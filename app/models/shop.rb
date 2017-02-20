@@ -1,8 +1,9 @@
 class Shop < ActiveRecord::Base
   include ShopifyApp::Shop
 
-  def createScriptTag(file)
+  def createScriptTag
 
+		file = ApplicationController.new.render_to_string(:template => "home/dash_js.js", :layout => false)
     asset = ShopifyAPI::Asset.new
     asset.key = "assets/witty_easy_dash.js"
     asset.value = file
