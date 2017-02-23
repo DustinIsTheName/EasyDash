@@ -1,0 +1,266 @@
+// Place all the styles related to the unembedded controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+/* Sidebar */
+
+.wittyEDSidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  z-index: 1;
+  -webkit-flex: none;
+  -ms-flex: none;
+  flex: none;
+  width: 300px;
+  background: #f5f6f7;
+  box-shadow: 1px 0 5px rgba(0,0,0,0.12);
+  overflow: hidden;
+  transition: all 300ms cubic-bezier(0.19, 1, 0.22, 1);
+  height: 100%;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  
+  
+  /* Misc Styles */
+  .ui-stack {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    margin-left: -2rem;
+    margin-top: -2rem;
+    
+    &>* {
+      margin-left: 2rem;
+      margin-top: 2rem;
+      -webkit-flex: 0 0 auto;
+      -ms-flex: 0 0 auto;
+      flex: 0 0 auto;
+    }
+  }
+  .ui-stack--wrap {
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+  }
+  .ui-stack-item--fill {
+    -webkit-flex: 1 1 auto;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+  }
+  .ui-stack-item {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .ui-stack--alignment-center {
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+  }
+  .ui-stack--spacing-tight {
+    margin-left: -1rem;
+    margin-top: -1rem;
+    
+    &>* {
+      margin-left: 1rem;
+      margin-top: 1rem;
+    }
+  }
+  .ui-heading {
+    font-size: 1.7rem;
+    line-height: 2.4rem;
+    font-weight: 600;
+  }
+  .ui-subheading {
+    font-size: 1.3rem;
+    line-height: 2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .ui-subheading--subdued {
+    color: #707070;
+  }
+  
+  .type--right { text-align: right; }
+  .type--left { text-align: left; }
+  
+  .segmented {
+    padding: 0;
+    margin: 0;
+    display: -webkit-inline-flex;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    
+    &>li {
+      position: relative;
+      list-style-type: none;
+      display: inline-block;
+      margin: 0;
+      
+      &:first-child .btn, &.first-child .btn {
+	    border-radius: 3px 0px 0px 3px;
+	    border-left-width: 1px !important;
+	  }
+      &:last-child .btn {
+    	border-radius: 0px 3px 3px 0px;
+	  }
+      
+      .btn {
+        display: inline-block;
+        position: static;
+        border-radius: 0px 0px 0px 0px;
+        border-left-width: 0 !important;
+        margin-right: 0;
+
+        .btn--icon {
+          padding-left: 9px;
+          padding-right: 9px;
+        }
+      }
+    }
+  }
+  
+  .next-icon, .next-icon__text {
+    margin-top: -13px;
+    margin-bottom: -13px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    top: -0.15em;
+    display: inline-block;
+    vertical-align: middle;
+    fill: currentColor;
+  }
+  .next-icon--size-12 {
+    width: 12px;
+    height: 12px;
+  }
+  .next-icon--size-16 {
+    width: 16px;
+    height: 16px;
+  }
+  .next-icon--size-20 {
+    width: 20px;
+    height: 20px;
+  }
+  .next-icon--inline-before {
+    margin-right: 0.5em;
+  }
+  
+  section {
+    article { 
+      margin: 0;
+      flex-direction: inherit;
+    }
+    
+    .card {
+      background-color: #ffffff;
+      border-radius: 3px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+  }
+  
+  .svg_white { fill: #fff; }
+  .svg_dark { fill: $witty-dark; }
+  .svg_teal { fill: $witty-teal; }
+  
+  .sidebyside_small { width: 15%; }
+  .sidebyside_large { width: calc(85% - 6px); }
+  
+  /* Main Section */
+  .wittyEDEditorMain {
+    position: relative;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    
+    .theme-editor__header--no-shadow {
+      box-shadow: none;
+    }
+    .theme-editor__header {
+      position: relative;
+      z-index: 2;
+      padding-top: 0;
+      min-height: auto;
+      text-align: left;
+      -webkit-flex: none;
+      -ms-flex: none;
+      flex: none;
+      background: #ffffff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .theme-editor__header-nav {
+      line-height: 32px;
+      background: $witty-dark;
+		}
+    .theme-editor__header-nav-link {
+      display: inline-block;
+      color: #ebeef0;
+      padding: 0 10px;
+		}
+    .theme-editor__title-bar {
+      padding: 10px;
+    }
+    .theme-editor__title {
+      padding-left: 3px;
+    }
+    .theme-editor__heading {
+      padding: 15px 40px;
+      cursor: default;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .wittyEDLogoHeading {
+      height: 18px;
+      padding: 20px 40px 16px;
+      
+      svg { height: 18px; }
+    }
+    .wittyEDPanelBody {
+      -webkit-flex: 1 1 auto;
+      -ms-flex: 1 1 auto;
+      flex: 1 1 auto;
+      height: 100%;
+      min-height: 0;
+      overflow-y: auto;
+      padding: 10px 10px 0;
+      box-sizing: border-box;
+      -webkit-overflow-scrolling: touch;
+    }
+    .wittyEDTopButtons { 
+      border-bottom: 1px solid #e7e7e7;
+      padding: $gutter;
+      margin: 0 -$gutter;
+      
+      .sidebyside_small.icon-trash {
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 27 27' enable-background='new 0 0 27 27'%3E%3Cpath fill='rgb(255,255,255)' d='M27.5,5a2.22,2.22,0,0,1-1.8,2.25H2.3A2.22,2.22,0,0,1,.5,5,2.22,2.22,0,0,1,2.3,2.75H9.5C9.5,1.63,11.07.5,12.2,0.5h3.6c1.13,0,2.7,1.35,2.7,2.25h7.2A2.22,2.22,0,0,1,27.5,5Zm-2.25,5.85V25.7c0,0.9-1.8,1.8-2.7,1.8H5.45c-0.9,0-2.7-.68-2.7-1.8V10.85A3.17,3.17,0,0,1,4.33,9.5H23.9A3.88,3.88,0,0,1,25.25,10.85ZM11.75,14.9a1,1,0,0,0-.9-0.9H10.4a1,1,0,0,0-.9.9v7.2a1,1,0,0,0,.9.9h0.45a1,1,0,0,0,.9-0.9V14.9Zm6.75,0a1,1,0,0,0-.9-0.9H17.15a1,1,0,0,0-.9.9v7.2a1,1,0,0,0,.9.9H17.6a1,1,0,0,0,.9-0.9V14.9Z' transform='translate(-0.5 -0.5)' /%3E%3C/svg%3E");
+      }
+    }
+    .theme-editor__subheading {
+      margin: 20px 0 10px 20px;
+      
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+    .theme-editor__card {
+      margin-bottom: 10px;
+    }
+  }
+}

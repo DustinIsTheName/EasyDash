@@ -1,6 +1,5 @@
 (function() {
 
-
   var loadScript = function(url, callback) {
 
   	var script = document.createElement("script");
@@ -29,7 +28,14 @@
 	/* This is my app's JavaScript */
 	var myAppJavaScript = function($) {
 
-        console.log('Shup up Donald! I\'m trying, these things take time!');
+    if ($('#admin_bar_iframe')[0]) {
+      $('body').append('<%= render(partial: "home/dash_js_html/open_button").to_s.gsub(/\n/, '').html_safe %>');
+      var top = $('html').css('padding-top');
+      $('.wittyEDContainer').css('top', top);
+    }
+
+    
+
 
 	}; // myAppJavaScript() ends here; ALL CUSTOM JS IS TO BE WITHIN THIS FUNCTION!
 
@@ -42,6 +48,5 @@
 	} else {
 	  myAppJavaScript(jQuery);
 	}
-
 
 })();
