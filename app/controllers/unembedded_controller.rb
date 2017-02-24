@@ -4,7 +4,6 @@ class UnembeddedController < ApplicationController
   layout 'application'
 
   def quick_select
-  	
   end
 
 end

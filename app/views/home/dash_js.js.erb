@@ -32,6 +32,14 @@
       $('body').append('<%= render(partial: "home/dash_js_html/open_button").to_s.gsub(/\n/, '').html_safe %>');
       var top = $('html').css('padding-top');
       $('.wittyEDContainer').css('top', top);
+
+      $('.wittyEDOpenButton').mouseenter(function() {
+      	$(this).addClass('open');
+      });
+
+      $('.wittyEDContainer').mouseleave(function() {
+      	$('.wittyEDOpenButton').removeClass('open');
+      });
     }
 
     

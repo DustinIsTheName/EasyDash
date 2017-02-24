@@ -53,11 +53,21 @@
 
     #wittyEDselectWindow {
 			border: none;
-	    /* display: none; */
+	    /*display: none; */
 	    position: absolute;
 	    top: 0;
 	    left: 300px;
-	    height: 300px;
+	    width: 75px;
+	    height: 60px;
+	    opacity: 0;
+	    transition: .5s width, .5s height;
+    }
+
+    .wittyEDOpenButton.open ~ #wittyEDselectWindow {
+    	/*display: block;*/
+    	opacity: 1;
+    	width: 300px;
+	    height: 548px;
     }
   </style>
 

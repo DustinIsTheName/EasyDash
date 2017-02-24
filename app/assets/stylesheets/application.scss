@@ -15,7 +15,48 @@
  */
 
 
+html { 
+  font-size: 62.5%;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+body { 
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 400;
+  text-transform: initial;
+  letter-spacing: initial;
+  color: #1a1a1a;
+  font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+}
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: #ebeef0;
+}
 
+
+$gutter: 10px;
+$witty-teal: #00a79d;
+$witty-teal-dark: #00968d;
+$witty-dark: #31373d;
+
+button.primary { 
+  background: $witty-teal; 
+  border-color: $witty-teal;
+  color: #fff;
+  
+  &:hover { 
+    background: $witty-teal-dark;
+    border-color: $witty-teal-dark;
+  }
+}
 
 /* Sidebar Toggle */
 .wittyEDFullscreenToggle {

@@ -4,6 +4,11 @@
 
 /* Sidebar */
 
+$gutter: 10px;
+$witty-teal: #00a79d;
+$witty-teal-dark: #00968d;
+$witty-dark: #31373d;
+
 .wittyEDSidebar {
   position: fixed;
   top: 0;
@@ -173,7 +178,7 @@
   .svg_teal { fill: $witty-teal; }
   
   .sidebyside_small { width: 15%; }
-  .sidebyside_large { width: calc(85% - 6px); }
+  .sidebyside_large { width: calc(85% - 7px); }
   
   /* Main Section */
   .wittyEDEditorMain {
@@ -194,7 +199,7 @@
       position: relative;
       z-index: 2;
       padding-top: 0;
-      min-height: auto;
+      min-height: 0;
       text-align: left;
       -webkit-flex: none;
       -ms-flex: none;
@@ -229,6 +234,8 @@
     .wittyEDLogoHeading {
       height: 18px;
       padding: 20px 40px 16px;
+      background: #31373d;
+      margin: 0;
       
       svg { height: 18px; }
     }
