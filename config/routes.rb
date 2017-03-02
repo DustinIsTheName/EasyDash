@@ -7,6 +7,13 @@ Rails.application.routes.draw do
     get 'logout' => :destroy, :as => :logout
   end
 
+  namespace :search do
+    get '/products' => :products
+    get '/articles' => :articles
+    get '/collections' => :collections
+    get '/pages' => :pages
+  end
+
   root :to => 'home#index'
 
   get '/preview-window' => 'unembedded#quick_select'
