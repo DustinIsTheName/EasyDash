@@ -1116,7 +1116,8 @@ input[type="tel"],
 input[type="url"],
 input[type="password"],
 textarea,
-select {
+select,
+.select-sim {
   padding: .5rem 1rem;
   background-color: #fff;
   border: .1rem solid #d3dbe2;
@@ -1134,7 +1135,9 @@ select {
   max-width: 100%;
   font-family: -apple-system, "BlinkMacSystemFont", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", sans-serif;
   box-shadow: none;
-  box-sizing: border-box; }
+  box-sizing: border-box; 
+}
+
   input[type="email"]:focus,
   input[type="number"]:focus,
   input[type="search"]:focus,
@@ -1226,13 +1229,25 @@ textarea,
 select {
   min-height: 3.4rem; }
 
-select {
+select,
+.select-sim {
+  text-align: left;
   padding-right: 3.2rem;
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' enable-background='new 0 0 24 24'%3E%3Cpath fill='rgb(121,140,156)' d='M21 5.176l-9.086 9.353-8.914-9.353-2.314 2.471 11.314 11.735 11.314-11.735-2.314-2.471z'/%3E%3C/svg%3E");
   background-size: 12px 12px;
   /* IE requires pixels. Using cover/contain/rem values cause blurry edges */
   background-repeat: no-repeat;
-  background-position: right 1.0rem top 1.1rem; }
+  background-position: right 1.0rem top 1.1rem; 
+
+  &:hover,
+  &:focus,
+  &:active {
+    border-color: #D3DBE2;
+    background-color: inherit;
+    color: #31373d;
+    box-shadow: none;
+  }
+}
   select[multiple] {
     padding-right: 1rem;
     background-image: none; }
