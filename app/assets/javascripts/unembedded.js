@@ -5,7 +5,7 @@ $(document).ready(function() {
 			pages = $('.select-sim-dropdown.page').data('object'),
 			products = $('.select-sim-dropdown.product').data('object'),
 			blog_page = 1,
-			collection_page = 1
+			collection_page = 1,
 			page_page = 1,
 			product_page = 1;
 
