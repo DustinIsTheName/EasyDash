@@ -1,0 +1,31 @@
+<div class="select-sim-dropdown-container">
+	<div class="search container">
+		<div class="search-container">
+			<i class="icon-search"></i>
+    	<input type="text" name="<%= resource_name %>-search" placeholder="Search <%= resource_name %>s">
+    </div>
+    <ul class="select-sim-dropdown <%= resource_name %>" data-object="<%= resources.to_json %>">
+  		<li>
+  			<a href="#" class="new">
+  				Add <%= resource_name %>
+  			</a>
+  		</li>
+    	<% if resources.length > 0 %>
+	    	<% for resource in resources.take(8) %>
+	    		<li>
+	    			<a href="#" data-handle="<%= resource.handle %>" data-id="<%= resource.id %>">
+	    				<%= resource.title %>
+	    			</a>
+	    		</li>
+	    	<% end %>
+    	<% else %>
+    		<li><span>No results found.</span></li>
+    	<% end %>
+    </ul>
+    <div class="arrow-navigation">
+    	<button class="secondary icon-prev disabled"></button>
+    	<button class="secondary icon-next"></button>
+    	<div style="clear:both;"></div>
+    </div>
+  </div>
+</div>

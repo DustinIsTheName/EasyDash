@@ -19,43 +19,25 @@
           <div class="card-section">
             Blog Post
             <button class="select-sim" type="button">Select</button>
-            <div class="select-sim-dropdown-container">
-            	<div class="search container">
-            		<div class="search-container">
-            			<i class="icon-search"></i>
-		            	<input type="text" name="blog-search" placeholder="">
-		            </div>
-		            <ul class="select-sim-dropdown">
-		            	<% for article in @articles.take(8) %>
-		            		<li>
-		            			<a href="#" data-handle="<%= article.handle %>">
-		            				<%= article.title %>
-		            			</a>
-		            		</li>
-		            	<% end %>
-		            </ul>
-		            <div class="arrow-navigation">
-		            	<button class="secondary icon-prev"></button>
-		            	<button class="secondary icon-next"></button>
-		            	<div style="clear:both;"></div>
-		            </div>
-		          </div>
-	          </div>
+						<%= render partial: 'select_dropdown', locals: {resources: @articles, resource_name: 'blog'} %>
           </div>
           <hr/>
           <div class="card-section">
             Collection
-            <select><option>Select</option></select>
+            <button class="select-sim" type="button">Select</button>
+						<%= render partial: 'select_dropdown', locals: {resources: @collections, resource_name: 'collection'} %>
           </div>
           <hr/>
           <div class="card-section">
             Page
-            <select><option>Select</option></select>
+            <button class="select-sim" type="button">Select</button>
+						<%= render partial: 'select_dropdown', locals: {resources: @pages, resource_name: 'page'} %>
           </div>
           <hr/>
           <div class="card-section">
             Product
-            <select><option>Select</option></select>
+            <button class="select-sim" type="button">Select</button>
+						<%= render partial: 'select_dropdown', locals: {resources: @products, resource_name: 'product'} %>
           </div>
         </div>
       </article><!-- .next-card -->
