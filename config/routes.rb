@@ -8,10 +8,10 @@ Rails.application.routes.draw do
   end
 
   namespace :search do
-    get '/products' => :products
-    get '/articles' => :articles
-    get '/collections' => :collections
-    get '/pages' => :pages
+    get '/product' => :products
+    get '/article' => :articles
+    get '/collection' => :collections
+    get '/page' => :pages
   end
 
   root :to => 'home#index'

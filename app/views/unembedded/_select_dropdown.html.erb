@@ -2,9 +2,9 @@
 	<div class="search container">
 		<div class="search-container">
 			<i class="icon-search"></i>
-    	<input type="text" name="<%= resource_name %>-search" placeholder="Search <%= resource_name %>s">
+    	<input type="text" class="resource-search" name="<%= resource_name %>-search" placeholder="Search <%= resource_name %>s" data-resource="<%= resource_name %>">
     </div>
-    <ul class="select-sim-dropdown <%= resource_name %>" data-object="<%= resources.to_json %>">
+    <ul class="select-sim-dropdown <%= resource_name %>" data-total="<%= total %>" data-resource="<%= resource_name %>" data-object="<%= resources.to_json %>">
   		<li>
   			<a href="#" class="new">
   				Add <%= resource_name %>
@@ -12,7 +12,7 @@
   		</li>
     	<% if resources.length > 0 %>
 	    	<% for resource in resources.take(8) %>
-	    		<li>
+	    		<li class="variable">
 	    			<a href="#" data-handle="<%= resource.handle %>" data-id="<%= resource.id %>">
 	    				<%= resource.title %>
 	    			</a>
@@ -24,7 +24,7 @@
     </ul>
     <div class="arrow-navigation">
     	<button class="secondary icon-prev disabled"></button>
-    	<button class="secondary icon-next"></button>
+    	<button class="secondary icon-next<% if total <= 8 %> disabled<% end %>"></button>
     	<div style="clear:both;"></div>
     </div>
   </div>

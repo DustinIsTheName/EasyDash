@@ -2,9 +2,9 @@
   
   <!-- Panel - Main -->
   
-  <section class="wittyEDEditorMain" component="UI.PanelContainer" context="UI_PanelContainer_Main">
+  <section class="wittyEDEditorMain">
     <header class="theme-editor__header theme-editor__header--no-shadow">
-      <h2 class="wittyEDLogoHeading ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">
+      <h2 class="wittyEDLogoHeading ui-heading theme-editor__heading">
       	<%= render partial: 'svg_logo_dark' %>
       </h2>
     </header><!-- .theme-editor__header -->
@@ -19,25 +19,25 @@
           <div class="card-section">
             Blog Post
             <button class="select-sim" type="button">Select</button>
-						<%= render partial: 'select_dropdown', locals: {resources: @articles, resource_name: 'blog'} %>
+						<%= render partial: 'select_dropdown', locals: {resources: @articles, total: @article_count, resource_name: 'blog'} %>
           </div>
           <hr/>
           <div class="card-section">
             Collection
             <button class="select-sim" type="button">Select</button>
-						<%= render partial: 'select_dropdown', locals: {resources: @collections, resource_name: 'collection'} %>
+						<%= render partial: 'select_dropdown', locals: {resources: @collections, total: @collection_count, resource_name: 'collection'} %>
           </div>
           <hr/>
           <div class="card-section">
             Page
             <button class="select-sim" type="button">Select</button>
-						<%= render partial: 'select_dropdown', locals: {resources: @pages, resource_name: 'page'} %>
+						<%= render partial: 'select_dropdown', locals: {resources: @pages, total: @page_count, resource_name: 'page'} %>
           </div>
           <hr/>
           <div class="card-section">
             Product
             <button class="select-sim" type="button">Select</button>
-						<%= render partial: 'select_dropdown', locals: {resources: @products, resource_name: 'product'} %>
+						<%= render partial: 'select_dropdown', locals: {resources: @products, total: @product_count, resource_name: 'product'} %>
           </div>
         </div>
       </article><!-- .next-card -->
