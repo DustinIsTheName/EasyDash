@@ -3,14 +3,14 @@ class SearchController < AuthenticatedController
 
   def products
     headers['Access-Control-Allow-Origin'] = '*'
-  	products = ShopifyAPI::Product.find(:all, params: {title: params[:q], limit: 250})
+  	products = ShopifyAPI::Product.find(:all, params: {title: params[:q], limit: 250, page: params[:page], fields: ['title', 'handle', 'id']})
 
   	render json: products
   end
 
   def articles
     headers['Access-Control-Allow-Origin'] = '*'
-  	articles = ShopifyAPI::Article.find(:all, params: {title: params[:q], limit: 250})
+  	articles = ShopifyAPI::Article.find(:all, params: {title: params[:q], limit: 250, page: params[:page], fields: ['title', 'handle', 'id']})
 
   	render json: articles
   end
@@ -19,12 +19,12 @@ class SearchController < AuthenticatedController
     headers['Access-Control-Allow-Origin'] = '*'
   	@collections = []
 
-		@cc = ShopifyAPI::CustomCollection.find(:all, params: {title: params[:q], :limit => 250})
+		@cc = ShopifyAPI::CustomCollection.find(:all, params: {title: params[:q], :limit => 250, page: params[:page], fields: ['title', 'handle', 'id']})
 		@cc.each do |c|
 		  @collections << c
 		 end
 
-		@sc = ShopifyAPI::SmartCollection.find(:all, params: {title: params[:q], :limit => 250})
+		@sc = ShopifyAPI::SmartCollection.find(:all, params: {title: params[:q], :limit => 250, page: params[:page], fields: ['title', 'handle', 'id']})
 		@sc.each do |c|
 		 @collections << c
 		end
@@ -34,7 +34,7 @@ class SearchController < AuthenticatedController
 
   def pages
     headers['Access-Control-Allow-Origin'] = '*'
-  	pages = ShopifyAPI::Page.find(:all, params: {title: params[:q], limit: 250})
+  	pages = ShopifyAPI::Page.find(:all, params: {title: params[:q], limit: 250, page: params[:page], fields: ['title', 'handle', 'id']})
 
   	render json: pages
   end
