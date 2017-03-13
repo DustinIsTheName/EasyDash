@@ -21,6 +21,16 @@ function ready() {
 	resource_infomation.page_total = resource_infomation.pages.length;
 	resource_infomation.product_total = resource_infomation.products.length;
 
+	$('.select-sim').click(function(event) {
+		$('.select-sim').not(this).removeClass('active');
+		$(this).toggleClass('active');
+		event.stopPropagation();
+	});
+
+	$(window).click(function() {
+		$('.select-sim').removeClass('active');
+	});
+
 	function extendResource(resource, page, total) {
 		resource_infomation[resource+'_chunks_loaded']++;
 		$.ajax({

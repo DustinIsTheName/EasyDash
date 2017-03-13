@@ -9,7 +9,7 @@ Rails.application.routes.draw do
 
   namespace :search do
     get '/product' => :products
-    get '/article' => :articles
+    get '/blog' => :blogs
     get '/collection' => :collections
     get '/page' => :pages
   end
@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   root :to => 'home#index'
 
   get '/preview-window' => 'unembedded#quick_select'
+  get '/dashboard' => 'unembedded#dashboard'
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

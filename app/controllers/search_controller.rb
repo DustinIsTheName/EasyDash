@@ -8,7 +8,7 @@ class SearchController < AuthenticatedController
   	render json: products
   end
 
-  def articles
+  def blogs
     headers['Access-Control-Allow-Origin'] = '*'
   	articles = ShopifyAPI::Article.find(:all, params: {title: params[:q], limit: 250, page: params[:page], fields: ['title', 'handle', 'id']})
 

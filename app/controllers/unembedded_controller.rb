@@ -23,7 +23,10 @@ class UnembeddedController < ApplicationController
 		@sc.each do |c|
 		 @collections << c
 		end
+  end
 
+  def dashboard
+    
   end
 
 end
