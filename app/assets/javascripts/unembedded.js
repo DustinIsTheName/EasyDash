@@ -53,8 +53,8 @@ function ready() {
 	function changePage(resource, resource_object, page, total) {
 		var total_pages = Math.ceil(total/8);
 		var new_html = '';
-		var max_bound = page*8;
-		var min_bound = page*8 - 7;
+		var max_bound = page*8 - 1;
+		var min_bound = page*8 - 8;
 
 		if (page >= total_pages - 3 && total_pages > 31 && resource_infomation[resource+'_chunks_loaded'] !== 'all') {
 			extendResource(resource, page, total);

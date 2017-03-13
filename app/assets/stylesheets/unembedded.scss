@@ -850,7 +850,7 @@ label .icon-calendar { float: right; margin-top: 2px; }
   box-shadow: 0 0 0 1px rgba(39,44,48,0.05), 
               0 2px 7px 1px rgba(39,44,48,0.16);
 
-  display: none;
+  // display: none;
 
   .select-sim.active + & {
     display: block;
