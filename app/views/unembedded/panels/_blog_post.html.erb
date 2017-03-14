@@ -1,0 +1,70 @@
+<article>
+  <div class="card blog_post_options">
+    <div class="row">
+      <label>Title</label>
+      <input type="text" placeholder="e.g. Blog about your latest products or deals" />
+    </div>
+    <div class="row">
+      <label>Content</label>
+      <textarea class="extra_margin"></textarea>
+      <a href="">Add excerpt</a>
+    </div>
+    <div class="row no_margin">
+      <label>Author</label>
+      <select class="extra_margin" id="author_column">
+        <option selected="selected" value="Travis Johnson">Travis Johnson</option>
+      </select>
+      <label>Blog</label>
+      <select id="blog_column">
+        <option selected="selected" value="News">News</option>
+        <option disabled="disabled">--------------------</option>
+        <option value="Create a new blog">Create a new blog...</option>
+      </select>
+    </div>
+  </div>
+</article>
+<article>
+  <a href="#" class="theme-editor-action-list__item" data-bind-event-click="action("openSectionPanel", "section-seo")" draggable="false">
+    <div class="card">
+      <h5>Search engine listing preview</h5>
+      <!-- <button class="btn--link top-right">Edit website SEO</button> -->
+      <p>Add a title and description to see how this article might appear in a search engine listing.</p>
+      <button class="secondary">Edit website SEO</button>
+      <!-- <button class="btn btn--plain icon-next dark" type="button" name="button"></button> -->
+    </div>
+  </a>
+</article>
+<article>
+  <div class="card secondary">
+    <h5>Visibility</h5>
+    <div class="divider"></div>
+    <div class="row no_margin">
+      <label class="extra_margin"><input type="radio" name="option4">Visible</label>
+      <label class="extra_margin"><input type="radio" name="option4" checked="checked">Hidden</label>
+      <a href="">Set a specific publish date</a>
+    </div>
+  </div>
+</article>
+<article>
+  <div class="card secondary featured_image">
+    <h5>Featured image</h5>
+    <div class="column twelve type--centered">
+      <i class="icon-image next-icon--size-40"></i>
+      <button class="primary">Upload image</button>
+		</div>
+  </div>
+</article>
+<article>
+  <div class="card secondary">
+    <h5>Organization</h5>
+    <label>Tags</label>
+    <input type="text" placeholder="Store news, new product, staff update"/>
+  </div>
+</article>
+<div class="wittyEDBottomButtons">
+  <!-- <button class="secondary red btn_bottom">Delete collection</button> -->
+  <button class="warning btn_bottom">Delete blog post</button>
+  <!-- <div class="divider"></div>
+  <button class="primary btn_bottom extra_margin">Manage blogs</button>
+  <button class="primary btn_bottom">Manage comments</button> -->
+</div>
