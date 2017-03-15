@@ -13,9 +13,7 @@
     	<% if resources.length > 0 %>
 	    	<% for resource in resources.take(8) %>
 	    		<li class="variable">
-	    			<a href="#" data-handle="<%= resource.handle %>" data-id="<%= resource.id %>">
-	    				<%= resource.title %>
-	    			</a>
+            <%= link_to resource.title, dashboard_path(resource: resource_name, id: resource.id), target: "_blank", data: {handle: resource.handle, id: resource.id} %>
 	    		</li>
 	    	<% end %>
     	<% else %>

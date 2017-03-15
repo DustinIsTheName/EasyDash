@@ -26,7 +26,23 @@ class UnembeddedController < ApplicationController
   end
 
   def dashboard
-    
+    @type = params[:resource]
+    case @type
+    when 'blog'
+      @resource = ShopifyAPI::Article.find(params[:id])
+    when 'collection'
+      @resource = ShopifyAPI::CustomCollection.find(params[:id])
+
+      unless @resource
+        @resource = ShopifyAPI::SmartCollection.find(params[:id])
+      end
+    when 'page'
+      @resource = ShopifyAPI::Page.find(params[:id])
+    when 'product'
+      @resource = ShopifyAPI::Product.find(params[:id])
+    else
+      @type = 'resource_select'
+    end
   end
 
 end

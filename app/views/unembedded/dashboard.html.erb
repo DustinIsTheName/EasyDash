@@ -3,35 +3,12 @@
 
   <section class="wittyEDEditorMain" component="UI.PanelContainer" context="UI_PanelContainer_Main">
 
-    <!-- Panel - Main -->
-
-    <div class="theme-editor__panel" id="section-main" data-panel-id="main" component="UI.SectionPanel" tabindex="-1" context="UI_SectionPanel_1">
-      <header class="theme-editor__header theme-editor__header--no-shadow">
-        <% if false %>
-        <nav class="theme-editor__header-nav">
-          <a class="theme-editor__header-nav-link" href="/admin/themes">
-            <%= svgs 'shopify_logo_white' %>
-            Back to your store
-          </a>    
-        </nav><!-- .theme-editor__header-nav -->
-        <% end %>
-        <nav class="theme-editor__header-nav wittyEDLogoHeading">
-          <button class="btn btn--plain theme-editor__header-action tip icon-prev white" data-hover="Back to your store" data-bind-event-click="action("closeSectionPanel", sectionId)" aria-label="Back to your store" type="button" name="button"></button>
-          <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">
-            <%= svgs 'logo_white' %>
-          </h2>
-        </nav><!-- .theme-editor__header-nav -->
-      </header><!-- .theme-editor__header -->
-      <div class="wittyEDPanelBody" data-scrollable="">
-        <%= panel 'resource_select' %>
-      </div><!-- .wittyEDPanelBody -->
-    </div><!-- .theme-editor__panel#section-main -->
-
-    <!-- Panel - Product -->
-
     <div class="theme-editor__panel" id="section-product" data-panel-id="product" component="UI.SectionPanel" tabindex="-1" context="UI_SectionPanel_2">
       <header class="theme-editor__header theme-editor__header--no-shadow">
         <nav class="theme-editor__header-nav wittyEDLogoHeading">
+          <% if @type == 'resource_select' %>
+            <button class="btn btn--plain theme-editor__header-action tip icon-prev white" data-hover="Back to your store" data-bind-event-click="action("closeSectionPanel", sectionId)" aria-label="Back to your store" type="button" name="button"></button>
+          <% end %>
           <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">
             <%= svgs 'logo_white' %>
           </h2>
@@ -39,117 +16,13 @@
       </header><!-- .theme-editor__header -->
       <header class="theme-editor__header theme-editor__header--no-shadow">
         <button class="btn btn--plain theme-editor__header-action icon-prev" data-bind-event-click="action("closeSectionPanel", sectionId)" aria-label="Back to sections" type="button" name="button"></button>
-        <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">Product</h2>
+        <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)"><%= @type %></h2>
         <a class="btn_more" href=""><% svgs 'more_teal' %></a>
       </header><!-- .theme-editor__header -->
       <div class="wittyEDPanelBody" data-scrollable="">
-        <%= panel 'product' %>
+        <%= panel @type %>
       </div><!-- .wittyEDPanelBody -->
     </div><!-- .theme-editor__panel#section-product -->
-    
-    <!-- Panel - Product Images -->
-
-    <div class="theme-editor__panel" id="section-product-images" data-panel-id="product-images" component="UI.SectionPanel" tabindex="-1" context="UI_SectionPanel_5">
-      <header class="theme-editor__header theme-editor__header--no-shadow">
-        <nav class="theme-editor__header-nav wittyEDLogoHeading">
-          <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">
-            <%= svgs 'logo_white' %>
-          </h2>
-        </nav><!-- .theme-editor__header-nav -->
-      </header><!-- .theme-editor__header -->
-      <header class="theme-editor__header theme-editor__header--no-shadow">
-        <button class="btn btn--plain theme-editor__header-action icon-prev" data-bind-event-click="action("closeSectionPanel", sectionId)" aria-label="Back to sections" type="button" name="button"></button>
-        <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">Images</h2>
-      </header><!-- .theme-editor__header -->
-      <div class="wittyEDPanelBody" data-scrollable="">
-        <%= panel 'product_images' %>
-      </div><!-- .wittyEDPanelBody -->
-    </div><!-- .theme-editor__panel#section-product-images -->
-    
-    <!-- Panel - Product Variants -->
-
-    <div class="theme-editor__panel" id="section-product-variants" data-panel-id="product-variants" component="UI.SectionPanel" tabindex="-1" context="UI_SectionPanel_6">
-      <header class="theme-editor__header theme-editor__header--no-shadow">
-        <nav class="theme-editor__header-nav wittyEDLogoHeading">
-          <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">
-            <%= svgs 'logo_white' %>
-          </h2>
-        </nav><!-- .theme-editor__header-nav -->
-      </header><!-- .theme-editor__header -->
-      <header class="theme-editor__header theme-editor__header--no-shadow">
-        <button class="btn btn--plain theme-editor__header-action icon-prev" data-bind-event-click="action("closeSectionPanel", sectionId)" aria-label="Back to sections" type="button" name="button"></button>
-        <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">Variants</h2>
-      </header><!-- .theme-editor__header -->
-      <div class="wittyEDPanelBody" data-scrollable="">
-        <%= panel 'variants' %>
-      </div><!-- .wittyEDPanelBody -->
-    </div><!-- .theme-editor__panel#section-product-variants -->
-
-    <!-- Panel - Page -->
-
-    <div class="theme-editor__panel" id="section-page" data-panel-id="page" component="UI.SectionPanel" tabindex="-1" context="UI_SectionPanel_3">
-      <header class="theme-editor__header theme-editor__header--no-shadow">
-        <nav class="theme-editor__header-nav wittyEDLogoHeading">
-          <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">
-            <%= svgs 'logo_white' %>
-          </h2>
-        </nav><!-- .theme-editor__header-nav -->
-      </header><!-- .theme-editor__header -->
-      <header class="theme-editor__header theme-editor__header--no-shadow">
-        <button class="btn btn--plain theme-editor__header-action icon-prev" data-bind-event-click="action("closeSectionPanel", sectionId)" aria-label="Back to sections" type="button" name="button"></button>
-        <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">Page</h2>
-        <a class="btn_more" href="">
-          <%= svgs 'more_teal' %>
-        </a>
-      </header><!-- .theme-editor__header -->
-      <div class="wittyEDPanelBody" data-scrollable="">
-        <%= panel 'page' %>
-      </div><!-- .wittyEDPanelBody -->
-    </div><!-- .theme-editor__panel#section-page -->
-    
-    <!-- Panel - Collection -->
-
-    <div class="theme-editor__panel" id="section-collection" data-panel-id="collection" component="UI.SectionPanel" tabindex="-1" context="UI_SectionPanel_4">
-      <header class="theme-editor__header theme-editor__header--no-shadow">
-        <nav class="theme-editor__header-nav wittyEDLogoHeading">
-          <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">
-            <%= svgs 'logo_white' %>
-          </h2>
-        </nav><!-- .theme-editor__header-nav -->
-      </header><!-- .theme-editor__header -->
-      <header class="theme-editor__header theme-editor__header--no-shadow">
-        <button class="btn btn--plain theme-editor__header-action icon-prev" data-bind-event-click="action("closeSectionPanel", sectionId)" aria-label="Back to sections" type="button" name="button"></button>
-        <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">Collection</h2>
-        <a class="btn_more" href="">
-          <%= svgs 'more_teal' %>
-        </a>
-      </header><!-- .theme-editor__header -->
-      <div class="wittyEDPanelBody" data-scrollable="">
-        <%= panel 'collection' %>
-      </div><!-- .wittyEDPanelBody -->
-    </div><!-- .theme-editor__panel#section-collection -->
-    
-    <!-- Panel - Blog Post -->
-
-    <div class="theme-editor__panel" id="section-blog_post" data-panel-id="blog_post" component="UI.SectionPanel" tabindex="-1" context="UI_SectionPanel_5">
-      <header class="theme-editor__header theme-editor__header--no-shadow">
-        <nav class="theme-editor__header-nav wittyEDLogoHeading">
-          <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">
-            <%= svgs 'logo_white' %>
-          </h2>
-        </nav><!-- .theme-editor__header-nav -->
-      </header><!-- .theme-editor__header -->
-      <header class="theme-editor__header theme-editor__header--no-shadow">
-        <button class="btn btn--plain theme-editor__header-action icon-prev" data-bind-event-click="action("closeSectionPanel", sectionId)" aria-label="Back to sections" type="button" name="button"></button>
-        <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">Blog Post</h2>
-        <a class="btn_more" href="">
-          <%= svgs 'more_teal' %>
-        </a>
-      </header><!-- .theme-editor__header -->
-      <div class="wittyEDPanelBody" data-scrollable="">
-        <%= panel 'blog_post' %>
-      </div><!-- .wittyEDPanelBody -->
-    </div><!-- .theme-editor__panel#section-blog-post -->
 
   </section><!-- .wittyEDEditorMain -->
 
