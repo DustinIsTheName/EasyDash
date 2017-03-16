@@ -1,193 +1,195 @@
-<article>
-  <div class="card">
-    <div class="row">
-      <label>Title</label>
-      <input type="text" placeholder="Short Sleeve T-Shirt" />
-    </div>
-    <div class="row no_margin">
-      <label>Description</label>
-      <textarea></textarea>
-    </div>
-  </div>
-</article>
-<article>
-  <!-- <a href="#" class="theme-editor-action-list__item" data-bind-event-click="action("openSectionPanel", "section-images")" draggable="false"> -->
-    <div class="card drop_images">
-      <!-- <h5 class="wittyEDPanelButton">Images</h5>
-      <button class="btn btn--plain icon-next dark tip" type="button" name="button" data-hover="Edit/add/delete images"></button> -->
-      <h5>Images</h5>
+<%= form_for @resource, url: url_for(controller: 'unembedded', action: 'update_api') do |o| %>
+  <article>
+    <div class="card">
+      <div class="row">
+        <label>Title</label>
+        <%= o.text_field :title, placeholder: "Short Sleeve T-Shirt" %>
+      </div>
       <div class="row no_margin">
-        <a style="display: inherit; margin-bottom: 1rem;" href="">Add images from URL</a>
-        <a href="">Add images</a>
-        <div class="column twelve type--centered no_margin">
-          <i class="image icon-photos next-icon--size-80"></i>
-          <h5>Drop images to upload</h5>
+        <label>Description</label>
+        <%= o.text_area :body_html %>
+      </div>
+    </div>
+  </article>
+  <article>
+    <!-- <a href="#" class="theme-editor-action-list__item" data-bind-event-click="action("openSectionPanel", "section-images")" draggable="false"> -->
+      <div class="card drop_images">
+        <!-- <h5 class="wittyEDPanelButton">Images</h5>
+        <button class="btn btn--plain icon-next dark tip" type="button" name="button" data-hover="Edit/add/delete images"></button> -->
+        <h5>Images</h5>
+        <div class="row no_margin">
+          <a style="display: inherit; margin-bottom: 1rem;" href="">Add images from URL</a>
+          <a href="">Add images</a>
+          <div class="column twelve type--centered no_margin">
+            <i class="image icon-photos next-icon--size-80"></i>
+            <h5>Drop images to upload</h5>
+          </div>
         </div>
       </div>
-    </div>
-  <!-- </a> -->
-</article>
-<article>
-  <div class="card">
-    <h5>Pricing</h5>
-    <div class="row">
-      <label>Price</label>
-      <div class="next-input--stylized next-input--has-content">
-        <span class="next-input__add-on next-input__add-on--before">$</span>
-        <input class="next-input next-input--invisible" type="text" placeholder="0.00" value="0.00" />
+    <!-- </a> -->
+  </article>
+  <article>
+    <div class="card">
+      <h5>Pricing</h5>
+      <div class="row">
+        <label>Price</label>
+        <div class="next-input--stylized next-input--has-content">
+          <span class="next-input__add-on next-input__add-on--before">$</span>
+          <input class="next-input next-input--invisible" type="text" placeholder="0.00" value="0.00" />
+        </div>
+      </div>
+      <div class="row next-input-stylized">
+        <label>Compare at price</label>
+        <div class="next-input--stylized next-input--has-content">
+          <span class="next-input__add-on next-input__add-on--before">$</span>
+          <input class="next-input next-input--invisible" type="text" placeholder="" />
+        </div>
+      </div>
+      <div class="row no_margin">
+        <label><input type="checkbox" name="" checked="checked">Charge taxes on this product</label>
       </div>
     </div>
-    <div class="row next-input-stylized">
-      <label>Compare at price</label>
-      <div class="next-input--stylized next-input--has-content">
-        <span class="next-input__add-on next-input__add-on--before">$</span>
-        <input class="next-input next-input--invisible" type="text" placeholder="" />
+  </article>
+  <article>
+    <div class="card">
+      <h5>Inventory</h5>
+      <div class="row">
+        <label>SKU (Stock Keeping Unit)</label>
+        <input type="text" />
       </div>
-    </div>
-    <div class="row no_margin">
-      <label><input type="checkbox" name="" checked="checked">Charge taxes on this product</label>
-    </div>
-  </div>
-</article>
-<article>
-  <div class="card">
-    <h5>Inventory</h5>
-    <div class="row">
-      <label>SKU (Stock Keeping Unit)</label>
-      <input type="text" />
-    </div>
-    <div class="row">
-      <label>Barcode (ISBN, UPC, GTIN, etc.)</label>
-      <input type="text" />
-    </div>
-    <div class="row no_margin">
-      <label>Inventory policy</label>
-      <select>
-        <option>Don't track inventory</option>
-        <option>Shopify tracks this product's inventory</option>
-      </select>
-    </div>
-  </div>
-</article>
-<article>
-  <div class="card">
-    <h5>Shipping</h5>
-    <div class="row">
-      <label><input type="checkbox" name="" checked="checked">This product requires shipping</label>
-    </div>
-    <div class="divider"></div>
-    <div class="row extra_margin">
-      <h6>Weight</h6>
-      <p class="subdued">Used to calculate shipping rates at checkout and label prices during fulfillment.</p>
-      <label>Weight</label>
-      <div class="input-group">
-        <input class="sidebyside_75" type="text" value="0.0" />
-        <select class="secondary sidebyside_25">
-          <option>lb</option>
-          <option>oz</option>
-          <option>kg</option>
-          <option>g</option>
+      <div class="row">
+        <label>Barcode (ISBN, UPC, GTIN, etc.)</label>
+        <input type="text" />
+      </div>
+      <div class="row no_margin">
+        <label>Inventory policy</label>
+        <select>
+          <option>Don't track inventory</option>
+          <option>Shopify tracks this product's inventory</option>
         </select>
       </div>
     </div>
-    <div class="row">
-      <h6>International Customs</h6>
-      <label>HS tariff code <a href="http://hts.usitc.gov/" target="_blank">(look up code)</a></label>
-      <input type="text" />
-    </div>
-    <div class="divider"></div>
-    <div class="row no_margin">
-      <h6>Fulfillment Service</h6>
-      <select>
-        <option>Manual</option>
-      </select>
-    </div>
-  </div>
-</article>
-<article>
-  <a href="#" class="theme-editor-action-list__item" data-bind-event-click="action("openSectionPanel", "section-variants")" draggable="false">
+  </article>
+  <article>
     <div class="card">
-      <h5>Variants</h5>
-      <!-- <button class="btn--link top-right">Add variant</button> -->
-      <p>Add variants if this product comes in multiple versions, like different sizes or colors.</p>
-      <button class="secondary">Add variant</button>
-      <div class="accordion_grey bottom rounded_bottom">
-        <div class="row">
-          <label>Option name</label>
-          <input class="extra_margin" type="text" value="Size"/>
-          <label>Option values</label>
-          <input type="text" placeholder="Separate options with a comma"/>
+      <h5>Shipping</h5>
+      <div class="row">
+        <label><input type="checkbox" name="" checked="checked">This product requires shipping</label>
+      </div>
+      <div class="divider"></div>
+      <div class="row extra_margin">
+        <h6>Weight</h6>
+        <p class="subdued">Used to calculate shipping rates at checkout and label prices during fulfillment.</p>
+        <label>Weight</label>
+        <div class="input-group">
+          <input class="sidebyside_75" type="text" value="0.0" />
+          <select class="secondary sidebyside_25">
+            <option>lb</option>
+            <option>oz</option>
+            <option>kg</option>
+            <option>g</option>
+          </select>
         </div>
-        <div class="divider" style="margin-left: 0; margin-right: 0;"></div>
-        <button class="secondary">Add another option</button>
       </div>
-      <!-- <button class="btn btn--plain icon-next dark tip" type="button" name="button" data-hover="Edit/add/delete variants"></button> -->
-    </div>
-  </a>
-</article>
-<article>
-  <a href="#" class="theme-editor-action-list__item" data-bind-event-click="action("openSectionPanel", "section-seo")" draggable="false">
-    <div class="card">
-      <h5>Search engine listing preview</h5>
-      <!-- <button class="btn--link top-right">Edit website SEO</button> -->
-      <p>Add a description to see how this product might appear in a search engine listing.</p>
-      <button class="secondary">Edit website SEO</button>
-      <!-- <button class="btn btn--plain icon-next dark" type="button" name="button"></button> -->
-    </div>
-  </a>
-</article>
-<article>
-  <div class="card secondary">
-    <h5>Visibility</h5>
-    <div class="divider"></div>
-    <div class="row no_margin">
-      <label><input type="checkbox" name="" checked="checked">Online store<a href=""><i class="icon-calendar tip" data-hover="Set publish date"></i></a></label>
-    </div>
-  </div>
-</article>
-<article>
-  <div class="card secondary">
-    <h5>Organization</h5>
-    <div class="row extra_margin">
-      <label>Product type</label>
-      <div class="input-group">
-        <input type="text" placeholder="Shirts" />
-        <button class="secondary icon-down"></button>
+      <div class="row">
+        <h6>International Customs</h6>
+        <label>HS tariff code <a href="http://hts.usitc.gov/" target="_blank">(look up code)</a></label>
+        <input type="text" />
+      </div>
+      <div class="divider"></div>
+      <div class="row no_margin">
+        <h6>Fulfillment Service</h6>
+        <select>
+          <option>Manual</option>
+        </select>
       </div>
     </div>
-    <div class="row">
-      <label>Vendor</label>
-      <div class="input-group">
-        <input type="text" placeholder="Nike" />
-        <button class="secondary icon-down"></button>
+  </article>
+  <article>
+    <a href="#" class="theme-editor-action-list__item" data-bind-event-click="action("openSectionPanel", "section-variants")" draggable="false">
+      <div class="card">
+        <h5>Variants</h5>
+        <!-- <button class="btn--link top-right">Add variant</button> -->
+        <p>Add variants if this product comes in multiple versions, like different sizes or colors.</p>
+        <button class="secondary">Add variant</button>
+        <div class="accordion_grey bottom rounded_bottom">
+          <div class="row">
+            <label>Option name</label>
+            <input class="extra_margin" type="text" value="Size"/>
+            <label>Option values</label>
+            <input type="text" placeholder="Separate options with a comma"/>
+          </div>
+          <div class="divider" style="margin-left: 0; margin-right: 0;"></div>
+          <button class="secondary">Add another option</button>
+        </div>
+        <!-- <button class="btn btn--plain icon-next dark tip" type="button" name="button" data-hover="Edit/add/delete variants"></button> -->
+      </div>
+    </a>
+  </article>
+  <article>
+    <a href="#" class="theme-editor-action-list__item" data-bind-event-click="action("openSectionPanel", "section-seo")" draggable="false">
+      <div class="card">
+        <h5>Search engine listing preview</h5>
+        <!-- <button class="btn--link top-right">Edit website SEO</button> -->
+        <p>Add a description to see how this product might appear in a search engine listing.</p>
+        <button class="secondary">Edit website SEO</button>
+        <!-- <button class="btn btn--plain icon-next dark" type="button" name="button"></button> -->
+      </div>
+    </a>
+  </article>
+  <article>
+    <div class="card secondary">
+      <h5>Visibility</h5>
+      <div class="divider"></div>
+      <div class="row no_margin">
+        <label><input type="checkbox" name="" checked="checked">Online store<a href=""><i class="icon-calendar tip" data-hover="Set publish date"></i></a></label>
       </div>
     </div>
-    <div class="divider"></div>
-    <div class="row">
-      <label class="extra_margin">Collection</label>
-      <input type="search" placeholder="Search for collections" />
-      <em>Add this product to a collection so it’s easy to find in your store.</em>
+  </article>
+  <article>
+    <div class="card secondary">
+      <h5>Organization</h5>
+      <div class="row extra_margin">
+        <label>Product type</label>
+        <div class="input-group">
+          <input type="text" placeholder="Shirts" />
+          <button class="secondary icon-down"></button>
+        </div>
+      </div>
+      <div class="row">
+        <label>Vendor</label>
+        <div class="input-group">
+          <input type="text" placeholder="Nike" />
+          <button class="secondary icon-down"></button>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="row">
+        <label class="extra_margin">Collection</label>
+        <input type="search" placeholder="Search for collections" />
+        <em>Add this product to a collection so it’s easy to find in your store.</em>
+      </div>
+      <div class="divider"></div>
+      <div class="row no_margin">
+        <label class="extra_margin">Tags <a href="#" class="label-cta">View all tags</a></label>
+        <%= o.text_field :tags, placeholder: "Vintage, cotton, summer" %>
+      </div>
     </div>
-    <div class="divider"></div>
-    <div class="row no_margin">
-      <label class="extra_margin">Tags <a href="#" class="label-cta">View all tags</a></label>
-      <input type="text" placeholder="Vintage, cotton, summer" />
+  </article>
+  <article>
+    <div class="card secondary">
+      <h5>Theme templates</h5>
+      <label>Template suffix</label>
+      <select class="secondary extra_margin">
+        <option>product</option>
+        <option>product.two</option>
+        <option>product.three</option>
+      </select>
+      <em class="no_margin">The template customers see when viewing this product in your store.</em>
     </div>
+  </article>
+  <div class="wittyEDBottomButtons"> 
+    <!-- <button class="secondary red btn_bottom">Delete product</button> -->
+    <button class="warning btn_bottom">Delete product</button>  
   </div>
-</article>
-<article>
-  <div class="card secondary">
-    <h5>Theme templates</h5>
-    <label>Template suffix</label>
-    <select class="secondary extra_margin">
-      <option>product</option>
-      <option>product.two</option>
-      <option>product.three</option>
-    </select>
-    <em class="no_margin">The template customers see when viewing this product in your store.</em>
-  </div>
-</article>
-<div class="wittyEDBottomButtons"> 
-  <!-- <button class="secondary red btn_bottom">Delete product</button> -->
-  <button class="warning btn_bottom">Delete product</button>  
-</div>
+<% end %>

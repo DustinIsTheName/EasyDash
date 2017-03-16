@@ -77,7 +77,7 @@ function ready() {
 		if (resource_object.length > 0) {
 			for (var i = min_bound; i <= max_bound; i++) {
 			  new_html += '<li class="variable">';
-				new_html += '<a href="#" data-handle="' + resource_object[i].handle + '" data-id="'+resource_object[i].id+'">';
+				new_html += '<a href="#" target="_blank" data-handle="' + resource_object[i].handle + '" data-id="'+resource_object[i].id+'">';
 			  new_html += resource_object[i].title;
 			  new_html += '</a>'
 			  new_html += '</li>'

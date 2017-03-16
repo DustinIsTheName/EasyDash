@@ -14,11 +14,13 @@
           </h2>
         </nav><!-- .theme-editor__header-nav -->
       </header><!-- .theme-editor__header -->
-      <header class="theme-editor__header theme-editor__header--no-shadow">
-        <button class="btn btn--plain theme-editor__header-action icon-prev" data-bind-event-click="action("closeSectionPanel", sectionId)" aria-label="Back to sections" type="button" name="button"></button>
-        <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)"><%= @type %></h2>
-        <a class="btn_more" href=""><% svgs 'more_teal' %></a>
-      </header><!-- .theme-editor__header -->
+      <% unless @type == 'resource_select' %>
+        <header class="theme-editor__header theme-editor__header--no-shadow">
+          <button class="btn btn--plain theme-editor__header-action icon-prev" data-bind-event-click="action("closeSectionPanel", sectionId)" aria-label="Back to sections" type="button" name="button"></button>
+          <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)"><%= @type %></h2>
+          <a class="btn_more" href=""><% svgs 'more_teal' %></a>
+        </header><!-- .theme-editor__header -->
+      <% end %>
       <div class="wittyEDPanelBody" data-scrollable="">
         <%= panel @type %>
       </div><!-- .wittyEDPanelBody -->

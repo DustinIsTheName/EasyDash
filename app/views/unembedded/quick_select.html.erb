@@ -19,25 +19,25 @@
           <div class="card-section">
             Blog Post
             <button class="select-sim" type="button">Select</button>
-						<%= render partial: 'select_dropdown', locals: {resources: @articles, total: @article_count, resource_name: 'blog'} %>
+            <%= dropdown @articles, @article_count, 'blog' %>
           </div>
           <hr/>
           <div class="card-section">
             Collection
             <button class="select-sim" type="button">Select</button>
-						<%= render partial: 'select_dropdown', locals: {resources: @collections, total: @collection_count, resource_name: 'collection'} %>
+            <%= dropdown @collections, @collection_count, 'collection' %>
           </div>
           <hr/>
           <div class="card-section">
             Page
             <button class="select-sim" type="button">Select</button>
-						<%= render partial: 'select_dropdown', locals: {resources: @pages, total: @page_count, resource_name: 'page'} %>
+            <%= dropdown @pages, @page_count, 'page' %>
           </div>
           <hr/>
           <div class="card-section">
             Product
             <button class="select-sim" type="button">Select</button>
-						<%= render partial: 'select_dropdown', locals: {resources: @products, total: @product_count, resource_name: 'product'} %>
+            <%= dropdown @products, @product_count, 'product' %>
           </div>
         </div>
       </article><!-- .next-card -->

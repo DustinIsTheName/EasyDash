@@ -4,25 +4,7 @@ class UnembeddedController < ApplicationController
   layout 'application'
 
   def quick_select
-  	@product_count = ShopifyAPI::Product.count
-  	@article_count = ShopifyAPI::Article.count
-  	@page_count = ShopifyAPI::Page.count
-  	@collection_count = ShopifyAPI::CustomCollection.count + ShopifyAPI::SmartCollection.count
-
-  	@products = ShopifyAPI::Product.find(:all, params: {limit: 250, fields: ['title', 'handle', 'id']})
-  	@articles = ShopifyAPI::Article.find(:all, params: {limit: 250, fields: ['title', 'handle', 'id']})
-  	@pages = ShopifyAPI::Page.find(:all, params: {limit: 250, fields: ['title', 'handle', 'id']})
-  	@collections = []
-
-		@cc = ShopifyAPI::CustomCollection.find(:all, params: {title: params[:q], :limit => 250, fields: ['title', 'handle', 'id']})
-		@cc.each do |c|
-		  @collections << c
-		 end
-
-		@sc = ShopifyAPI::SmartCollection.find(:all, params: {title: params[:q], :limit => 250, fields: ['title', 'handle', 'id']})
-		@sc.each do |c|
-		 @collections << c
-		end
+    get_resources
   end
 
   def dashboard
@@ -42,7 +24,34 @@ class UnembeddedController < ApplicationController
       @resource = ShopifyAPI::Product.find(params[:id])
     else
       @type = 'resource_select'
+      get_resources
     end
   end
+
+  private
+
+    def get_resources
+      @product_count = ShopifyAPI::Product.count
+      @article_count = ShopifyAPI::Article.count
+      @page_count = ShopifyAPI::Page.count
+      @collection_count = ShopifyAPI::CustomCollection.count + ShopifyAPI::SmartCollection.count
+
+      api_params = {limit: 250, fields: ['title', 'handle', 'id']}
+
+      @products = ShopifyAPI::Product.find(:all, params: api_params)
+      @articles = ShopifyAPI::Article.find(:all, params: api_params)
+      @pages = ShopifyAPI::Page.find(:all, params: api_params)
+      @collections = []
+
+      @cc = ShopifyAPI::CustomCollection.find(:all, params: api_params)
+      @cc.each do |c|
+        @collections << c
+       end
+
+      @sc = ShopifyAPI::SmartCollection.find(:all, params: api_params)
+      @sc.each do |c|
+       @collections << c
+      end
+    end
 
 end
