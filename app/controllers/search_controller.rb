@@ -1,30 +1,29 @@
 class SearchController < AuthenticatedController
   skip_before_filter :verify_authenticity_token
+  before_filter :set_params_and_headers
 
   def products
-    headers['Access-Control-Allow-Origin'] = '*'
-  	products = ShopifyAPI::Product.find(:all, params: {title: params[:q], limit: 250, page: params[:page], fields: ['title', 'handle', 'id']})
+  	products = ShopifyAPI::Product.find(:all, params: api_params)
 
   	render json: products
   end
 
   def blogs
-    headers['Access-Control-Allow-Origin'] = '*'
-  	articles = ShopifyAPI::Article.find(:all, params: {title: params[:q], limit: 250, page: params[:page], fields: ['title', 'handle', 'id']})
+  	articles = ShopifyAPI::Article.find(:all, params: api_params)
 
   	render json: articles
   end
 
   def collections
-    headers['Access-Control-Allow-Origin'] = '*'
+    
   	@collections = []
 
-		@cc = ShopifyAPI::CustomCollection.find(:all, params: {title: params[:q], :limit => 250, page: params[:page], fields: ['title', 'handle', 'id']})
+		@cc = ShopifyAPI::CustomCollection.find(:all, params: api_params)
 		@cc.each do |c|
 		  @collections << c
 		 end
 
-		@sc = ShopifyAPI::SmartCollection.find(:all, params: {title: params[:q], :limit => 250, page: params[:page], fields: ['title', 'handle', 'id']})
+		@sc = ShopifyAPI::SmartCollection.find(:all, params: api_params)
 		@sc.each do |c|
 		 @collections << c
 		end
@@ -33,10 +32,17 @@ class SearchController < AuthenticatedController
   end
 
   def pages
-    headers['Access-Control-Allow-Origin'] = '*'
-  	pages = ShopifyAPI::Page.find(:all, params: {title: params[:q], limit: 250, page: params[:page], fields: ['title', 'handle', 'id']})
+  	pages = ShopifyAPI::Page.find(:all, params: api_params)
 
   	render json: pages
   end
+
+  private
+
+    def set_params_and_headers
+      headers['Access-Control-Allow-Origin'] = '*'
+
+      api_params = { title: params[:q], limit: 250, page: params[:page], fields: ['title', 'handle', 'id'] }
+    end
 
 end
