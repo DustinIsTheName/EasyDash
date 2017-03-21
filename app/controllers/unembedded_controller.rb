@@ -1,5 +1,6 @@
 class UnembeddedController < ApplicationController
 	before_action :login_again_if_different_shop
+  skip_before_filter :verify_authenticity_token, :only => :update_api
   around_filter :shopify_session
   layout 'application'
 
@@ -21,11 +22,39 @@ class UnembeddedController < ApplicationController
     when 'page'
       @resource = ShopifyAPI::Page.find(params[:id])
     when 'product'
+      @fulfillment_services = ShopifyAPI::FulfillmentService.find(:all, params: {scope: :all, fields: ['name', 'handle']})
       @resource = ShopifyAPI::Product.find(params[:id])
     else
       @type = 'resource_select'
       get_resources
     end
+  end
+
+  def update_api
+    # .add_metafield
+
+    puts Colorize.magenta(params);
+
+    @type = params[:resource]
+    case @type
+    when 'blog'
+      @resource = ShopifyAPI::Article.find(params[:id])
+    when 'collection'
+      @resource = ShopifyAPI::CustomCollection.find(params[:id])
+
+      unless @resource
+        @resource = ShopifyAPI::SmartCollection.find(params[:id])
+      end
+    when 'page'
+      @resource = ShopifyAPI::Page.find(params[:id])
+    when 'product'
+      @fulfillment_services = ShopifyAPI::FulfillmentService.find(:all, params: {scope: :all, fields: ['name', 'handle']})
+      @resource = ShopifyAPI::Product.find(params[:id])
+    else
+      @type = 'resource_select'
+      get_resources
+    end
+    render :dashboard, resource: params[:resource], id: params[:id]
   end
 
   private

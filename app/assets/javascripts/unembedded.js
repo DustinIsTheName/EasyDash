@@ -16,10 +16,14 @@ function ready() {
 		query: ''
 	}
 
-	resource_infomation.blog_total = resource_infomation.blogs.length;
-	resource_infomation.collection_total = resource_infomation.collections.length;
-	resource_infomation.page_total = resource_infomation.pages.length;
-	resource_infomation.product_total = resource_infomation.products.length;
+	try {
+		resource_infomation.blog_total = resource_infomation.blogs.length;
+		resource_infomation.collection_total = resource_infomation.collections.length;
+		resource_infomation.page_total = resource_infomation.pages.length;
+		resource_infomation.product_total = resource_infomation.products.length;
+	} catch (e) {
+		console.log(e);
+	}
 
 	$('.select-sim').click(function(event) {
 		$('.select-sim').not(this).removeClass('active');
@@ -77,7 +81,7 @@ function ready() {
 		if (resource_object.length > 0) {
 			for (var i = min_bound; i <= max_bound; i++) {
 			  new_html += '<li class="variable">';
-				new_html += '<a href="#" target="_blank" data-handle="' + resource_object[i].handle + '" data-id="'+resource_object[i].id+'">';
+				new_html += '<a href="/dashboard?resource='+resource+'&id='+resource_object[i].id+'" target="_blank" data-handle="' + resource_object[i].handle + '" data-id="'+resource_object[i].id+'">';
 			  new_html += resource_object[i].title;
 			  new_html += '</a>'
 			  new_html += '</li>'
@@ -139,6 +143,15 @@ function ready() {
 			});
 		}
 	});
+
+  $('.reveal-trigger').click(function(e) {
+  	e.preventDefault();
+  	var reveal = $(this).data('reveal');
+  	$(this).hide();
+
+  	$('.reveal-target[data-reveal="'+reveal+'"]').show();
+  });
+
 }
 
 $(document).on('turbolinks:load', ready);

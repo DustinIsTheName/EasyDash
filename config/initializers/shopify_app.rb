@@ -6,6 +6,6 @@ ShopifyApp.configure do |config|
 	else
 		config.redirect_uri = "https://localhost:3000/auth/shopify/callback"
 	end
-  config.scope = "read_content, write_content, read_themes, write_themes, read_products, write_products, read_script_tags, write_script_tags"
+  config.scope = "write_content, write_themes, write_products, write_script_tags, read_fulfillments"
   config.embedded_app = true
 end

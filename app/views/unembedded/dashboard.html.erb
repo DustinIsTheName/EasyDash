@@ -16,7 +16,7 @@
       </header><!-- .theme-editor__header -->
       <% unless @type == 'resource_select' %>
         <header class="theme-editor__header theme-editor__header--no-shadow">
-          <button class="btn btn--plain theme-editor__header-action icon-prev" data-bind-event-click="action("closeSectionPanel", sectionId)" aria-label="Back to sections" type="button" name="button"></button>
+          <button class="btn btn--plain theme-editor__header-action icon-prev" data-bind-event-click="action('closeSectionPanel', sectionId)" aria-label="Back to sections" type="button" name="button"></button>
           <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)"><%= @type %></h2>
           <a class="btn_more" href=""><% svgs 'more_teal' %></a>
         </header><!-- .theme-editor__header -->
@@ -33,14 +33,14 @@
       <button class="btn secondary views_button" title="Viewport selector" type="button" name="button" id="ui-popover-activator--10" aria-expanded="true" aria-haspopup="true" aria-owns="ui-popover--10" aria-controls="ui-popover--10">
         <%= svgs 'monitor_teal' %>
         <div class="icon-down teal"></div>
-	  </button>
+  	  </button>
       <div class="ui-stack-item ui-stack-item--fill type--right">
         <ul class="segmented">
           <li>
-            <button class="btn btn--icon tip icon-undo" disabled="disabled" data-hover="Undo" data-role="undo" data-bind-disabled="!editor.undoTracker.hasUndo() || editor.saving || editor.loading" data-bind-event-click="action("undo")" aria-label="Undo" type="button" name="button"></button>          
+            <button class="btn btn--icon tip icon-undo" disabled="disabled" data-hover="Undo" data-role="undo" data-bind-disabled="!editor.undoTracker.hasUndo() || editor.saving || editor.loading" data-bind-event-click="action('undo')" aria-label="Undo" type="button" name="button"></button>          
           </li>
           <li>
-            <button class="btn btn--icon tip icon-redo" disabled="disabled" data-hover="Redo" data-role="redo" data-bind-disabled="!editor.undoTracker.hasRedo() || editor.saving || editor.loading" data-bind-event-click="action("redo")" aria-label="Redo" type="button" name="button"></button>
+            <button class="btn btn--icon tip icon-redo" disabled="disabled" data-hover="Redo" data-role="redo" data-bind-disabled="!editor.undoTracker.hasRedo() || editor.saving || editor.loading" data-bind-event-click="action('redo')" aria-label="Redo" type="button" name="button"></button>
           </li>
         </ul>
         <button class="btn btn-primary" disabled="" data-bind-disabled="!editor.dirty || editor.saving" data-bind-class="{"is-loading": editor.saving }" data-bind-event-click="action("save")" data-role="save" type="button" name="button">Save</button>
