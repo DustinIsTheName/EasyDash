@@ -26,4 +26,14 @@ module OptionsHelper
 
 		options
 	end
+
+	def template_suffix_options(assets)
+		options = []
+
+		for asset in assets
+			options.push([asset.key.gsub("templates/", "").gsub(".liquid", ""), asset.key.gsub("templates/product", "").gsub(".", "").gsub("liquid", "")])
+		end
+
+		options.sort
+	end
 end

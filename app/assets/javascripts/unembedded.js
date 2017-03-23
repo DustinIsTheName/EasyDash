@@ -13,6 +13,7 @@ function ready() {
 		collection_chunks_loaded: 1,
 		page_chunks_loaded: 1,
 		product_chunks_loaded: 1,
+		target: $('#target_attr').data('target'),
 		query: ''
 	}
 
@@ -81,7 +82,7 @@ function ready() {
 		if (resource_object.length > 0) {
 			for (var i = min_bound; i <= max_bound; i++) {
 			  new_html += '<li class="variable">';
-				new_html += '<a href="/dashboard?resource='+resource+'&id='+resource_object[i].id+'" target="_blank" data-handle="' + resource_object[i].handle + '" data-id="'+resource_object[i].id+'">';
+				new_html += '<a href="/dashboard?resource='+resource+'&id='+resource_object[i].id+'" target="'+resource_infomation.target+'" data-handle="' + resource_object[i].handle + '" data-id="'+resource_object[i].id+'">';
 			  new_html += resource_object[i].title;
 			  new_html += '</a>'
 			  new_html += '</li>'

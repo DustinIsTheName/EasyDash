@@ -3,30 +3,31 @@
   <button class="sidebyside_15 warning icon-trash tip" data-hover="Delete Product"></button>
 </div>
 <h3 class="ui-subheading ui-subheading--subdued theme-editor__subheading">Or choose another option</h3>
+<input type="hidden" id="target_attr" data-target="">
 <article class="next-card">
   <div class="card has-sections no_margin">
     <div class="card-section">
       Blog Post
       <button class="select-sim" type="button">Select</button>
-      <%= dropdown @articles, @article_count, 'blog' %>
+      <%= dropdown @articles, @article_count, 'blog', '' %>
     </div>
     <hr/>
     <div class="card-section">
       Collection
       <button class="select-sim" type="button">Select</button>
-      <%= dropdown @collections, @collection_count, 'collection' %>
+      <%= dropdown @collections, @collection_count, 'collection', '' %>
     </div>
     <hr/>
     <div class="card-section">
       Page
       <button class="select-sim" type="button">Select</button>
-      <%= dropdown @pages, @page_count, 'page' %>
+      <%= dropdown @pages, @page_count, 'page', '' %>
     </div>
     <hr/>
     <div class="card-section">
       Product
       <button class="select-sim" type="button">Select</button>
-      <%= dropdown @products, @product_count, 'product' %>
+      <%= dropdown @products, @product_count, 'product', '' %>
     </div>
   </div>
 </article><!-- .next-card -->

@@ -101,14 +101,20 @@
           <div class="row">
             <h6>International Customs</h6>
             <label>HS tariff code <a href="http://hts.usitc.gov/" target="_blank">(look up code)</a></label>
-            <% v.object.metafields.each do |metafield| %>
-              <% if metafield.key == 'harmonized_system_code' %>
-                <%= fields_for 'metafields[]', metafield do |m| %>
-                  <%= m.text_field :value %>
+            <% if v.object.metafields.count > 0 %>
+              <% v.object.metafields.each do |metafield| %>
+                <% if metafield.key == 'harmonized_system_code' %>
+                  <%= fields_for 'variants['+v.object.id.to_s+']metafields[]', metafield do |m| %>
+                    <%= m.text_field :value %>
+                  <% end %>
                 <% end %>
               <% end %>
+            <% else %>
+              <%= fields_for 'variants['+v.object.id.to_s+']new_metafields[]', ShopifyAPI::Metafield.new do |m| %>
+                <%= m.hidden_field :name, value: "harmonized_system_code" %>
+                <%= m.text_field :value, class: "new_field" %>
+              <% end %>
             <% end %>
-
           </div>
           <div class="divider"></div>
           <div class="row no_margin">
@@ -174,27 +180,33 @@
             <% end %>
           <% end %>
 
-          <% if title_tag_index %>
-            <%= fields_for 'metafields[]', @resource.metafields[title_tag_index] do |m| %>
-              <%= m.text_field :value %>
+          <div class="row">
+            <% if title_tag_index %>
+              <%= fields_for 'metafields[]', @resource.metafields[title_tag_index] do |m| %>
+                <%= m.text_field :value %>
+              <% end %>
+            <% else %>
+              <%= fields_for 'new_metafields[]', ShopifyAPI::Metafield.new do |m| %>
+                <%= m.text_field :value, class: "new_field" %>
+              <% end %>
             <% end %>
-          <% else %>
-            <%= fields_for 'new_metafields[]', ShopifyAPI::Metafield.new do |m| %>
-              <%= m.text_field :value, class: "new_field" %>
-            <% end %>
-          <% end %>
+          </div>
 
-          <% if description_tag_index %>
-            <%= fields_for 'metafields[]',  @resource.metafields[description_tag_index] do |m| %>
-              <%= m.text_area :value %>
+          <div class="row">
+            <% if description_tag_index %>
+              <%= fields_for 'metafields[]',  @resource.metafields[description_tag_index] do |m| %>
+                <%= m.text_area :value %>
+              <% end %>
+            <% else %>
+              <%= fields_for 'new_metafields[]', ShopifyAPI::Metafield.new do |m| %>
+                <%= m.text_field :value, class: "new_field" %>
+              <% end %>
             <% end %>
-          <% else %>
-            <%= fields_for 'new_metafields[]', ShopifyAPI::Metafield.new do |m| %>
-              <%= m.text_field :value, class: "new_field" %>
-            <% end %>
-          <% end %>
+          </div>
 
-          <%= o.text_field :handle %>
+          <div class="row no_margin">
+            <%= o.text_field :handle %>
+          </div>
         </div>
         <!-- <button class="btn btn--plain icon-next dark" type="button" name="button"></button> -->
       </div>
@@ -215,14 +227,14 @@
       <div class="row extra_margin">
         <label>Product type</label>
         <div class="input-group">
-          <input type="text" placeholder="Shirts" />
+          <%= o.text_field :product_type, placeholder: "Shirts" %>
           <button class="secondary icon-down"></button>
         </div>
       </div>
       <div class="row">
         <label>Vendor</label>
         <div class="input-group">
-          <input type="text" placeholder="Nike" />
+          <%= o.text_field :vendor, placeholder: "Nike" %>
           <button class="secondary icon-down"></button>
         </div>
       </div>
@@ -243,11 +255,7 @@
     <div class="card secondary">
       <h5>Theme templates</h5>
       <label>Template suffix</label>
-      <select class="secondary extra_margin">
-        <option>product</option>
-        <option>product.two</option>
-        <option>product.three</option>
-      </select>
+      <%= o.select :template_suffix, template_suffix_options(@assets.select{|asset| asset.key.include? "templates/product" }), {}, {class: "secondary extra_margin"} %>>
       <em class="no_margin">The template customers see when viewing this product in your store.</em>
     </div>
   </article>
