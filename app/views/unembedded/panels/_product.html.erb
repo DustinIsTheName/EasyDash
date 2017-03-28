@@ -187,6 +187,7 @@
               <% end %>
             <% else %>
               <%= fields_for 'new_metafields[]', ShopifyAPI::Metafield.new do |m| %>
+                <%= m.hidden_field :name, value: 'title_tag', class: "new_field" %>
                 <%= m.text_field :value, class: "new_field" %>
               <% end %>
             <% end %>
@@ -199,7 +200,8 @@
               <% end %>
             <% else %>
               <%= fields_for 'new_metafields[]', ShopifyAPI::Metafield.new do |m| %>
-                <%= m.text_field :value, class: "new_field" %>
+                <%= m.hidden_field :name, value: 'description_tag', class: "new_field" %>
+                <%= m.text_area :value, class: "new_field" %>
               <% end %>
             <% end %>
           </div>
@@ -217,7 +219,18 @@
       <h5>Visibility</h5>
       <div class="divider"></div>
       <div class="row no_margin">
-        <label><input type="checkbox" name="" checked="checked">Online store<a href=""><i class="icon-calendar tip" data-hover="Set publish date"></i></a></label>
+        <label>
+          <% if @resource.published_at %>
+            <input type="checkbox" name="shopify_api_product[published_at]" checked="checked">
+            <input type="hidden" name="shopify_api_product[old_published_at]" value="<%= @resource.published_at %>">
+          <% else %>
+            <input type="checkbox" name="shopify_api_product[published_at]">
+          <% end %>
+          Online store
+          <a href="">
+            <i class="icon-calendar tip" data-hover="Set publish date"></i>
+          </a>
+        </label>
       </div>
     </div>
   </article>

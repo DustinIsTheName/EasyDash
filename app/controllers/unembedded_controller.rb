@@ -51,8 +51,12 @@ class UnembeddedController < ApplicationController
     when 'product'
       successes = 0
       failures = 0
+      identicals = 0
+      i_arr = []
 
       @product = ShopifyAPI::Product.find(params[:id])
+
+      old_product = ShopifyAPI::Product.new(@product.attributes)
 
       @product.title = params["shopify_api_product"]["title"]
       @product.body_html = params["shopify_api_product"]["body_html"]
@@ -62,25 +66,65 @@ class UnembeddedController < ApplicationController
       @product.tags = params["shopify_api_product"]["tags"]
       @product.template_suffix = params["shopify_api_product"]["template_suffix"]
 
-      if @product.save
-        successes += 1
+      if params["shopify_api_product"]["published_at"]
+        unless params["shopify_api_product"]["old_published_at"]
+          @product.published_at = Time.now
+        end
       else
-        failures += 1
-      end
+        @product.published_at = nil
+      end  
 
-      @product.metafields.each do |metafield|
-        m = params["metafields"][metafield.id.to_s]
-
-        metafield.value = m["value"]
-        
-        if metafield.save
+      if old_product.attributes == @product.attributes
+        identicals += 1
+        i_arr.push 'product'
+      else
+        if @product.save
           successes += 1
         else
           failures += 1
         end
       end
 
+      @product.metafields.each do |metafield|
+        old_metafield = ShopifyAPI::Metafield.new(metafield.attributes)
+        m = params["metafields"][metafield.id.to_s]
+
+        if m
+          metafield.value = m["value"]
+          
+          if old_metafield.attributes == metafield.attributes
+            identicals += 1
+            i_arr.push m["value"]
+          else
+            if metafield.save
+              successes += 1
+            else
+              failures += 1
+            end
+          end
+        end
+      end
+
+      if params["new_metafields"]
+        params["new_metafields"].each do |new_metafield|
+          @product.add_metafield(ShopifyAPI::Metafield.new({
+            namespace: 'global',
+            key: new_metafield["name"],
+            value: new_metafield["value"],
+            value_type: 'string'
+          }))
+        end
+      end
+
       @product.variants.each do |variant|
+        variant.attributes.each do |key, value| 
+          variant.attributes[key] = "" if value.nil?
+          variant.attributes[key] = "1" if value == true
+          variant.attributes[key] = "0" if value == false
+          variant.attributes[key] = variant.attributes[key].to_s
+        end
+
+        old_variant = ShopifyAPI::Metafield.new(variant.attributes)
         v = params["variants"][variant.id.to_s]
 
         variant.price = v["price"]
@@ -94,21 +138,48 @@ class UnembeddedController < ApplicationController
         variant.weight_unit = v["weight_unit"]
         variant.fulfillment_service = v["fulfillment_service"]
 
-        if variant.save
-          successes += 1
+        puts old_variant.attributes
+        puts variant.attributes
+
+        if old_variant.attributes == variant.attributes
+          identicals += 1
+          i_arr.push 'variant'
         else
-          failures += 1
-        end
-
-        variant.metafields.each do |metafield|
-          m = v["metafields"][metafield.id.to_s]
-
-          metafield.value = m["value"]
-
-          if metafield.save
+          if variant.save
             successes += 1
           else
             failures += 1
+          end
+        end
+
+        variant.metafields.each do |metafield|
+          old_metafield = ShopifyAPI::Metafield.new(metafield.attributes)
+          m = v["metafields"][metafield.id.to_s]
+
+          if m
+            metafield.value = m["value"]
+
+            if old_metafield.attributes = metafield.attributes
+              identicals += 1
+              i_arr.push m["value"]
+            else
+              if metafield.save
+                successes += 1
+              else
+                failures += 1
+              end
+            end
+          end
+        end
+
+        if v["new_metafields"]
+          v["new_metafields"].each do |new_metafield|
+            variant.add_metafield(ShopifyAPI::Metafield.new({
+              namespace: 'global',
+              key: new_metafield["name"],
+              value: new_metafield["value"],
+              value_type: 'string'
+            }))
           end
         end
 
@@ -116,8 +187,9 @@ class UnembeddedController < ApplicationController
 
     end
 
-    puts Colorize.green('successes: '<<successes)
-    puts Colorize.red('failures: '<<failures)
+    puts Colorize.green('successes: '<<successes.to_s)
+    puts Colorize.red('failures: '<<failures.to_s)
+    puts Colorize.cyan('identicals: '<<identicals.to_s<<' '<<i_arr.join(' '))
 
     redirect_to dashboard_path(resource: params[:resource], id: params[:id])
   end
