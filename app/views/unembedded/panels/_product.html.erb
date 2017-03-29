@@ -1,4 +1,4 @@
-<%= form_for @resource, url: url_for(controller: 'unembedded', action: 'update_api'), method: :post do |o| %>
+<%= form_for @resource, url: url_for(controller: 'unembedded', action: 'update_api'), method: :put do |o| %>
 
   <input type="hidden" name="resource" value="<%= @type %>"> 
   <input type="hidden" name="id" value="<%= @resource.id %>"> 
@@ -137,31 +137,46 @@
   <% end %>
 
   <article>
-    <a href="#" class="theme-editor-action-list__item" data-bind-event-click="action("openSectionPanel", "section-variants")" draggable="false">
-      <div class="card">
-        <h5>Variants</h5>
-        <!-- <button class="btn--link top-right">Add variant</button> -->
-        <p>Add variants if this product comes in multiple versions, like different sizes or colors.</p>
-        <button class="secondary">Add variant</button>
-        <div class="accordion_grey bottom rounded_bottom">
+    <div class="card">
+      <h5>Variants</h5>
+      <p>Add variants if this product comes in multiple versions, like different sizes or colors.</p>
+      <button class="secondary reveal-trigger" data-reveal="options">Add variant</button>
+      <div class="accordion_grey bottom rounded_bottom reveal-target" data-reveal="options">
+        <div class="row">
+          <label>Option name</label>
+          <input name="new_option_1" class="extra_margin" type="text" value="Size"/>
+          <label>Option values</label>
+          <input name="new_option_values_1" type="text" placeholder="Separate options with a comma"/>
+        </div>
+        <div class="divider" style="margin-left: 0; margin-right: 0;"></div>
+        <button class="secondary reveal-trigger" data-reveal="options_2">Add another option</button>
+
+        <div class="reveal-target" data-reveal="options_2">
           <div class="row">
             <label>Option name</label>
-            <input class="extra_margin" type="text" value="Size"/>
+            <input name="new_option_2" class="extra_margin" type="text" value="Color"/>
             <label>Option values</label>
-            <input type="text" placeholder="Separate options with a comma"/>
+            <input name="new_option_values_2" type="text" placeholder="Separate options with a comma"/>
           </div>
           <div class="divider" style="margin-left: 0; margin-right: 0;"></div>
-          <button class="secondary">Add another option</button>
+          <button class="secondary reveal-trigger" data-reveal="options_3">Add another option</button>
         </div>
-        <!-- <button class="btn btn--plain icon-next dark tip" type="button" name="button" data-hover="Edit/add/delete variants"></button> -->
+
+        <div class="reveal-target" data-reveal="options_3">
+          <div class="row">
+            <label>Option name</label>
+            <input name="new_option_3" class="extra_margin" type="text" value="Material"/>
+            <label>Option values</label>
+            <input name="new_option_values_3" type="text" placeholder="Separate options with a comma"/>
+          </div>
+        </div>
       </div>
-    </a>
+    </div>
   </article>
   <article>
     <div class="theme-editor-action-list__item" data-bind-event-click="action("openSectionPanel", "section-seo")" draggable="false">
       <div class="card">
         <h5>Search engine listing preview</h5>
-        <!-- <button class="btn--link top-right">Edit website SEO</button> -->
         <p>Add a description to see how this product might appear in a search engine listing.</p>
         <button class="secondary reveal-trigger" data-reveal="seo">Edit website SEO</button>
         <div class="edit reveal-target" data-reveal="seo">
@@ -222,7 +237,7 @@
         <label>
           <% if @resource.published_at %>
             <input type="checkbox" name="shopify_api_product[published_at]" checked="checked">
-            <input type="hidden" name="shopify_api_product[old_published_at]" value="<%= @resource.published_at %>">
+            <input type="hidden" name="shopify_api_product[old_published_at]" value="true">
           <% else %>
             <input type="checkbox" name="shopify_api_product[published_at]">
           <% end %>

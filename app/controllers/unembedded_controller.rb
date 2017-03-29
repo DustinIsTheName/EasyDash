@@ -138,9 +138,6 @@ class UnembeddedController < ApplicationController
         variant.weight_unit = v["weight_unit"]
         variant.fulfillment_service = v["fulfillment_service"]
 
-        puts old_variant.attributes
-        puts variant.attributes
-
         if old_variant.attributes == variant.attributes
           identicals += 1
           i_arr.push 'variant'
@@ -185,11 +182,51 @@ class UnembeddedController < ApplicationController
 
       end
 
+      original_variant = params["variants"].values.first
+
+      unless params["new_option_values_1"].strip == ""
+        new_option_values_1 = params["new_option_values_1"].split(",").map{ |v| v.strip }
+        @product.options = []
+        @product.variants = []
+        @product.options << ShopifyAPI::Option.new(:name => params["new_option_1"])
+
+        unless params["new_option_values_2"].strip == ""
+          new_option_values_2 = params["new_option_values_2"].split(",").map{ |v| v.strip }
+          @product.options << ShopifyAPI::Option.new(:name => params["new_option_2"])
+
+          unless params["new_option_values_3"].strip == ""
+            new_option_values_3 = params["new_option_values_2"].split(",").map{ |v| v.strip }
+            @product.options << ShopifyAPI::Option.new(:name => params["new_option_2"])
+            puts Colorize.blue('3 options')
+
+          else
+            puts Colorize.purple('2 options')
+          end
+        else
+          puts Colorize.green('1 option')
+          new_option_values_1.each do |option1|
+            v = @product.variants << ShopifyAPI::Variant.new({
+              option1: option1,
+              price: original_variant["price"],
+              compare_at_price: original_variant["compare_at_price"],
+              barcode: original_variant["barcode"],
+              taxable: original_variant["taxable"],
+              fulfillment_service: original_variant["fulfillment_service"],
+              inventory_management: original_variant["inventory_management"],
+              requires_shipping: original_variant["requires_shipping"],
+              weight: original_variant["weight"],
+              weight_unit: original_variant["weight_unit"]
+            })
+          end
+          @product.save
+        end
+      end
+
     end
 
-    puts Colorize.green('successes: '<<successes.to_s)
-    puts Colorize.red('failures: '<<failures.to_s)
-    puts Colorize.cyan('identicals: '<<identicals.to_s<<' '<<i_arr.join(' '))
+    # puts Colorize.green('successes: '<<successes.to_s)
+    # puts Colorize.red('failures: '<<failures.to_s)
+    # puts Colorize.cyan('identicals: '<<identicals.to_s<<' '<<i_arr.join(' '))
 
     redirect_to dashboard_path(resource: params[:resource], id: params[:id])
   end
