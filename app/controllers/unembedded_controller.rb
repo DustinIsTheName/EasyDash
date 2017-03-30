@@ -195,12 +195,50 @@ class UnembeddedController < ApplicationController
           @product.options << ShopifyAPI::Option.new(:name => params["new_option_2"])
 
           unless params["new_option_values_3"].strip == ""
-            new_option_values_3 = params["new_option_values_2"].split(",").map{ |v| v.strip }
-            @product.options << ShopifyAPI::Option.new(:name => params["new_option_2"])
+            new_option_values_3 = params["new_option_values_3"].split(",").map{ |v| v.strip }
+            @product.options << ShopifyAPI::Option.new(:name => params["new_option_3"])
             puts Colorize.blue('3 options')
-
+            new_option_values_1.each do |option1|
+              new_option_values_2.each do |option2|
+                new_option_values_3.each do |option3|
+                  v = @product.variants << ShopifyAPI::Variant.new({
+                    option1: option1,
+                    option2: option2,
+                    option3: option3,
+                    price: original_variant["price"],
+                    compare_at_price: original_variant["compare_at_price"],
+                    barcode: original_variant["barcode"],
+                    taxable: original_variant["taxable"],
+                    fulfillment_service: original_variant["fulfillment_service"],
+                    inventory_management: original_variant["inventory_management"],
+                    requires_shipping: original_variant["requires_shipping"],
+                    weight: original_variant["weight"],
+                    weight_unit: original_variant["weight_unit"]
+                  })
+                end
+              end
+            end
+            @product.save
           else
             puts Colorize.purple('2 options')
+            new_option_values_1.each do |option1|
+              new_option_values_2.each do |option2|
+                v = @product.variants << ShopifyAPI::Variant.new({
+                  option1: option1,
+                  option2: option2,
+                  price: original_variant["price"],
+                  compare_at_price: original_variant["compare_at_price"],
+                  barcode: original_variant["barcode"],
+                  taxable: original_variant["taxable"],
+                  fulfillment_service: original_variant["fulfillment_service"],
+                  inventory_management: original_variant["inventory_management"],
+                  requires_shipping: original_variant["requires_shipping"],
+                  weight: original_variant["weight"],
+                  weight_unit: original_variant["weight_unit"]
+                })
+              end
+            end
+            @product.save
           end
         else
           puts Colorize.green('1 option')
