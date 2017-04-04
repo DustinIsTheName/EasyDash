@@ -176,13 +176,15 @@
           <div class="variant-selector">
             <ul class="variant-selector-list">
               <li class="variant-selector-item">Select:</li>
-              <li class="variant-selector-item"><a class="variant-selector-link default-option" data-bind-event-click="selectAll(this)">All</a></li>
-              <li class="variant-selector-item"><a class="variant-selector-link default-option" data-bind-event-click="deselectAll(this)">None</a></li>
-            </ul>
-            <ul class="variant-selector-list">
+              <li class="variant-selector-item variant-selector-link" data-option="all">
+                All
+              </li>
+              <li class="variant-selector-item variant-selector-link" data-option="none">
+                None
+              </li>
               <% @resource.options.each_with_index do |option, index| %>
                 <% option.values.each do |value| %>
-                  <li class="variant-selector-item option-<%= index + 1 %> variant-selector-link">
+                  <li class="variant-selector-item option-<%= index + 1 %> variant-selector-link" data-option="<%= index + 1 %>" data-value="<%= value %>">
                     <%= value %>
                   </li>
                 <% end %>
@@ -197,41 +199,68 @@
           </div>
           <% @resource.variants.each do |variant| %>
             <%= fields_for 'variants[]', variant do |v| %>
-              <div class="variant">
-                <input type="checkbox">
-                <% if variant.image_id %>
-                  <div class="variant_image">
-                    <img src="<%= @resource.images.select{|i| i.id == variant.image_id}.first.src %>">
+              <div class="variant" data-option1="<%= variant.option1 %>" data-option2="<%= variant.option2 %>" data-option3="<%= variant.option3 %>" >
+                <div class="col_left">
+                  <input type="checkbox">
+                  <% if variant.image_id %>
+                    <div class="variant_image">
+                      <img src="<%= @resource.images.select{ |i| i.id == variant.image_id }.first.src %>">
+                    </div>
+                  <% else %>
+                    <i class="icon-image"></i>
+                  <% end %>
+                </div>
+                <div class="col_right">
+                  <ul class="variant_options lists">
+                    <li class="option-1"><%= variant.option1 %></li>
+                    <li class="option-2"><%= variant.option2 %></li>
+                    <li class="option-3"><%= variant.option3 %></li>
+                  </ul>
+                  <ul class="variant_options inputs">
+                    <% for i in 1..3 %>
+                      <% if variant.attributes["option#{i}"] %>
+                        <li class="option-<%= i %>">
+                          <span class="label"><%= @resource.options[i - 1].name %></span>
+                          <%= v.text_field "option#{i}".to_sym %>
+                        </li>
+                      <% else %>
+                        <li class="option-<%= i %> null">
+                          <span class="label">Option <%= i %></span>
+                          <div class="skeleton_option"></div>
+                        </li>
+                      <% end %>
+                    <% end %>
+                  </ul>
+                </div>
+                <div class="inputs_container">
+                  <div class="input">
+                    <label>Inventory</label>
+                    <% if variant.inventory_management %>
+                      <%= v.text_field :inventory_quantity %>
+                    <% else %>
+                      <input type="text" class="null" value="N/A" readonly>
+                    <% end %>
                   </div>
-                <% else %>
-                  <i class="icon-image"></i>
-                <% end %>
-                <ul class="variant_options">
-                  <li class="option-1"><%= variant.option1 %></li>
-                  <li class="option-2"><%= variant.option2 %></li>
-                  <li class="option-3"><%= variant.option3 %></li>
-                </ul>
+                  <div class="input">
+                    <label>Compare at Price</label>
+                    <%= v.text_field :compare_at_price %>
+                  </div>
+                  <div class="input">
+                    <label>Price</label>
+                    <%= v.text_field :sku %>
+                  </div>
+                  <div class="input">
+                    <label>SKU</label>
+                    <%= v.text_field :price %>
+                  </div>
+                </div>
+                <div class="buttons">
+                  <button class="sidebyside_85 primary">Edit variant</button>
+                  <button class="sidebyside_15 warning icon-trash tip" data-hover="Delete Variant"></button>
+                </div>
               </div>
             <% end %>
           <% end %>
-          <div class="variant">
-            <input type="checkbox">
-            <img src="{{ 'sample_product_image.png' | asset_url }}" />
-            <ul class="variant_options">
-              <li class="option-1">Plumberry</li>
-              <li class="option-2">XS</li>
-              <li class="option-3">XL</li>
-            </ul>
-          </div>
-          <div class="variant">
-            <input type="checkbox">
-            <img src="{{ 'sample_product_image.png' | asset_url }}" />
-            <ul class="variant_options">
-              <li class="option-1">Plumberry</li>
-              <li class="option-2">XS</li>
-              <li class="option-3">XL</li>
-            </ul>
-          </div>
           <div class="variant_open">
             <div class="col_left">
               <input type="checkbox">

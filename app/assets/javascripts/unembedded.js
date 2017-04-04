@@ -1,5 +1,7 @@
 function ready() {
 
+	// JS for the resourse selection
+
 	var resource_infomation = {
 		blogs: $('.select-sim-dropdown.blog').data('object'),
 		collections: $('.select-sim-dropdown.collection').data('object'),
@@ -145,6 +147,8 @@ function ready() {
 		}
 	});
 
+	// permenatly shows target upon clicking the trigger
+
   $('.reveal-trigger').click(function(e) {
   	e.preventDefault();
   	var reveal = $(this).data('reveal');
@@ -153,6 +157,33 @@ function ready() {
   	$('.reveal-target[data-reveal="'+reveal+'"]').show();
   });
 
+  // checkes variant checkboxes based on option value clicked
+
+  $('.variant-selector-link').click(function() {
+  	var option = $(this).data('option');
+  	var value = $(this).data('value');
+
+  	$('.variant > input[type="checkbox"]').prop('checked', false);
+
+  	if (option === 'all') {
+  		$('.variant > input[type="checkbox"]').prop('checked', true);
+  	} else if (option !== 'none') {
+	  	$('.variant[data-option'+option+'="'+value+'"] > input[type="checkbox"]').prop('checked', true);
+	  }
+  });
+
+	// Opens bulk variant editing 
+
+	$('.variant').click(function() {
+		if (!$(this).hasClass('variant_open')) {
+			$('.variant').removeClass('variant_open');
+			$(this).addClass('variant_open');
+		}
+	});
+
+	$('.variant input[type="checkbox"]').click(function(e) {
+		e.stopPropagation();
+	});
 }
 
 $(document).on('turbolinks:load', ready);
