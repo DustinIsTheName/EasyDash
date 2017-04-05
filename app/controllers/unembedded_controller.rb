@@ -80,6 +80,7 @@ class UnembeddedController < ApplicationController
       else
         if @product.save
           successes += 1
+          puts Colorize.cyan(ShopifyAPI.credit_left)
         else
           failures += 1
         end
@@ -98,6 +99,7 @@ class UnembeddedController < ApplicationController
           else
             if metafield.save
               successes += 1
+              puts Colorize.cyan(ShopifyAPI.credit_left)
             else
               failures += 1
             end
@@ -144,6 +146,7 @@ class UnembeddedController < ApplicationController
         else
           if variant.save
             successes += 1
+            puts Colorize.cyan(ShopifyAPI.credit_left)
           else
             failures += 1
           end
@@ -162,6 +165,7 @@ class UnembeddedController < ApplicationController
             else
               if metafield.save
                 successes += 1
+                puts Colorize.cyan(ShopifyAPI.credit_left)
               else
                 failures += 1
               end
@@ -184,17 +188,17 @@ class UnembeddedController < ApplicationController
 
       original_variant = params["variants"].values.first
 
-      unless params["new_option_values_1"].strip == ""
+      unless params["new_option_values_1"] and params["new_option_values_1"].strip == ""
         new_option_values_1 = params["new_option_values_1"].split(",").map{ |v| v.strip }
         @product.options = []
         @product.variants = []
         @product.options << ShopifyAPI::Option.new(:name => params["new_option_1"])
 
-        unless params["new_option_values_2"].strip == ""
+        unless params["new_option_values_2"] and params["new_option_values_2"].strip == ""
           new_option_values_2 = params["new_option_values_2"].split(",").map{ |v| v.strip }
           @product.options << ShopifyAPI::Option.new(:name => params["new_option_2"])
 
-          unless params["new_option_values_3"].strip == ""
+          unless params["new_option_values_3"] and params["new_option_values_3"].strip == ""
             new_option_values_3 = params["new_option_values_3"].split(",").map{ |v| v.strip }
             @product.options << ShopifyAPI::Option.new(:name => params["new_option_3"])
             puts Colorize.blue('3 options')
@@ -219,6 +223,7 @@ class UnembeddedController < ApplicationController
               end
             end
             @product.save
+            puts Colorize.cyan(ShopifyAPI.credit_left)
           else
             puts Colorize.purple('2 options')
             new_option_values_1.each do |option1|
@@ -239,6 +244,7 @@ class UnembeddedController < ApplicationController
               end
             end
             @product.save
+            puts Colorize.cyan(ShopifyAPI.credit_left)
           end
         else
           puts Colorize.green('1 option')
@@ -257,6 +263,7 @@ class UnembeddedController < ApplicationController
             })
           end
           @product.save
+          puts Colorize.cyan(ShopifyAPI.credit_left)
         end
       end
 
