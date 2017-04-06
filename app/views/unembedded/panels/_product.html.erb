@@ -207,7 +207,9 @@
                       <img src="<%= @resource.images.select{ |i| i.id == variant.image_id }.first.src %>">
                     </div>
                   <% else %>
-                    <i class="icon-image"></i>
+                    <div class="variant_image">
+                      <i class="icon-image"></i>
+                    </div>
                   <% end %>
                 </div>
                 <div class="col_right">
@@ -251,7 +253,7 @@
                   </div>
                   <div class="input">
                     <label>SKU</label>
-                    <%= v.text_field :sku%>
+                    <%= v.text_field :sku %>
                   </div>
                 </div>
                 <div class="buttons">
@@ -261,41 +263,6 @@
               </div>
             <% end %>
           <% end %>
-          <div class="variant_open">
-            <div class="col_left">
-              <input type="checkbox">
-              <img src="{{ 'sample_product_image.png' | asset_url }}" />
-            </div>
-            <div class="col_right">
-              <ul class="variant_options">
-                <li class="option-1"><span class="label">Color</span>Plumberry</li>
-                <li class="option-2 null"><span class="label">Option 2</span><div class="skeleton_option"></div></li>
-                <li class="option-3 null"><span class="label">Option 3</span><div class="skeleton_option"></div></li>
-              </ul>
-            </div>
-            <div class="inputs_container">
-              <div class="input">
-                <label>Inventory</label>
-                <input type="text"/>
-              </div>
-              <div class="input">
-                <label>Incoming</label>
-                <input type="text"/>
-              </div>
-              <div class="input">
-                <label>Price</label>
-                <input type="text"/>
-              </div>
-              <div class="input">
-                <label>SKU</label>
-                <input type="text"/>
-              </div>
-            </div>
-            <div class="buttons">
-              <button class="sidebyside_85 primary">Edit variant</button>
-              <button class="sidebyside_15 warning icon-trash tip" data-hover="Delete Variant"></button>
-            </div>
-          </div>
         </div><!-- .row -->
       </div><!-- .card -->
     </article>

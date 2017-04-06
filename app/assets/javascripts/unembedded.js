@@ -163,12 +163,12 @@ function ready() {
   	var option = $(this).data('option');
   	var value = $(this).data('value');
 
-  	$('.variant > input[type="checkbox"]').prop('checked', false);
+  	$('.variant .col_left > input[type="checkbox"]').prop('checked', false);
 
   	if (option === 'all') {
-  		$('.variant > input[type="checkbox"]').prop('checked', true);
+  		$('.variant .col_left > input[type="checkbox"]').prop('checked', true);
   	} else if (option !== 'none') {
-	  	$('.variant[data-option'+option+'="'+value+'"] > input[type="checkbox"]').prop('checked', true);
+	  	$('.variant[data-option'+option+'="'+value+'"] .col_left > input[type="checkbox"]').prop('checked', true);
 	  }
   });
 

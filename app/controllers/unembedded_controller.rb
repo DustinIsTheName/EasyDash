@@ -126,19 +126,23 @@ class UnembeddedController < ApplicationController
           variant.attributes[key] = variant.attributes[key].to_s
         end
 
-        old_variant = ShopifyAPI::Metafield.new(variant.attributes)
+        old_variant = ShopifyAPI::Variant.new(variant.attributes)
         v = params["variants"][variant.id.to_s]
 
-        variant.price = v["price"]
-        variant.compare_at_price = v["compare_at_price"]
-        variant.taxable = v["taxable"]
-        variant.sku = v["sku"]
-        variant.barcode = v["barcode"]
-        variant.inventory_management = v["inventory_management"]
-        variant.requires_shipping = v["requires_shipping"]
-        variant.weight = v["weight"]
-        variant.weight_unit = v["weight_unit"]
-        variant.fulfillment_service = v["fulfillment_service"]
+        variant.option1 = v["option1"] if v["option1"]
+        variant.option2 = v["option2"] if v["option2"]
+        variant.option3 = v["option3"] if v["option3"]
+        variant.price = v["price"] if v["price"]
+        variant.compare_at_price = v["compare_at_price"] if v["compare_at_price"]
+        variant.sku = v["sku"] if v["sku"]
+        variant.inventory_quantity = v["inventory_quantity"] if v["inventory_quantity"]
+        variant.taxable = v["taxable"] if v["taxable"]
+        variant.barcode = v["barcode"] if v["barcode"]
+        variant.inventory_management = v["inventory_management"] if v["inventory_management"]
+        variant.requires_shipping = v["requires_shipping"] if v["requires_shipping"]
+        variant.weight = v["weight"] if v["weight"]
+        variant.weight_unit = v["weight_unit"] if v["weight_unit"]
+        variant.fulfillment_service = v["fulfillment_service"] if v["fulfillment_service"]
 
         if old_variant.attributes == variant.attributes
           identicals += 1
@@ -149,6 +153,7 @@ class UnembeddedController < ApplicationController
             puts Colorize.cyan(ShopifyAPI.credit_left)
           else
             failures += 1
+            puts Colorize.red(variant.errors.messages)
           end
         end
 
@@ -188,17 +193,17 @@ class UnembeddedController < ApplicationController
 
       original_variant = params["variants"].values.first
 
-      unless params["new_option_values_1"] and params["new_option_values_1"].strip == ""
+      unless params["new_option_values_1"].nil? or params["new_option_values_1"]&.strip == ""
         new_option_values_1 = params["new_option_values_1"].split(",").map{ |v| v.strip }
         @product.options = []
         @product.variants = []
         @product.options << ShopifyAPI::Option.new(:name => params["new_option_1"])
 
-        unless params["new_option_values_2"] and params["new_option_values_2"].strip == ""
+        unless params["new_option_values_2"].nil? or params["new_option_values_2"]&.strip == ""
           new_option_values_2 = params["new_option_values_2"].split(",").map{ |v| v.strip }
           @product.options << ShopifyAPI::Option.new(:name => params["new_option_2"])
 
-          unless params["new_option_values_3"] and params["new_option_values_3"].strip == ""
+          unless params["new_option_values_3"].nil? or params["new_option_values_3"]&.strip == ""
             new_option_values_3 = params["new_option_values_3"].split(",").map{ |v| v.strip }
             @product.options << ShopifyAPI::Option.new(:name => params["new_option_3"])
             puts Colorize.blue('3 options')
@@ -269,9 +274,9 @@ class UnembeddedController < ApplicationController
 
     end
 
-    # puts Colorize.green('successes: '<<successes.to_s)
-    # puts Colorize.red('failures: '<<failures.to_s)
-    # puts Colorize.cyan('identicals: '<<identicals.to_s<<' '<<i_arr.join(' '))
+    puts Colorize.green('successes: '<<successes.to_s)
+    puts Colorize.red('failures: '<<failures.to_s)
+    puts Colorize.cyan('identicals: '<<identicals.to_s<<' ')
 
     redirect_to dashboard_path(resource: params[:resource], id: params[:id])
   end
