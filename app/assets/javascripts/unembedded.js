@@ -1,7 +1,6 @@
 function ready() {
 
 	// JS for the resourse selection
-
 	var resource_infomation = {
 		blogs: $('.select-sim-dropdown.blog').data('object'),
 		collections: $('.select-sim-dropdown.collection').data('object'),
@@ -148,7 +147,6 @@ function ready() {
 	});
 
 	// permenatly shows target upon clicking the trigger
-
   $('.reveal-trigger').click(function(e) {
   	e.preventDefault();
   	var reveal = $(this).data('reveal');
@@ -158,7 +156,6 @@ function ready() {
   });
 
   // checkes variant checkboxes based on option value clicked
-
   $('.variant-selector-link').click(function() {
   	var option = $(this).data('option');
   	var value = $(this).data('value');
@@ -173,7 +170,6 @@ function ready() {
   });
 
 	// Opens bulk variant editing 
-
 	$('.variant').click(function() {
 		if (!$(this).hasClass('variant_open')) {
 			$('.variant').removeClass('variant_open');
@@ -183,6 +179,20 @@ function ready() {
 
 	$('.variant input[type="checkbox"]').click(function(e) {
 		e.stopPropagation();
+	});
+
+	// submit form with AJAX
+	$('form.ajax').submit(function() {  
+	    var valuesToSubmit = $(this).serialize();
+	    $.ajax({
+	        type: "POST",
+	        url: $(this).attr('action'), //sumbits it to the given url of the form
+	        data: valuesToSubmit,
+	        dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+	    }).success(function(json){
+	        console.log("success", json);
+	    });
+	    return false; // prevents normal behaviour
 	});
 }
 
