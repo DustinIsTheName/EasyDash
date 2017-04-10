@@ -2,7 +2,6 @@
 <div class="wittyEDSidebar">
 
   <section class="wittyEDEditorMain" component="UI.PanelContainer" context="UI_PanelContainer_Main">
-
     <div class="theme-editor__panel" id="section-product" data-panel-id="product" component="UI.SectionPanel" tabindex="-1" context="UI_SectionPanel_2">
       <header class="theme-editor__header theme-editor__header--no-shadow">
         <nav class="theme-editor__header-nav wittyEDLogoHeading">
@@ -14,16 +13,23 @@
           </h2>
         </nav><!-- .theme-editor__header-nav -->
       </header><!-- .theme-editor__header -->
+      <div class="wittyEDPanel<% if @type == 'resource_select' %> active<% end %>" data-tier="1">
+        <div class="wittyEDPanelBody">
+          <%= panel 'resource_select' %>
+        </div><!-- .wittyEDPanelBody -->
+      </div>
       <% unless @type == 'resource_select' %>
-        <header class="theme-editor__header theme-editor__header--no-shadow">
-          <button class="btn btn--plain theme-editor__header-action icon-prev" data-bind-event-click="action('closeSectionPanel', sectionId)" aria-label="Back to sections" type="button" name="button"></button>
-          <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)"><%= @type %></h2>
-          <a class="btn_more" href=""><% svgs 'more_teal' %></a>
-        </header><!-- .theme-editor__header -->
+        <div class="wittyEDPanel active" data-tier="2">
+          <header class="theme-editor__header theme-editor__header--no-shadow">
+            <button class="btn btn--plain theme-editor__header-action icon-prev prev-pannel" aria-label="Back to sections" type="button" name="button"></button>
+            <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)"><%= @type %></h2>
+            <a class="btn_more" href=""><% svgs 'more_teal' %></a>
+          </header><!-- .theme-editor__header -->
+          <div class="wittyEDPanelBody">
+            <%= panel @type %>
+          </div><!-- .wittyEDPanelBody -->
+        </div>
       <% end %>
-      <div class="wittyEDPanelBody" data-scrollable="">
-        <%= panel @type %>
-      </div><!-- .wittyEDPanelBody -->
     </div><!-- .theme-editor__panel#section-product -->
 
   </section><!-- .wittyEDEditorMain -->

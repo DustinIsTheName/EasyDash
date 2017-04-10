@@ -17,6 +17,7 @@ class UnembeddedController < ApplicationController
       @question.valid? # run validations to to populate the errors[]
     else
 
+      get_resources
       case @type
       when 'blog'
         @resource = ShopifyAPI::Article.find(params[:id])
@@ -34,7 +35,6 @@ class UnembeddedController < ApplicationController
         @resource = ShopifyAPI::Product.find(params[:id])
       else
         @type = 'resource_select'
-        get_resources
       end
 
     end

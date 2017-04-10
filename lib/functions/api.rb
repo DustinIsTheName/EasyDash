@@ -81,7 +81,6 @@ class API
 
 			# loop through product variants and write proper information
       @product.variants.each do |variant|
-      	puts Colorize.purple('just gettings a variant! ' << ShopifyAPI.credit_left.to_s)
 
       	# make all attributes synonymous to their corosponding empty values from the form
         variant.attributes.each do |key, value| 
@@ -123,7 +122,7 @@ class API
           end
         end
 
-        
+        # only loop through metafields if data is sent for them
         if v["metafields"]
 	        variant.metafields.each do |metafield|
 	          old_metafield = ShopifyAPI::Metafield.new(metafield.attributes)
@@ -132,6 +131,7 @@ class API
 	          if m
 	            metafield.value = m["value"]
 
+	            # save metafield if information has changed
 	            if old_metafield.attributes == metafield.attributes
 	              identicals += 1
 	              i_arr.push m["value"]
@@ -147,6 +147,7 @@ class API
 	        end
 	      end
 
+	      # loop through any new variant metafields and create them 
         if v["new_metafields"]
           v["new_metafields"].each do |new_metafield|
             variant.add_metafield(ShopifyAPI::Metafield.new({
@@ -160,8 +161,9 @@ class API
 
       end
 
-      original_variant = params["variants"].values.first
+      original_variant = params["variants"].values.first # get Defaut Title variant
 
+      # loop through and create new variants
       unless params["new_option_values_1"].nil? or params["new_option_values_1"]&.strip == ""
         new_option_values_1 = params["new_option_values_1"].split(",").map{ |v| v.strip }
         @product.options = []

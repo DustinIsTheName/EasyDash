@@ -1,5 +1,22 @@
 function ready() {
 
+	$.fn.extend({
+		slideInRight: function() {
+	    return this.each(function() {
+	      $(this).show('slide', {
+          direction: 'right'
+	      }, 1000);
+	    });
+	  },
+		slideOutRight: function() {
+	    return this.each(function() {
+	      $(this).hide('slide', {
+          direction: 'right'
+	      }, 1000);
+	    });
+	  }
+	});
+
 	// JS for the resourse selection
 	var resource_infomation = {
 		blogs: $('.select-sim-dropdown.blog').data('object'),
@@ -191,8 +208,19 @@ function ready() {
 	        dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
 	    }).success(function(json){
 	        console.log("success", json);
+
+	        // time to provide feedback 
 	    });
 	    return false; // prevents normal behaviour
+	});
+
+	$('.prev-pannel').click(function() {
+		var pannel = $(this).closest('.wittyEDPanel');
+		var tier = parseInt(pannel.data('tier'));
+		pannel.blindRightToggle(400, 'swing', function() {
+			$(this).css({'height': 0, 'opacity': 0});
+		});
+		$('.wittyEDPanel[data-tier="'+(tier - 1)+'"]').css({'height': 'auto', 'opacity': 1}).blindLeftIn(400);
 	});
 }
 
