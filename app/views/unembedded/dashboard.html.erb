@@ -1,12 +1,12 @@
 <!-- WITTY EasyDash - Sidebar Code -->
 <div class="wittyEDSidebar">
 
-  <section class="wittyEDEditorMain" component="UI.PanelContainer" context="UI_PanelContainer_Main">
-    <div class="theme-editor__panel" id="section-product" data-panel-id="product" component="UI.SectionPanel" tabindex="-1" context="UI_SectionPanel_2">
+  <section class="wittyEDEditorMain">
+    <div class="theme-editor__panel" id="section-product" data-panel-id="product" tabindex="-1">
       <header class="theme-editor__header theme-editor__header--no-shadow">
         <nav class="theme-editor__header-nav wittyEDLogoHeading">
           <% if @type == 'resource_select' %>
-            <button class="btn btn--plain theme-editor__header-action tip icon-prev white" data-hover="Back to your store" data-bind-event-click="action("closeSectionPanel", sectionId)" aria-label="Back to your store" type="button" name="button"></button>
+            <button class="btn btn--plain theme-editor__header-action tip icon-prev white" data-hover="Back to your store" aria-label="Back to your store" type="button" name="button"></button>
           <% end %>
           <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">
             <%= svgs 'logo_white' %>
@@ -24,7 +24,7 @@
           <div class="wittyEDPanel active" data-tier="2">
             <header class="theme-editor__header theme-editor__header--no-shadow">
               <button class="btn btn--plain theme-editor__header-action icon-prev prev-pannel" aria-label="Back to sections" type="button" name="button"></button>
-              <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)"><%= @type %></h2>
+              <h2 class="ui-heading theme-editor__heading"><%= @type %></h2>
               <a class="btn_more" href=""><% svgs 'more_teal' %></a>
             </header><!-- .theme-editor__header -->
             <div class="wittyEDPanelBody">
@@ -32,10 +32,10 @@
             </div><!-- .wittyEDPanelBody -->
           </div>
           <% if @type == 'product' %>
-            <div class="wittyEDPanel active" data-tier="3">
+            <div class="wittyEDPanel" data-tier="3">
               <header class="theme-editor__header theme-editor__header--no-shadow">
                 <button class="btn btn--plain theme-editor__header-action icon-prev prev-pannel" aria-label="Back to sections" type="button" name="button"></button>
-                <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">Variants</h2>
+                <h2 class="ui-heading theme-editor__heading">Variants</h2>
                 <a class="btn_more" href=""><% svgs 'more_teal' %></a>
               </header><!-- .theme-editor__header -->
               <div class="wittyEDPanelBody">
@@ -52,27 +52,29 @@
 
   <div class="wittyEDEditorFooter">
     <div class="ui-stack ui-stack--wrap">
-      <button class="btn secondary views_button" title="Viewport selector" type="button" name="button" id="ui-popover-activator--10" aria-expanded="true" aria-haspopup="true" aria-owns="ui-popover--10" aria-controls="ui-popover--10">
+      <button class="btn secondary views_button" title="Viewport selector" type="button" name="button" id="ui-popover-activator--10">
         <%= svgs 'monitor_teal' %>
         <div class="icon-down teal"></div>
   	  </button>
       <div class="ui-stack-item ui-stack-item--fill type--right">
         <ul class="segmented">
           <li>
-            <button class="btn btn--icon tip icon-undo" disabled="disabled" data-hover="Undo" data-role="undo" data-bind-disabled="!editor.undoTracker.hasUndo() || editor.saving || editor.loading" data-bind-event-click="action('undo')" aria-label="Undo" type="button" name="button"></button>          
+            <button class="btn btn--icon tip icon-undo" disabled="disabled" data-hover="Undo" data-role="undo" aria-label="Undo" type="button" name="button"></button>          
           </li>
           <li>
-            <button class="btn btn--icon tip icon-redo" disabled="disabled" data-hover="Redo" data-role="redo" data-bind-disabled="!editor.undoTracker.hasRedo() || editor.saving || editor.loading" data-bind-event-click="action('redo')" aria-label="Redo" type="button" name="button"></button>
+            <button class="btn btn--icon tip icon-redo" disabled="disabled" data-hover="Redo" data-role="redo" aria-label="Redo" type="button" name="button"></button>
           </li>
         </ul>
-        <button class="btn btn-primary" disabled="" data-bind-disabled="!editor.dirty || editor.saving" data-bind-class="{"is-loading": editor.saving }" data-bind-event-click="action("save")" data-role="save" type="button" name="button">Save</button>
+        <button class="btn btn-primary" disabled="" data-bind-class="{"is-loading": editor.saving }" data-role="save" type="button" name="button">Save</button>
       </div>
     </div>
   </div><!-- .wittyEDEditorFooter -->
 
 </div><!-- .wittyEDSidebar -->
 
-<button class="wittyEDFullscreenToggle" data-bind-event-click="action("toggleSidebar")" aria-label="Toggle sidebar" type="button" name="button">
+<button class="wittyEDFullscreenToggle" aria-label="Toggle sidebar" type="button" name="button">
   <%= svgs 'dashboard_dark' %>
 </button><!-- .wittyEDEditorFullscreenToggle -->
 <!-- End WITTY EasyDash - Sidebar Code -->
+
+<iframe id="dashboard-iframe" src="https://easy-dash.myshopify.com/"></iframe>

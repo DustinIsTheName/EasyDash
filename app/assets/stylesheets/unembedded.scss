@@ -705,10 +705,14 @@ label .icon-calendar { float: right; margin-top: 2px; }
       position: absolute;
       width: 100%;
       margin-left: -300px;
+      height: 0;
+      opacity: 0;
 
       &.active {
         display: block;
         margin-left: 0;
+        height: auto;
+        opacity: 1;
 
         &+ .wittyEDPanel,
         .wittyEDPanel {
@@ -1219,7 +1223,13 @@ label .icon-calendar { float: right; margin-top: 2px; }
   }
 }
 
-
+#dashboard-iframe {
+  width: calc(100% - 300px);
+  height: 100%;
+  position: relative;
+  left: 300px;
+  display: block;
+}
 
 
 
