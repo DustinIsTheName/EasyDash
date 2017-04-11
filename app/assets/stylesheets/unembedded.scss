@@ -710,7 +710,8 @@ label .icon-calendar { float: right; margin-top: 2px; }
         display: block;
         margin-left: 0;
 
-        &+ .wittyEDPanel {
+        &+ .wittyEDPanel,
+        .wittyEDPanel {
           margin-left: 300px;
         }
       }
