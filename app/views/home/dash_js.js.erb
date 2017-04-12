@@ -28,7 +28,7 @@
 	/* This is my app's JavaScript */
 	var myAppJavaScript = function($) {
 
-    if ($('#admin_bar_iframe')[0]) {
+    if ( $('#admin_bar_iframe')[0] && window.location.href.indexOf('ediframe=true') === -1 ) {
       $('body').append('<%= render(partial: "home/dash_js_html/open_button").to_s.gsub(/\n/, '').html_safe %>');
       var top = $('html').css('padding-top');
       $('.wittyEDContainer').css('top', top);

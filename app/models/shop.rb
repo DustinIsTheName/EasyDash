@@ -9,6 +9,10 @@ class Shop < ActiveRecord::Base
     asset.value = file
     asset.save
 
+    ShopifyAPI::ScriptTag.all.each do |st|
+      puts Colorize.orange(st.src)
+    end
+
     if ShopifyAPI::ScriptTag.first
 	    ShopifyAPI::ScriptTag.first.destroy
 	  end
