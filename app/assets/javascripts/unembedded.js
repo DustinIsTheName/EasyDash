@@ -197,6 +197,7 @@ function ready() {
 	    return false; // prevents normal behaviour
 	});
 
+	// pannel navigation
 	$('.prev-pannel').click(function() {
 		var pannel = $(this).closest('.wittyEDPanel');
 		var tier = parseInt(pannel.data('tier'));
@@ -213,6 +214,16 @@ function ready() {
 			$(this).css({'height': 0, 'opacity': 0});
 		});
 		$('.wittyEDPanel[data-tier="'+(tier + 1)+'"]').css({'height': 'auto', 'opacity': 1}).blindRightIn(400);
+	});
+
+	$('.responsive-dropdown-items a').click(function(e) {
+		console.log('ff');
+		e.preventDefault();
+
+		var width = $(this).data('width');
+		var height = $(this).data('height');
+
+		$('#dashboard-iframe').width(width).height(height);
 	});
 }
 

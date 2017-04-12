@@ -925,6 +925,55 @@ label .icon-calendar { float: right; margin-top: 2px; }
   }
 }
 
+.responsive-dropdown-items-container {
+  position: absolute;
+  bottom: 63px;
+  left: 1px;
+  border-radius: 3px;
+
+  .responsive-dropdown-items {
+    box-shadow: 0 0 0 1px rgba(39,44,48,0.05), 
+                0 2px 7px 1px rgba(39,44,48,0.16);
+    background: #fff;
+    padding: 3px 7px;
+    border-radius: 3px;
+
+    ul { 
+      margin: 5px 0; 
+
+      li {
+        padding: 5px 20px;
+        list-style: none;
+      }
+    }
+  }
+
+  .dropdown-arrow {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    bottom: -20px;
+    left: 25px;
+    overflow: hidden;
+
+    &:before {
+      content: "";
+      position: absolute;
+      top: -5px;
+      left: 50%;
+      -webkit-transform: rotate(45deg);
+      transform: rotate(45deg);
+      margin-left: -5px;
+      display: block;
+      height: 10px;
+      width: 10px;
+      background-color: rgba(255, 255, 255, 0.98);
+      box-shadow: 0 0 0 1px rgba(39, 44, 48, 0.05), 
+                  0 2px 7px 1px rgba(39, 44, 48, 0.16);
+    }
+  }
+}
+
 /* NEW CSS FOR VARIANTS SECTION */
 
 .variant-selector {
@@ -1226,10 +1275,18 @@ label .icon-calendar { float: right; margin-top: 2px; }
 #dashboard-iframe {
   width: calc(100% - 300px);
   height: 100%;
+  max-width: calc(100% - 300px);
+  max-height: 100%;
   position: relative;
   left: 300px;
   display: block;
   border: none;
+  left: calc(50% + 150px);
+  display: block;
+  border: none;
+  -webkit-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  transform: translateX(-50%);
 }
 
 
