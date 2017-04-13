@@ -1,0 +1,933 @@
+<!-- WITTY EasyDash - Sidebar Code -->
+<div class="wittyEDSidebar">
+
+  <section class="wittyEDEditorMain" component="UI.PanelContainer" context="UI_PanelContainer_Main">
+
+    <!-- Panel - Main -->
+
+    <div class="theme-editor__panel" id="section-main" data-panel-id="main" component="UI.SectionPanel" tabindex="-1" context="UI_SectionPanel_1">
+      <header class="theme-editor__header theme-editor__header--no-shadow">
+        {% comment %}
+        <nav class="theme-editor__header-nav">
+          <a class="theme-editor__header-nav-link" href="/admin/themes">
+            {% include 'witty-easydash-svgs' with 'shopify_logo_white' %}
+            Back to your store
+          </a>    
+        </nav><!-- .theme-editor__header-nav -->
+        {% endcomment %}
+        <nav class="theme-editor__header-nav wittyEDLogoHeading">
+          <button class="btn btn--plain theme-editor__header-action tip icon-prev white" data-hover="Back to your store" data-bind-event-click="action("closeSectionPanel", sectionId)" aria-label="Back to your store" type="button" name="button"></button>
+          <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">{% include 'witty-easydash-svgs' with 'logo_white' %}</h2>
+        </nav><!-- .theme-editor__header-nav -->
+      </header><!-- .theme-editor__header -->
+      <div class="wittyEDPanelBody" data-scrollable="">
+        <div class="wittyEDTopButtons theme-editor__header"> 
+          <button class="sidebyside_85 primary">Edit Product</button>
+          <button class="sidebyside_15 warning icon-trash tip" data-hover="Delete Product"></button>
+        </div>
+        <h3 class="ui-subheading ui-subheading--subdued theme-editor__subheading">Or choose another option</h3>
+        <article class="next-card">
+          <div class="card has-sections no_margin">
+            <div class="card-section">
+              Blog Post
+              <select><option>Select</option></select>
+            </div>
+            <hr/>
+            <div class="card-section">
+              Collection
+              <select><option>Select</option></select>
+            </div>
+            <hr/>
+            <div class="card-section">
+              Page
+              <select><option>Select</option></select>
+            </div>
+            <hr/>
+            <div class="card-section">
+              Product
+              <select><option>Select</option></select>
+            </div>
+          </div>
+        </article><!-- .next-card -->
+      </div><!-- .wittyEDPanelBody -->
+    </div><!-- .theme-editor__panel#section-main -->
+
+    <!-- Panel - Product -->
+
+    <div class="theme-editor__panel" id="section-product" data-panel-id="product" component="UI.SectionPanel" tabindex="-1" context="UI_SectionPanel_2">
+      <header class="theme-editor__header theme-editor__header--no-shadow">
+        <nav class="theme-editor__header-nav wittyEDLogoHeading">
+          <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">{% include 'witty-easydash-svgs' with 'logo_white' %}</h2>
+        </nav><!-- .theme-editor__header-nav -->
+      </header><!-- .theme-editor__header -->
+      <header class="theme-editor__header theme-editor__header--no-shadow">
+        <button class="btn btn--plain theme-editor__header-action icon-prev" data-bind-event-click="action("closeSectionPanel", sectionId)" aria-label="Back to sections" type="button" name="button"></button>
+        <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">Product</h2>
+        <a class="btn_more" href="">{% include 'witty-easydash-svgs' with 'more_teal' %}</a>
+      </header><!-- .theme-editor__header -->
+      <div class="wittyEDPanelBody" data-scrollable="">
+        <article>
+          <div class="card">
+            <div class="row">
+              <label>Title</label>
+              <input type="text" placeholder="Short Sleeve T-Shirt" />
+            </div>
+            <div class="row no_margin">
+              <label>Description</label>
+              <textarea></textarea>
+            </div>
+          </div>
+        </article>
+        <article>
+          <!-- <a href="#" class="theme-editor-action-list__item" data-bind-event-click="action("openSectionPanel", "section-images")" draggable="false"> -->
+            <div class="card drop_images">
+              <!-- <h5 class="wittyEDPanelButton">Images</h5>
+              <button class="btn btn--plain icon-next dark tip" type="button" name="button" data-hover="Edit/add/delete images"></button> -->
+              <h5>Images</h5>
+              <div class="row no_margin">
+                <a style="display: inherit; margin-bottom: 1rem;" href="">Add images from URL</a>
+                <a href="">Add images</a>
+                <div class="column twelve type--centered no_margin">
+                  <i class="image icon-photos next-icon--size-80"></i>
+                  <h5>Drop images to upload</h5>
+                </div>
+              </div>
+            </div>
+          <!-- </a> -->
+        </article>
+        <article>
+          <div class="card">
+            <h5>Pricing</h5>
+            <div class="row">
+              <label>Price</label>
+              <div class="next-input--stylized next-input--has-content">
+                <span class="next-input__add-on next-input__add-on--before">$</span>
+                <input class="next-input next-input--invisible" type="text" placeholder="0.00" value="0.00" />
+              </div>
+            </div>
+            <div class="row next-input-stylized">
+              <label>Compare at price</label>
+              <div class="next-input--stylized next-input--has-content">
+                <span class="next-input__add-on next-input__add-on--before">$</span>
+                <input class="next-input next-input--invisible" type="text" placeholder="" />
+              </div>
+            </div>
+            <div class="row no_margin">
+              <label><input type="checkbox" name="" checked="checked">Charge taxes on this product</label>
+            </div>
+          </div>
+        </article>
+        <article>
+          <div class="card">
+            <h5>Inventory</h5>
+            <div class="row">
+              <label>SKU (Stock Keeping Unit)</label>
+              <input type="text" />
+            </div>
+            <div class="row">
+              <label>Barcode (ISBN, UPC, GTIN, etc.)</label>
+              <input type="text" />
+            </div>
+            <div class="row no_margin">
+              <label>Inventory policy</label>
+              <select>
+                <option>Don't track inventory</option>
+                <option>Shopify tracks this product's inventory</option>
+              </select>
+            </div>
+          </div>
+        </article>
+        <article>
+          <div class="card">
+            <h5>Shipping</h5>
+            <div class="row">
+              <label><input type="checkbox" name="" checked="checked">This product requires shipping</label>
+            </div>
+            <div class="divider"></div>
+            <div class="row extra_margin">
+              <h6>Weight</h6>
+              <p class="subdued">Used to calculate shipping rates at checkout and label prices during fulfillment.</p>
+              <label>Weight</label>
+              <div class="input-group">
+                <input class="sidebyside_75" type="text" value="0.0" />
+                <select class="secondary sidebyside_25">
+                  <option>lb</option>
+                  <option>oz</option>
+                  <option>kg</option>
+                  <option>g</option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <h6>International Customs</h6>
+              <label>HS tariff code <a href="http://hts.usitc.gov/" target="_blank">(look up code)</a></label>
+              <input type="text" />
+            </div>
+            <div class="divider"></div>
+            <div class="row no_margin">
+              <h6>Fulfillment Service</h6>
+              <select>
+                <option>Manual</option>
+              </select>
+            </div>
+          </div>
+        </article>
+        <article>
+          <a href="#" class="theme-editor-action-list__item" data-bind-event-click="action("openSectionPanel", "section-variants")" draggable="false">
+            <div class="card">
+              <h5>Variants</h5>
+              <!-- <button class="btn--link top-right">Add variant</button> -->
+              <p>Add variants if this product comes in multiple versions, like different sizes or colors.</p>
+              <button class="secondary">Add variant</button>
+              <div class="accordion_grey bottom rounded_bottom">
+                <div class="row">
+                  <label>Option name</label>
+                  <input class="extra_margin" type="text" value="Size"/>
+                  <label>Option values</label>
+                  <input type="text" placeholder="Separate options with a comma"/>
+                </div>
+                <div class="divider" style="margin-left: 0; margin-right: 0;"></div>
+                <button class="secondary">Add another option</button>
+              </div>
+              <!-- <button class="btn btn--plain icon-next dark tip" type="button" name="button" data-hover="Edit/add/delete variants"></button> -->
+            </div>
+          </a>
+        </article>
+        <article>
+          <a href="#" class="theme-editor-action-list__item" data-bind-event-click="action("openSectionPanel", "section-seo")" draggable="false">
+            <div class="card">
+              <h5>Search engine listing preview</h5>
+              <!-- <button class="btn--link top-right">Edit website SEO</button> -->
+              <p>Add a description to see how this product might appear in a search engine listing.</p>
+              <button class="secondary">Edit website SEO</button>
+              <!-- <button class="btn btn--plain icon-next dark" type="button" name="button"></button> -->
+            </div>
+          </a>
+        </article>
+        <article>
+          <div class="card secondary">
+            <h5>Visibility</h5>
+            <div class="divider"></div>
+            <div class="row no_margin">
+              <label class="extra_margin"><input type="checkbox" name="" checked="checked">Online store<a href=""><i class="icon-calendar tip" data-hover="Set publish date"></i></a></label>
+              <div class="alert notice no_margin">
+                <dl>
+                  <dt>Set publish date</dt>
+                  <dd>Publish date has to be set in the Shopify Admin Dashboard</dd>
+                  <div class="alert_bottom">
+                    <label><input type="checkbox" name="">Open Shopify Admin Dashboard in new tab after saving product</label>
+                  </div>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article>
+          <div class="card secondary">
+            <h5>Organization</h5>
+            <div class="row extra_margin">
+              <label>Product type</label>
+              <div class="input-group">
+                <input type="text" placeholder="Shirts" />
+                <button class="secondary icon-down"></button>
+              </div>
+            </div>
+            <div class="row">
+              <label>Vendor</label>
+              <div class="input-group">
+                <input type="text" placeholder="Nike" />
+                <button class="secondary icon-down"></button>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <div class="row">
+              <label class="extra_margin">Collection</label>
+              <input type="search" placeholder="Search for collections" />
+              <em>Add this product to a collection so it’s easy to find in your store.</em>
+            </div>
+            <div class="divider"></div>
+            <div class="row no_margin">
+              <label class="extra_margin">Tags <a href="#" class="label-cta">View all tags</a></label>
+              <input type="text" placeholder="Vintage, cotton, summer" />
+            </div>
+          </div>
+        </article>
+        <article>
+          <div class="card secondary">
+            <h5>Theme templates</h5>
+            <label>Template suffix</label>
+            <select class="secondary extra_margin">
+              <option>product</option>
+              <option>product.two</option>
+              <option>product.three</option>
+            </select>
+            <em class="no_margin">The template customers see when viewing this product in your store.</em>
+          </div>
+        </article>
+        <div class="wittyEDBottomButtons"> 
+          <!-- <button class="secondary red btn_bottom">Delete product</button> -->
+          <button class="warning btn_bottom">Delete product</button>  
+        </div>
+      </div><!-- .wittyEDPanelBody -->
+    </div><!-- .theme-editor__panel#section-product -->
+    
+    <!-- Panel - Product Images -->
+
+    <div class="theme-editor__panel" id="section-product-images" data-panel-id="product-images" component="UI.SectionPanel" tabindex="-1" context="UI_SectionPanel_5">
+      <header class="theme-editor__header theme-editor__header--no-shadow">
+        <nav class="theme-editor__header-nav wittyEDLogoHeading">
+          <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">{% include 'witty-easydash-svgs' with 'logo_white' %}</h2>
+        </nav><!-- .theme-editor__header-nav -->
+      </header><!-- .theme-editor__header -->
+      <header class="theme-editor__header theme-editor__header--no-shadow">
+        <button class="btn btn--plain theme-editor__header-action icon-prev" data-bind-event-click="action("closeSectionPanel", sectionId)" aria-label="Back to sections" type="button" name="button"></button>
+        <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">Images</h2>
+      </header><!-- .theme-editor__header -->
+      <div class="wittyEDPanelBody" data-scrollable="">
+        <article>
+          <div class="card product_images">
+            <div class="row">
+              <a style="display: inherit; margin-bottom: 1rem;" href="">Add images from URL</a>
+              <a href="">Add images</a>
+              <div class="column twelve">
+                <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97350&w=350&h=350"/>
+              </div>
+            </div>
+            <div class="row">
+              <div class="columns one-half">
+                <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97350&w=350&h=350"/>
+              </div>
+              <div class="columns one-half">
+                <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97350&w=350&h=350"/>
+              </div>
+            </div>
+            <div class="row">
+              <div class="columns one-half">
+                <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97350&w=350&h=350"/>
+              </div>
+              <div class="columns one-half">
+                <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97350&w=350&h=350"/>
+              </div>
+            </div>
+            <div class="row">
+              <div class="columns one-half">
+                <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97350&w=350&h=350"/>
+              </div>
+              <div class="columns one-half">
+                <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97350&w=350&h=350"/>
+              </div>
+            </div>
+            <div class="row">
+              <div class="columns one-half">
+                <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97350&w=350&h=350"/>
+              </div>
+              <div class="columns one-half">
+                <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97350&w=350&h=350"/>
+              </div>
+            </div>
+            <div class="row">
+              <div class="columns one-half">
+                <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97350&w=350&h=350"/>
+              </div>
+              <div class="columns one-half">
+                <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97350&w=350&h=350"/>
+              </div>
+            </div>
+            <div class="row link">
+              <a href="" class="type--centered">Show all images</a>
+            </div>
+          </div>
+        </article>
+      </div><!-- .wittyEDPanelBody -->
+    </div><!-- .theme-editor__panel#section-product-images -->
+    
+    <!-- Panel - Product Variants -->
+
+    <div class="theme-editor__panel" id="section-product-variants" data-panel-id="product-variants" component="UI.SectionPanel" tabindex="-1" context="UI_SectionPanel_6">
+      <header class="theme-editor__header theme-editor__header--no-shadow">
+        <nav class="theme-editor__header-nav wittyEDLogoHeading">
+          <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">{% include 'witty-easydash-svgs' with 'logo_white' %}</h2>
+        </nav><!-- .theme-editor__header-nav -->
+      </header><!-- .theme-editor__header -->
+      <header class="theme-editor__header theme-editor__header--no-shadow">
+        <button class="btn btn--plain theme-editor__header-action icon-prev" data-bind-event-click="action("closeSectionPanel", sectionId)" aria-label="Back to sections" type="button" name="button"></button>
+        <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">Variants</h2>
+      </header><!-- .theme-editor__header -->
+      <div class="wittyEDPanelBody" data-scrollable="">
+        <article>
+          <div class="card">
+            <div class="row">
+              <a style="display: inherit; margin-bottom: 1rem;" href="">Redorder variants</a>
+              <a style="display: inherit; margin-bottom: 1rem;" href="">Edit options</a>              
+              <a style="display: inherit; margin-bottom: 1rem;" href="">Add variant</a>
+              <div class="divider"></div>
+              <div class="variant-selector">
+                <ul class="variant-selector-list">
+                  <li class="variant-selector-item">Select:</li>
+                  <li class="variant-selector-item"><a class="variant-selector-link default-option" data-bind-event-click="selectAll(this)">All</a></li>
+                  <li class="variant-selector-item"><a class="variant-selector-link default-option" data-bind-event-click="deselectAll(this)">None</a></li>
+                </ul>
+                <ul class="variant-selector-list">
+                  <li class="variant-selector-item option-1 variant-selector-link" data-bind-event-click="selectAllSubset(&quot;Plumberry&quot;, 1)">
+                    Plumberry
+                  </li>
+                  <li class="variant-selector-item option-1 variant-selector-link" data-bind-event-click="selectAllSubset(&quot;Marlin&quot;, 1)">
+                    Marlin
+                  </li>
+                  <li class="variant-selector-item option-1 variant-selector-link" data-bind-event-click="selectAllSubset(&quot;DoryBlue&quot;, 1)">
+                    DoryBlue
+                  </li>
+                  <li class="variant-selector-item option-1 variant-selector-link" data-bind-event-click="selectAllSubset(&quot;RedHot&quot;, 1)">
+                    RedHot
+                  </li>
+                  <li class="variant-selector-item option-1 variant-selector-link" data-bind-event-click="selectAllSubset(&quot;Black&quot;, 1)">
+                    Black
+                  </li>
+                  <li class="variant-selector-item option-1 variant-selector-link" data-bind-event-click="selectAllSubset(&quot;White&quot;, 1)">
+                    White
+                  </li>
+                  <li class="variant-selector-item option-1 variant-selector-link" data-bind-event-click="selectAllSubset(&quot;BlueCrush&quot;, 1)">
+                    BlueCrush
+                  </li>
+                  <li class="variant-selector-item option-1 variant-selector-link" data-bind-event-click="selectAllSubset(&quot;HotCoral&quot;, 1)">
+                    HotCoral
+                  </li>
+                </ul>
+                <ul class="variant-selector-list">
+                  <li class="variant-selector-item option-2 variant-selector-link" data-bind-event-click="selectAllSubset(&quot;XS&quot;, 2)">
+                    XS
+                  </li>
+                  <li class="variant-selector-item option-2 variant-selector-link" data-bind-event-click="selectAllSubset(&quot;S&quot;, 2)">
+                    S
+                  </li>
+                  <li class="variant-selector-item option-2 variant-selector-link" data-bind-event-click="selectAllSubset(&quot;M&quot;, 2)">
+                    M
+                  </li>
+                  <li class="variant-selector-item option-2 variant-selector-link" data-bind-event-click="selectAllSubset(&quot;L&quot;, 2)">
+                    L
+                  </li>
+                  <li class="variant-selector-item option-2 variant-selector-link" data-bind-event-click="selectAllSubset(&quot;XL&quot;, 2)">
+                    XL
+                  </li>
+                </ul>
+                <ul class="variant-selector-list">
+                  <li class="variant-selector-item option-3 variant-selector-link" data-bind-event-click="selectAllSubset(&quot;XS&quot;, 3)">
+                    XS
+                  </li>
+                  <li class="variant-selector-item option-3 variant-selector-link" data-bind-event-click="selectAllSubset(&quot;S&quot;, 3)">
+                    S
+                  </li>
+                  <li class="variant-selector-item option-3 variant-selector-link" data-bind-event-click="selectAllSubset(&quot;M&quot;, 3)">
+                    M
+                  </li>
+                  <li class="variant-selector-item option-3 variant-selector-link" data-bind-event-click="selectAllSubset(&quot;L&quot;, 3)">
+                    L
+                  </li>
+                  <li class="variant-selector-item option-3 variant-selector-link" data-bind-event-click="selectAllSubset(&quot;XL&quot;, 3)">
+                    XL
+                  </li>
+                </ul>
+              </div>
+            </div><!-- .row -->
+            <div class="row no_margin">
+              <div class="bulk_checkbox extra_margin">
+                <input type="checkbox">
+                {% include 'witty-easydash-svgs' with 'arrow_down' %}
+              </div>
+              <div class="variant">
+                <input type="checkbox">
+                <img src="{{ 'sample_product_image.png' | asset_url }}" />
+                <ul class="variant_options">
+                  <li class="option-1">Plumberry</li>
+                  <li class="option-2">XS</li>
+                  <li class="option-3">XL</li>
+                </ul>
+              </div>
+              <div class="variant">
+                <input type="checkbox">
+                <img src="{{ 'sample_product_image.png' | asset_url }}" />
+                <ul class="variant_options">
+                  <li class="option-1">Plumberry</li>
+                  <li class="option-2">XS</li>
+                  <li class="option-3">XL</li>
+                </ul>
+              </div>
+              <div class="variant">
+                <input type="checkbox">
+                <img src="{{ 'sample_product_image.png' | asset_url }}" />
+                <ul class="variant_options">
+                  <li class="option-1">Plumberry</li>
+                  <li class="option-2">XS</li>
+                  <li class="option-3">XL</li>
+                </ul>
+              </div>
+              <div class="variant_open">
+                <div class="col_left">
+                  <input type="checkbox">
+                  <img src="{{ 'sample_product_image.png' | asset_url }}" />
+                </div>
+                <div class="col_right">
+                  <ul class="variant_options">
+                    <li class="option-1"><span class="label">Color</span>Plumberry</li>
+                    <li class="option-2 null"><span class="label">Option 2</span><div class="skeleton_option"></div></li>
+                    <li class="option-3 null"><span class="label">Option 3</span><div class="skeleton_option"></div></li>
+                  </ul>
+                </div>
+                <div class="inputs_container">
+                  <div class="input">
+                    <label>Inventory</label>
+                    <input type="text"/>
+                  </div>
+                  <div class="input">
+                    <label>Incoming</label>
+                    <input type="text"/>
+                  </div>
+                  <div class="input">
+                    <label>Price</label>
+                    <input type="text"/>
+                  </div>
+                  <div class="input">
+                    <label>SKU</label>
+                    <input type="text"/>
+                  </div>
+                </div>
+                <div class="buttons">
+                  <button class="sidebyside_85 primary">Edit variant</button>
+                  <button class="sidebyside_15 warning icon-trash tip" data-hover="Delete Variant"></button>
+                </div>
+              </div>
+            </div><!-- .row -->
+          </div><!-- .card -->
+        </article>
+      </div><!-- .wittyEDPanelBody -->
+    </div><!-- .theme-editor__panel#section-product-variants -->
+    
+    <!-- Panel - Edit Variant -->
+
+    <div class="theme-editor__panel" id="section-edit-variant" data-panel-id="product" component="UI.SectionPanel" tabindex="-1" context="UI_SectionPanel_2">
+      <header class="theme-editor__header theme-editor__header--no-shadow">
+        <nav class="theme-editor__header-nav wittyEDLogoHeading">
+          <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">{% include 'witty-easydash-svgs' with 'logo_white' %}</h2>
+        </nav><!-- .theme-editor__header-nav -->
+      </header><!-- .theme-editor__header -->
+      <header class="theme-editor__header theme-editor__header--no-shadow">
+        <button class="btn btn--plain theme-editor__header-action icon-prev" data-bind-event-click="action("closeSectionPanel", sectionId)" aria-label="Back to sections" type="button" name="button"></button>
+        <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">Edit Variant</h2>
+        <a class="btn_more" href="">{% include 'witty-easydash-svgs' with 'more_teal' %}</a>
+      </header><!-- .theme-editor__header -->
+      <div class="wittyEDPanelBody" data-scrollable="">
+        <article>
+          <div class="card edit_variant_info secondary">
+            <div class="col_left">
+              <img src="{{ 'sample_product_image.png' | asset_url }}" />
+            </div>
+            <div class="col_right">
+              <h5 class="no_margin">Product Title Goes Here</h5>
+              <p class="subdued no_margin">31 variants</p>
+            </div>
+          </div>
+        </article>
+        <article>
+          <div class="card secondary">
+            <h5>Variants</h5>
+            <select>
+              <option>Variant 1</option>
+              <option>Variant 2</option>
+              <option>Variant 3</option>
+              <option>Variant 4</option>
+              <option>Variant 5</option>
+            </select>
+          </div>
+        </article>
+        <article>
+          <div class="card drop_images">
+            <h5>Options</h5>
+            <div class="row">
+              <label>Color</label>
+              <input class="option_1" type="text" placeholder="Plumberry" value="Plumberry" />
+            </div>
+            <div class="row">
+              <label>Option 2</label>
+              <input class="option_2" type="text" placeholder="Option 2" />
+            </div>
+            <div class="row">
+              <label>Option 3</label>
+              <input class="option_3" type="text" placeholder="Option 3" />
+            </div>
+            <div class="row no_margin image_box" style="text-align: center;">
+              <div class="column twelve type--centered no_margin">
+                <i class="image icon-image next-icon--size-80"></i>
+                <h5>Choose image</h5>
+              </div>
+              <a style="margin-top: 1rem; display: inline-block;" href="">Change image</a>
+            </div>
+          </div>
+        </article>
+        <article>
+          <div class="card">
+            <h5>Pricing</h5>
+            <div class="row">
+              <label>Price</label>
+              <div class="next-input--stylized next-input--has-content">
+                <span class="next-input__add-on next-input__add-on--before">$</span>
+                <input class="next-input next-input--invisible" type="text" placeholder="0.00" value="0.00" />
+              </div>
+            </div>
+            <div class="row next-input-stylized">
+              <label>Compare at price</label>
+              <div class="next-input--stylized next-input--has-content">
+                <span class="next-input__add-on next-input__add-on--before">$</span>
+                <input class="next-input next-input--invisible" type="text" placeholder="" />
+              </div>
+            </div>
+            <div class="row no_margin">
+              <label><input type="checkbox" name="" checked="checked">Charge taxes on this product</label>
+            </div>
+          </div>
+        </article>
+        <article>
+          <div class="card">
+            <h5>Inventory</h5>
+            <div class="row">
+              <label>SKU (Stock Keeping Unit)</label>
+              <input type="text" />
+            </div>
+            <div class="row">
+              <label>Barcode (ISBN, UPC, GTIN, etc.)</label>
+              <input type="text" />
+            </div>
+            <div class="row no_margin">
+              <label>Inventory policy</label>
+              <select>
+                <option>Don't track inventory</option>
+                <option>Shopify tracks this product's inventory</option>
+              </select>
+            </div>
+          </div>
+        </article>
+        <article>
+          <div class="card">
+            <h5>Shipping</h5>
+            <div class="row">
+              <label><input type="checkbox" name="" checked="checked">This product requires shipping</label>
+            </div>
+            <div class="divider"></div>
+            <div class="row extra_margin">
+              <h6>Weight</h6>
+              <p class="subdued">Used to calculate shipping rates at checkout and label prices during fulfillment.</p>
+              <label>Weight</label>
+              <div class="input-group">
+                <input class="sidebyside_75" type="text" value="0.0" />
+                <select class="secondary sidebyside_25">
+                  <option>lb</option>
+                  <option>oz</option>
+                  <option>kg</option>
+                  <option>g</option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <h6>International Customs</h6>
+              <label>HS tariff code <a href="http://hts.usitc.gov/" target="_blank">(look up code)</a></label>
+              <input type="text" />
+            </div>
+            <div class="divider"></div>
+            <div class="row no_margin">
+              <h6>Fulfillment Service</h6>
+              <select>
+                <option>Manual</option>
+              </select>
+            </div>
+          </div>
+        </article>
+        <div class="wittyEDBottomButtons"> 
+          <!-- <button class="secondary red btn_bottom">Delete variant</button> -->
+          <button class="warning btn_bottom">Delete variant</button>  
+        </div>
+      </div><!-- .wittyEDPanelBody -->
+    </div><!-- .theme-editor__panel#section-edit-variant -->
+
+    <!-- Panel - Page -->
+
+    <div class="theme-editor__panel" id="section-page" data-panel-id="page" component="UI.SectionPanel" tabindex="-1" context="UI_SectionPanel_3">
+      <header class="theme-editor__header theme-editor__header--no-shadow">
+        <nav class="theme-editor__header-nav wittyEDLogoHeading">
+          <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">{% include 'witty-easydash-svgs' with 'logo_white' %}</h2>
+        </nav><!-- .theme-editor__header-nav -->
+      </header><!-- .theme-editor__header -->
+      <header class="theme-editor__header theme-editor__header--no-shadow">
+        <button class="btn btn--plain theme-editor__header-action icon-prev" data-bind-event-click="action("closeSectionPanel", sectionId)" aria-label="Back to sections" type="button" name="button"></button>
+        <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">Page</h2>
+        <a class="btn_more" href="">{% include 'witty-easydash-svgs' with 'more_teal' %}</a>
+      </header><!-- .theme-editor__header -->
+      <div class="wittyEDPanelBody" data-scrollable="">
+        <article>
+          <div class="card">
+            <div class="row">
+              <h5>Page details</h5>
+              <label>Title</label>
+              <input type="text" placeholder="e.g. Contact us, Sizing chart, FAQs" />
+            </div>
+            <div class="row no_margin">
+              <label>Content</label>
+              <textarea></textarea>
+            </div>
+          </div>
+        </article>
+        <article>
+          <a href="#" class="theme-editor-action-list__item" data-bind-event-click="action("openSectionPanel", "section-seo")" draggable="false">
+            <div class="card">
+              <h5>Search engine listing preview</h5>
+              <!-- <button class="btn--link top-right">Edit website SEO</button> -->
+              <p>Add a title and description to see how this page might appear in a search engine listing.</p>
+              <button class="secondary">Edit website SEO</button>
+              <!-- <button class="btn btn--plain icon-next dark" type="button" name="button"></button> -->
+            </div>
+          </a>
+        </article>
+        <article>
+          <div class="card secondary">
+            <h5>Visibility</h5>
+            <div class="divider"></div>
+            <div class="row no_margin">
+              <label class="extra_margin"><input type="radio" name="option1" checked="checked">Visible <span class="subdued">(as of 2017-02-24 10:46pm EST)</span></label>
+              <label class="extra_margin"><input type="radio" name="option1">Hidden</label>
+              <a href="">Set a specific publish date</a>
+            </div>
+          </div>
+        </article>
+        <article>
+          <div class="card secondary">
+            <h5>Template</h5>
+            <label class="extra_margin">Select a template for this page.</label>
+            <select class="secondary">
+              <option>page</option>
+              <option>page.contact</option>
+            </select>
+          </div>
+        </article>
+        <div class="wittyEDBottomButtons">
+          <!-- <button class="secondary red btn_bottom">Delete page</button> -->
+          <button class="warning btn_bottom">Delete page</button> 
+        </div>
+      </div><!-- .wittyEDPanelBody -->
+    </div><!-- .theme-editor__panel#section-page -->
+    
+    <!-- Panel - Collection -->
+
+    <div class="theme-editor__panel" id="section-collection" data-panel-id="collection" component="UI.SectionPanel" tabindex="-1" context="UI_SectionPanel_4">
+      <header class="theme-editor__header theme-editor__header--no-shadow">
+        <nav class="theme-editor__header-nav wittyEDLogoHeading">
+          <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">{% include 'witty-easydash-svgs' with 'logo_white' %}</h2>
+        </nav><!-- .theme-editor__header-nav -->
+      </header><!-- .theme-editor__header -->
+      <header class="theme-editor__header theme-editor__header--no-shadow">
+        <button class="btn btn--plain theme-editor__header-action icon-prev" data-bind-event-click="action("closeSectionPanel", sectionId)" aria-label="Back to sections" type="button" name="button"></button>
+        <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">Collection</h2>
+        <a class="btn_more" href="">{% include 'witty-easydash-svgs' with 'more_teal' %}</a>
+      </header><!-- .theme-editor__header -->
+      <div class="wittyEDPanelBody" data-scrollable="">
+        <article>
+          <div class="card">
+            <div class="row">
+              <label>Title</label>
+              <input type="text" placeholder="e.g. Summer collection, Under $100, Staff picks" />
+            </div>
+            <div class="row no_margin">
+              <label>Description</label>
+              <textarea></textarea>
+            </div>
+          </div>
+        </article>
+        <article>
+          <div class="card collection_conditions">
+            <h5>Conditions</h5>
+            <div class="row extra_margin_3x">
+              <label class="extra_margin"><input type="radio" name="option2">Manually select products <span class="subdued">(you will be able to select products on the next page)</span></label>
+              <label><input type="radio" name="option2" checked="checked">Automatically select products based on conditions</label>
+            </div>
+            <div class="row">
+              <label>Products must match:</label>
+              <label><input type="radio" name="option3" checked="checked">all conditions</label>
+              <label><input type="radio" name="option3">any condition</label>
+            </div>
+            <div class="divider"></div>
+            <div class="row">
+              <select class="extra_margin" id="collection_rules_column">
+                <option selected="selected" value="title">Product title</option>
+				<option value="type">Product type</option>
+				<option value="vendor">Product vendor</option>
+				<option value="variant_price">Product price</option>
+				<option value="tag">Product tag</option>
+				<option value="variant_compare_at_price">Compare at price</option>
+				<option value="variant_weight">Weight</option>
+				<option value="variant_inventory">Inventory stock</option>
+				<option value="variant_title">Variant's title</option>
+              </select>
+              <select class="extra_margin" id="rule_relation">
+                <option value="equals" selected="selected" data-bind-disabled="isRelationDisabled(this.value)">is equal to</option>
+                <option value="not_equals" data-bind-disabled="isRelationDisabled(this.value)">is not equal to</option>
+                <option value="greater_than" data-bind-disabled="isRelationDisabled(this.value)" disabled="">is greater than</option>
+                <option value="less_than" data-bind-disabled="isRelationDisabled(this.value)" disabled="">is less than</option>
+                <option value="starts_with" data-bind-disabled="isRelationDisabled(this.value)">starts with</option>
+                <option value="ends_with" data-bind-disabled="isRelationDisabled(this.value)">ends with</option>
+                <option value="contains" data-bind-disabled="isRelationDisabled(this.value)">contains</option>
+                <option value="not_contains" data-bind-disabled="isRelationDisabled(this.value)">does not contain</option>
+              </select>
+              <input type="text" />
+            </div>
+            <div class="divider" style="margin-left: 0; margin-right: 0;"></div>
+            <button class="secondary">Add another condition</button>
+          </div>
+        </article>
+        <article>
+          <a href="#" class="theme-editor-action-list__item" data-bind-event-click="action("openSectionPanel", "section-seo")" draggable="false">
+            <div class="card">
+              <h5>Search engine listing preview</h5>
+              <!-- <button class="btn--link top-right">Edit website SEO</button> -->
+              <p>Add a title and description to see how this collection might appear in a search engine listing.</p>
+              <button class="secondary">Edit website SEO</button>
+              <!-- <button class="btn btn--plain icon-next dark" type="button" name="button"></button> -->
+            </div>
+          </a>
+        </article>
+        <article>
+          <div class="card secondary">
+            <h5>Visibility</h5>
+            <div class="divider"></div>
+            <div class="row no_margin">
+              <label><input type="checkbox" name="" checked="checked">Online store<a href=""><i class="icon-calendar tip" data-hover="Set publish date"></i></a></label>
+            </div>
+          </div>
+        </article>
+        <article>
+          <div class="card secondary collection_image">
+            <h5>Collection image</h5>
+            <div class="column twelve type--centered">
+              <i class="icon-image next-icon--size-40"></i>
+              <button class="primary">Upload image</button>
+			</div>
+          </div>
+        </article>
+        <div class="wittyEDBottomButtons">
+          <!-- <button class="secondary red btn_bottom">Delete collection</button> -->
+          <button class="warning btn_bottom">Delete collection</button>          
+        </div>
+      </div><!-- .wittyEDPanelBody -->
+    </div><!-- .theme-editor__panel#section-collection -->
+    
+    <!-- Panel - Blog Post -->
+
+    <div class="theme-editor__panel" id="section-blog_post" data-panel-id="blog_post" component="UI.SectionPanel" tabindex="-1" context="UI_SectionPanel_5">
+      <header class="theme-editor__header theme-editor__header--no-shadow">
+        <nav class="theme-editor__header-nav wittyEDLogoHeading">
+          <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">{% include 'witty-easydash-svgs' with 'logo_white' %}</h2>
+        </nav><!-- .theme-editor__header-nav -->
+      </header><!-- .theme-editor__header -->
+      <header class="theme-editor__header theme-editor__header--no-shadow">
+        <button class="btn btn--plain theme-editor__header-action icon-prev" data-bind-event-click="action("closeSectionPanel", sectionId)" aria-label="Back to sections" type="button" name="button"></button>
+        <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">Blog Post</h2>
+        <a class="btn_more" href="">{% include 'witty-easydash-svgs' with 'more_teal' %}</a>
+      </header><!-- .theme-editor__header -->
+      <div class="wittyEDPanelBody" data-scrollable="">
+        <article>
+          <div class="card blog_post_options">
+            <div class="row">
+              <label>Title</label>
+              <input type="text" placeholder="e.g. Blog about your latest products or deals" />
+            </div>
+            <div class="row">
+              <label>Content</label>
+              <textarea class="extra_margin"></textarea>
+              <a href="">Add excerpt</a>
+            </div>
+            <div class="row no_margin">
+              <label>Author</label>
+              <select class="extra_margin" id="author_column">
+                <option selected="selected" value="Travis Johnson">Travis Johnson</option>
+              </select>
+              <label>Blog</label>
+              <select id="blog_column">
+                <option selected="selected" value="News">News</option>
+                <option disabled="disabled">--------------------</option>
+                <option value="Create a new blog">Create a new blog...</option>
+              </select>
+            </div>
+          </div>
+        </article>
+        <article>
+          <a href="#" class="theme-editor-action-list__item" data-bind-event-click="action("openSectionPanel", "section-seo")" draggable="false">
+            <div class="card">
+              <h5>Search engine listing preview</h5>
+              <!-- <button class="btn--link top-right">Edit website SEO</button> -->
+              <p>Add a title and description to see how this article might appear in a search engine listing.</p>
+              <button class="secondary">Edit website SEO</button>
+              <!-- <button class="btn btn--plain icon-next dark" type="button" name="button"></button> -->
+            </div>
+          </a>
+        </article>
+        <article>
+          <div class="card secondary">
+            <h5>Visibility</h5>
+            <div class="divider"></div>
+            <div class="row no_margin">
+              <label class="extra_margin"><input type="radio" name="option4">Visible</label>
+              <label class="extra_margin"><input type="radio" name="option4" checked="checked">Hidden</label>
+              <a href="">Set a specific publish date</a>
+            </div>
+          </div>
+        </article>
+        <article>
+          <div class="card secondary featured_image">
+            <h5>Featured image</h5>
+            <div class="column twelve type--centered">
+              <i class="icon-image next-icon--size-40"></i>
+              <button class="primary">Upload image</button>
+			</div>
+          </div>
+        </article>
+        <article>
+          <div class="card secondary">
+            <h5>Organization</h5>
+            <label>Tags</label>
+            <input type="text" placeholder="Store news, new product, staff update"/>
+          </div>
+        </article>
+        <div class="wittyEDBottomButtons">
+          <!-- <button class="secondary red btn_bottom">Delete collection</button> -->
+          <button class="warning btn_bottom">Delete blog post</button>
+          <!-- <div class="divider"></div>
+          <button class="primary btn_bottom extra_margin">Manage blogs</button>
+          <button class="primary btn_bottom">Manage comments</button> -->
+        </div>
+      </div><!-- .wittyEDPanelBody -->
+    </div><!-- .theme-editor__panel#section-blog-post -->
+
+  </section><!-- .wittyEDEditorMain -->
+
+  <div class="wittyEDEditorFooter">
+    <div class="ui-stack ui-stack--wrap">
+      <button class="btn secondary views_button" title="Viewport selector" type="button" name="button" id="ui-popover-activator--10" aria-expanded="true" aria-haspopup="true" aria-owns="ui-popover--10" aria-controls="ui-popover--10">
+        {% include 'witty-easydash-svgs' with 'monitor_teal' %}
+        <div class="icon-down teal"></div>
+	  </button>
+      <div class="ui-stack-item ui-stack-item--fill type--right">
+        <ul class="segmented">
+          <li>
+            <button class="btn btn--icon tip icon-undo" disabled="disabled" data-hover="Undo" data-role="undo" data-bind-disabled="!editor.undoTracker.hasUndo() || editor.saving || editor.loading" data-bind-event-click="action("undo")" aria-label="Undo" type="button" name="button"></button>          
+          </li>
+          <li>
+            <button class="btn btn--icon tip icon-redo" disabled="disabled" data-hover="Redo" data-role="redo" data-bind-disabled="!editor.undoTracker.hasRedo() || editor.saving || editor.loading" data-bind-event-click="action("redo")" aria-label="Redo" type="button" name="button"></button>
+          </li>
+        </ul>
+        <button class="btn btn-primary" disabled="" data-bind-disabled="!editor.dirty || editor.saving" data-bind-class="{"is-loading": editor.saving }" data-bind-event-click="action("save")" data-role="save" type="button" name="button">Save</button>
+      </div>
+    </div>
+  </div><!-- .wittyEDEditorFooter -->
+
+</div><!-- .wittyEDSidebar -->
+
+<button class="wittyEDFullscreenToggle" data-bind-event-click="action("toggleSidebar")" aria-label="Toggle sidebar" type="button" name="button">
+  {% include 'witty-easydash-svgs' with 'dashboard_dark' %}
+</button><!-- .wittyEDEditorFullscreenToggle -->
+<!-- End WITTY EasyDash - Sidebar Code -->

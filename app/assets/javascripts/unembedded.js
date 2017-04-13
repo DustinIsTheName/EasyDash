@@ -216,8 +216,19 @@ function ready() {
 		$('.wittyEDPanel[data-tier="'+(tier + 1)+'"]').css({'height': 'auto', 'opacity': 1}).blindRightIn(400);
 	});
 
+	$('#responsive-dropdown').click(function() {
+		$('.responsive-dropdown-items-container').toggleClass('active');
+	});
+
+	$(document).click(function() {
+		$('.responsive-dropdown-items-container').removeClass('active');
+	});
+
+	$('.responsive-dropdown-items-container, #responsive-dropdown').click(function(e) {
+		e.stopPropagation();
+	});
+
 	$('.responsive-dropdown-items a').click(function(e) {
-		console.log('ff');
 		e.preventDefault();
 
 		var width = $(this).data('width');
