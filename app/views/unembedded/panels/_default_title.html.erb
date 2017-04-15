@@ -1,5 +1,5 @@
 <%= fields_for 'variants[]', @resource.variants.first do |v| %>
-  <%= render partial: 'unembedded/panels/common_variant_fields', locals: {v: v} %>
+  <%= render partial: 'unembedded/panels/common_variant_fields', locals: {v: v, additional_class: ''} %>
 <% end %>
 
 <article>

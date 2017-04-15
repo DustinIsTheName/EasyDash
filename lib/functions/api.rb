@@ -1,15 +1,11 @@
 class API
 
-	def self.update(params)
+	def self.updateProduct(params)
     case params[:resource]
     when 'blog'
     when 'collection'
     when 'page'
     when 'product'
-      successes = 0
-      failures = 0
-      identicals = 0
-      i_arr = []
 
       # get product and write product's new information
       @product = ShopifyAPI::Product.find(params[:id])
@@ -34,14 +30,12 @@ class API
 
       # save product if anything's changed
       if old_product.attributes == @product.attributes
-        identicals += 1
-        i_arr.push 'product'
+        puts Colorize.cyan(@product.title << ' skipped')
       else
         if @product.save
-          successes += 1
-          puts Colorize.orange(ShopifyAPI.credit_left)
+          puts Colorize.green(@product.title << ' saved ') + Colorize.orange(ShopifyAPI.credit_left)
         else
-          failures += 1
+          puts Colorize.red(@product.errors.messages)
         end
       end
 
@@ -54,14 +48,12 @@ class API
           metafield.value = m["value"]
           
           if old_metafield.attributes == metafield.attributes
-            identicals += 1
-            i_arr.push m["value"]
+            puts Colorize.cyan(metafield.key << ' skipped')
           else
             if metafield.save
-              successes += 1
-              puts Colorize.orange(ShopifyAPI.credit_left)
+              puts Colorize.green(metafield.key << ' saved ') + Colorize.orange(ShopifyAPI.credit_left)
             else
-              failures += 1
+              puts Colorize.red(metafield.errors.messages)
             end
           end
         end
@@ -82,82 +74,7 @@ class API
 			# loop through product variants and write proper information
       @product.variants.each do |variant|
 
-      	# make all attributes synonymous to their corosponding empty values from the form
-        variant.attributes.each do |key, value| 
-          variant.attributes[key] = "" if value.nil?
-          variant.attributes[key] = "1" if value == true
-          variant.attributes[key] = "0" if value == false
-          variant.attributes[key] = variant.attributes[key].to_s
-        end
-
-        old_variant = ShopifyAPI::Variant.new(variant.attributes)
-        v = params["variants"][variant.id.to_s]
-
-        variant.option1 = v["option1"] if v["option1"]
-        variant.option2 = v["option2"] if v["option2"]
-        variant.option3 = v["option3"] if v["option3"]
-        variant.price = v["price"] if v["price"]
-        variant.compare_at_price = v["compare_at_price"] if v["compare_at_price"]
-        variant.sku = v["sku"] if v["sku"]
-        variant.inventory_quantity = v["inventory_quantity"] if v["inventory_quantity"]
-        variant.taxable = v["taxable"] if v["taxable"]
-        variant.barcode = v["barcode"] if v["barcode"]
-        variant.inventory_management = v["inventory_management"] if v["inventory_management"]
-        variant.requires_shipping = v["requires_shipping"] if v["requires_shipping"]
-        variant.weight = v["weight"] if v["weight"]
-        variant.weight_unit = v["weight_unit"] if v["weight_unit"]
-        variant.fulfillment_service = v["fulfillment_service"] if v["fulfillment_service"]
-
-        # save if anything has changed
-        if old_variant.attributes == variant.attributes
-          identicals += 1
-          i_arr.push 'variant'
-        else
-          if variant.save
-            successes += 1
-            puts Colorize.orange(ShopifyAPI.credit_left)
-          else
-            failures += 1
-            puts Colorize.red(variant.errors.messages)
-          end
-        end
-
-        # only loop through metafields if data is sent for them
-        if v["metafields"]
-	        variant.metafields.each do |metafield|
-	          old_metafield = ShopifyAPI::Metafield.new(metafield.attributes)
-	          m = v["metafields"][metafield.id.to_s]
-
-	          if m
-	            metafield.value = m["value"]
-
-	            # save metafield if information has changed
-	            if old_metafield.attributes == metafield.attributes
-	              identicals += 1
-	              i_arr.push m["value"]
-	            else
-	              if metafield.save
-	                successes += 1
-	                puts Colorize.orange(ShopifyAPI.credit_left)
-	              else
-	                failures += 1
-	              end
-	            end
-	          end
-	        end
-	      end
-
-	      # loop through any new variant metafields and create them 
-        if v["new_metafields"]
-          v["new_metafields"].each do |new_metafield|
-            variant.add_metafield(ShopifyAPI::Metafield.new({
-              namespace: 'global',
-              key: new_metafield["name"],
-              value: new_metafield["value"],
-              value_type: 'string'
-            }))
-          end
-        end
+        updateVariant(params, variant)
 
       end
 
@@ -245,11 +162,83 @@ class API
 
     end
 
-    puts Colorize.green('successes: '<<successes.to_s)
-    puts Colorize.red('failures: '<<failures.to_s)
-    puts Colorize.cyan('identicals: '<<identicals.to_s<<' ')
-
     @product
 	end
+
+  def self.updateVariant(params, variant)
+
+    # make all attributes synonymous to their corosponding empty values from the form
+    variant.attributes.each do |key, value| 
+      variant.attributes[key] = "" if value.nil?
+      variant.attributes[key] = "1" if value == true
+      variant.attributes[key] = "0" if value == false
+      variant.attributes[key] = variant.attributes[key].to_s
+    end
+
+    old_variant = ShopifyAPI::Variant.new(variant.attributes)
+    v = params["variants"][variant.id.to_s]
+
+    variant.option1 = v["option1"] if v["option1"]
+    variant.option2 = v["option2"] if v["option2"]
+    variant.option3 = v["option3"] if v["option3"]
+    variant.price = v["price"] if v["price"]
+    variant.compare_at_price = v["compare_at_price"] if v["compare_at_price"]
+    variant.sku = v["sku"] if v["sku"]
+    variant.inventory_quantity = v["inventory_quantity"] if v["inventory_quantity"]
+    variant.taxable = v["taxable"] if v["taxable"]
+    variant.barcode = v["barcode"] if v["barcode"]
+    variant.inventory_management = v["inventory_management"] if v["inventory_management"]
+    variant.requires_shipping = v["requires_shipping"] if v["requires_shipping"]
+    variant.weight = v["weight"] if v["weight"]
+    variant.weight_unit = v["weight_unit"] if v["weight_unit"]
+    variant.fulfillment_service = v["fulfillment_service"] if v["fulfillment_service"]
+
+    # save if anything has changed
+    if old_variant.attributes == variant.attributes
+      puts Colorize.cyan(variant.title << ' skipped')
+    else
+      if variant.save
+        puts Colorize.green(variant.title << ' saved ') + Colorize.orange(ShopifyAPI.credit_left)
+      else
+        puts Colorize.red(variant.errors.messages)
+      end
+    end
+
+    # only loop through metafields if data is sent for them
+    if v["metafields"]
+      variant.metafields.each do |metafield|
+        old_metafield = ShopifyAPI::Metafield.new(metafield.attributes)
+        m = v["metafields"][metafield.id.to_s]
+
+        if m
+          metafield.value = m["value"]
+
+          # save metafield if information has changed
+          if old_metafield.attributes == metafield.attributes
+            puts Colorize.cyan(metafield.key << ' skipped')
+          else
+            if metafield.save
+              puts Colorize.green(metafield.key << ' saved ') + Colorize.orange(ShopifyAPI.credit_left)
+            else
+              puts Colorize.red(metafield.errors.messages)
+            end
+          end
+        end
+      end
+    end
+
+    # loop through any new variant metafields and create them 
+    if v["new_metafields"]
+      v["new_metafields"].each do |new_metafield|
+        variant.add_metafield(ShopifyAPI::Metafield.new({
+          namespace: 'global',
+          key: new_metafield["name"],
+          value: new_metafield["value"],
+          value_type: 'string'
+        }))
+      end
+    end
+
+  end
 
 end

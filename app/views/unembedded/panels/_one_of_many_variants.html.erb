@@ -31,19 +31,23 @@
         <label>Color</label>
         <%= v.text_field :option1, placeholder: "Option 1", class: "option_1 variant_input" %>
       </div>
+      <% if v.object.option2 %>
       <div class="row">
         <label>Option 2</label>
         <%= v.text_field :option2, placeholder: "Option 2", class: "option_2 variant_input" %>
       </div>
+      <% end %>
+      <% if v.object.option3 %>
       <div class="row">
         <label>Option 3</label>
         <%= v.text_field :option3, placeholder: "Option 3", class: "option_3 variant_input" %>
       </div>
+      <% end %>
       <div class="row no_margin image_box" style="text-align: center;">
         <% if v.object.image_id %>
-          <%= image_tag @resource.images.select{ |i| i.id == v.object.image_id }.first.src %>
+          <%= image_tag @resource.images.select{ |i| i.id == v.object.image_id }.first.src, class: "variant-image" %>
         <% else %>
-          <div class="column twelve type--centered no_margin">
+          <div class="column twelve type--centered no_margin variant-image">
             <i class="image icon-image next-icon--size-80"></i>
             <h5>Choose image</h5>
           </div>
@@ -53,10 +57,12 @@
     </div>
   </article>
 
-  <%= render partial: 'unembedded/panels/common_variant_fields', locals: {v: v} %>
+  <%= render partial: 'unembedded/panels/common_variant_fields', locals: {v: v, additional_class: 'variant_input'} %>
   
 <% end %>
 <div class="wittyEDBottomButtons"> 
   <!-- <button class="secondary red btn_bottom">Delete variant</button> -->
   <button class="warning btn_bottom">Delete variant</button>  
+
+  <button class="single_variant_submit">Save Variant</button>
 </div>  

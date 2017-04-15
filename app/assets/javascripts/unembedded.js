@@ -182,7 +182,9 @@ function ready() {
 	});
 
 	// submit form with AJAX
-	$('form.ajax').submit(function() {  
+	$('form.ajax').submit(function() {
+			$('.variant_input').prop('disabled', true);
+
 	    var valuesToSubmit = $(this).serialize();
 	    $.ajax({
 	        type: "POST",
@@ -192,9 +194,78 @@ function ready() {
 	    }).success(function(json){
 	        console.log("success", json);
 
+	        $('.variant_input').prop('disabled', false);
 	        // time to provide feedback 
+	    }).error(function(e) {
+	    	console.log(e);
+
+	    	$('.variant_input').prop('disabled', false);
 	    });
 	    return false; // prevents normal behaviour
+	});
+
+	// submit single variant
+	$('.single_variant_submit').click(function(e) {
+		var data;
+
+
+		$('form.ajax [name]:not(.variant_input)').prop('disabled', true);
+
+		console.log($('form.ajax').serialize());
+
+		return false; // prevents normal behaviour
+	});
+
+	// edit single variant
+	$('.edit_single_variant').click(function(e) {
+		e.preventDefault();
+
+		var image = $(this).data('image');
+		var variant = $(this).data('object');
+		var metafields = $(this).data('metafields');
+		console.log(variant);
+
+		$('.variant-image').remove();
+		if (image) {
+			$('.image_box').prepend('<img class="variant-image" src="'+image+'" alt="Penrose stairs">');
+		} else {
+			$('.image_box').prepend('<div class="column twelve type--centered no_margin variant-image"><i class="image icon-image next-icon--size-80"></i><h5>Choose image</h5></div>');
+		}
+
+		$('.new_hsc_name').remove();
+
+		$('#section-edit-variant [name^="variants"]').each(function() {
+			var variantName = $(this).attr('name'),
+					variantId = $(this).attr('id'),
+					nameRegexp = /variants\[([0-9]{11})\].*\[(.+)\]/g,
+					match = nameRegexp.exec(variantName),
+					oldId = match[1],
+					oldKey = match[2],
+					hsc;
+			console.log(oldId, oldKey);
+
+
+			if (variant.hasOwnProperty(oldKey)) {
+				$(this).attr('name', variantName.replace(oldId, variant.id));
+				$(this).val(variant[oldKey]);
+				if (variantId) $(this).attr('id', variantId.replace(oldId, variant.id));
+			} else {
+				hsc = metafields.filter(function(m) {
+				  return m.key === 'harmonized_system_code';
+				})[0];
+
+				if (hsc) {
+					$(this).val(hsc.value);
+					$(this).attr('name', 'variants['+variant.id+']metafields['+hsc.id+'][value]');
+					$(this).attr('id', 'variants_'+variant.id+'_metafields_'+hsc.id+'_value');
+				} else {
+					$(this).val('');
+					$(this).before('<input value="harmonized_system_code" class="new_hsc_name variant_input" type="hidden" name="variants['+variant.id+']new_metafields[][name]" id="variants_'+variant.id+'_new_metafields__name">');
+					$(this).attr('name', 'variants['+variant.id+']new_metafields[][value]');
+					$(this).attr('id', 'variants_'+variant.id+'_new_metafields__value');
+				}
+			}
+		});
 	});
 
 	// pannel navigation
@@ -216,6 +287,7 @@ function ready() {
 		$('.wittyEDPanel[data-tier="'+(tier + 1)+'"]').css({'height': 'auto', 'opacity': 1}).blindRightIn(400);
 	});
 
+	// responsive iframe adjustments
 	$('#responsive-dropdown').click(function() {
 		$('.responsive-dropdown-items-container').toggleClass('active');
 	});

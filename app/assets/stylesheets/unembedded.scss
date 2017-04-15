@@ -421,6 +421,8 @@ label .icon-calendar { float: right; margin-top: 2px; }
         p.extra_margin { margin-bottom: 2rem; }
       }
 
+      .image_box img {max-width: 100%;}
+
       h5:last-child {margin-bottom:0;}
       
       p {
@@ -1309,6 +1311,9 @@ label .icon-calendar { float: right; margin-top: 2px; }
     h5 { line-height: 2rem; }
   }
 }
+
+.prev-pannel,
+.next-pannel {cursor: pointer;}
 
 #section-edit-variant {
   .drop_images {

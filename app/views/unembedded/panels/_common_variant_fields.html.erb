@@ -5,19 +5,19 @@
       <label>Price</label>
       <div class="next-input--stylized next-input--has-content">
         <span class="next-input__add-on next-input__add-on--before">$</span>
-        <%= v.text_field :price, placeholder: "0.00", class: "next-input next-input--invisible" %>
+        <%= v.text_field :price, placeholder: "0.00", class: "next-input next-input--invisible " + additional_class %>
       </div>
     </div>
     <div class="row next-input-stylized">
       <label>Compare at price</label>
       <div class="next-input--stylized next-input--has-content">
         <span class="next-input__add-on next-input__add-on--before">$</span>
-        <%= v.text_field :compare_at_price, class: "next-input next-input--invisible" %>
+        <%= v.text_field :compare_at_price, class: "next-input next-input--invisible " + additional_class %>
       </div>
     </div>
     <div class="row no_margin">
       <label>
-        <%= v.check_box :taxable %>
+        <%= v.check_box :taxable, class: additional_class %>
         Charge taxes on this product
       </label>
     </div>
@@ -28,15 +28,15 @@
     <h5>Inventory</h5>
     <div class="row">
       <label>SKU (Stock Keeping Unit)</label>
-      <%= v.text_field :sku %>
+      <%= v.text_field :sku, class: additional_class %>
     </div>
     <div class="row">
       <label>Barcode (ISBN, UPC, GTIN, etc.)</label>
-      <%= v.text_field :barcode %>
+      <%= v.text_field :barcode, class: additional_class %>
     </div>
     <div class="row no_margin">
       <label>Inventory policy</label>
-      <%= v.select :inventory_management, inventory_management_options %>
+      <%= v.select :inventory_management, inventory_management_options, {}, {class: additional_class} %>
     </div>
   </div>
 </article>
@@ -45,7 +45,7 @@
     <h5>Shipping</h5>
     <div class="row">
       <label>
-        <%= v.check_box :requires_shipping %>
+        <%= v.check_box :requires_shipping, class: additional_class %>
         This product requires shipping
       </label>
     </div>
@@ -55,8 +55,8 @@
       <p class="subdued">Used to calculate shipping rates at checkout and label prices during fulfillment.</p>
       <label>Weight</label>
       <div class="input-group">
-        <%= v.text_field :weight, class: 'sidebyside_75' %>
-        <%= v.select :weight_unit, weight_unit_options, {}, {class: 'secondary sidebyside_25'} %>
+        <%= v.text_field :weight, class: 'sidebyside_75 ' + additional_class %>
+        <%= v.select :weight_unit, weight_unit_options, {}, {class: 'secondary sidebyside_25 ' + additional_class} %>
       </div>
     </div>
     <div class="row">
@@ -66,21 +66,21 @@
         <% v.object.metafields.each do |metafield| %>
           <% if metafield.key == 'harmonized_system_code' %>
             <%= fields_for 'variants['+v.object.id.to_s+']metafields[]', metafield do |m| %>
-              <%= m.text_field :value %>
+              <%= m.text_field :value, class: additional_class %>
             <% end %>
           <% end %>
         <% end %>
       <% else %>
         <%= fields_for 'variants['+v.object.id.to_s+']new_metafields[]', ShopifyAPI::Metafield.new do |m| %>
-          <%= m.hidden_field :name, value: "harmonized_system_code" %>
-          <%= m.text_field :value, class: "new_field" %>
+          <%= m.hidden_field :name, value: "harmonized_system_code", class: "new_hsc_name " + additional_class %>
+          <%= m.text_field :value, class: "new_field " + additional_class %>
         <% end %>
       <% end %>
     </div>
     <div class="divider"></div>
     <div class="row no_margin">
       <h6>Fulfillment Service</h6>
-      <%= v.select :fulfillment_service, fulfillment_service_options(@fulfillment_services) %>
+      <%= v.select :fulfillment_service, fulfillment_service_options(@fulfillment_services), {}, {class: additional_class} %>
     </div>
   </div>
 </article>

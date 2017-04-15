@@ -44,7 +44,7 @@ class UnembeddedController < ApplicationController
     # .add_metafield
     puts Colorize.magenta(params)
 
-    product = API.update(params)
+    product = API.updateProduct(params)
 
     # redirect_to dashboard_path(resource: params[:resource], id: params[:id])
     render json: product
