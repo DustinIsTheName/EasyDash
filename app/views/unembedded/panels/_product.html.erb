@@ -31,10 +31,10 @@
 </article>
 
 <% if @resource.variants.first.title == 'Default Title' %>
-  <%= panel 'one_variant' %>
+  <%= panel 'default_title' %>
 <% else %>
   <div class="card">
-    <div class="next-pannel">Wait there!</div>
+    <h5 class="next-pannel">Variants</h5>
   </div>
 <% end %>
 

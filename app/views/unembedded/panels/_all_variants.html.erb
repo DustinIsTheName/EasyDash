@@ -36,7 +36,7 @@
               <input type="checkbox">
               <% if variant.image_id %>
                 <div class="variant_image">
-                  <img src="<%= @resource.images.select{ |i| i.id == variant.image_id }.first.src %>">
+                  <%= image_tag @resource.images.select{ |i| i.id == variant.image_id }.first.src %>
                 </div>
               <% else %>
                 <div class="variant_image">

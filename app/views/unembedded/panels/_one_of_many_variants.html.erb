@@ -1,0 +1,62 @@
+<%= fields_for 'variants[]', @resource.variants.first do |v| %>
+  <article>
+    <div class="card edit_variant_info secondary">
+      <div class="col_left">
+        <% if @resource.images.first %>
+          <img src="<%= @resource.images.first.src %>" />
+        <% else %>
+          <i class="icon-image"></i>
+        <% end %>
+      </div>
+      <div class="col_right">
+        <h5 class="no_margin"><%= @resource.title %></h5>
+        <p class="subdued no_margin"><%= @resource.variants.count %> variants</p>
+      </div>
+    </div>
+  </article>
+  <article>
+    <div class="card secondary">
+      <h5>Variants</h5>
+      <select>
+        <% for variant in @resource.variants %>
+          <option><%= variant.title %></option>
+        <% end %>
+      </select>
+    </div>
+  </article>
+  <article>
+    <div class="card drop_images">
+      <h5>Options</h5>
+      <div class="row">
+        <label>Color</label>
+        <%= v.text_field :option1, placeholder: "Option 1", class: "option_1 variant_input" %>
+      </div>
+      <div class="row">
+        <label>Option 2</label>
+        <%= v.text_field :option2, placeholder: "Option 2", class: "option_2 variant_input" %>
+      </div>
+      <div class="row">
+        <label>Option 3</label>
+        <%= v.text_field :option3, placeholder: "Option 3", class: "option_3 variant_input" %>
+      </div>
+      <div class="row no_margin image_box" style="text-align: center;">
+        <% if v.object.image_id %>
+          <%= image_tag @resource.images.select{ |i| i.id == v.object.image_id }.first.src %>
+        <% else %>
+          <div class="column twelve type--centered no_margin">
+            <i class="image icon-image next-icon--size-80"></i>
+            <h5>Choose image</h5>
+          </div>
+        <% end %>
+        <a style="margin-top: 1rem; display: inline-block;" href="">Change image</a>
+      </div>
+    </div>
+  </article>
+
+  <%= render partial: 'unembedded/panels/common_variant_fields', locals: {v: v} %>
+  
+<% end %>
+<div class="wittyEDBottomButtons"> 
+  <!-- <button class="secondary red btn_bottom">Delete variant</button> -->
+  <button class="warning btn_bottom">Delete variant</button>  
+</div>  

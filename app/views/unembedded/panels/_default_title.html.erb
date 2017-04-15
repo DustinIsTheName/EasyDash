@@ -1,0 +1,41 @@
+<%= fields_for 'variants[]', @resource.variants.first do |v| %>
+  <%= render partial: 'unembedded/panels/common_variant_fields', locals: {v: v} %>
+<% end %>
+
+<article>
+  <div class="card">
+    <h5>Variants</h5>
+    <p>Add variants if this product comes in multiple versions, like different sizes or colors.</p>
+    <button class="secondary reveal-trigger" data-reveal="options">Add variant</button>
+    <div class="accordion_grey bottom rounded_bottom reveal-target" data-reveal="options">
+      <div class="row">
+        <label>Option name</label>
+        <input name="new_option_1" class="extra_margin" type="text" value="Size"/>
+        <label>Option values</label>
+        <input name="new_option_values_1" type="text" placeholder="Separate options with a comma"/>
+      </div>
+      <div class="divider" style="margin-left: 0; margin-right: 0;"></div>
+      <button class="secondary reveal-trigger" data-reveal="options_2">Add another option</button>
+
+      <div class="reveal-target" data-reveal="options_2">
+        <div class="row">
+          <label>Option name</label>
+          <input name="new_option_2" class="extra_margin" type="text" value="Color"/>
+          <label>Option values</label>
+          <input name="new_option_values_2" type="text" placeholder="Separate options with a comma"/>
+        </div>
+        <div class="divider" style="margin-left: 0; margin-right: 0;"></div>
+        <button class="secondary reveal-trigger" data-reveal="options_3">Add another option</button>
+      </div>
+
+      <div class="reveal-target" data-reveal="options_3">
+        <div class="row">
+          <label>Option name</label>
+          <input name="new_option_3" class="extra_margin" type="text" value="Material"/>
+          <label>Option values</label>
+          <input name="new_option_values_3" type="text" placeholder="Separate options with a comma"/>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
