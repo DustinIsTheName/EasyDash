@@ -124,7 +124,6 @@ function ready() {
 	});
 
 	$('.resource-search').keyup(function() {
-		console.log('wat?');
 		if ($(this).val().length > 2 || $(this).val().length === 0) {
 			var resource = $(this).data('resource');
 			resource_infomation.query = $(this).val();
@@ -182,37 +181,54 @@ function ready() {
 	});
 
 	// submit form with AJAX
-	$('form.ajax').submit(function() {
-			$('.variant_input').prop('disabled', true);
+	$('#save_resource').click(function() {
+		$('.variant_input').prop('disabled', true);
 
-	    var valuesToSubmit = $(this).serialize();
-	    $.ajax({
-	        type: "POST",
-	        url: $(this).attr('action'), //sumbits it to the given url of the form
-	        data: valuesToSubmit,
-	        dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
-	    }).success(function(json){
-	        console.log("success", json);
+    var valuesToSubmit = $('form.ajax').serialize();
+    $.ajax({
+      type: "POST",
+      url: $('form.ajax').attr('action'), //sumbits it to the given url of the form
+      data: valuesToSubmit,
+      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+    }).success(function(json){
+      console.log("success", json);
 
-	        $('.variant_input').prop('disabled', false);
-	        // time to provide feedback 
-	    }).error(function(e) {
-	    	console.log(e);
+      $('.variant_input').prop('disabled', false);
+      // time to provide feedback 
+    }).error(function(e) {
+    	console.log(e);
 
-	    	$('.variant_input').prop('disabled', false);
-	    });
-	    return false; // prevents normal behaviour
+    	$('.variant_input').prop('disabled', false);
+    });
+    return false; // prevents normal behaviour
 	});
 
 	// submit single variant
 	$('.single_variant_submit').click(function(e) {
 		var data;
 
-
 		$('form.ajax [name]:not(.variant_input)').prop('disabled', true);
+		data = $('form.ajax').serialize();
+		$('form.ajax [name]:not(.variant_input)').prop('disabled', false);
 
-		console.log($('form.ajax').serialize());
+		console.log(data);
 
+		// submit form with AJAX
+    $.ajax({
+      type: "POST",
+      url: '/variant-update', //sumbits it to the given url of the form
+      data: data,
+      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+    }).success(function(json) {
+      console.log("success", json);
+
+      $('.variant_input').prop('disabled', false);
+      // time to provide feedback 
+    }).error(function(e) {
+    	console.log(e);
+
+    	$('.variant_input').prop('disabled', false);
+    });
 		return false; // prevents normal behaviour
 	});
 
@@ -243,7 +259,6 @@ function ready() {
 					oldKey = match[2],
 					hsc;
 			console.log(oldId, oldKey);
-
 
 			if (variant.hasOwnProperty(oldKey)) {
 				$(this).attr('name', variantName.replace(oldId, variant.id));
@@ -308,6 +323,12 @@ function ready() {
 
 		$('#dashboard-iframe').width(width).height(height);
 	});
+
+	// window.onbeforeunload = function () {
+	//   if (!confirm("Do you really want to close?")) {
+	//   	return false;
+	//   }
+	// };
 }
 
 $(document).on('turbolinks:load', ready);

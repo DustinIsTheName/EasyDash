@@ -239,6 +239,7 @@ class API
       end
     end
 
+    variant
   end
 
 end

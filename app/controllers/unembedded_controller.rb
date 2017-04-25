@@ -50,6 +50,14 @@ class UnembeddedController < ApplicationController
     render json: product
   end
 
+  def update_variant
+    puts Colorize.magenta(params)
+    @variant = ShopifyAPI::Variant.find(params["variants"].keys[0])
+
+    variant = API.updateVariant(params, @variant)
+    render json: variant
+  end
+
   private
 
     def get_resources
