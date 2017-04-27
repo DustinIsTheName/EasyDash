@@ -31,7 +31,7 @@
       </div>
       <% @resource.variants.each do |variant| %>
         <%= fields_for 'variants[]', variant do |v| %>
-          <div class="variant" data-option1="<%= variant.option1 %>" data-option2="<%= variant.option2 %>" data-option3="<%= variant.option3 %>" >
+          <div id="variant_id_<%= variant.id %>" class="variant" data-option1="<%= variant.option1 %>" data-option2="<%= variant.option2 %>" data-option3="<%= variant.option3 %>" >
             <div class="col_left">
               <input type="checkbox">
               <% if variant.image_id %>

@@ -96,12 +96,32 @@
             <button class="btn btn--icon tip icon-redo" disabled="disabled" data-hover="Redo" aria-label="Redo" type="button" name="button"></button>
           </li>
         </ul>
-        <button id="save_resource" class="btn btn-primary" disabled="" type="button" name="button">Save</button>
+        <button id="save_resource" class="btn btn-primary" type="button" name="button">Save</button>
       </div>
     </div>
   </div><!-- .wittyEDEditorFooter -->
 
 </div><!-- .wittyEDSidebar -->
+
+<% if @type == 'product' %>
+<section class="editVariantImage">
+  <div class="card has-sections">
+    <div class="card-section">
+      <h3>Update variant image</h3>
+      <!-- <a href="#" class="close" role="button" aria-label="Close dialog">x</a> -->
+    </div>
+    <hr>
+    <div class="card-section">
+      <% @resource.images.each_with_index do |image, index| %>
+        <input type="radio" id="variant-select-image-<%= index %>" class="variant-select-image">
+        <label for="variant-select-image-<%= index %>">
+          <img src="<%= image.src %>">
+        </label>
+      <% end %>
+    </div>
+  </div>
+</section>
+<% end %>
 
 <button class="wittyEDFullscreenToggle" aria-label="Toggle sidebar" type="button" name="button">
   <%= svgs 'dashboard_dark' %>

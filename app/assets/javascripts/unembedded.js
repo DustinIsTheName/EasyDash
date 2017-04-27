@@ -190,10 +190,15 @@ function ready() {
       url: $('form.ajax').attr('action'), //sumbits it to the given url of the form
       data: valuesToSubmit,
       dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
-    }).success(function(json){
-      console.log("success", json);
-
+    }).success(function(product){
+    	var variant;
+      console.log("success product", product);
       $('.variant_input').prop('disabled', false);
+
+      for (var i = 0; i < product.variants.length; i++) {
+      	variant = product.variants[i];
+      	$('#variant_id_'+variant.id+' .edit_single_variant').data('object', variant);
+      }
       // time to provide feedback 
     }).error(function(e) {
     	console.log(e);
@@ -219,15 +224,25 @@ function ready() {
       url: '/variant-update', //sumbits it to the given url of the form
       data: data,
       dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
-    }).success(function(json) {
-      console.log("success", json);
+    }).success(function(variant) {
+      console.log("success variant", variant);
+      $('[data-object*="'+variant.id+'"]').data('object', variant);
+      $('#variants_'+variant.id+'_option1').val();
+      $('#variants_'+variant.id+'_option2').val();
+      $('#variants_'+variant.id+'_option3').val();
+      $('#variants_'+variant.id+'_inventory_quantity').val();
+      $('#variants_'+variant.id+'_compare_at_price').val();
+      $('#variants_'+variant.id+'_price').val();
+      $('#variants_'+variant.id+'_sku').val();
 
-      $('.variant_input').prop('disabled', false);
+      $('form.ajax [name]:not(.variant_input)').prop('disabled', false);
+      // qw12
+
       // time to provide feedback 
     }).error(function(e) {
     	console.log(e);
 
-    	$('.variant_input').prop('disabled', false);
+    	$('form.ajax [name]:not(.variant_input)').prop('disabled', false);
     });
 		return false; // prevents normal behaviour
 	});
@@ -239,7 +254,6 @@ function ready() {
 		var image = $(this).data('image');
 		var variant = $(this).data('object');
 		var metafields = $(this).data('metafields');
-		console.log(variant);
 
 		$('.variant-image').remove();
 		if (image) {
@@ -258,7 +272,6 @@ function ready() {
 					oldId = match[1],
 					oldKey = match[2],
 					hsc;
-			console.log(oldId, oldKey);
 
 			if (variant.hasOwnProperty(oldKey)) {
 				$(this).attr('name', variantName.replace(oldId, variant.id));
@@ -323,6 +336,13 @@ function ready() {
 
 		$('#dashboard-iframe').width(width).height(height);
 	});
+
+	// edit variant image
+	function editVariantImage() {
+		$('.editVariantImage').addClass('open')
+	}
+
+	$('.variant_image').click(editVariantImage);
 
 	// window.onbeforeunload = function () {
 	//   if (!confirm("Do you really want to close?")) {
