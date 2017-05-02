@@ -1379,17 +1379,60 @@ label .icon-calendar { float: right; margin-top: 2px; }
   }
 
   .card-section {
+    font-size: 0;
+    display: flex;
+
+    *:last-child {margin-bottom:0;}
+
+    .variant-select-image:checked + label:before {
+      border: 2px solid #0078bd;
+      border-radius: 3px;
+      top: -3px;
+      right: -3px;
+      bottom: -3px;
+      left: -3px;
+      z-index: 1;
+      content: "";
+      position: absolute;
+    }
+
     label {
-      width: 20%;
-      float: left;
-      padding: 10px;
+      flex-basis: calc(20% - 16px);
+      display: flex;
+      flex-flow: column;
+      justify-content: center;
+      vertical-align: middle;
+      box-sizing: border-box;
+      position: relative;
+      background: #fafbfc;
+      border: 1px solid rgba(195,207,216,0.6);
+
+      &~ label {margin-left: 20px;}
 
       img {
         max-width: 100%;
         float: left;
       }
     }
+
+    .arrow-navigation {
+      .icon-prev {
+        border-radius: .3rem 0 0 .3rem;
+        border-right: 0;
+      }
+      .icon-next {
+        border-radius: 0 .3rem .3rem 0;
+      }
+    }
+
+    &> button {margin-left: 10px;}
+
+    #cancel {
+      margin-left: auto;
+    }
   }
+
+  hr {clear:both;}
 }
 
 

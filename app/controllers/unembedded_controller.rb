@@ -52,10 +52,21 @@ class UnembeddedController < ApplicationController
 
   def update_variant
     puts Colorize.magenta(params)
-    @variant = ShopifyAPI::Variant.find(params["variants"].keys[0])
+    @variant = ShopifyAPI::Variant.find(params['variants'].keys[0])
 
     variant = API.updateVariant(params, @variant)
     render json: variant
+  end
+
+  def update_variant_image
+    puts Colorize.magenta(params)
+    API.updateVariantImage(params['variant'], params['image'])
+    if params['image'] == 'destroy'
+      render json: {id: nil}
+    else
+      @image = ShopifyAPI::Image.find(params['image'], params: {product_id: params['product']})
+      render json: @image
+    end
   end
 
   private

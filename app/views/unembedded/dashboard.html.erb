@@ -113,11 +113,24 @@
     <hr>
     <div class="card-section">
       <% @resource.images.each_with_index do |image, index| %>
-        <input type="radio" id="variant-select-image-<%= index %>" class="variant-select-image">
-        <label for="variant-select-image-<%= index %>">
+        <input type="radio" id="variant-select-image-<%= image.id %>" class="variant-select-image" name="variants[<%= @resource.variants.first.id %>][image_id]" value="<%= image.id %>">
+        <label for="variant-select-image-<%= image.id %>">
           <img src="<%= image.src %>">
         </label>
       <% end %>
+    </div>
+    <hr>
+    <div class="card-section">
+      <div class="arrow-navigation">
+        <button class="secondary icon-prev"></button>
+        <button class="secondary icon-next"></button>
+        <div style="clear:both;"></div>
+      </div>
+      <button id="variant-image-destroy" class="secondary red variant-image-save" href="#">Remove image</button>
+
+      <button id="cancel" class="secondary" href="#">Cancel</button>
+      <button class="secondary" href="#">Add Image</button>
+      <button id="variant-image-save" class="primary variant-image-save" href="#">Save</button>
     </div>
   </div>
 </section>

@@ -16,11 +16,14 @@ Rails.application.routes.draw do
 
   root :to => 'home#index'
 
-  get '/preview-window' => 'unembedded#quick_select'
-  get '/dashboard' => 'unembedded#dashboard'
-  post '/dashboard-new' => 'unembedded#new_api'
-  put '/dashboard-update' => 'unembedded#update_api'
-  post '/variant-update' => 'unembedded#update_variant'
+  controller :unembedded do
+    get '/preview-window' => :quick_select
+    get '/dashboard' => :dashboard
+    post '/dashboard-new' => :new_api
+    put '/dashboard-update' => :update_api
+    post '/variant-update' => :update_variant
+    post '/variant-image' => :update_variant_image
+  end
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

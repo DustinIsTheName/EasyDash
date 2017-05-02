@@ -242,4 +242,19 @@ class API
     variant
   end
 
+  def self.updateVariantImage(variant_id, image_id)
+    variant = ShopifyAPI::Variant.find(variant_id)
+    if image_id == 'destroy'
+      variant.image_id = nil
+    else
+      variant.image_id = image_id
+    end
+    puts variant.image_id
+    if variant.save
+      puts Colorize.green(variant.title << ' saved ') + Colorize.orange(ShopifyAPI.credit_left)
+    else
+      puts Colorize.red(variant.errors.messages)
+    end
+  end
+
 end

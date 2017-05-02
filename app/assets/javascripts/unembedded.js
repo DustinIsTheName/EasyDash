@@ -339,8 +339,40 @@ function ready() {
 
 	// edit variant image
 	function editVariantImage() {
-		$('.editVariantImage').addClass('open')
+		var image_id = $(this).data('image-id');
+		var variant_id = $(this).closest('.variant').find('.edit_single_variant').data('object').id;
+
+		$('#variant-select-image-'+image_id).prop('checked', true);
+		$('.variant-select-image').attr('name', 'variants['+variant_id+'][image_id]');
+
+		$('.editVariantImage').addClass('open');
 	}
+
+	$('.variant-image-save').click(function(e) {
+		e.preventDefault();
+		console.log('v-i-s');
+
+		var variant_id = $('.variant-select-image').attr('name').match(/variants\[([0-9]{11})\]\[image_id\]/)[1],
+				product_id = $('[name="id"]').val(),
+				image_id = $('[name="variants['+variant_id+'][image_id]"]:checked').val();
+
+		if ($(this).attr('id') === 'variant-image-destroy') {image_id = 'destroy';}
+
+		$.ajax({
+      type: "POST",
+      url: '/variant-image', //sumbits it to the given url of the form
+      data: {
+      	image: image_id,
+      	variant: variant_id,
+      	product: product_id
+      },
+      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+    }).success(function(image) {
+    	console.log(image);
+    }).error(function(e) {
+    	console.log(e);
+    });
+	});
 
 	$('.variant_image').click(editVariantImage);
 
