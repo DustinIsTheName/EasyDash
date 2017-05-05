@@ -251,7 +251,7 @@ class API
     end
     puts variant.image_id
     if variant.save
-      puts Colorize.green(variant.title << ' saved ') + Colorize.orange(ShopifyAPI.credit_left)
+      puts Colorize.green(variant.title << ' image saved ') + Colorize.orange(ShopifyAPI.credit_left)
     else
       puts Colorize.red(variant.errors.messages)
     end

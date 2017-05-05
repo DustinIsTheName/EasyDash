@@ -1355,7 +1355,7 @@ label .icon-calendar { float: right; margin-top: 2px; }
   -webkit-transform: translate(-50%,-50%);
   -moz-transform: translate(-50%,-50%);
   transform: translate(-50%,-50%);
-  transition: height 1s, width 1s;
+  transition: height 1s, width 1s, max-width 1s;
 }
 
 .editVariantImage {
