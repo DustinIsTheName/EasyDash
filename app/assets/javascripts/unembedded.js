@@ -257,7 +257,7 @@ function ready() {
 
 		$('.variant-image').remove();
 		if (image) {
-			$('.image_box').prepend('<img class="variant-image" src="'+image+'" alt="Penrose stairs">');
+			$('.image_box').prepend('<img class="variant-image" src="'+image+'">');
 		} else {
 			$('.image_box').prepend('<div class="column twelve type--centered no_margin variant-image"><i class="image icon-image next-icon--size-80"></i><h5>Choose image</h5></div>');
 		}
@@ -338,9 +338,16 @@ function ready() {
 	});
 
 	// edit variant image
-	function editVariantImage() {
-		var image_id = $(this).data('image-id');
-		var variant_id = $(this).closest('.variant').find('.edit_single_variant').data('object').id;
+	function editVariantImage($this) {
+		var image_id = $this.data('image-id');
+		var variant_id = $this.data('object').id;
+
+		if (image_id) {
+			$('#variant-image-destroy').show();
+		} else {
+			$('#variant-image-destroy').hide();
+			$('.variant-select-image').prop('checked', false);
+		}
 
 		$('#variant-select-image-'+image_id).prop('checked', true);
 		$('.variant-select-image').attr('name', 'variants['+variant_id+'][image_id]');
@@ -348,9 +355,12 @@ function ready() {
 		$('.editVariantImage').addClass('open');
 	}
 
+	function closeVariantImage() {
+		$('.editVariantImage').removeClass('open');
+	}
+
 	$('.variant-image-save').click(function(e) {
 		e.preventDefault();
-		console.log('v-i-s');
 
 		var variant_id = $('.variant-select-image').attr('name').match(/variants\[([0-9]{11})\]\[image_id\]/)[1],
 				product_id = $('[name="id"]').val(),
@@ -368,13 +378,31 @@ function ready() {
       },
       dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
     }).success(function(image) {
-    	console.log(image);
+    	closeVariantImage();
+
+    	$('#variant_id_'+variant_id+' .variant_image').data('image-id', image.id);
+    	$('#variant_id_'+variant_id+' .variant_image *').remove(); //qw12
+
+    	if (image.id) {
+	    	$('#variant_id_'+variant_id+' .variant_image').prepend('<img src="'+image.src+'">');
+	    } else {
+	    	$('#variant_id_'+variant_id+' .variant_image').prepend('<i class="icon-image"></i>');
+	    }
     }).error(function(e) {
     	console.log(e);
     });
 	});
 
-	$('.variant_image').click(editVariantImage);
+	$('#cancel').click(closeVariantImage);
+
+	$('.variant_image').click(function(e) {
+		e.preventDefault();
+		$parent = $(this).parent().parent();
+
+		if ($parent.hasClass('variant_open') || $parent.hasClass('drop_images')) {
+			editVariantImage($(this));
+		}
+	});
 
 	// window.onbeforeunload = function () {
 	//   if (!confirm("Do you really want to close?")) {
