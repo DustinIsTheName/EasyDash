@@ -62,7 +62,7 @@ class UnembeddedController < ApplicationController
     puts Colorize.magenta(params)
     API.updateVariantImage(params['variant'], params['image'])
     if params['image'] == 'destroy'
-      render json: {id: nil}
+      render json: {id: nil, src: nil}
     else
       @image = ShopifyAPI::Image.find(params['image'], params: {product_id: params['product']})
       render json: @image

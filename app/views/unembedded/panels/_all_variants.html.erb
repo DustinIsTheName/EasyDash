@@ -35,11 +35,11 @@
             <div class="col_left">
               <input type="checkbox">
               <% if variant.image_id %>
-                <div class="variant_image" data-image-id="<%= variant.image_id %>">
+                <div class="variant_image" data-variant-id="<%= variant.id %>" data-image-id="<%= variant.image_id %>">
                   <%= image_tag @resource.images.select{ |i| i.id == variant.image_id }.first.src %>
                 </div>
               <% else %>
-                <div class="variant_image">
+                <div class="variant_image" data-variant-id="<%= variant.id %>">
                   <i class="icon-image"></i>
                 </div>
               <% end %>

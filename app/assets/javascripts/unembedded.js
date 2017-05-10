@@ -257,8 +257,11 @@ function ready() {
 
 		$('.variant-image').remove();
 		if (image) {
-			$('.image_box').prepend('<img class="variant-image" src="'+image+'">');
+			$('.image_box').prepend('<img class="variant-image quark" src="'+image+'">');
+			$('.image_box .variant_image').data('image-id', variant.image_id);
+			$('.image_box .variant_image').data('variant-id', variant.id);
 		} else {
+			$('.image_box .variant_image').data('image-id', '');
 			$('.image_box').prepend('<div class="column twelve type--centered no_margin variant-image"><i class="image icon-image next-icon--size-80"></i><h5>Choose image</h5></div>');
 		}
 
@@ -337,10 +340,16 @@ function ready() {
 		$('#dashboard-iframe').width(width).height(height);
 	});
 
+	$('.wittyEDFullscreenToggle').click(function(e) {
+		e.preventDefault();
+		$('.wittyEDSidebar').toggleClass('closed');
+	});
+
 	// edit variant image
 	function editVariantImage($this) {
 		var image_id = $this.data('image-id');
-		var variant_id = $this.data('object').id;
+		var variant_id = $this.data('variant-id');
+		console.log($this, image_id)
 
 		if (image_id) {
 			$('#variant-image-destroy').show();
@@ -379,14 +388,24 @@ function ready() {
       dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
     }).success(function(image) {
     	closeVariantImage();
+    	console.log(image)
 
+    	$('.image_box .variant_image').data('image-id', image.id);
     	$('#variant_id_'+variant_id+' .variant_image').data('image-id', image.id);
-    	$('#variant_id_'+variant_id+' .variant_image *').remove(); //qw12
+    	$('#variant_id_'+variant_id+' .edit_single_variant').data('image', image.src);
+    	var variant_object = $('#variant_id_'+variant_id+' .edit_single_variant').data('object');
+    	variant_object.image_id = image.id;
+    	$('#variant_id_'+variant_id+' .edit_single_variant').data('object', variant_object);
 
+    	console.log(variant_id);
+    	$('.variant-image').remove();
+    	$('#variant_id_'+variant_id+' .variant_image *').remove(); //qw12
     	if (image.id) {
 	    	$('#variant_id_'+variant_id+' .variant_image').prepend('<img src="'+image.src+'">');
+	    	$('.image_box').prepend('<img class="variant-image" src="'+image.src+'">');
 	    } else {
 	    	$('#variant_id_'+variant_id+' .variant_image').prepend('<i class="icon-image"></i>');
+	    	$('.image_box').prepend('<div class="column twelve type--centered no_margin variant-image"><i class="image icon-image next-icon--size-80"></i><h5>Choose image</h5></div>');
 	    }
     }).error(function(e) {
     	console.log(e);
