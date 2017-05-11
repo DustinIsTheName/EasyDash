@@ -33,6 +33,7 @@ class UnembeddedController < ApplicationController
         @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
         @fulfillment_services = ShopifyAPI::FulfillmentService.find(:all, params: {scope: :all, fields: ['name', 'handle']})
         @resource = ShopifyAPI::Product.find(params[:id])
+        @smart_collections = ShopifyAPI::SmartCollection.find(:all, params: {product_id: params[:id], limit: 250, fields: ['title', 'handle', 'id']})
       else
         @type = 'resource_select'
       end
@@ -41,8 +42,7 @@ class UnembeddedController < ApplicationController
   end
 
   def update_api
-    # .add_metafield
-    puts Colorize.magenta(params)
+    # puts Colorize.magenta(params)
 
     product = API.updateProduct(params)
 
@@ -51,7 +51,7 @@ class UnembeddedController < ApplicationController
   end
 
   def update_variant
-    puts Colorize.magenta(params)
+    # puts Colorize.magenta(params)
     @variant = ShopifyAPI::Variant.find(params['variants'].keys[0])
 
     variant = API.updateVariant(params, @variant)
@@ -59,7 +59,7 @@ class UnembeddedController < ApplicationController
   end
 
   def update_variant_image
-    puts Colorize.magenta(params)
+    # puts Colorize.magenta(params)
     API.updateVariantImage(params['variant'], params['image'])
     if params['image'] == 'destroy'
       render json: {id: nil, src: nil}

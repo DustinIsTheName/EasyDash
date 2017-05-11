@@ -34,7 +34,7 @@
   <%= panel 'default_title' %>
 <% else %>
   <div class="card">
-    <h5 class="next-pannel">Variants</h5>
+    <h5 class="next-pannel">Variants <span class="icon-next variant-next"></span></h5>
   </div>
 <% end %>
 
@@ -135,7 +135,25 @@
     <div class="row">
       <label class="extra_margin">Collection</label>
       <input type="search" placeholder="Search for collections" />
-      <em>Add this product to a collection so it’s easy to find in your store.</em>
+      <% for collection in @resource.collections %>
+        <div class="collection" data-collection="<%= collection.to_json %>">
+          <a target="_blank" href="https://<%= @shop_session.url %>/admin/collections/<%= collection.id %>">
+            <%= collection.title %>
+          </a>
+          <span class="icon-close"></span>
+        </div>
+      <% end %>
+      <% for collection in @smart_collections %>
+        <div class="collection" data-collection="<%= collection.to_json %>">
+          <a target="_blank" href="https://<%= @shop_session.url %>/admin/collections/<%= collection.id %>">
+            <%= collection.title %> 
+          </a>
+          <span class="auto">auto</span>
+        </div>
+      <% end %>
+      <% if @smart_collections.size == 0 and @resource.collections.size == 0 %>
+        <em >Add this product to a collection so it’s easy to find in your store.</em>
+      <% end %>
     </div>
     <div class="divider"></div>
     <div class="row no_margin">
@@ -148,7 +166,7 @@
   <div class="card secondary">
     <h5>Theme templates</h5>
     <label>Template suffix</label>
-    <%= o.select :template_suffix, template_suffix_options(@assets.select{|asset| asset.key.include? "templates/product" }), {}, {class: "secondary extra_margin"} %>>
+    <%= o.select :template_suffix, template_suffix_options(@assets.select{|asset| asset.key.include? "templates/product" }), {}, {class: "secondary extra_margin"} %>
     <em class="no_margin">The template customers see when viewing this product in your store.</em>
   </div>
 </article>
