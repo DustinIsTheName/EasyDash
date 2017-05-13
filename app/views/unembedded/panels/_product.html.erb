@@ -134,7 +134,10 @@
     <div class="divider"></div>
     <div class="row">
       <label class="extra_margin">Collection</label>
-      <input type="search" placeholder="Search for collections" />
+      <input type="search" class="resource-search" name="collection-search" placeholder="Search for collections" data-resource="collection" data-exceptions="product-panel">
+      <div class="select-sim-dropdown-container">
+        <ul class="select-sim-dropdown collection" data-total="" data-resource="collection" data-object=""></ul>
+      </div>
       <% for collection in @resource.collections %>
         <div class="collection" data-collection="<%= collection.to_json %>">
           <a target="_blank" href="https://<%= @shop_session.url %>/admin/collections/<%= collection.id %>">

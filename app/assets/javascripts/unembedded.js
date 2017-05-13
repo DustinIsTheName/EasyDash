@@ -27,9 +27,37 @@ function ready() {
 		console.log(e);
 	}
 
+	function checkVisible(elm) {
+	  var rect = elm.getBoundingClientRect();
+	  var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+	  return (rect.bottom <= viewHeight && rect.top >= 0);
+	}
+
 	$('.select-sim').click(function(event) {
 		$('.select-sim').not(this).removeClass('active');
 		$(this).toggleClass('active');
+
+		if (!checkVisible(this.nextElementSibling)) {
+			$(this).toggleClass('reverse');
+			while (!checkVisible(this.nextElementSibling)) {
+				$(this.nextElementSibling).addClass('no-arrow');
+
+				if ($(this).hasClass('reverse')) {
+					var bottom = parseInt($(this.nextElementSibling).css('bottom'));
+					$(this.nextElementSibling).css('bottom', bottom - 10);
+					console.log(bottom);
+				} else {
+					var top = parseInt($(this.nextElementSibling).css('top'));
+					$(this.nextElementSibling).css('top', top + 10);
+					console.log(top);
+				}
+			}
+		}
+
+		event.stopPropagation();
+	});
+
+	$('.select-sim-dropdown-container').click(function(event) {
 		event.stopPropagation();
 	});
 
@@ -124,6 +152,14 @@ function ready() {
 	});
 
 	$('.resource-search').keyup(function() {
+
+		if ($(this).data('exceptions') === 'product-panel' && $(this).val().length === 0) {
+			$(this).hide();
+			return;
+		} else {
+			$(this).show();
+		}
+
 		if ($(this).val().length > 2 || $(this).val().length === 0) {
 			var resource = $(this).data('resource');
 			resource_infomation.query = $(this).val();
@@ -178,6 +214,10 @@ function ready() {
 
 	$('.variant input[type="checkbox"]').click(function(e) {
 		e.stopPropagation();
+	});
+
+	$('form.ajax').submit(function(e) {
+		e.preventDefault();
 	});
 
 	// submit form with AJAX

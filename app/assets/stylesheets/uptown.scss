@@ -497,7 +497,7 @@ section {
     section .card.has-sections {
       padding: 0; }
     section .card .card-section {
-      padding: 2.0rem; }
+      padding: 2.0rem; position:relative; }
       section .card .card-section ~ h1:first-of-type,
       section .card .card-section ~ h2:first-of-type,
       section .card .card-section ~ h3:first-of-type,
