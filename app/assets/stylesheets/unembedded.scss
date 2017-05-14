@@ -617,6 +617,10 @@ label .icon-calendar { float: right; margin-top: 2px; }
       &.divider_bottom { margin-top: 1rem; }
     }
   }
+
+  &.quick-select section .card {
+    margin-bottom: 1rem;
+  }
   
   .icon-prev { /* Teal */
     background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28' enable-background='new 0 0 28 28'%3E%3Cpath fill='rgb(0,167,157)' d='M23,24.7L12.5,14.2L23,3.7L20.3,1L7,14.2l13.3,13.3C20.3,27.5,23,24.7,23,24.7z'%3E%3C/path%3E%3C/svg%3E");
@@ -711,7 +715,7 @@ label .icon-calendar { float: right; margin-top: 2px; }
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      text-transform: uppercase;
+      text-transform: capitalize;
     }
     .btn--link {
       height: auto;

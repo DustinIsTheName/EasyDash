@@ -45,11 +45,9 @@ function ready() {
 				if ($(this).hasClass('reverse')) {
 					var bottom = parseInt($(this.nextElementSibling).css('bottom'));
 					$(this.nextElementSibling).css('bottom', bottom - 10);
-					console.log(bottom);
 				} else {
 					var top = parseInt($(this.nextElementSibling).css('top'));
 					$(this.nextElementSibling).css('top', top + 10);
-					console.log(top);
 				}
 			}
 		}
@@ -63,6 +61,7 @@ function ready() {
 
 	$(window).click(function() {
 		$('.select-sim').removeClass('active');
+		$('.product-pannel-collection-select').hide();
 	});
 
 	function extendResource(resource, page, total) {
@@ -152,15 +151,13 @@ function ready() {
 	});
 
 	$('.resource-search').keyup(function() {
+		var minimum = 3;
 
-		if ($(this).data('exceptions') === 'product-panel' && $(this).val().length === 0) {
-			$(this).hide();
-			return;
-		} else {
-			$(this).show();
+		if ($(this).data('exceptions') === 'product-panel') {
+			minimum = 0;
 		}
 
-		if ($(this).val().length > 2 || $(this).val().length === 0) {
+		if ($(this).val().length >= minimum || $(this).val().length === 0) {
 			var resource = $(this).data('resource');
 			resource_infomation.query = $(this).val();
 			$.ajax({
@@ -179,6 +176,15 @@ function ready() {
 				}
 			});
 		}
+	});
+
+	$('.resource-search[data-exceptions="product-panel"]').focus(function() {
+		$(this).next().show();
+		$(this).keyup();
+	});
+
+	$('.resource-search[data-exceptions="product-panel"]').click(function(event) {
+		event.stopPropagation();
 	});
 
 	// permenatly shows target upon clicking the trigger
@@ -276,7 +282,6 @@ function ready() {
       $('#variants_'+variant.id+'_sku').val();
 
       $('form.ajax [name]:not(.variant_input)').prop('disabled', false);
-      // qw12
 
       // time to provide feedback 
     }).error(function(e) {
@@ -389,7 +394,6 @@ function ready() {
 	function editVariantImage($this) {
 		var image_id = $this.data('image-id');
 		var variant_id = $this.data('variant-id');
-		console.log($this, image_id)
 
 		if (image_id) {
 			$('#variant-image-destroy').show();
@@ -439,7 +443,7 @@ function ready() {
 
     	console.log(variant_id);
     	$('.variant-image').remove();
-    	$('#variant_id_'+variant_id+' .variant_image *').remove(); //qw12
+    	$('#variant_id_'+variant_id+' .variant_image *').remove();
     	if (image.id) {
 	    	$('#variant_id_'+variant_id+' .variant_image').prepend('<img src="'+image.src+'">');
 	    	$('.image_box').prepend('<img class="variant-image" src="'+image.src+'">');
