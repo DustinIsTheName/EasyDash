@@ -42,7 +42,7 @@ class UnembeddedController < ApplicationController
   end
 
   def update_api
-    # puts Colorize.magenta(params)
+    puts Colorize.magenta(params)
 
     product = API.updateProduct(params)
 

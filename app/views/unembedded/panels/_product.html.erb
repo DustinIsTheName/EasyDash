@@ -132,15 +132,26 @@
       </div>
     </div>
     <div class="divider"></div>
-    <div class="row">
+    <div class="row product-collections-select">
       <label class="extra_margin">Collection</label>
+      <% for collection in @resource.collections %>
+        <%= fields_for 'collections', '' do |c| %>
+          <%= c.hidden_field '', value: collection.id, id: "collection_#{collection.id}" %>
+        <% end %>
+      <% end %>
       <input type="search" class="resource-search" name="collection-search" placeholder="Search for collections" data-resource="collection" data-exceptions="product-panel">
-      <div class="select-sim-dropdown-container product-pannel-collection-select search">
+      <div class="select-sim-dropdown-container product-pannel-collection-select search" data-shop-url="<%= @shop_session.url %>">
         <div class="dropdown-arrow"></div>
-        <ul class="select-sim-dropdown collection" data-total="" data-resource="collection" data-object=""></ul>
+        <ul class="select-sim-dropdown collection" data-total="" data-resource="collection" data-object="">
+          <% for collection in @cc.take(8) %>
+            <li class="variable">
+              <%= link_to collection.title, '#', data: {handle: collection.handle, id: collection.id} %>
+            </li>
+          <% end %>
+        </ul>
         <div class="arrow-navigation">
           <button class="secondary icon-prev disabled"></button>
-          <button class="secondary icon-next disabled"></button>
+          <button class="secondary icon-next<% if @cc.size <= 8 %> disabled<% end %>"></button>
           <div style="clear:both;"></div>
         </div>
       </div>
@@ -168,6 +179,8 @@
     <div class="row no_margin">
       <label class="extra_margin">Tags <a href="#" class="label-cta">View all tags</a></label>
       <%= o.text_field :tags, placeholder: "Vintage, cotton, summer" %>
+
+      <%= o.hidden_field :tags, placeholder: "Vintage, cotton, summer" %>
     </div>
   </div>
 </article>

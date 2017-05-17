@@ -71,11 +71,30 @@ class API
         end
       end
 
+      if params["collections"]
+        new_collections = params["collections"].map{|par| par.to_i}
+      else
+        new_collections = []
+      end
+      old_collections = @product.collections.map{|c| c.id.to_i}
+      remove_collections = old_collections - new_collections
+      add_collections = new_collections - old_collections
+
+      remove_collections.each do |r|
+        collect = ShopifyAPI::Collect.find(:first, {product_id: params[:id], collection_id: r})
+
+        puts Colorize.purple(params[:id])
+        puts Colorize.purple(r)
+        collect.destroy
+      end
+
+      add_collections.each do |a|
+        ShopifyAPI::Collect.create(product_id: params[:id], collection_id: a)
+      end
+
 			# loop through product variants and write proper information
       @product.variants.each do |variant|
-
         updateVariant(params, variant)
-
       end
 
       original_variant = params["variants"].values.first # get Defaut Title variant

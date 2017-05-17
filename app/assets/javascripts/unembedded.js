@@ -180,11 +180,33 @@ function ready() {
 
 	$('.resource-search[data-exceptions="product-panel"]').focus(function() {
 		$(this).next().show();
-		$(this).keyup();
 	});
 
 	$('.resource-search[data-exceptions="product-panel"]').click(function(event) {
 		event.stopPropagation();
+	});
+
+	$('.product-pannel-collection-select').on('click', '.variable a', function(event) {
+		event.preventDefault();
+		var id = $(this).data('id');
+		var title = $(this).text();
+		var shop_url = $('.product-pannel-collection-select').data('shop-url');
+		var collection = {id: id}
+
+		var new_html = '<div class="collection" data-collection=\''+JSON.stringify(collection)+'\'>';
+    new_html += '<a target="_blank" href="https://'+shop_url+'/admin/collections/'+id+'">'+title+'</a>';
+    new_html += '<span class="icon-close"></span>';
+    new_html += '</div>';
+
+		$('.resource-search[data-exceptions="product-panel"]').before('<input value="'+id+'" id="collection_'+id+'" type="hidden" name="collections[]">');
+    $('.product-pannel-collection-select').after(new_html);
+	});
+
+	$('.product-collections-select').on('click', '.icon-close', function() {
+		var id = $(this).parent().data('collection').id;
+
+		$('input#collection_'+id).remove();
+		$(this).parent().remove();
 	});
 
 	// permenatly shows target upon clicking the trigger
