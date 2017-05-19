@@ -71,6 +71,7 @@ class API
         end
       end
 
+      # add or remove collections from the product
       if params["collections"]
         new_collections = params["collections"].map{|par| par.to_i}
       else
@@ -81,15 +82,13 @@ class API
       add_collections = new_collections - old_collections
 
       remove_collections.each do |r|
-        collect = ShopifyAPI::Collect.find(:first, {product_id: params[:id], collection_id: r})
-
-        puts Colorize.purple(params[:id])
-        puts Colorize.purple(r)
-        collect.destroy
+        ShopifyAPI::Collect.find(:first, params: {product_id: params[:id], collection_id: r}).destroy
+        puts Colorize.red('deleted collection')
       end
 
       add_collections.each do |a|
         ShopifyAPI::Collect.create(product_id: params[:id], collection_id: a)
+        puts Colorize.green('created collection')
       end
 
 			# loop through product variants and write proper information
