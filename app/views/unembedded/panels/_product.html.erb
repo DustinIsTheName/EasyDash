@@ -172,14 +172,21 @@
         </div>
       <% end %>
       <% if @smart_collections.size == 0 and @resource.collections.size == 0 %>
-        <em >Add this product to a collection so it’s easy to find in your store.</em>
+        <em>Add this product to a collection so it’s easy to find in your store.</em>
       <% end %>
     </div>
     <div class="divider"></div>
     <div class="row no_margin">
       <label class="extra_margin">Tags <a href="#" class="label-cta">View all tags</a></label>
-      <%= o.text_field :tags, placeholder: "Vintage, cotton, summer" %>
-
+      <input type="text" id="tag-field" placeholder="Vintage, cotton, summer">
+      <div class="tags-container">
+        <% for tag in @resource.tags.split(',') %>
+          <span class="tag blue remove">
+            <%= tag %>
+            <a href="#"></a>
+          </span>
+        <% end %>
+      </div>
       <%= o.hidden_field :tags, placeholder: "Vintage, cotton, summer" %>
     </div>
   </div>

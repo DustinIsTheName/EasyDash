@@ -434,6 +434,35 @@ function ready() {
 		$('.editVariantImage').removeClass('open');
 	}
 
+	$('#tag-field').keyup(function(e) {
+    if (e.key === ',') {
+    	var tag_text = $(this).val().replace(',', '');
+    	var tag_list = $('#shopify_api_product_tags').val().split(',');
+
+    	if (tag_text.trim() === '') {
+    		$(this).val(tag_text.replace(',', ''));
+    	} else {
+	    	tag_list.push(tag_text)
+				$('#shopify_api_product_tags').val(tag_list.join(','));
+	    	$(this).val('');
+	    	tag = '<span class="tag blue remove">'+tag_text+'<a href="#"></a></span>';
+	    	$('#shopify_api_product_tags').before(tag);
+	    }
+    }
+  });
+
+	$('.tags-container').on('click', '.tag.remove a', function(e) {
+		e.preventDefault();
+		var tag = $(this).parent().remove().text().trim();
+		var tag_list = $('#shopify_api_product_tags').val().split(',');
+		var tag_index = tag_list.indexOf(tag);
+
+		tag_list.splice(tag_index, 1);
+		$('#shopify_api_product_tags').val(tag_list.join(','));
+		console.log(tag);
+		// /(\s*?[,]\s*?){2,}/
+	});
+
 	$('.variant-image-save').click(function(e) {
 		e.preventDefault();
 
