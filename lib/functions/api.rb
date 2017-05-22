@@ -30,10 +30,10 @@ class API
 
       # save product if anything's changed
       if old_product.attributes == @product.attributes
-        puts Colorize.cyan(@product.title << ' skipped')
+        puts Colorize.cyan(@product.title + ' skipped')
       else
         if @product.save
-          puts Colorize.green(@product.title << ' saved ') + Colorize.orange(ShopifyAPI.credit_left)
+          puts Colorize.green(@product.title + ' saved ') + Colorize.orange(ShopifyAPI.credit_left)
         else
           puts Colorize.red(@product.errors.messages)
         end
@@ -48,10 +48,10 @@ class API
           metafield.value = m["value"]
           
           if old_metafield.attributes == metafield.attributes
-            puts Colorize.cyan(metafield.key << ' skipped')
+            puts Colorize.cyan(metafield.key + ' skipped')
           else
             if metafield.save
-              puts Colorize.green(metafield.key << ' saved ') + Colorize.orange(ShopifyAPI.credit_left)
+              puts Colorize.green(metafield.key + ' saved ') + Colorize.orange(ShopifyAPI.credit_left)
             else
               puts Colorize.red(metafield.errors.messages)
             end
@@ -68,6 +68,15 @@ class API
             value: new_metafield["value"],
             value_type: 'string'
           }))
+        end
+      end
+
+      if params["shopify_api_product"]["file"]
+        for uploaded_file in params["shopify_api_product"]["file"]
+          base64_file = Base64.encode64(uploaded_file.read)
+          @product.images << ShopifyAPI::Image.new(attachment: base64_file)
+          @product.save
+          puts Colorize.green'image created')
         end
       end
 
@@ -213,10 +222,10 @@ class API
 
     # save if anything has changed
     if old_variant.attributes == variant.attributes
-      puts Colorize.cyan(variant.title << ' skipped')
+      puts Colorize.cyan(variant.title + ' skipped')
     else
       if variant.save
-        puts Colorize.green(variant.title << ' saved ') + Colorize.orange(ShopifyAPI.credit_left)
+        puts Colorize.green(variant.title + ' saved ') + Colorize.orange(ShopifyAPI.credit_left)
       else
         puts Colorize.red(variant.errors.messages)
       end
@@ -233,10 +242,10 @@ class API
 
           # save metafield if information has changed
           if old_metafield.attributes == metafield.attributes
-            puts Colorize.cyan(metafield.key << ' skipped')
+            puts Colorize.cyan(metafield.key + ' skipped')
           else
             if metafield.save
-              puts Colorize.green(metafield.key << ' saved ') + Colorize.orange(ShopifyAPI.credit_left)
+              puts Colorize.green(metafield.key + ' saved ') + Colorize.orange(ShopifyAPI.credit_left)
             else
               puts Colorize.red(metafield.errors.messages)
             end
@@ -269,7 +278,7 @@ class API
     end
     puts variant.image_id
     if variant.save
-      puts Colorize.green(variant.title << ' image saved ') + Colorize.orange(ShopifyAPI.credit_left)
+      puts Colorize.green(variant.title + ' image saved ') + Colorize.orange(ShopifyAPI.credit_left)
     else
       puts Colorize.red(variant.errors.messages)
     end

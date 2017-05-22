@@ -20,11 +20,22 @@
       <h5>Images</h5>
       <div class="row no_margin">
         <a style="display: inherit; margin-bottom: 1rem;" href="">Add images from URL</a>
-        <a href="">Add images</a>
+        <label class="link_label" for="shopify_api_product_file">Add images</label>
+        <%= o.file_field "file", multiple: true, accept: "image/*" %>
+        <% if @resource.images.length > 0 %>
+          <div class="images-container">
+            <% for image in @resource.images %>
+              <div class="product-image">
+                <img src="<%= image.src %>">
+              </div>
+            <% end %>
+          </div>
+        <% else %>
         <div class="column twelve type--centered no_margin">
           <i class="image icon-photos next-icon--size-80"></i>
           <h5>Drop images to upload</h5>
         </div>
+        <% end %>
       </div>
     </div>
   <!-- </a> -->

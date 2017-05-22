@@ -27,6 +27,10 @@ function ready() {
 		console.log(e);
 	}
 
+	$.ajaxSetup({
+  	dataType: 'json'
+	});
+
 	function checkVisible(elm) {
 	  var rect = elm.getBoundingClientRect();
 	  var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
@@ -244,36 +248,59 @@ function ready() {
 		e.stopPropagation();
 	});
 
-	$('form.ajax').submit(function(e) {
-		e.preventDefault();
-	});
+	// $('form.ajax').submit(function(e) {
+	// 	e.preventDefault();
+	// });
 
 	// submit form with AJAX
 	$('#save_resource').click(function() {
-		$('.variant_input').prop('disabled', true);
+		$('form.ajax').submit();
+		// $('.variant_input').prop('disabled', true);
 
-    var valuesToSubmit = $('form.ajax').serialize();
-    $.ajax({
-      type: "POST",
-      url: $('form.ajax').attr('action'), //sumbits it to the given url of the form
-      data: valuesToSubmit,
-      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
-    }).success(function(product){
-    	var variant;
-      console.log("success product", product);
-      $('.variant_input').prop('disabled', false);
+  //   var valuesToSubmit = $('form.ajax').serialize();
+  //   $.ajax({
+  //     type: "POST",
+  //     url: $('form.ajax').attr('action'), //sumbits it to the given url of the form
+  //     data: valuesToSubmit,
+  //     dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+  //   }).success(function(product){
+  //   	var variant;
+  //     console.log("success product", product);
+  //     $('.variant_input').prop('disabled', false);
 
-      for (var i = 0; i < product.variants.length; i++) {
-      	variant = product.variants[i];
-      	$('#variant_id_'+variant.id+' .edit_single_variant').data('object', variant);
-      }
-      // time to provide feedback 
-    }).error(function(e) {
-    	console.log(e);
+  //     for (var i = 0; i < product.variants.length; i++) {
+  //     	variant = product.variants[i];
+  //     	$('#variant_id_'+variant.id+' .edit_single_variant').data('object', variant);
+  //     }
+  //     // time to provide feedback 
+  //   }).error(function(e) {
+  //   	console.log(e);
 
-    	$('.variant_input').prop('disabled', false);
-    });
-    return false; // prevents normal behaviour
+  //   	$('.variant_input').prop('disabled', false);
+  //   });
+  //   return false; // prevents normal behaviour
+	});
+
+	$('form.ajax').bind("ajax:success", function(event, product){
+  	var variant;
+    console.log("success product", product);
+    $('.variant_input').prop('disabled', false);
+
+    for (var i = 0; i < product.variants.length; i++) {
+    	variant = product.variants[i];
+    	$('#variant_id_'+variant.id+' .edit_single_variant').data('object', variant);
+    }
+    // time to provide feedback 
+
+	  if ( $(this).data('remotipartSubmitted') ) {
+
+	  }
+	});
+
+	$('form.ajax').bind("ajax:error", function(event, error){
+  	console.log(event, error);
+
+  	$('.variant_input').prop('disabled', false);
 	});
 
 	// submit single variant

@@ -78,6 +78,15 @@ a {
   &:hover { color: $witty-teal-dark; }
 }
 
+.link_label {
+  color: $witty-teal;
+  cursor: pointer;
+
+  &:hover { color: $witty-teal-dark; text-decoration: underline; }
+
+  &+ input[type="file"] {display: none;}
+}
+
 .type--right { text-align: right; }
 .type--left { text-align: left; }
 .type--centered { text-align: center; }
@@ -544,6 +553,37 @@ label .icon-calendar { float: right; margin-top: 2px; }
             margin-top: 147px;
             color: #D3DBE2;
             text-align: center;
+          }
+        }
+
+        .images-container {
+          .product-image {
+            float: left;
+            width: calc(50% - 5px);
+            background: #fafbfc;
+            border: 1px solid rgba(195,207,216,0.3);
+            position: relative;
+            padding-bottom: 50%;
+            box-sizing: border-box;
+
+            &+ .product-image {margin-top: 10px;}
+
+            &:first-child {width: 100%;padding-bottom: 100%;}
+
+            &:nth-child(2n) {clear: left;margin-right: 10px;}
+
+            img {
+              float: left;
+              position: absolute;
+              max-width: 100%;
+              max-height: 100%;
+              display: block;
+              top: 0;
+              right: 0;
+              bottom: 0;
+              left: 0;
+              margin: auto;
+            }
           }
         }
       }
