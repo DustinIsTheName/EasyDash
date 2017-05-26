@@ -23,6 +23,7 @@ Rails.application.routes.draw do
     put '/dashboard-update' => :update_api
     post '/variant-update' => :update_variant
     post '/variant-image' => :update_variant_image
+    post '/add-images' => :add_images
   end
   
   # The priority is based upon order of creation: first created -> highest priority.

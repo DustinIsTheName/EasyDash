@@ -394,7 +394,8 @@ function ready() {
 	});
 
 	// pannel navigation
-	$('.prev-pannel').click(function() {
+	$('.prev-pannel').click(function(e) {
+		e.preventDefault();
 		var pannel = $(this).closest('.wittyEDPanel');
 		var tier = parseInt(pannel.data('tier'));
 		pannel.blindRightOut(400, 'swing', function() {
@@ -403,7 +404,8 @@ function ready() {
 		$('.wittyEDPanel[data-tier="'+(tier - 1)+'"]').css({'height': 'auto', 'opacity': 1}).blindLeftIn(400);
 	});
 
-	$('.next-pannel').click(function() {
+	$('.next-pannel').click(function(e) {
+		e.preventDefault();
 		var pannel = $(this).closest('.wittyEDPanel');
 		var tier = parseInt(pannel.data('tier'));
 		pannel.blindLeftOut(400, 'swing', function() {
@@ -461,19 +463,32 @@ function ready() {
 		$('.editVariantImage').removeClass('open');
 	}
 
+	$('#tag-field').blur(function() {
+		$(this).val('');
+		$('.tag-error').hide();
+	});
+
 	$('#tag-field').keyup(function(e) {
+		$('.tag-error').hide();
     if (e.key === ',') {
     	var tag_text = $(this).val().replace(',', '');
-    	var tag_list = $('#shopify_api_product_tags').val().split(',');
+    	var tag_list = $('#shopify_api_product_tags').val().split(',').filter(function(value) {
+    		return value !== '';
+    	}).map(function(value, index) {
+	  		return value.trim();
+    	});
 
     	if (tag_text.trim() === '') {
     		$(this).val(tag_text.replace(',', ''));
+    	} else if (tag_list.indexOf(tag_text.trim()) > -1) {
+    		$('.tag-error span').text(tag_text);
+    		$('.tag-error').show();
     	} else {
-	    	tag_list.push(tag_text)
+	    	tag_list.push(tag_text.trim())
 				$('#shopify_api_product_tags').val(tag_list.join(','));
 	    	$(this).val('');
 	    	tag = '<span class="tag blue remove">'+tag_text+'<a href="#"></a></span>';
-	    	$('#shopify_api_product_tags').before(tag);
+	    	$('.tags-container').append(tag);
 	    }
     }
   });
@@ -481,13 +496,11 @@ function ready() {
 	$('.tags-container').on('click', '.tag.remove a', function(e) {
 		e.preventDefault();
 		var tag = $(this).parent().remove().text().trim();
-		var tag_list = $('#shopify_api_product_tags').val().split(',');
+		var tag_list = $('#shopify_api_product_tags').val().split(',').map(function(a) {return a.trim()});
 		var tag_index = tag_list.indexOf(tag);
 
 		tag_list.splice(tag_index, 1);
 		$('#shopify_api_product_tags').val(tag_list.join(','));
-		console.log(tag);
-		// /(\s*?[,]\s*?){2,}/
 	});
 
 	$('.variant-image-save').click(function(e) {
@@ -543,6 +556,21 @@ function ready() {
 		if ($parent.hasClass('variant_open') || $parent.hasClass('drop_images')) {
 			editVariantImage($(this));
 		}
+	});
+
+	$('#shopify_api_product_file').change(function() {
+		$.ajax({
+      type: "POST",
+      url: '/add-images', //sumbits it to the given url of the form
+      data: {
+      	images: this.files
+      },
+      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+    }).success(function(image) {
+    	console.log(image);
+    }).error(function(e) {
+    	console.log(e);
+    });
 	});
 
 	// window.onbeforeunload = function () {

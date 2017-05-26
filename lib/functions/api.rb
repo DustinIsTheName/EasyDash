@@ -76,7 +76,7 @@ class API
           base64_file = Base64.encode64(uploaded_file.read)
           @product.images << ShopifyAPI::Image.new(attachment: base64_file)
           @product.save
-          puts Colorize.green'image created')
+          puts Colorize.green('image created')
         end
       end
 

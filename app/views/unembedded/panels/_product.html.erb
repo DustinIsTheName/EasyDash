@@ -20,13 +20,20 @@
       <h5>Images</h5>
       <div class="row no_margin">
         <a style="display: inherit; margin-bottom: 1rem;" href="">Add images from URL</a>
-        <label class="link_label" for="shopify_api_product_file">Add images</label>
+        <label class="link_label" for="shopify_api_product_file" style="margin-bottom: 1rem;">Add images</label>
         <%= o.file_field "file", multiple: true, accept: "image/*" %>
         <% if @resource.images.length > 0 %>
           <div class="images-container">
             <% for image in @resource.images %>
               <div class="product-image">
                 <img src="<%= image.src %>">
+                <div class="overlay">
+                  <div class="icons-container">
+                    <i class="image icon-preview next-icon--size-16"></i>
+                    <i class="next-icon--size-16 alt-tag">ALT</i>
+                    <i class="image icon-trash next-icon--size-16"></i>
+                  </div>
+                </div>
               </div>
             <% end %>
           </div>
@@ -190,6 +197,7 @@
     <div class="row no_margin">
       <label class="extra_margin">Tags <a href="#" class="label-cta">View all tags</a></label>
       <input type="text" id="tag-field" placeholder="Vintage, cotton, summer">
+      <div class="tag-error">Oops, you've already used <span class=""></span></div>
       <div class="tags-container">
         <% for tag in @resource.tags.split(',') %>
           <span class="tag blue remove">

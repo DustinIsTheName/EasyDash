@@ -572,6 +572,47 @@ label .icon-calendar { float: right; margin-top: 2px; }
 
             &:nth-child(2n) {clear: left;margin-right: 10px;}
 
+            &:hover .overlay {
+              display: block;
+            }
+
+            .overlay {
+              background: rgba(49,55,61,0.75);
+              position: absolute;
+              height: 100%;
+              width: 100%;
+              display: none;
+
+              .icons-container {
+                text-align: center;
+                position: absolute;
+                bottom: 10px;
+                width: 100%;
+
+                i {
+                  display: inline-block;
+                  vertical-align: top;
+                  margin: 0 3px;
+                  cursor: pointer;
+                }
+
+                i.icon-preview {
+                  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 500' enable-background='new 0 0 500 500'%3E%3Cpath fill='rgb(255,255,255)' d='M497.9 237.5C447.9 129.2 352.1 58.3 250 58.3S52.1 129.2 2.1 237.5c-4.2 8.3-4.2 18.8 0 27.1 50 108.3 145.8 179.2 247.9 179.2S447.9 373 497.9 264.6c2.1-10.4 2.1-18.8 0-27.1zM250 345.8c-52.1 0-95.8-43.8-95.8-95.8s43.8-95.8 95.8-95.8 95.8 43.8 95.8 95.8-43.7 95.8-95.8 95.8z'/%3E%3C/svg%3E");
+                }
+
+                i.alt-tag {
+                  color: #fff;
+                  font-style: normal;
+                  font-weight: 900;
+                  font-size: 8px;
+                  width: 16px;
+                  height: 16px;
+                  line-height: 16px;
+                }
+
+              }
+            }
+
             img {
               float: left;
               position: absolute;
@@ -845,6 +886,7 @@ label .icon-calendar { float: right; margin-top: 2px; }
       padding: $gutter;
       margin: 0 -$gutter;
       background: #fff;
+      box-sizing: border-box;
       
       .sidebyside_15.icon-trash {
         background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 27 27' enable-background='new 0 0 27 27'%3E%3Cpath fill='rgb(255,255,255)' d='M27.5,5a2.22,2.22,0,0,1-1.8,2.25H2.3A2.22,2.22,0,0,1,.5,5,2.22,2.22,0,0,1,2.3,2.75H9.5C9.5,1.63,11.07.5,12.2,0.5h3.6c1.13,0,2.7,1.35,2.7,2.25h7.2A2.22,2.22,0,0,1,27.5,5Zm-2.25,5.85V25.7c0,0.9-1.8,1.8-2.7,1.8H5.45c-0.9,0-2.7-.68-2.7-1.8V10.85A3.17,3.17,0,0,1,4.33,9.5H23.9A3.88,3.88,0,0,1,25.25,10.85ZM11.75,14.9a1,1,0,0,0-.9-0.9H10.4a1,1,0,0,0-.9.9v7.2a1,1,0,0,0,.9.9h0.45a1,1,0,0,0,.9-0.9V14.9Zm6.75,0a1,1,0,0,0-.9-0.9H17.15a1,1,0,0,0-.9.9v7.2a1,1,0,0,0,.9.9H17.6a1,1,0,0,0,.9-0.9V14.9Z' transform='translate(-0.5 -0.5)' /%3E%3C/svg%3E");
@@ -1585,7 +1627,36 @@ label .icon-calendar { float: right; margin-top: 2px; }
   hr {clear:both;}
 }
 
+.tags-container {
+  float: left;
+}
 
+.tag-error {
+  background: #ec6060;
+  color: #fff;
+  padding: 4px 9px;
+  border-radius: 3px;
+  position: absolute;
+  top: 77px;
+  z-index: 9;
+  display: none;
+
+  &:after {
+    content: "";
+    bottom: 100%;
+    left: 10%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(236, 96, 96, 0);
+    border-bottom-color: #ec6060;
+    border-width: 5px;
+    margin-left: -5px;
+  }
+}
 
 
 

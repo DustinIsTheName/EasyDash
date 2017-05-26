@@ -58,6 +58,12 @@ class UnembeddedController < ApplicationController
     render json: variant
   end
 
+  def add_images
+    puts Colorize.magenta(params)
+    # API.addImages()
+    render json: params
+  end
+
   def update_variant_image
     # puts Colorize.magenta(params)
     API.updateVariantImage(params['variant'], params['image'])
