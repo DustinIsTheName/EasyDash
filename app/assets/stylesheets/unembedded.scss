@@ -26,7 +26,7 @@ html, body {
   margin: 0;
   padding: 0;
   border: 0;
-  background: #ebeef0;
+  background: #ebeef0 image-url("diagonal_line.svg") 0/5px 5px;
 }
 
 $gutter: 10px;
@@ -979,7 +979,14 @@ label .icon-calendar { float: right; margin-top: 2px; }
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
   
-  &:hover, &:focus, &:active { background: #f5f6f7; color: $witty-teal; }
+  &:hover, &:focus, &:active { 
+    background: #EBEEF0; 
+    color: $witty-teal;
+
+    
+  }
+
+  &:hover .wittyEDFullscreenToggleIcon .svg_dark { fill: $witty-teal; }
   
   .wittyEDFullscreenToggleIcon {
     position: absolute;
@@ -1548,12 +1555,25 @@ label .icon-calendar { float: right; margin-top: 2px; }
   -moz-transform: translate(-50%,-50%);
   transform: translate(-50%,-50%);
   transition: height 1s, width 1s, max-width 1s, left 1s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.editVariantImageOverlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background-color: rgba(0,0,0,0.25);
+  display: none;
+
+  &.open {
+    display: block;
+  }
 }
 
 .editVariantImage {
   width: calc(100% - 20px);
   max-width: 620px;
-  display: none;
   position: fixed;
   top: 60px;
   z-index: 9999;
@@ -1562,17 +1582,18 @@ label .icon-calendar { float: right; margin-top: 2px; }
   -moz-transform: translateX(-50%);
   transform: translateX(-50%);
 
-  &.open {
-    display: block;
+  .card.has-sections {
+    margin-bottom: 0;
   }
 
   .variant-select-image {
     display: none;
   }
 
-  .card-section {
+  div.card-section {
     font-size: 0;
     display: flex;
+    flex-wrap: wrap;
 
     *:last-child {margin-bottom:0;}
 
@@ -1591,19 +1612,29 @@ label .icon-calendar { float: right; margin-top: 2px; }
     label {
       flex-basis: calc(20% - 16px);
       display: flex;
-      flex-flow: column;
-      justify-content: center;
+      align-items: center;
       vertical-align: middle;
       box-sizing: border-box;
       position: relative;
       background: #fafbfc;
       border: 1px solid rgba(195,207,216,0.6);
+      margin-left: 20px;
+      margin-bottom: 20px;
+      padding-bottom: calc(20% - 16px);
 
-      &~ label {margin-left: 20px;}
+      &:last-child {margin-bottom: 20px;}
+
+      &:nth-child(10n + 2) {
+        margin-left: 0;
+      }
 
       img {
         max-width: 100%;
-        float: left;
+        max-height: 100%;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
       }
     }
 

@@ -81,12 +81,14 @@
         <div class="row">
           <% if title_tag_index %>
             <%= fields_for 'metafields[]', @resource.metafields[title_tag_index] do |m| %>
+              <label for="metafields_<%= @resource.metafields[title_tag_index].id %>_value">Page title</label>
               <%= m.text_field :value %>
             <% end %>
           <% else %>
             <%= fields_for 'new_metafields[]', ShopifyAPI::Metafield.new do |m| %>
               <%= m.hidden_field :name, value: 'title_tag', class: "new_field" %>
-              <%= m.text_field :value, class: "new_field" %>
+              <label for="new_field_title">Page title</label>
+              <%= m.text_field :value, class: "new_field", id: "new_field_title" %>
             <% end %>
           <% end %>
         </div>
@@ -94,17 +96,20 @@
         <div class="row">
           <% if description_tag_index %>
             <%= fields_for 'metafields[]',  @resource.metafields[description_tag_index] do |m| %>
+              <label for="metafields_<%= @resource.metafields[description_tag_index].id %>_value">Meta description</label>
               <%= m.text_area :value %>
             <% end %>
           <% else %>
             <%= fields_for 'new_metafields[]', ShopifyAPI::Metafield.new do |m| %>
               <%= m.hidden_field :name, value: 'description_tag', class: "new_field" %>
-              <%= m.text_area :value, class: "new_field" %>
+              <label for="new_field_description">Meta description</label>
+              <%= m.text_area :value, class: "new_field", id: "new_field_description" %>
             <% end %>
           <% end %>
         </div>
 
         <div class="row no_margin">
+          <label for="shopify_api_product_handle">URL and handle</label>
           <%= o.text_field :handle %>
         </div>
       </div>

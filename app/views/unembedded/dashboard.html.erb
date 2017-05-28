@@ -106,36 +106,38 @@
 </div><!-- .wittyEDSidebar -->
 
 <% if @type == 'product' %>
-<section class="editVariantImage">
-  <div class="card has-sections">
-    <div class="card-section">
-      <h3>Update variant image</h3>
-      <!-- <a href="#" class="close" role="button" aria-label="Close dialog">x</a> -->
-    </div>
-    <hr>
-    <div class="card-section">
-      <% @resource.images.each_with_index do |image, index| %>
-        <input type="radio" id="variant-select-image-<%= image.id %>" class="variant-select-image" name="variants[<%= @resource.variants.first.id %>][image_id]" value="<%= image.id %>">
-        <label for="variant-select-image-<%= image.id %>">
-          <img src="<%= image.src %>">
-        </label>
-      <% end %>
-    </div>
-    <hr>
-    <div class="card-section">
-      <div class="arrow-navigation">
-        <button class="secondary icon-prev"></button>
-        <button class="secondary icon-next"></button>
-        <div style="clear:both;"></div>
+<div class="editVariantImageOverlay">
+  <section class="editVariantImage">
+    <div class="card has-sections">
+      <div class="card-section">
+        <h3>Update variant image</h3>
+        <!-- <a href="#" class="close" role="button" aria-label="Close dialog">x</a> -->
       </div>
-      <button id="variant-image-destroy" class="secondary red variant-image-save" href="#">Remove image</button>
+      <hr>
+      <div class="card-section" style="padding-bottom: 0;">
+        <% @resource.images.each_with_index do |image, index| %>
+          <input type="radio" id="variant-select-image-<%= image.id %>" class="variant-select-image" name="variants[<%= @resource.variants.first.id %>][image_id]" value="<%= image.id %>">
+          <label for="variant-select-image-<%= image.id %>" class="variant-select-image-label" data-page="<%= index/10 %>"<% if index > 9 %> style="display: none;"<% end %>>
+            <img src="<%= image.src %>">
+          </label>
+        <% end %>
+      </div>
+      <hr>
+      <div class="card-section">
+        <div class="arrow-navigation">
+          <button class="secondary icon-prev disabled"></button>
+          <button class="secondary icon-next"></button>
+          <div style="clear:both;"></div>
+        </div>
+        <button id="variant-image-destroy" class="secondary red variant-image-save" href="#">Remove image</button>
 
-      <button id="cancel" class="secondary" href="#">Cancel</button>
-      <button class="secondary" href="#">Add Image</button>
-      <button id="variant-image-save" class="primary variant-image-save" href="#">Save</button>
+        <button id="cancel" class="secondary" href="#">Cancel</button>
+        <button class="secondary" href="#">Add Image</button>
+        <button id="variant-image-save" class="primary variant-image-save" href="#">Save</button>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+</div>
 <% end %>
 
 <button class="wittyEDFullscreenToggle" aria-label="Toggle sidebar" type="button" name="button">

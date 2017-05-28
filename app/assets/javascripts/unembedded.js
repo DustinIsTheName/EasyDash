@@ -1,5 +1,6 @@
 function ready() {
 
+	var variant_image_page = 0;
 	// JS for the resourse selection
 	var resource_infomation = {
 		blogs: $('.select-sim-dropdown.blog').data('object'),
@@ -455,13 +456,53 @@ function ready() {
 
 		$('#variant-select-image-'+image_id).prop('checked', true);
 		$('.variant-select-image').attr('name', 'variants['+variant_id+'][image_id]');
+	
+		variant_image_page = 0;
+		changeVariantImagePage(variant_image_page);
+		$('.editVariantImageOverlay').addClass('open');
+	}
 
-		$('.editVariantImage').addClass('open');
+	function changeVariantImagePage(page) {
+		$('.variant-select-image-label').hide();
+		$('.variant-select-image-label[data-page="'+page+'"]').show();
 	}
 
 	function closeVariantImage() {
-		$('.editVariantImage').removeClass('open');
+		$('.editVariantImageOverlay').removeClass('open');
 	}
+
+	$('.editVariantImageOverlay').click(closeVariantImage);
+	$('.editVariantImage').click(function(e) {
+		e.stopPropagation();
+	});
+
+	$('.editVariantImage .icon-prev').click(function() {
+		if (!$(this).hasClass('disabled')) {
+			variant_image_page--;
+			changeVariantImagePage(variant_image_page);
+			$('.editVariantImage .icon-next').removeClass('disabled');
+		}
+
+		if (variant_image_page === 0) {
+			$(this).addClass('disabled');
+		} else {
+			$(this).removeClass('disabled');
+		}
+	});
+
+	$('.editVariantImage .icon-next').click(function() {
+		if (!$(this).hasClass('disabled')) {
+			variant_image_page++;
+			changeVariantImagePage(variant_image_page);
+			$('.editVariantImage .icon-prev').removeClass('disabled');
+		}
+
+		if (variant_image_page === Math.floor($('.variant-select-image-label').length/10)) {
+			$(this).addClass('disabled');
+		} else {
+			$(this).removeClass('disabled');
+		}
+	});
 
 	$('#tag-field').blur(function() {
 		$(this).val('');
