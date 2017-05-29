@@ -1100,6 +1100,19 @@ label .icon-calendar { float: right; margin-top: 2px; }
     list-style: none;
     margin: 0;
 
+    li {
+      position: relative;
+
+      .icon-trash {
+        position: absolute;
+        right: 7px;
+        top: 7px;
+        min-height: 2.6rem;
+        width: 22px;
+        padding: 0 14px;
+      }
+    }
+
     li + li {border-top: 1px solid #ebeef0;}
 
     a, 
@@ -1239,7 +1252,11 @@ label .icon-calendar { float: right; margin-top: 2px; }
   position: relative;
   clear: both;
   
-  &:nth-child(2) { border-radius: .3rem .3rem 0 0; border-top: #d3dbe2 solid 1px; }
+  &:nth-child(2) { 
+    border-top-right-radius: .3rem;
+    border-top-left-radius: .3rem;
+    border-top: #d3dbe2 solid 1px; 
+  }
   &:last-of-type { border-radius: 0 0 .3rem .3rem; }
   
   input[type="checkbox"] { 
@@ -1306,13 +1323,29 @@ label .icon-calendar { float: right; margin-top: 2px; }
   }
 }
 
+.before_variant_open {
+  margin-bottom: 15px;
+  border-bottom-right-radius: .3rem;
+  border-bottom-left-radius: .3rem;
+}
+
 .variant_open,
 .variant.variant_open {
   position: relative;
   float: left;
   width: 100%;
   padding: 0;
+  margin-bottom: 15px;
+  border-top: #D3DBE2 solid 1px;
   box-sizing: border-box;
+  border-radius: .3rem;
+
+  &+ .variant {
+
+    border-top-right-radius: .3rem;
+    border-top-left-radius: .3rem;
+    border-top: #D3DBE2 solid 1px;
+  }
 
   .col_left {
     width: 80px;

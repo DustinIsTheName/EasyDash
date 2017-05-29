@@ -35,6 +35,8 @@
 	    height: 60px;
 	    padding: 20px;
 	    cursor: pointer;
+			z-index: 9;
+	    position: relative;
 	    box-sizing: border-box;
   	}
 
@@ -53,10 +55,9 @@
 
     #wittyEDselectWindow {
 			border: none;
-	    /*display: none; */
 	    position: absolute;
 	    top: 0;
-	    left: 300px;
+	    left: 0;
 	    width: 75px;
 	    height: 60px;
 	    opacity: 0;
@@ -64,10 +65,10 @@
     }
 
     .wittyEDOpenButton.open ~ #wittyEDselectWindow {
-    	/*display: block;*/
     	opacity: 1;
     	width: 300px;
 	    height: 548px;
+      z-index: 7;
     }
   </style>
 

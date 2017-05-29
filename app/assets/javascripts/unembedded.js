@@ -5,6 +5,8 @@ function ready() {
 	var resource_infomation = {
 		blogs: $('.select-sim-dropdown.blog').data('object'),
 		collections: $('.select-sim-dropdown.collection').data('object'),
+		smart_collections: $('.select-sim-dropdown.collection').data('smart'),
+		custom_collections: $('.select-sim-dropdown.collection').data('custom'),
 		pages: $('.select-sim-dropdown.page').data('object'),
 		products: $('.select-sim-dropdown.product').data('object'),
 		blog_page: 1,
@@ -18,6 +20,8 @@ function ready() {
 		target: $('#target_attr').data('target'),
 		query: ''
 	}
+
+	console.log(resource_infomation);
 
 	try {
 		resource_infomation.blog_total = resource_infomation.blogs.length;
@@ -39,6 +43,7 @@ function ready() {
 	}
 
 	$('.select-sim').click(function(event) {
+
 		$('.select-sim').not(this).removeClass('active');
 		$(this).toggleClass('active');
 
@@ -87,12 +92,39 @@ function ready() {
 			}
 		});
 	}
+      
+	function deleteResource(id, resource, callback) {
+		$.ajax({
+			type: "POST",
+			url: '/dashboard-delete',
+      data: {
+      	id: id,
+      	resource: resource
+      },
+			dataType: "JSON",
+			success: callback,
+			error: function(error) {
+				console.log(error);
+			}
+		});
+	}
+
+	$('.select-sim-dropdown').on('click', '.icon-trash', function() {
+		deleteResource($(this).data('id'), $(this).data('resource'), function(deleted_resource) {
+			console.log(deleted_resource);
+
+			if (deleted_resource) {
+				$('.select-sim-dropdown .icon-trash[data-id="'+deleted_resource.id+'"]').parent().remove();
+			}
+		});
+	});
 
 	function changePage(resource, resource_object, page, total) {
 		var total_pages = Math.ceil(total/8);
 		var new_html = '';
 		var max_bound = page*8 - 1;
 		var min_bound = page*8 - 8;
+		var data_resource = resource;
 
 		if (page >= total_pages - 3 && total_pages > 31 && resource_infomation[resource+'_chunks_loaded'] !== 'all') {
 			extendResource(resource, page, total);
@@ -114,7 +146,25 @@ function ready() {
 
 		if (resource_object.length > 0) {
 			for (var i = min_bound; i <= max_bound; i++) {
+				if (resource == 'collection') {
+					data_resource = resource;
+					smart_ids = resource_infomation.smart_collections.map(function(sc) {
+						return sc.id
+					});
+					custom_ids = resource_infomation.custom_collections.map(function(cc) {
+						return cc.id
+					});
+					if (smart_ids.indexOf(resource_object[i].id) > -1) {
+						data_resource = 'smart_collection';
+					}
+
+					if (custom_ids.indexOf(resource_object[i].id) > -1) {
+						data_resource = 'custom_collection';
+					}
+				}
+
 			  new_html += '<li class="variable">';
+			  new_html += '<button class="sidebyside_small warning icon-trash" data-id="'+resource_object[i].id+'" data-resource="'+data_resource+'"></button>'
 				new_html += '<a href="/dashboard?resource='+resource+'&id='+resource_object[i].id+'" target="'+resource_infomation.target+'" data-handle="' + resource_object[i].handle + '" data-id="'+resource_object[i].id+'">';
 			  new_html += resource_object[i].title;
 			  new_html += '</a>'
@@ -240,8 +290,9 @@ function ready() {
 	// Opens bulk variant editing 
 	$('.variant').click(function() {
 		if (!$(this).hasClass('variant_open')) {
-			$('.variant').removeClass('variant_open');
+			$('.variant').removeClass('variant_open before_variant_open');
 			$(this).addClass('variant_open');
+			$(this).prev().addClass('before_variant_open');
 		}
 	});
 

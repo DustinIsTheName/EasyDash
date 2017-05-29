@@ -21,12 +21,10 @@ class UnembeddedController < ApplicationController
       case @type
       when 'blog'
         @resource = ShopifyAPI::Article.find(params[:id])
-      when 'collection'
+      when 'custom_collection'
         @resource = ShopifyAPI::CustomCollection.find(params[:id])
-
-        unless @resource
-          @resource = ShopifyAPI::SmartCollection.find(params[:id])
-        end
+      when 'smart_collection'
+        @resource = ShopifyAPI::SmartCollection.find(params[:id])
       when 'page'
         @resource = ShopifyAPI::Page.find(params[:id])
       when 'product'
@@ -73,6 +71,12 @@ class UnembeddedController < ApplicationController
       @image = ShopifyAPI::Image.find(params['image'], params: {product_id: params['product']})
       render json: @image
     end
+  end
+
+  def delete_api
+    puts Colorize.magenta(params)
+    resource = API.deleteResource(params)
+    render json: resource
   end
 
   private

@@ -5,7 +5,7 @@
 			<i class="icon-search"></i>
     	<input type="text" class="resource-search" name="<%= resource_name %>-search" placeholder="Search <%= resource_name %>s" data-resource="<%= resource_name %>">
     </div>
-    <ul class="select-sim-dropdown <%= resource_name %>" data-total="<%= total %>" data-resource="<%= resource_name %>" data-object="<%= resources.to_json %>">
+    <ul class="select-sim-dropdown <%= resource_name %>" data-total="<%= total %>" data-resource="<%= resource_name %>" data-object="<%= resources.to_json %>"<% if resource_name == 'collection' %> data-smart="<%= @sc.to_json %>" data-custom="<%= @cc.to_json %>"<% end %>>
   		<li>
   			<a href="#" class="new">
   				Add <%= resource_name %>
@@ -13,7 +13,13 @@
   		</li>
     	<% if resources.length > 0 %>
 	    	<% for resource in resources.take(8) %>
+          <% if @sc.include?(resource) %>
+            <% resource_name = 'smart_collection' %>
+          <% elsif @cc.include?(resource) %>
+            <% resource_name = 'custom_collection' %>
+          <% end %>
 	    		<li class="variable">
+            <button class="sidebyside_small warning icon-trash" data-id="<%= resource.id %>" data-resource="<%= resource_name %>"></button>
             <%= link_to resource.title, dashboard_path(resource: resource_name, id: resource.id), target: target, data: {handle: resource.handle, id: resource.id} %>
 	    		</li>
 	    	<% end %>

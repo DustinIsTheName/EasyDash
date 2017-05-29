@@ -22,6 +22,7 @@ Rails.application.routes.draw do
     post '/dashboard-new' => :new_api
     put '/dashboard-update' => :update_api
     post '/variant-update' => :update_variant
+    post '/dashboard-delete' => :delete_api
     post '/variant-image' => :update_variant_image
     post '/add-images' => :add_images
   end

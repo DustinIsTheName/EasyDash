@@ -284,4 +284,28 @@ class API
     end
   end
 
+  def self.deleteResource(params)
+
+    case params[:resource]
+    when 'product'
+      resource = ShopifyAPI::Product.find(params[:id])
+    when 'custom_collection'
+      resource = ShopifyAPI::CustomCollection.find(params[:id])
+    when 'smart_collection'
+      resource = ShopifyAPI::SmartCollection.find(params[:id])
+    when 'page'
+      resource = ShopifyAPI::Page.find(params[:id])
+    when 'blog'
+      resource = ShopifyAPI::Article.find(params[:id])
+    end
+    if resource
+      resource.destroy
+      puts Colorize.red('deleted ' + resource.title)
+      return resource
+    else
+      puts Colorize.red('something went wrong')
+      return nil
+    end
+  end
+
 end
