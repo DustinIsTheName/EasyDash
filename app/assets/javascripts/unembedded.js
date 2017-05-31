@@ -42,6 +42,58 @@ function ready() {
 	  return (rect.bottom <= viewHeight && rect.top >= 0);
 	}
 
+	function confirmBox(confirmHeader, confirmText, callbackFunctions, callbackParams) {
+		var confirm_function,
+				deny_function;
+		if (typeof callbackFunctions.yes === 'function') {
+			confirm_function = function(e) {
+				e.stopPropagation();
+				callbackFunctions.yes(callbackParams);
+				$('#confirmBoxOverlay').remove();
+			}
+		} else {
+			confirm_function = function(e) {
+				e.stopPropagation();
+				$('#confirmBoxOverlay').remove();
+			}
+		}
+
+		if (typeof callbackFunctions.no === 'function') {
+			deny_function = function(e) {
+				e.stopPropagation();
+				callbackFunctions.no(callbackParams);
+				$('#confirmBoxOverlay').remove();
+			}
+		} else {
+			deny_function = function(e) {
+				e.stopPropagation();
+				$('#confirmBoxOverlay').remove();
+			}
+		}
+
+		var $confirmBox = $('<div>', {id: 'confirmBoxOverlay'})
+				.append(
+					$('<section>', {id: 'confirmBox'})
+					.append($('<div>', {"class": "card has-sections"})
+						.append(
+							$('<div>', {"class": 'card-section'}).append('<h3>'+confirmHeader+'</h3>')
+						).append('<hr>').append(
+							$('<div>', {"class": 'card-section'}).append('<p>'+confirmText+'</p>')
+						).append('<hr>').append(
+							$('<div>', {"class": 'card-section'}).append(
+								$('<button>', {id: 'cancel'}).text('Cancel').click(deny_function)
+							).append(
+								$('<button>', {id: 'confirm'}).text('Confirm').click(confirm_function)
+							)
+						)
+					)
+				).click(function(e) {
+					e.stopPropagation();
+				});
+
+		$('body').append($confirmBox);
+	}
+
 	$('.select-sim').click(function(event) {
 
 		$('.select-sim').not(this).removeClass('active');
@@ -93,16 +145,16 @@ function ready() {
 		});
 	}
       
-	function deleteResource(id, resource, callback) {
+	function deleteResource(params) {
 		$.ajax({
 			type: "POST",
 			url: '/dashboard-delete',
       data: {
-      	id: id,
-      	resource: resource
+      	id: params.id,
+      	resource: params.resource
       },
 			dataType: "JSON",
-			success: callback,
+			success: params.callback,
 			error: function(error) {
 				console.log(error);
 			}
@@ -110,11 +162,29 @@ function ready() {
 	}
 
 	$('.select-sim-dropdown').on('click', '.icon-trash', function() {
-		deleteResource($(this).data('id'), $(this).data('resource'), function(deleted_resource) {
-			console.log(deleted_resource);
+		var resource = $(this).data('resource');
+		var id = $(this).data('id');
+		var index_of_id;
 
-			if (deleted_resource) {
-				$('.select-sim-dropdown .icon-trash[data-id="'+deleted_resource.id+'"]').parent().remove();
+		confirmBox('confirmHeader', 'confirmText', {
+			yes: deleteResource
+		}, {
+			id: id,
+			resource: resource,
+			callback: function(deleted_resource) {
+				console.log(deleted_resource);
+				if (deleted_resource) {
+					index_of_id = resource_infomation[resource+'s'].map(function(a) {return a.id}).indexOf(deleted_resource.id);
+					resource_infomation[resource+'s'].splice(index_of_id, 1);
+					resource_infomation[resource+'_total'] = resource_infomation[resource+'_total'] - 1;
+
+					if (resource.indexOf('collection') > -1) {
+						index_of_id = resource_infomation['collections'].map(function(a) {return a.id}).indexOf(deleted_resource.id);
+						resource_infomation['collections'].splice(index_of_id, 1);
+					}
+
+					changePage(resource, resource_infomation[resource+'s'], resource_infomation[resource+'_page'], resource_infomation[resource+'_total']);
+				}
 			}
 		});
 	});
@@ -122,9 +192,13 @@ function ready() {
 	function changePage(resource, resource_object, page, total) {
 		var total_pages = Math.ceil(total/8);
 		var new_html = '';
+		page = Math.min(page, total_pages);
+		page = Math.max(1, page);
 		var max_bound = page*8 - 1;
 		var min_bound = page*8 - 8;
 		var data_resource = resource;
+		resource_infomation[resource+'_page'] = page;
+		console.log(total, page, total_pages);
 
 		if (page >= total_pages - 3 && total_pages > 31 && resource_infomation[resource+'_chunks_loaded'] !== 'all') {
 			extendResource(resource, page, total);
@@ -138,7 +212,7 @@ function ready() {
 		if (page === 1) {
 			$('.select-sim-dropdown.'+resource+' + .arrow-navigation .icon-prev').addClass('disabled');
 		}
-		if (page === total_pages) {
+		if (page >= total_pages) {
 			$('.select-sim-dropdown.'+resource+' + .arrow-navigation .icon-next').addClass('disabled');
 		}
 
