@@ -91,6 +91,31 @@ a {
 .type--left { text-align: left; }
 .type--centered { text-align: center; }
 
+.close-modal {
+  background-color: transparent;
+  background-image: url(//cdn.shopify.com/s/assets/admin/icon-sprite-fd0620cf871991a01f2321ba21b521b4502c86d282ea36fbd5e9b58aa6f2e072.png);
+  background-repeat: no-repeat;
+  background-position: 50% -3305px;
+  opacity: 0.7;
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 1px;
+  text-indent: -9999px;
+  width: 34px;
+  height: 34px;
+  border: 0;
+
+  &:focus {
+    background-color: transparent;
+  }
+
+  &:hover {
+    opacity: 1;
+    background-color: transparent;
+  }
+}
+
 input[type="email"]:focus, 
 input[type="number"]:focus, 
 input[type="search"]:focus, 
@@ -1145,6 +1170,8 @@ label .icon-calendar { float: right; margin-top: 2px; }
     button {
       float: left;
 
+      &:focus {background-color: #fff;}
+      &:hover {background-color: #f5f6f7;}
       &.icon-prev {border-radius: .3rem 0 0 .3rem;border-right: 0;}
       &.icon-next {border-radius: 0 .3rem .3rem 0;}
     }
@@ -1623,7 +1650,16 @@ label .icon-calendar { float: right; margin-top: 2px; }
   .card {
     border-radius: .3rem;
 
-    .card-section {
+    .card-section { // qw12
+
+      &:last-child {
+        text-align: right;
+
+        button + button {
+          margin-left: 10px;
+        }
+      }
+
       &> * {
         margin-bottom: 0;
       }

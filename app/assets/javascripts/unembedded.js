@@ -48,12 +48,14 @@ function ready() {
 		if (typeof callbackFunctions.yes === 'function') {
 			confirm_function = function(e) {
 				e.stopPropagation();
+				e.preventDefault();
 				callbackFunctions.yes(callbackParams);
 				$('#confirmBoxOverlay').remove();
 			}
 		} else {
 			confirm_function = function(e) {
 				e.stopPropagation();
+				e.preventDefault();
 				$('#confirmBoxOverlay').remove();
 			}
 		}
@@ -61,27 +63,30 @@ function ready() {
 		if (typeof callbackFunctions.no === 'function') {
 			deny_function = function(e) {
 				e.stopPropagation();
+				e.preventDefault();
 				callbackFunctions.no(callbackParams);
 				$('#confirmBoxOverlay').remove();
 			}
 		} else {
 			deny_function = function(e) {
 				e.stopPropagation();
+				e.preventDefault();
 				$('#confirmBoxOverlay').remove();
 			}
 		}
 
 		var $confirmBox = $('<div>', {id: 'confirmBoxOverlay'})
 				.append(
-					$('<section>', {id: 'confirmBox'})
+					$('<section>', {id: 'confirmBox', "class": 'modal'})
 					.append($('<div>', {"class": "card has-sections"})
 						.append(
 							$('<div>', {"class": 'card-section'}).append('<h3>'+confirmHeader+'</h3>')
+							.append('<button class="btn btn--link close-modal" type="button" name="button">Close modal</button>').click(deny_function)
 						).append('<hr>').append(
 							$('<div>', {"class": 'card-section'}).append('<p>'+confirmText+'</p>')
 						).append('<hr>').append(
 							$('<div>', {"class": 'card-section'}).append(
-								$('<button>', {id: 'cancel'}).text('Cancel').click(deny_function)
+								$('<button>', {id: 'cancel', "class": 'secondary'}).text('Cancel').click(deny_function)
 							).append(
 								$('<button>', {id: 'confirm'}).text('Confirm').click(confirm_function)
 							)
@@ -165,8 +170,9 @@ function ready() {
 		var resource = $(this).data('resource');
 		var id = $(this).data('id');
 		var index_of_id;
+		var resource_title = $(this).next().text();
 
-		confirmBox('confirmHeader', 'confirmText', {
+		confirmBox('Delete '+resource_title+'?', 'Are you sure you want to delete '+resource_title+'? This action cannot be reversed.', {
 			yes: deleteResource
 		}, {
 			id: id,
@@ -176,12 +182,13 @@ function ready() {
 				if (deleted_resource) {
 					index_of_id = resource_infomation[resource+'s'].map(function(a) {return a.id}).indexOf(deleted_resource.id);
 					resource_infomation[resource+'s'].splice(index_of_id, 1);
-					resource_infomation[resource+'_total'] = resource_infomation[resource+'_total'] - 1;
 
 					if (resource.indexOf('collection') > -1) {
 						index_of_id = resource_infomation['collections'].map(function(a) {return a.id}).indexOf(deleted_resource.id);
 						resource_infomation['collections'].splice(index_of_id, 1);
+						resource = 'collection';
 					}
+					resource_infomation[resource+'_total'] = resource_infomation[resource+'_total'] - 1;
 
 					changePage(resource, resource_infomation[resource+'s'], resource_infomation[resource+'_page'], resource_infomation[resource+'_total']);
 				}
@@ -198,7 +205,6 @@ function ready() {
 		var min_bound = page*8 - 8;
 		var data_resource = resource;
 		resource_infomation[resource+'_page'] = page;
-		console.log(total, page, total_pages);
 
 		if (page >= total_pages - 3 && total_pages > 31 && resource_infomation[resource+'_chunks_loaded'] !== 'all') {
 			extendResource(resource, page, total);
@@ -207,6 +213,8 @@ function ready() {
 		if (max_bound >= total) {
 			max_bound = total - 1;
 		}
+
+		console.log(min_bound, max_bound);
 
 		$('.select-sim-dropdown.'+resource+' + .arrow-navigation button').removeClass('disabled');
 		if (page === 1) {
