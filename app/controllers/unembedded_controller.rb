@@ -9,6 +9,7 @@ class UnembeddedController < ApplicationController
   end
 
   def dashboard
+    t = Time.now
     @type = params[:resource]
 
     if session[:question]
@@ -18,6 +19,7 @@ class UnembeddedController < ApplicationController
     else
 
       get_resources
+      puts Colorize.cyan(Time.now - t)
       case @type
       when 'blog'
         @resource = ShopifyAPI::Article.find(params[:id])
@@ -29,13 +31,17 @@ class UnembeddedController < ApplicationController
         @resource = ShopifyAPI::Page.find(params[:id])
       when 'product'
         @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
+        puts Colorize.cyan(Time.now - t)
         @fulfillment_services = ShopifyAPI::FulfillmentService.find(:all, params: {scope: :all, fields: ['name', 'handle']})
+        puts Colorize.cyan(Time.now - t)
         @resource = ShopifyAPI::Product.find(params[:id])
+        puts Colorize.cyan(Time.now - t)
         @smart_collections = ShopifyAPI::SmartCollection.find(:all, params: {product_id: params[:id], limit: 250, fields: ['title', 'handle', 'id']})
+        puts Colorize.cyan(Time.now - t)
       else
         @type = 'resource_select'
       end
-
+      puts Colorize.cyan(Time.now - t)
     end
   end
 

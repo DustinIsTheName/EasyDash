@@ -19,7 +19,7 @@
             <% resource_name = 'custom_collection' %>
           <% end %>
 	    		<li class="variable">
-            <button class="sidebyside_small warning icon-trash" data-id="<%= resource.id %>" data-resource="<%= resource_name %>"></button>
+            <button type="button" class="sidebyside_small warning icon-trash" data-id="<%= resource.id %>" data-resource="<%= resource_name %>"></button>
             <%= link_to resource.title, dashboard_path(resource: resource_name, id: resource.id), target: target, data: {handle: resource.handle, id: resource.id} %>
 	    		</li>
 	    	<% end %>
@@ -28,8 +28,8 @@
     	<% end %>
     </ul>
     <div class="arrow-navigation">
-    	<button class="secondary icon-prev disabled"></button>
-    	<button class="secondary icon-next<% if total <= 8 %> disabled<% end %>"></button>
+    	<button type="button" class="secondary icon-prev disabled"></button>
+    	<button type="button" class="secondary icon-next<% if total <= 8 %> disabled<% end %>"></button>
     	<div style="clear:both;"></div>
     </div>
   </div>

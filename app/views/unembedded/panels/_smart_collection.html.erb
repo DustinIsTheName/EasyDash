@@ -1,0 +1,86 @@
+<article>
+  <div class="card">
+    <div class="row">
+      <label>Title</label>
+      <input type="text" placeholder="e.g. Summer collection, Under $100, Staff picks" />
+    </div>
+    <div class="row no_margin">
+      <label>Description</label>
+      <textarea></textarea>
+    </div>
+  </div>
+</article>
+<article>
+  <div class="card collection_conditions">
+    <h5>Conditions</h5>
+    <div class="row extra_margin_3x">
+      <label class="extra_margin"><input type="radio" name="option2">Manually select products <span class="subdued">(you will be able to select products on the next page)</span></label>
+      <label><input type="radio" name="option2" checked="checked">Automatically select products based on conditions</label>
+    </div>
+    <div class="row">
+      <label>Products must match:</label>
+      <label><input type="radio" name="option3" checked="checked">all conditions</label>
+      <label><input type="radio" name="option3">any condition</label>
+    </div>
+    <div class="divider"></div>
+    <div class="row">
+      <select class="extra_margin" id="collection_rules_column">
+        <option selected="selected" value="title">Product title</option>
+				<option value="type">Product type</option>
+				<option value="vendor">Product vendor</option>
+				<option value="variant_price">Product price</option>
+				<option value="tag">Product tag</option>
+				<option value="variant_compare_at_price">Compare at price</option>
+				<option value="variant_weight">Weight</option>
+				<option value="variant_inventory">Inventory stock</option>
+				<option value="variant_title">Variant's title</option>
+      </select>
+      <select class="extra_margin" id="rule_relation">
+        <option value="equals" selected="selected" data-bind-disabled="isRelationDisabled(this.value)">is equal to</option>
+        <option value="not_equals" data-bind-disabled="isRelationDisabled(this.value)">is not equal to</option>
+        <option value="greater_than" data-bind-disabled="isRelationDisabled(this.value)" disabled="">is greater than</option>
+        <option value="less_than" data-bind-disabled="isRelationDisabled(this.value)" disabled="">is less than</option>
+        <option value="starts_with" data-bind-disabled="isRelationDisabled(this.value)">starts with</option>
+        <option value="ends_with" data-bind-disabled="isRelationDisabled(this.value)">ends with</option>
+        <option value="contains" data-bind-disabled="isRelationDisabled(this.value)">contains</option>
+        <option value="not_contains" data-bind-disabled="isRelationDisabled(this.value)">does not contain</option>
+      </select>
+      <input type="text" />
+    </div>
+    <div class="divider" style="margin-left: 0; margin-right: 0;"></div>
+    <button class="secondary">Add another condition</button>
+  </div>
+</article>
+<article>
+  <a href="#" class="theme-editor-action-list__item" data-bind-event-click="action("openSectionPanel", "section-seo")" draggable="false">
+    <div class="card">
+      <h5>Search engine listing preview</h5>
+      <!-- <button class="btn--link top-right">Edit website SEO</button> -->
+      <p>Add a title and description to see how this collection might appear in a search engine listing.</p>
+      <button class="secondary">Edit website SEO</button>
+      <!-- <button class="btn btn--plain icon-next dark" type="button" name="button"></button> -->
+    </div>
+  </a>
+</article>
+<article>
+  <div class="card secondary">
+    <h5>Visibility</h5>
+    <div class="divider"></div>
+    <div class="row no_margin">
+      <label><input type="checkbox" name="" checked="checked">Online store<a href=""><i class="icon-calendar tip" data-hover="Set publish date"></i></a></label>
+    </div>
+  </div>
+</article>
+<article>
+  <div class="card secondary collection_image">
+    <h5>Collection image</h5>
+    <div class="column twelve type--centered">
+      <i class="icon-image next-icon--size-40"></i>
+      <button class="primary">Upload image</button>
+</div>
+  </div>
+</article>
+<div class="wittyEDBottomButtons">
+  <!-- <button class="secondary red btn_bottom">Delete collection</button> -->
+  <button class="warning btn_bottom">Delete collection</button>          
+</div>

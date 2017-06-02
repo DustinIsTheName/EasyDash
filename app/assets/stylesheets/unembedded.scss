@@ -1159,7 +1159,7 @@ label .icon-calendar { float: right; margin-top: 2px; }
 
     a:hover {
       text-decoration: none;
-      background: #eff9fd;
+      background: rgba(0, 167, 157, .05);
     }
   }
 
@@ -1665,6 +1665,19 @@ label .icon-calendar { float: right; margin-top: 2px; }
       }
     }
   }
+
+  &.delete {
+
+    #confirm {
+      background-color: #d83e3e;
+      border-color: #d83e3e;
+
+      &:hover {
+        border-color: #d83e3e;
+        background-color: #d83e3e;
+      }
+    }
+  }
 }
 
 .editVariantImageOverlay {
@@ -1797,7 +1810,6 @@ label .icon-calendar { float: right; margin-top: 2px; }
     margin-left: -5px;
   }
 }
-
 
 
 

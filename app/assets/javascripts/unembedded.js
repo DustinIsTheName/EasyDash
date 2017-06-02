@@ -42,7 +42,7 @@ function ready() {
 	  return (rect.bottom <= viewHeight && rect.top >= 0);
 	}
 
-	function confirmBox(confirmHeader, confirmText, callbackFunctions, callbackParams) {
+	function confirmBox(confirmHeader, confirmText, confirmAction, callbackFunctions, callbackParams) {
 		var confirm_function,
 				deny_function;
 		if (typeof callbackFunctions.yes === 'function') {
@@ -77,7 +77,7 @@ function ready() {
 
 		var $confirmBox = $('<div>', {id: 'confirmBoxOverlay'})
 				.append(
-					$('<section>', {id: 'confirmBox', "class": 'modal'})
+					$('<section>', {id: 'confirmBox', "class": 'modal '+confirmAction.toLowerCase()})
 					.append($('<div>', {"class": "card has-sections"})
 						.append(
 							$('<div>', {"class": 'card-section'}).append('<h3>'+confirmHeader+'</h3>')
@@ -86,9 +86,9 @@ function ready() {
 							$('<div>', {"class": 'card-section'}).append('<p>'+confirmText+'</p>')
 						).append('<hr>').append(
 							$('<div>', {"class": 'card-section'}).append(
-								$('<button>', {id: 'cancel', "class": 'secondary'}).text('Cancel').click(deny_function)
+								$('<button>', {id: 'cancel', "class": 'secondary', type: "button"}).text('Cancel').click(deny_function)
 							).append(
-								$('<button>', {id: 'confirm'}).text('Confirm').click(confirm_function)
+								$('<button>', {id: 'confirm', type: "button"}).text(confirmAction).click(confirm_function)
 							)
 						)
 					)
@@ -110,11 +110,13 @@ function ready() {
 				$(this.nextElementSibling).addClass('no-arrow');
 
 				if ($(this).hasClass('reverse')) {
+					console.log(bottom);
 					var bottom = parseInt($(this.nextElementSibling).css('bottom'));
-					$(this.nextElementSibling).css('bottom', bottom - 10);
+					$(this.nextElementSibling).css({'bottom': bottom - 10, 'top': 'auto'});
 				} else {
+					console.log(top);
 					var top = parseInt($(this.nextElementSibling).css('top'));
-					$(this.nextElementSibling).css('top', top + 10);
+					$(this.nextElementSibling).css({'top': top + 10, 'bottom': 'auto'});
 				}
 			}
 		}
@@ -172,7 +174,7 @@ function ready() {
 		var index_of_id;
 		var resource_title = $(this).next().text();
 
-		confirmBox('Delete '+resource_title+'?', 'Are you sure you want to delete '+resource_title+'? This action cannot be reversed.', {
+		confirmBox('Delete '+resource_title+'?', 'Are you sure you want to delete '+resource_title+'? This action cannot be reversed.', 'Delete', {
 			yes: deleteResource
 		}, {
 			id: id,
@@ -246,8 +248,8 @@ function ready() {
 				}
 
 			  new_html += '<li class="variable">';
-			  new_html += '<button class="sidebyside_small warning icon-trash" data-id="'+resource_object[i].id+'" data-resource="'+data_resource+'"></button>'
-				new_html += '<a href="/dashboard?resource='+resource+'&id='+resource_object[i].id+'" target="'+resource_infomation.target+'" data-handle="' + resource_object[i].handle + '" data-id="'+resource_object[i].id+'">';
+			  new_html += '<button type="button" class="sidebyside_small warning icon-trash" data-id="'+resource_object[i].id+'" data-resource="'+data_resource+'"></button>'
+				new_html += '<a href="/dashboard?resource='+data_resource+'&id='+resource_object[i].id+'" target="'+resource_infomation.target+'" data-handle="' + resource_object[i].handle + '" data-id="'+resource_object[i].id+'">';
 			  new_html += resource_object[i].title;
 			  new_html += '</a>'
 			  new_html += '</li>'
@@ -745,6 +747,10 @@ function ready() {
     }).error(function(e) {
     	console.log(e);
     });
+	});
+
+	$('warning.btn_bottom').click(function() {
+		// qw12
 	});
 
 	// window.onbeforeunload = function () {
