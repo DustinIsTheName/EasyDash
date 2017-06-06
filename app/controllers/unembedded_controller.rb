@@ -85,6 +85,12 @@ class UnembeddedController < ApplicationController
     render json: resource
   end
 
+  def hard_delete_api
+    puts Colorize.magenta(params)
+    resource = API.deleteResource(params)
+    render :dashboard
+  end
+
   private
 
     def get_resources

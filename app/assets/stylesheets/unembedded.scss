@@ -1784,6 +1784,14 @@ label .icon-calendar { float: right; margin-top: 2px; }
   float: left;
 }
 
+.warning.btn_bottom a {
+  color: #fff;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
 .tag-error {
   background: #ec6060;
   color: #fff;

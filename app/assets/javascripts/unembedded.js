@@ -663,7 +663,7 @@ function ready() {
 	    	tag_list.push(tag_text.trim())
 				$('#shopify_api_product_tags').val(tag_list.join(','));
 	    	$(this).val('');
-	    	tag = '<span class="tag blue remove">'+tag_text+'<a href="#"></a></span>';
+	    	tag = '<span class="tag teal remove">'+tag_text+'<a href="#"></a></span>';
 	    	$('.tags-container').append(tag);
 	    }
     }
@@ -749,8 +749,16 @@ function ready() {
     });
 	});
 
-	$('warning.btn_bottom').click(function() {
-		// qw12
+	$('.warning.btn_bottom').click(function(e) {
+		e.preventDefault();
+		var resource_title = $(this).data('resource');
+		var url = $(this).find('a').attr('href');
+
+		confirmBox('Delete '+resource_title+'?', 'Are you sure you want to delete '+resource_title+'? This action cannot be reversed.', 'Delete', {
+			yes: function() {
+				window.location.href = url;
+			}
+		});
 	});
 
 	// window.onbeforeunload = function () {

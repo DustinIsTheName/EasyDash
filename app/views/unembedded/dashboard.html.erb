@@ -13,6 +13,11 @@
           </h2>
         </nav><!-- .theme-editor__header-nav -->
       </header><!-- .theme-editor__header -->
+      <div class="wittyEDPanel<% if @type == 'resource_select' %> active<% end %>" data-tier="1">
+        <div class="wittyEDPanelBody">
+          <%= panel 'resource_select' %>
+        </div><!-- .wittyEDPanelBody -->
+      </div>
       <% if @resource %>
         <%= form_for @resource, remote: true, url: url_for(controller: 'unembedded', action: 'update_api'), method: :put, html: {class: 'ajax'} do |o| %>
 

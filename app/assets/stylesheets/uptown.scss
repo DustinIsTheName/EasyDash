@@ -1503,6 +1503,9 @@ table {
     color: #3e89b5; }
     .tag.blue.pending {
       background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' enable-background='new 0 0 24 24'%3E%3Cpath fill='rgb(62,137,181)' d='M12,0C5.4,0,0,5.4,0,12s5.4,12,12,12s12-5.4,12-12S18.6,0,12,0z M12,21c-5,0-9-4-9-9c0-5,4-9,9-9s9,4,9,9 C21,17,17,21,12,21z M17.4,14.5l-4.4-3V6.4l-0.1-0.3L12.5,6h-1.2L11,6.1l-0.1,0.3v6l0.1,0.3l0.1,0.1l5.1,3.4l0.3,0.1l0.1,0l0.3-0.2 l0.6-1C17.6,14.9,17.6,14.6,17.4,14.5z'%3E%3C/path%3E%3C/svg%3E"); }
+  .tag.teal {
+    background-color: #BAE4E1;
+    color: #00857d; }
   .tag.green {
     background-color: #b2d86a;
     color: #4d684b; }
@@ -1550,6 +1553,9 @@ table {
       /* IE requires pixels. Using cover/contain/rem values cause blurry edges */
       background-repeat: no-repeat;
       background-position: center; }
+  .tag.teal.remove a {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' enable-background='new 0 0 24 24'%3E%3Cpath fill='rgb(0, 133, 125)' d='M19.5 22c-.2 0-.5-.1-.7-.3L12 14.9l-6.8 6.8c-.2.2-.4.3-.7.3-.2 0-.5-.1-.7-.3l-1.6-1.6c-.1-.2-.2-.4-.2-.6 0-.2.1-.5.3-.7L9.1 12 2.3 5.2C2.1 5 2 4.8 2 4.5c0-.2.1-.5.3-.7l1.6-1.6c.2-.1.4-.2.6-.2.3 0 .5.1.7.3L12 9.1l6.8-6.8c.2-.2.4-.3.7-.3.2 0 .5.1.7.3l1.6 1.6c.1.2.2.4.2.6 0 .2-.1.5-.3.7L14.9 12l6.8 6.8c.2.2.3.4.3.7 0 .2-.1.5-.3.7l-1.6 1.6c-.2.1-.4.2-.6.2z'%3E%3C/path%3E%3C/svg%3E");
+  }
   .tag.collapsable {
     box-shadow: inset 0 0 0 0.1rem rgba(0, 0, 0, 0.15); }
     .tag.collapsable a {

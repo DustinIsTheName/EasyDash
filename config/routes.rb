@@ -25,6 +25,7 @@ Rails.application.routes.draw do
     post '/dashboard-delete' => :delete_api
     post '/variant-image' => :update_variant_image
     post '/add-images' => :add_images
+    get '/dashboard-hard-delete' => :hard_delete_api
   end
   
   # The priority is based upon order of creation: first created -> highest priority.
