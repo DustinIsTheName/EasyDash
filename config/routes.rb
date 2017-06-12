@@ -21,11 +21,12 @@ Rails.application.routes.draw do
     get '/dashboard' => :dashboard
     post '/dashboard-new' => :new_api
     put '/dashboard-update' => :update_api
-    post '/variant-update' => :update_variant
     post '/dashboard-delete' => :delete_api
+    get '/dashboard-hard-delete' => :hard_delete_api
+    post '/variant-update' => :update_variant
     post '/variant-image' => :update_variant_image
     post '/add-images' => :add_images
-    get '/dashboard-hard-delete' => :hard_delete_api
+    post '/delete-image' => :delete_image
   end
   
   # The priority is based upon order of creation: first created -> highest priority.

@@ -607,6 +607,16 @@ label .icon-calendar { float: right; margin-top: 2px; }
               height: 100%;
               width: 100%;
               display: none;
+              cursor: move; /* fallback if grab cursor is unsupported */
+              cursor: grab;
+              cursor: -moz-grab;
+              cursor: -webkit-grab;
+
+              &:active {
+                cursor: grabbing;
+                cursor: -moz-grabbing;
+                cursor: -webkit-grabbing;
+              }
 
               .icons-container {
                 text-align: center;

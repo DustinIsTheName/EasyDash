@@ -25,7 +25,7 @@
         <% if @resource.images.length > 0 %>
           <div class="images-container">
             <% for image in @resource.images %>
-              <div class="product-image">
+              <div class="product-image" data-id="<%= image.id %>">
                 <img src="<%= image.src %>">
                 <div class="overlay">
                   <div class="icons-container">

@@ -735,18 +735,89 @@ function ready() {
 	});
 
 	$('#shopify_api_product_file').change(function() {
-		$.ajax({
-      type: "POST",
-      url: '/add-images', //sumbits it to the given url of the form
-      data: {
-      	images: this.files
-      },
-      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
-    }).success(function(image) {
-    	console.log(image);
-    }).error(function(e) {
-    	console.log(e);
-    });
+		var data = [];
+		var files = Array.from(this.files);
+		console.log(files);
+
+		function getBase64(file, total_files, callback) {
+	   var reader = new FileReader();
+	   reader.readAsDataURL(file);
+	   reader.onload = function () {
+	    data.push(reader.result.replace(/data:image\/[a-z]{3,4};base64,/, ''));
+	    if (data.length === total_files) {
+	    	callback(data);
+	    }
+	   };
+	   reader.onerror = function (error) {
+	     console.log('Error: ', error);
+	   };
+		}
+
+		files.forEach(function(file) {
+			getBase64(file, files.length, function(data) {
+				$.ajax({
+		      type: "POST",
+		      url: '/add-images', // sumbits it to the given url of the form
+		      data: {
+		      	id: $('[name="id"]').val(),
+		      	images: data
+		      },
+		      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+		    }).success(function(images) {
+		    	console.log(images);
+
+		    	images.forEach(function(image) {
+			    	var image_html = '';
+		    		image_html += '<div class="product-image" data-id="'+image.id+'">';
+            	image_html += '<img src="'+image.src+'">';
+              image_html += '<div class="overlay">';
+	              image_html += '<div class="icons-container">';
+		              image_html += '<i class="image icon-preview next-icon--size-16"></i>';
+		              image_html += '<i class="next-icon--size-16 alt-tag">ALT</i>';
+		              image_html += '<i class="image icon-trash next-icon--size-16"></i>';
+	              image_html += '</div>';
+	            image_html += '</div>';
+	          image_html += '</div>';
+
+	          if ($('.product-image[data-id="'+image.id+'"]').length === 0) {
+		          $('.images-container').append(image_html);
+		        }
+		    	});
+		    }).error(function(e) {
+		    	console.log(e);
+		    });
+			});
+		});
+
+	});
+
+	$('.images-container').on('click', '.image.icon-trash', function() {
+		var product_id = $('[name="id"]').val();
+		var image_id = $(this).closest('.product-image').data('id');
+
+		confirmBox('Delete this image?', 'Are you sure you want to delete this image and remove it from all variants? This action cannot be reversed.', 'Delete', {
+			yes: function(params) {
+				$.ajax({
+		      type: "POST",
+		      url: '/delete-image', // sumbits it to the given url of the form
+		      data: {
+		      	product_id: params.product_id,
+		      	image_id: params.image_id
+		      },
+		      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+		    }).success(function(image) {
+		    	console.log(image);
+
+		    	$('.product-image[data-id="'+image.id+'"]').remove();
+		    }).error(function(e) {
+		    	console.log(e);
+		    });
+			}
+		},
+		{
+			product_id: product_id,
+			image_id: image_id
+		});
 	});
 
 	$('.warning.btn_bottom').click(function(e) {

@@ -285,7 +285,6 @@ class API
   end
 
   def self.deleteResource(params)
-
     case params[:resource]
     when 'product'
       resource = ShopifyAPI::Product.find(params[:id])
@@ -306,6 +305,27 @@ class API
       puts Colorize.red('something went wrong')
       return nil
     end
+  end
+
+  def self.addImages(params)
+    product = ShopifyAPI::Product.find(params[:id])
+    images = params[:images]
+    if images
+      for image in images
+        product.images << ShopifyAPI::Image.new(attachment: image)
+      end
+      if product.save
+        puts Colorize.green(images.size.to_s + 'image created')
+      end
+    end
+
+    product
+  end
+
+  def self.deleteImage(params)
+    image = ShopifyAPI::Image.find(params[:image_id], params: {product_id: params[:product_id]})
+    image.destroy
+    image
   end
 
 end
