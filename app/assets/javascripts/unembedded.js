@@ -594,6 +594,14 @@ function ready() {
 	
 		variant_image_page = 0;
 		changeVariantImagePage(variant_image_page);
+
+		$('.editVariantImage .icon-prev').addClass('disabled');
+		if ($('.variant-select-image-label').length > 10) {
+			$('.editVariantImage .icon-next').removeClass('disabled');
+		} else {
+			$('.editVariantImage .icon-next').addClass('disabled');
+		}
+
 		$('.editVariantImageOverlay').addClass('open');
 	}
 
@@ -728,6 +736,7 @@ function ready() {
 	$('.variant_image').click(function(e) {
 		e.preventDefault();
 		$parent = $(this).parent().parent();
+		// qw12
 
 		if ($parent.hasClass('variant_open') || $parent.hasClass('drop_images')) {
 			editVariantImage($(this));
@@ -765,9 +774,11 @@ function ready() {
 		      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
 		    }).success(function(images) {
 		    	console.log(images);
+		    	var dataPage = $('.variant-select-image-label').length;
 
-		    	images.forEach(function(image) {
+		    	images.forEach(function(image, index) {
 			    	var image_html = '';
+			    	var variant_image_html = '';
 		    		image_html += '<div class="product-image" data-id="'+image.id+'">';
             	image_html += '<img src="'+image.src+'">';
               image_html += '<div class="overlay">';
@@ -779,8 +790,17 @@ function ready() {
 	            image_html += '</div>';
 	          image_html += '</div>';
 
+	          variant_image_html += '<input type="radio" id="variant-select-image-'+image.id+'" class="variant-select-image" name="variants[][image_id]" value="'+image.id+'">';
+	          variant_image_html += '<label for="variant-select-image-'+image.id+'" class="variant-select-image-label" data-page="'+Math.floor(index/10)+'" style="display: flex;">';
+	            variant_image_html += '<img src="'+image.src+'">';
+	          variant_image_html += '</label>';
+
 	          if ($('.product-image[data-id="'+image.id+'"]').length === 0) {
 		          $('.images-container').append(image_html);
+		        }
+
+		        if ($('#variant-select-image-'+image.id+'').length === 0) {
+		        	$('.editVariantImage .card-section:eq(1)').append(variant_image_html);
 		        }
 		    	});
 		    }).error(function(e) {
@@ -789,6 +809,10 @@ function ready() {
 			});
 		});
 
+	});
+
+	$('.images-container').on('click', '.alt-tag', function() {
+		
 	});
 
 	$('.images-container').on('click', '.image.icon-trash', function() {
@@ -809,6 +833,12 @@ function ready() {
 		    	console.log(image);
 
 		    	$('.product-image[data-id="'+image.id+'"]').remove();
+		    	$('#variant-select-image-'+image.id).remove();
+		    	$('.variant-select-image-label[for="variant-select-image-'+image.id+'"]').remove();
+		    	$('.variant-select-image-label').each(function(index) {
+		    		console.log(index);
+		    		$(this).attr('data-page', Math.floor(index/10));
+		    	});
 		    }).error(function(e) {
 		    	console.log(e);
 		    });
