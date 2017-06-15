@@ -90,6 +90,7 @@ a {
 .type--right { text-align: right; }
 .type--left { text-align: left; }
 .type--centered { text-align: center; }
+.type--subdued { color: #637381; }
 
 .close-modal {
   background-color: transparent;
@@ -1644,14 +1645,11 @@ label .icon-calendar { float: right; margin-top: 2px; }
   height: 100%;
   z-index: 9;
   background-color: rgba(0, 0, 0, 0.25);
+  display: none;
 
-  &#editVariantImageOverlay,
-  &#editAltTagOverlay {
-    display: none;
-
-    &.open {
-      display: block;
-    }
+  &.open,
+  &#confirmBoxOverlay {
+    display: block;
   }
 
   .editModal {
@@ -1790,6 +1788,8 @@ label .icon-calendar { float: right; margin-top: 2px; }
           margin-bottom: 0;
         }
 
+        .type--subdued { color: #637381; }
+
         .product-image {
           width: calc(25% - 10px);
           background: #fafbfc;
@@ -1819,13 +1819,19 @@ label .icon-calendar { float: right; margin-top: 2px; }
           float: right;
         }
 
-        #image-alt-tag {
+        #image-alt-tag + p {
           margin-bottom: 2rem;
         }
 
         &:last-child {
           text-align: right;
         }
+      }
+    }
+    &#preview {
+      .product-image {
+        overflow: scroll;
+        max-height: 200px;
       }
     }
   }

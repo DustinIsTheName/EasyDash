@@ -595,17 +595,22 @@ function ready() {
 		variant_image_page = 0;
 		changeVariantImagePage(variant_image_page);
 
-		$('#editVariantImage .icon-prev').addClass('disabled');
-		if ($('.variant-select-image-label').length > 10) {
-			$('#editVariantImage .icon-next').removeClass('disabled');
-		} else {
-			$('#editVariantImage .icon-next').addClass('disabled');
-		}
-
 		$('#editVariantImageOverlay').addClass('open');
 	}
 
 	function changeVariantImagePage(page) {
+		if (page <= 0) {
+			$('#editVariantImage .icon-prev').addClass('disabled');
+		} else {
+			$('#editVariantImage .icon-prev').removeClass('disabled');
+		}
+
+		if (page >= Math.floor($('.variant-select-image-label').length/10)) {
+			$('#editVariantImage .icon-next').addClass('disabled');
+		} else {
+			$('#editVariantImage .icon-next').removeClass('disabled');
+		}
+
 		$('.variant-select-image-label').hide();
 		$('.variant-select-image-label[data-page="'+page+'"]').show();
 	}
@@ -623,13 +628,6 @@ function ready() {
 		if (!$(this).hasClass('disabled')) {
 			variant_image_page--;
 			changeVariantImagePage(variant_image_page);
-			$('#editVariantImage .icon-next').removeClass('disabled');
-		}
-
-		if (variant_image_page === 0) {
-			$(this).addClass('disabled');
-		} else {
-			$(this).removeClass('disabled');
 		}
 	});
 
@@ -637,13 +635,6 @@ function ready() {
 		if (!$(this).hasClass('disabled')) {
 			variant_image_page++;
 			changeVariantImagePage(variant_image_page);
-			$('#editVariantImage .icon-prev').removeClass('disabled');
-		}
-
-		if (variant_image_page === Math.floor($('.variant-select-image-label').length/10)) {
-			$(this).addClass('disabled');
-		} else {
-			$(this).removeClass('disabled');
 		}
 	});
 
@@ -731,12 +722,15 @@ function ready() {
     });
 	});
 
+	$('#editVariantImage #variant-add-image').click(function() {
+		$('.link_label[for="shopify_api_product_file"]').click();
+	});
+
 	$('#editVariantImage .cancel').click(closeVariantImage);
 
 	$('.variant_image').click(function(e) {
 		e.preventDefault();
 		$parent = $(this).parent().parent();
-		// qw12
 
 		if ($parent.hasClass('variant_open') || $parent.hasClass('drop_images')) {
 			editVariantImage($(this));
@@ -774,7 +768,10 @@ function ready() {
 		      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
 		    }).success(function(images) {
 		    	console.log(images);
-		    	var dataPage = $('.variant-select-image-label').length;
+		    	var dataPageTotal = Math.floor($('.variant-select-image-label').length/10);
+		    	var variantIdRegex = $('.variant-select-image').attr('name').match(/[0-9]{11}/);
+		    	var variantId = '';
+		    	if (variantIdRegex) {variantId = variantIdRegex[0]}
 
 		    	images.forEach(function(image, index) {
 			    	var image_html = '';
@@ -790,7 +787,7 @@ function ready() {
 	            image_html += '</div>';
 	          image_html += '</div>';
 
-	          variant_image_html += '<input type="radio" id="variant-select-image-'+image.id+'" class="variant-select-image" name="variants[][image_id]" value="'+image.id+'">';
+	          variant_image_html += '<input type="radio" id="variant-select-image-'+image.id+'" class="variant-select-image" name="variants['+variantId+'][image_id]" value="'+image.id+'">';
 	          variant_image_html += '<label for="variant-select-image-'+image.id+'" class="variant-select-image-label" data-page="'+Math.floor(index/10)+'" style="display: flex;">';
 	            variant_image_html += '<img src="'+image.src+'">';
 	          variant_image_html += '</label>';
@@ -803,12 +800,23 @@ function ready() {
 		        	$('#editVariantImage .card-section:eq(1)').append(variant_image_html);
 		        }
 		    	});
+					
+					variant_image_page = dataPageTotal;
+					changeVariantImagePage(variant_image_page);
+
 		    }).error(function(e) {
 		    	console.log(e);
 		    });
 			});
 		});
 
+	});
+
+	$('.images-container').on('click', '.icon-preview', function() {
+		var image = $(this).parent().parent().prev().attr('src');
+
+		$('#image-preview').attr('src', image);
+		$('#previewOverlay').addClass('open');
 	});
 
 	$('.images-container').on('click', '.alt-tag', function() {
@@ -831,7 +839,7 @@ function ready() {
     	if (alt_tag_metafield) {
 	    	$('#image-alt-tag').data('metafield-id', alt_tag_metafield.id).val(alt_tag_metafield.value);
 			} else {
-				$('#image-alt-tag').data('metafield-id', 'new').val(''); // qw12
+				$('#image-alt-tag').data('metafield-id', 'new').val('');
 			}
 
 			$('#editAltTagOverlay').addClass('open');
@@ -894,7 +902,6 @@ function ready() {
 		    	$('#variant-select-image-'+image.id).remove();
 		    	$('.variant-select-image-label[for="variant-select-image-'+image.id+'"]').remove();
 		    	$('.variant-select-image-label').each(function(index) {
-		    		console.log(index);
 		    		$(this).attr('data-page', Math.floor(index/10));
 		    	});
 		    }).error(function(e) {

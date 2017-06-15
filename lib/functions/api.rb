@@ -315,7 +315,7 @@ class API
         product.images << ShopifyAPI::Image.new(attachment: image)
       end
       if product.save
-        puts Colorize.green(images.size.to_s + 'image created')
+        puts Colorize.green(images.size.to_s + ' image(s) created')
       end
     end
 

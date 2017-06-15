@@ -75,7 +75,7 @@ class UnembeddedController < ApplicationController
   end
 
   def update_variant_image
-    # puts Colorize.magenta(params)
+    puts Colorize.magenta(params)
     API.updateVariantImage(params['variant'], params['image'])
     if params['image'] == 'destroy'
       render json: {id: nil, src: nil}
@@ -106,11 +106,7 @@ class UnembeddedController < ApplicationController
     puts Colorize.magenta(params)
     if params[:metafield_id] == 'new'
       metafield = ShopifyAPI::Metafield.new(namespace: "tags", key: "alt", value: params[:alt_tag], owner_id: params[:image_id], owner_resource: "product_image", value_type: "string")
-      if metafield.save
-
-      else
-        puts metafield.errors
-      end
+      metafield.save
     else
       metafield = ShopifyAPI::Metafield.find(params[:metafield_id])
       metafield.value = params[:alt_tag]
