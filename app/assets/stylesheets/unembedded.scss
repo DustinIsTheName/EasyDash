@@ -1638,53 +1638,194 @@ label .icon-calendar { float: right; margin-top: 2px; }
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
-#confirmBoxOverlay {
+.editModalOverlay {
   position: fixed;
   width: 100%;
   height: 100%;
   z-index: 9;
   background-color: rgba(0, 0, 0, 0.25);
-}
 
-#confirmBox {
-  width: calc(100% - 20px);
-  max-width: 620px;
-  position: fixed;
-  top: 60px;
-  z-index: 9999;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-  -moz-transform: translateX(-50%);
-  transform: translateX(-50%);
+  &#editVariantImageOverlay,
+  &#editAltTagOverlay {
+    display: none;
 
-  .card {
-    border-radius: .3rem;
-
-    .card-section { // qw12
-
-      &:last-child {
-        text-align: right;
-
-        button + button {
-          margin-left: 10px;
-        }
-      }
-
-      &> * {
-        margin-bottom: 0;
-      }
+    &.open {
+      display: block;
     }
   }
 
-  &.delete {
+  .editModal {
+    width: calc(100% - 20px);
+    max-width: 620px;
+    position: fixed;
+    top: 60px;
+    z-index: 9999;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    transform: translateX(-50%);
 
-    #confirm {
-      background-color: #d83e3e;
-      border-color: #d83e3e;
+    &#confirmBox{
+      .card {
+        border-radius: .3rem;
 
-      &:hover {
-        border-color: #d83e3e;
-        background-color: #d83e3e;
+        .card-section {
+
+          &:last-child {
+            text-align: right;
+
+            button + button {
+              margin-left: 10px;
+            }
+          }
+
+          &> * {
+            margin-bottom: 0;
+          }
+        }
+      }
+
+      &.delete {
+
+        #confirm {
+          background-color: #d83e3e;
+          border-color: #d83e3e;
+
+          &:hover {
+            border-color: #d83e3e;
+            background-color: #d83e3e;
+          }
+        }
+      }
+    }
+
+    &#editVariantImage {
+      .card.has-sections {
+        margin-bottom: 0;
+      }
+
+      .variant-select-image {
+        display: none;
+      }
+
+      div.card-section {
+        font-size: 0;
+        display: flex;
+        flex-wrap: wrap;
+
+        *:last-child {margin-bottom:0;}
+
+        .variant-select-image:checked + label:before {
+          border: 2px solid #0078bd;
+          border-radius: 3px;
+          top: -3px;
+          right: -3px;
+          bottom: -3px;
+          left: -3px;
+          z-index: 1;
+          content: "";
+          position: absolute;
+        }
+
+        label {
+          flex-basis: calc(20% - 16px);
+          display: flex;
+          align-items: center;
+          vertical-align: middle;
+          box-sizing: border-box;
+          position: relative;
+          background: #fafbfc;
+          border: 1px solid rgba(195,207,216,0.6);
+          margin-left: 20px;
+          margin-bottom: 20px;
+          padding-bottom: calc(20% - 16px);
+
+          &:last-child {margin-bottom: 20px;}
+
+          &:nth-child(10n + 2) {
+            margin-left: 0;
+          }
+
+          img {
+            max-width: 100%;
+            max-height: 100%;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+          }
+        }
+
+        .arrow-navigation {
+          .icon-prev {
+            border-radius: .3rem 0 0 .3rem;
+            border-right: 0;
+          }
+          .icon-next {
+            border-radius: 0 .3rem .3rem 0;
+          }
+        }
+
+        &> button {margin-left: 10px;}
+
+        .cancel {
+          margin-left: auto;
+        }
+      }
+
+      hr {clear:both;}
+    }
+
+    &#editAltTag {
+      .card.has-sections {
+        margin-bottom: 0;
+      }
+
+      hr {
+        clear: both;
+      }
+
+      .card-section {
+        h3 {
+          margin-bottom: 0;
+        }
+
+        .product-image {
+          width: calc(25% - 10px);
+          background: #fafbfc;
+          border: 1px solid rgba(195, 207, 216, 0.3);
+          position: relative;
+          padding-bottom: 25%;
+          margin-bottom: 2rem;
+          box-sizing: border-box;
+          float: left;
+
+          #image-for-alt-tag {
+            float: left;
+            position: absolute;
+            max-width: 100%;
+            max-height: 100%;
+            display: block;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            margin: auto;
+          }
+        }
+
+        .field-for-alt-tag {
+          width: calc(75% - 10px);
+          float: right;
+        }
+
+        #image-alt-tag {
+          margin-bottom: 2rem;
+        }
+
+        &:last-child {
+          text-align: right;
+        }
       }
     }
   }
@@ -1714,80 +1855,7 @@ label .icon-calendar { float: right; margin-top: 2px; }
   -moz-transform: translateX(-50%);
   transform: translateX(-50%);
 
-  .card.has-sections {
-    margin-bottom: 0;
-  }
-
-  .variant-select-image {
-    display: none;
-  }
-
-  div.card-section {
-    font-size: 0;
-    display: flex;
-    flex-wrap: wrap;
-
-    *:last-child {margin-bottom:0;}
-
-    .variant-select-image:checked + label:before {
-      border: 2px solid #0078bd;
-      border-radius: 3px;
-      top: -3px;
-      right: -3px;
-      bottom: -3px;
-      left: -3px;
-      z-index: 1;
-      content: "";
-      position: absolute;
-    }
-
-    label {
-      flex-basis: calc(20% - 16px);
-      display: flex;
-      align-items: center;
-      vertical-align: middle;
-      box-sizing: border-box;
-      position: relative;
-      background: #fafbfc;
-      border: 1px solid rgba(195,207,216,0.6);
-      margin-left: 20px;
-      margin-bottom: 20px;
-      padding-bottom: calc(20% - 16px);
-
-      &:last-child {margin-bottom: 20px;}
-
-      &:nth-child(10n + 2) {
-        margin-left: 0;
-      }
-
-      img {
-        max-width: 100%;
-        max-height: 100%;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-      }
-    }
-
-    .arrow-navigation {
-      .icon-prev {
-        border-radius: .3rem 0 0 .3rem;
-        border-right: 0;
-      }
-      .icon-next {
-        border-radius: 0 .3rem .3rem 0;
-      }
-    }
-
-    &> button {margin-left: 10px;}
-
-    #cancel {
-      margin-left: auto;
-    }
-  }
-
-  hr {clear:both;}
+  
 }
 
 .tags-container {

@@ -75,9 +75,9 @@ function ready() {
 			}
 		}
 
-		var $confirmBox = $('<div>', {id: 'confirmBoxOverlay'})
+		var $confirmBox = $('<div>', {id: 'confirmBoxOverlay', class: 'editModalOverlay'})
 				.append(
-					$('<section>', {id: 'confirmBox', "class": 'modal '+confirmAction.toLowerCase()})
+					$('<section>', {id: 'confirmBox', "class": 'editModal '+confirmAction.toLowerCase()})
 					.append($('<div>', {"class": "card has-sections"})
 						.append(
 							$('<div>', {"class": 'card-section'}).append('<h3>'+confirmHeader+'</h3>')
@@ -174,7 +174,7 @@ function ready() {
 		var index_of_id;
 		var resource_title = $(this).next().text();
 
-		confirmBox('Delete '+resource_title+'?', 'Are you sure you want to delete '+resource_title+'? This action cannot be reversed.', 'Delete', {
+		confirmBox('Delete '+resource_title+'?', 'Are you sure you want to delete this '+resource_title+'? This action cannot be reversed.', 'Delete', {
 			yes: deleteResource
 		}, {
 			id: id,
@@ -595,14 +595,14 @@ function ready() {
 		variant_image_page = 0;
 		changeVariantImagePage(variant_image_page);
 
-		$('.editVariantImage .icon-prev').addClass('disabled');
+		$('#editVariantImage .icon-prev').addClass('disabled');
 		if ($('.variant-select-image-label').length > 10) {
-			$('.editVariantImage .icon-next').removeClass('disabled');
+			$('#editVariantImage .icon-next').removeClass('disabled');
 		} else {
-			$('.editVariantImage .icon-next').addClass('disabled');
+			$('#editVariantImage .icon-next').addClass('disabled');
 		}
 
-		$('.editVariantImageOverlay').addClass('open');
+		$('#editVariantImageOverlay').addClass('open');
 	}
 
 	function changeVariantImagePage(page) {
@@ -611,19 +611,19 @@ function ready() {
 	}
 
 	function closeVariantImage() {
-		$('.editVariantImageOverlay').removeClass('open');
+		$('#editVariantImageOverlay').removeClass('open');
 	}
 
-	$('.editVariantImageOverlay').click(closeVariantImage);
-	$('.editVariantImage').click(function(e) {
+	$('#editVariantImageOverlay').click(closeVariantImage);
+	$('#editVariantImage').click(function(e) {
 		e.stopPropagation();
 	});
 
-	$('.editVariantImage .icon-prev').click(function() {
+	$('#editVariantImage .icon-prev').click(function() {
 		if (!$(this).hasClass('disabled')) {
 			variant_image_page--;
 			changeVariantImagePage(variant_image_page);
-			$('.editVariantImage .icon-next').removeClass('disabled');
+			$('#editVariantImage .icon-next').removeClass('disabled');
 		}
 
 		if (variant_image_page === 0) {
@@ -633,11 +633,11 @@ function ready() {
 		}
 	});
 
-	$('.editVariantImage .icon-next').click(function() {
+	$('#editVariantImage .icon-next').click(function() {
 		if (!$(this).hasClass('disabled')) {
 			variant_image_page++;
 			changeVariantImagePage(variant_image_page);
-			$('.editVariantImage .icon-prev').removeClass('disabled');
+			$('#editVariantImage .icon-prev').removeClass('disabled');
 		}
 
 		if (variant_image_page === Math.floor($('.variant-select-image-label').length/10)) {
@@ -731,7 +731,7 @@ function ready() {
     });
 	});
 
-	$('#cancel').click(closeVariantImage);
+	$('#editVariantImage .cancel').click(closeVariantImage);
 
 	$('.variant_image').click(function(e) {
 		e.preventDefault();
@@ -800,7 +800,7 @@ function ready() {
 		        }
 
 		        if ($('#variant-select-image-'+image.id+'').length === 0) {
-		        	$('.editVariantImage .card-section:eq(1)').append(variant_image_html);
+		        	$('#editVariantImage .card-section:eq(1)').append(variant_image_html);
 		        }
 		    	});
 		    }).error(function(e) {
@@ -812,7 +812,65 @@ function ready() {
 	});
 
 	$('.images-container').on('click', '.alt-tag', function() {
-		
+		var image = $(this).parent().parent().prev().attr('src');
+		var image_id = $(this).parent().parent().parent().data('id');
+
+		$('#image-for-alt-tag').attr('src', image);
+		$('#image-for-alt-tag').data('image-id', image_id);
+
+		$.ajax({
+      type: "GET",
+      url: '/alt-tag', //sumbits it to the given url of the form
+      data: {
+      	image_id: image_id
+      },
+      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+    }).success(function(alt_tag_metafield) {
+    	console.log(alt_tag_metafield);
+
+    	if (alt_tag_metafield) {
+	    	$('#image-alt-tag').data('metafield-id', alt_tag_metafield.id).val(alt_tag_metafield.value);
+			} else {
+				$('#image-alt-tag').data('metafield-id', 'new').val(''); // qw12
+			}
+
+			$('#editAltTagOverlay').addClass('open');
+    }).error(function(error) {
+    	console.log(error);
+    });
+	});
+
+	$('#editAltTag #image-alt-tag-save').click(function() {
+		var metafield_id = $('#image-alt-tag').data('metafield-id');
+		var image_id = $('#image-for-alt-tag').data('image-id');
+		var alt_tag = $('#image-alt-tag').val();
+
+		$.ajax({
+      type: "POST",
+      url: '/alt-tag', //sumbits it to the given url of the form
+      data: {
+      	metafield_id: metafield_id,
+      	image_id: image_id,
+      	alt_tag: alt_tag
+      },
+      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+    }).success(function(alt_tag_metafield) {
+    	console.log(alt_tag_metafield);
+    	closeAltTag();
+    }).error(function(error) {
+    	console.log(error);
+    });
+	});
+
+	function closeAltTag() {
+		$('#editAltTagOverlay').removeClass('open');
+	}
+
+	$('#editAltTagOverlay').click(closeAltTag);
+	$('#editAltTag .cancel').click(closeAltTag);
+
+	$('#editAltTag').click(function(e) {
+		e.stopPropagation();
 	});
 
 	$('.images-container').on('click', '.image.icon-trash', function() {

@@ -111,8 +111,8 @@
 </div><!-- .wittyEDSidebar -->
 
 <% if @type == 'product' %>
-<div class="editVariantImageOverlay">
-  <section class="editVariantImage">
+<div id="editVariantImageOverlay" class="editModalOverlay">
+  <section id="editVariantImage" class="editModal">
     <div class="card has-sections">
       <div class="card-section">
         <h3>Update variant image</h3>
@@ -136,9 +136,34 @@
         </div>
         <button id="variant-image-destroy" class="secondary red variant-image-save" href="#">Remove image</button>
 
-        <button id="cancel" class="secondary" href="#">Cancel</button>
+        <button class="secondary cancel" href="#">Cancel</button>
         <button class="secondary" href="#">Add Image</button>
         <button id="variant-image-save" class="primary variant-image-save" href="#">Save</button>
+      </div>
+    </div>
+  </section>
+</div>
+<div id="editAltTagOverlay" class="editModalOverlay">
+  <section id="editAltTag" class="editModal">
+    <div class="card has-sections">
+      <div class="card-section">
+        <h3>Edit image alt text</h3>
+        <!-- <a href="#" class="close" role="button" aria-label="Close dialog">x</a> -->
+      </div>
+      <hr>
+      <div class="card-section" style="padding-bottom: 0;">
+        <div class="product-image">
+          <img id="image-for-alt-tag">
+        </div>
+        <div class="field-for-alt-tag">
+          <label for="image-alt-tag">Image alt text</label>
+          <input type="text" id="image-alt-tag" class="variant-select-image">
+        </div>
+      </div>
+      <hr>
+      <div class="card-section">
+        <button class="secondary cancel" href="#">Cancel</button>
+        <button id="image-alt-tag-save" class="primary" href="#">Save</button>
       </div>
     </div>
   </section>

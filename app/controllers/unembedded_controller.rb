@@ -97,6 +97,29 @@ class UnembeddedController < ApplicationController
     render :dashboard
   end
 
+  def get_alt_tag
+    alt_tag_metafield = ShopifyAPI::Metafield.find(:first, params: {"metafield[owner_id]" => params[:image_id], "metafield[owner_resource]" => 'product_image', key: 'alt'})
+    render json: alt_tag_metafield
+  end
+
+  def edit_alt_tag
+    puts Colorize.magenta(params)
+    if params[:metafield_id] == 'new'
+      metafield = ShopifyAPI::Metafield.new(namespace: "tags", key: "alt", value: params[:alt_tag], owner_id: params[:image_id], owner_resource: "product_image", value_type: "string")
+      if metafield.save
+
+      else
+        puts metafield.errors
+      end
+    else
+      metafield = ShopifyAPI::Metafield.find(params[:metafield_id])
+      metafield.value = params[:alt_tag]
+      metafield.save
+    end
+
+    render json: metafield
+  end
+
   private
 
     def get_resources
