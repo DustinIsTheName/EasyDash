@@ -128,6 +128,12 @@ class UnembeddedController < ApplicationController
     render json: metafield
   end
 
+  def get_variant_hsc
+    puts Colorize.magenta(params)
+    hsc_metafield = ShopifyAPI::Metafield.find(:first, params: {"metafield[owner_id]" => params[:variant_id], "metafield[owner_resource]" => 'variant', key: 'harmonized_system_code'})
+    render json: hsc_metafield
+  end
+
   private
 
     def get_resources

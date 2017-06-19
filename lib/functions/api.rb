@@ -337,8 +337,6 @@ class API
   def self.changeImageOrder(params)
     product = ShopifyAPI::Product.find(params[:id])
     product.images.each_with_index do |image, index|
-      puts Colorize.cyan(image.id)
-      puts Colorize.orange(params["image_orders"][image.id])
       product.images[index].position = params["image_orders"][image.id.to_s]
     end
     if product.save

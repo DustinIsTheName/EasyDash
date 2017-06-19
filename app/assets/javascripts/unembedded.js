@@ -45,6 +45,24 @@ function ready() {
 	  // return this.nextAll(sel).length !== 0;
 	}
 
+	function flashMessage(message, type) {
+		type = type || 'success';
+
+		if ($('.flash-message').length === 0) {
+			$('body').append('<div class="flash-message '+type+'">'+message+'</div>');
+		} else {
+			$('.flash-message').removeClass('success error');
+			$('.flash-message').text(message);
+			$('.flash-message').addClass(type);
+		}
+
+		$('.flash-message').addClass('active');
+
+		setTimeout(function() {
+			$('.flash-message').removeClass('active');
+		}, 4000);
+	}
+
 	function checkVisible(elm) {
 	  var rect = elm.getBoundingClientRect();
 	  var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
@@ -241,8 +259,6 @@ function ready() {
 			max_bound = total - 1;
 		}
 
-		console.log(min_bound, max_bound);
-
 		$('.select-sim-dropdown.'+resource+' + .arrow-navigation button').removeClass('disabled');
 		if (page === 1) {
 			$('.select-sim-dropdown.'+resource+' + .arrow-navigation .icon-prev').addClass('disabled');
@@ -425,15 +441,14 @@ function ready() {
     }
     // time to provide feedback 
 
-	  if ( $(this).data('remotipartSubmitted') ) {
-
-	  }
+	  flashMessage('Product was successfully saved');
 	});
 
 	$('form.ajax').bind("ajax:error", function(event, error){
   	console.log(event, error);
 
   	$('.variant_input').prop('disabled', false);
+  	flashMessage('Product was not saved', 'error');
 	});
 
 	// submit single variant
@@ -444,8 +459,6 @@ function ready() {
 		data = $('form.ajax').serialize();
 		$('form.ajax [name]:not(.variant_input)').prop('disabled', false);
 
-		console.log(data);
-
 		// submit form with AJAX
     $.ajax({
       type: "POST",
@@ -454,6 +467,7 @@ function ready() {
       dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
     }).success(function(variant) {
       console.log("success variant", variant);
+      flashMessage('Variant has been updated successfully.');
       $('[data-object*="'+variant.id+'"]').data('object', variant);
       $('#variants_'+variant.id+'_option1').val();
       $('#variants_'+variant.id+'_option2').val();
@@ -468,7 +482,7 @@ function ready() {
       // time to provide feedback 
     }).error(function(e) {
     	console.log(e);
-
+    	flashMessage('Variant failed to update successfully.', 'error');
     	$('form.ajax [name]:not(.variant_input)').prop('disabled', false);
     });
 		return false; // prevents normal behaviour
@@ -480,7 +494,7 @@ function ready() {
 
 		var image = $(this).data('image');
 		var variant = $(this).data('object');
-		var metafields = $(this).data('metafields');
+		// var metafields = $(this).data('metafields');
 
 		$('.variant-image').remove();
 		if (image) {
@@ -501,27 +515,42 @@ function ready() {
 					match = nameRegexp.exec(variantName),
 					oldId = match[1],
 					oldKey = match[2],
-					hsc;
+					hsc,
+					$this = $(this);
 
 			if (variant.hasOwnProperty(oldKey)) {
 				$(this).attr('name', variantName.replace(oldId, variant.id));
 				$(this).val(variant[oldKey]);
 				if (variantId) $(this).attr('id', variantId.replace(oldId, variant.id));
 			} else {
-				hsc = metafields.filter(function(m) {
-				  return m.key === 'harmonized_system_code';
-				})[0];
 
-				if (hsc) {
-					$(this).val(hsc.value);
-					$(this).attr('name', 'variants['+variant.id+']metafields['+hsc.id+'][value]');
-					$(this).attr('id', 'variants_'+variant.id+'_metafields_'+hsc.id+'_value');
-				} else {
-					$(this).val('');
-					$(this).before('<input value="harmonized_system_code" class="new_hsc_name variant_input" type="hidden" name="variants['+variant.id+']new_metafields[][name]" id="variants_'+variant.id+'_new_metafields__name">');
-					$(this).attr('name', 'variants['+variant.id+']new_metafields[][value]');
-					$(this).attr('id', 'variants_'+variant.id+'_new_metafields__value');
-				}
+				$.ajax({
+		      type: "GET",
+		      url: '/variant-hsc', //sumbits it to the given url of the form
+		      data: {
+		      	variant_id: variant.id
+		      },
+		      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+		    }).success(function(hsc) {
+		    	console.log(hsc);
+
+				// hsc = metafields.filter(function(m) {
+				//   return m.key === 'harmonized_system_code';
+				// })[0];
+
+					if (hsc) {
+						$this.val(hsc.value);
+						$this.attr('name', 'variants['+variant.id+']metafields['+hsc.id+'][value]');
+						$this.attr('id', 'variants_'+variant.id+'_metafields_'+hsc.id+'_value');
+					} else {
+						$this.val('');
+						$this.before('<input value="harmonized_system_code" class="new_hsc_name variant_input" type="hidden" name="variants['+variant.id+']new_metafields[][name]" id="variants_'+variant.id+'_new_metafields__name">');
+						$this.attr('name', 'variants['+variant.id+']new_metafields[][value]');
+						$this.attr('id', 'variants_'+variant.id+'_new_metafields__value');
+					}
+		    }).error(function(error) {
+		    	console.log(error);
+		    });
 			}
 		});
 	});
@@ -765,6 +794,8 @@ function ready() {
       }
   	});
 		
+		flashMessage('Image(s) Added');
+
 		variant_image_page = dataPageTotal;
 		changeVariantImagePage(variant_image_page);
 		closeModal($('#addImageUrlOverlay'));
@@ -850,12 +881,10 @@ function ready() {
 
 			if (!$(this).hasClass('dragging')) {
 				if ($(this).isAfter($dragSrcEl)) {
-					console.log('after?');
 					$(this).after($dragSrcEl);
 					return;
-				} 
+				}
 				if ($(this).isBefore($dragSrcEl)) {
-					console.log('before?');
 					$(this).before($dragSrcEl);
 				}
 			}
@@ -896,8 +925,10 @@ function ready() {
 		      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
 		    }).success(function(images) {
 		    	console.log(images);
+		    	flashMessage('Image order has been saved.');
 		    }).error(function(error) {
 		    	console.log(error);
+		    	flashMessage('Image order failed to save.', 'error');
 		    });
 		  }
 		}
@@ -959,9 +990,11 @@ function ready() {
       dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
     }).success(function(alt_tag_metafield) {
     	console.log(alt_tag_metafield);
+    	flashMessage('The image has been updated.');
     	closeModal($('#editAltTagOverlay'));
     }).error(function(error) {
     	console.log(error);
+    	flashMessage('The image failed to update.');
     });
 	});
 
@@ -985,6 +1018,7 @@ function ready() {
 		      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
 		    }).success(function(image) {
 		    	console.log(image);
+		    	flashMessage('The image has been deleted.');
 		    	$('.variant .variant_image[data-image-id="'+image.id+'"]').prepend('<i class="icon-image"></i>').find('img').remove();
 		    	$('.variant .variant_image[data-image-id="'+image.id+'"]').each(function() {
 		    		$(this).closest('.variant').find('.edit_single_variant').data('image', null);
@@ -998,6 +1032,7 @@ function ready() {
 		    	});
 		    }).error(function(e) {
 		    	console.log(e);
+		    	flashMessage('The image failed to be deleted.', 'error');
 		    });
 			}
 		},

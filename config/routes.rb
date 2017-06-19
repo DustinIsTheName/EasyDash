@@ -31,6 +31,7 @@ Rails.application.routes.draw do
     post '/delete-image' => :delete_image
     get '/alt-tag' => :get_alt_tag
     post '/alt-tag' => :edit_alt_tag
+    get '/variant-hsc' => :get_variant_hsc
   end
   
   # The priority is based upon order of creation: first created -> highest priority.
