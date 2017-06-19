@@ -322,6 +322,32 @@ class API
     product
   end
 
+  def self.addImageFromURL(params)
+    product = ShopifyAPI::Product.find(params[:id])
+    if params[:src]
+      product.images << ShopifyAPI::Image.new(src: params[:src])
+      if product.save
+        puts Colorize.green('image created')
+      end
+    end
+
+    product
+  end
+
+  def self.changeImageOrder(params)
+    product = ShopifyAPI::Product.find(params[:id])
+    product.images.each_with_index do |image, index|
+      puts Colorize.cyan(image.id)
+      puts Colorize.orange(params["image_orders"][image.id])
+      product.images[index].position = params["image_orders"][image.id.to_s]
+    end
+    if product.save
+      puts Colorize.green('images saved')
+    end
+
+    product
+  end
+
   def self.deleteImage(params)
     image = ShopifyAPI::Image.find(params[:image_id], params: {product_id: params[:product_id]})
     image.destroy

@@ -68,6 +68,18 @@ class UnembeddedController < ApplicationController
     render json: product.images
   end
 
+  def add_image_from_url
+    puts Colorize.magenta(params)
+    product = API.addImageFromURL(params)
+    render json: product.images
+  end
+
+  def change_image_order
+    puts Colorize.magenta(params)
+    product = API.changeImageOrder(params)
+    render json: product.images
+  end
+
   def delete_image
     puts Colorize.magenta(params)
     image = API.deleteImage(params)

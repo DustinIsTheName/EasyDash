@@ -36,6 +36,15 @@ function ready() {
   	dataType: 'json'
 	});
 
+	$.fn.isAfter = function(sel){
+		return this.index() > sel.index();
+	  // return this.prevAll(sel).length !== 0;
+	}
+	$.fn.isBefore= function(sel){
+		return this.index() < sel.index();
+	  // return this.nextAll(sel).length !== 0;
+	}
+
 	function checkVisible(elm) {
 	  var rect = elm.getBoundingClientRect();
 	  var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
@@ -98,6 +107,22 @@ function ready() {
 
 		$('body').append($confirmBox);
 	}
+
+	function closeModal($overlay) {
+		$overlay.removeClass('open');
+	}
+
+	$('.editModalOverlay').click(function() {
+		closeModal($(this));
+	});
+
+	$('.editModal .cancel').click(function() {
+		closeModal($(this).closest('.editModalOverlay'));
+	});
+
+	$('.editModal').click(function(e) {
+		e.stopPropagation();
+	});
 
 	$('.select-sim').click(function(event) {
 
@@ -384,37 +409,9 @@ function ready() {
 		e.stopPropagation();
 	});
 
-	// $('form.ajax').submit(function(e) {
-	// 	e.preventDefault();
-	// });
-
 	// submit form with AJAX
 	$('#save_resource').click(function() {
 		$('form.ajax').submit();
-		// $('.variant_input').prop('disabled', true);
-
-  //   var valuesToSubmit = $('form.ajax').serialize();
-  //   $.ajax({
-  //     type: "POST",
-  //     url: $('form.ajax').attr('action'), //sumbits it to the given url of the form
-  //     data: valuesToSubmit,
-  //     dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
-  //   }).success(function(product){
-  //   	var variant;
-  //     console.log("success product", product);
-  //     $('.variant_input').prop('disabled', false);
-
-  //     for (var i = 0; i < product.variants.length; i++) {
-  //     	variant = product.variants[i];
-  //     	$('#variant_id_'+variant.id+' .edit_single_variant').data('object', variant);
-  //     }
-  //     // time to provide feedback 
-  //   }).error(function(e) {
-  //   	console.log(e);
-
-  //   	$('.variant_input').prop('disabled', false);
-  //   });
-  //   return false; // prevents normal behaviour
 	});
 
 	$('form.ajax').bind("ajax:success", function(event, product){
@@ -605,7 +602,7 @@ function ready() {
 			$('#editVariantImage .icon-prev').removeClass('disabled');
 		}
 
-		if (page >= Math.floor($('.variant-select-image-label').length/10)) {
+		if (page >= Math.floor(($('.variant-select-image-label').length-1)/10)) {
 			$('#editVariantImage .icon-next').addClass('disabled');
 		} else {
 			$('#editVariantImage .icon-next').removeClass('disabled');
@@ -614,15 +611,6 @@ function ready() {
 		$('.variant-select-image-label').hide();
 		$('.variant-select-image-label[data-page="'+page+'"]').show();
 	}
-
-	function closeVariantImage() {
-		$('#editVariantImageOverlay').removeClass('open');
-	}
-
-	$('#editVariantImageOverlay').click(closeVariantImage);
-	$('#editVariantImage').click(function(e) {
-		e.stopPropagation();
-	});
 
 	$('#editVariantImage .icon-prev').click(function() {
 		if (!$(this).hasClass('disabled')) {
@@ -697,11 +685,11 @@ function ready() {
       },
       dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
     }).success(function(image) {
-    	closeVariantImage();
-    	console.log(image)
+    	closeModal($('#editVariantImageOverlay'));
+    	console.log(image);
 
     	$('.image_box .variant_image').data('image-id', image.id);
-    	$('#variant_id_'+variant_id+' .variant_image').data('image-id', image.id);
+    	$('#variant_id_'+variant_id+' .variant_image').data('image-id', image.id).attr('data-image-id', image.id);
     	$('#variant_id_'+variant_id+' .edit_single_variant').data('image', image.src);
     	var variant_object = $('#variant_id_'+variant_id+' .edit_single_variant').data('object');
     	variant_object.image_id = image.id;
@@ -726,8 +714,6 @@ function ready() {
 		$('.link_label[for="shopify_api_product_file"]').click();
 	});
 
-	$('#editVariantImage .cancel').click(closeVariantImage);
-
 	$('.variant_image').click(function(e) {
 		e.preventDefault();
 		$parent = $(this).parent().parent();
@@ -737,23 +723,70 @@ function ready() {
 		}
 	});
 
+	$('#addImageUrlLink').click(function(e) {
+		e.preventDefault();
+
+		$('#addImageUrlOverlay').addClass('open');
+	});
+
+	function addImagesCallback(images) {
+  	$('#shopify_api_product_file').val('');
+  	console.log(images);
+  	var dataPageTotal = Math.floor(($('.variant-select-image-label').length-1)/10);
+  	var variantIdRegex = $('.variant-select-image').attr('name').match(/[0-9]{11}/);
+  	var variantId = '';
+  	if (variantIdRegex) {variantId = variantIdRegex[0]}
+
+  	images.forEach(function(image, index) {
+    	var image_html = '';
+    	var variant_image_html = '';
+  		image_html += '<div class="product-image" data-id="'+image.id+'" draggable="true">';
+      	image_html += '<img src="'+image.src+'">';
+        image_html += '<div class="overlay">';
+          image_html += '<div class="icons-container">';
+            image_html += '<i class="image icon-preview next-icon--size-16"></i>';
+            image_html += '<i class="next-icon--size-16 alt-tag">ALT</i>';
+            image_html += '<i class="image icon-trash next-icon--size-16"></i>';
+          image_html += '</div>';
+        image_html += '</div>';
+      image_html += '</div>';
+
+      variant_image_html += '<input type="radio" id="variant-select-image-'+image.id+'" class="variant-select-image" name="variants['+variantId+'][image_id]" value="'+image.id+'">';
+      variant_image_html += '<label for="variant-select-image-'+image.id+'" class="variant-select-image-label" data-page="'+Math.floor(index/10)+'" style="display: flex;">';
+        variant_image_html += '<img src="'+image.src+'">';
+      variant_image_html += '</label>';
+
+      if ($('.product-image[data-id="'+image.id+'"]').length === 0) {
+        $('.images-container').append(image_html);
+      }
+
+      if ($('#variant-select-image-'+image.id+'').length === 0) {
+      	$('#editVariantImage .card-section:eq(1)').append(variant_image_html);
+      }
+  	});
+		
+		variant_image_page = dataPageTotal;
+		changeVariantImagePage(variant_image_page);
+		closeModal($('#addImageUrlOverlay'));
+  }
+
 	$('#shopify_api_product_file').change(function() {
 		var data = [];
 		var files = Array.from(this.files);
 		console.log(files);
 
 		function getBase64(file, total_files, callback) {
-	   var reader = new FileReader();
-	   reader.readAsDataURL(file);
-	   reader.onload = function () {
-	    data.push(reader.result.replace(/data:image\/[a-z]{3,4};base64,/, ''));
-	    if (data.length === total_files) {
-	    	callback(data);
-	    }
-	   };
-	   reader.onerror = function (error) {
-	     console.log('Error: ', error);
-	   };
+	  	var reader = new FileReader();
+	  	reader.readAsDataURL(file);
+	  	reader.onload = function () {
+	    	data.push(reader.result.replace(/data:image\/[a-z]{3,4};base64,/, ''));
+	    	if (data.length === total_files) {
+	    		callback(data);
+	    	}
+	  	};
+	  	reader.onerror = function (error) {
+	  		console.log('Error: ', error);
+	  	};
 		}
 
 		files.forEach(function(file) {
@@ -766,57 +799,119 @@ function ready() {
 		      	images: data
 		      },
 		      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
-		    }).success(function(images) {
-		    	console.log(images);
-		    	var dataPageTotal = Math.floor($('.variant-select-image-label').length/10);
-		    	var variantIdRegex = $('.variant-select-image').attr('name').match(/[0-9]{11}/);
-		    	var variantId = '';
-		    	if (variantIdRegex) {variantId = variantIdRegex[0]}
-
-		    	images.forEach(function(image, index) {
-			    	var image_html = '';
-			    	var variant_image_html = '';
-		    		image_html += '<div class="product-image" data-id="'+image.id+'">';
-            	image_html += '<img src="'+image.src+'">';
-              image_html += '<div class="overlay">';
-	              image_html += '<div class="icons-container">';
-		              image_html += '<i class="image icon-preview next-icon--size-16"></i>';
-		              image_html += '<i class="next-icon--size-16 alt-tag">ALT</i>';
-		              image_html += '<i class="image icon-trash next-icon--size-16"></i>';
-	              image_html += '</div>';
-	            image_html += '</div>';
-	          image_html += '</div>';
-
-	          variant_image_html += '<input type="radio" id="variant-select-image-'+image.id+'" class="variant-select-image" name="variants['+variantId+'][image_id]" value="'+image.id+'">';
-	          variant_image_html += '<label for="variant-select-image-'+image.id+'" class="variant-select-image-label" data-page="'+Math.floor(index/10)+'" style="display: flex;">';
-	            variant_image_html += '<img src="'+image.src+'">';
-	          variant_image_html += '</label>';
-
-	          if ($('.product-image[data-id="'+image.id+'"]').length === 0) {
-		          $('.images-container').append(image_html);
-		        }
-
-		        if ($('#variant-select-image-'+image.id+'').length === 0) {
-		        	$('#editVariantImage .card-section:eq(1)').append(variant_image_html);
-		        }
-		    	});
-					
-					variant_image_page = dataPageTotal;
-					changeVariantImagePage(variant_image_page);
-
-		    }).error(function(e) {
+		    }).success(addImagesCallback).error(function(e) {
 		    	console.log(e);
 		    });
 			});
 		});
-
 	});
+
+	$('#add-image-from-url').click(function() {
+		$.ajax({
+      type: "POST",
+      url: '/add-image-from-url', // sumbits it to the given url of the form
+      data: {
+      	id: $('[name="id"]').val(),
+      	src: $('#addImageUrlInput').val()
+      },
+      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+    }).success(addImagesCallback).error(function(error) {
+    	console.log(error);
+    });
+	});
+
+	var dragCounter = 0;
+	var $dragSrcEl = null;
+	var $dragIcon;
+
+	$('.images-container').on({
+		dragstart: function(e) {
+			$dragSrcEl = $(this); // set original element
+			e.originalEvent.dataTransfer.effectAllowed = 'move';
+			e.originalEvent.dataTransfer.setData('text/html', $dragSrcEl);
+
+			$dragIcon = $dragSrcEl.clone(); // copy original element for ghost image
+			$dragIcon.addClass('ghostImage').find('.overlay').remove();
+			if ($dragSrcEl.index() === 0) {$dragIcon.addClass('first')} // for proper width
+			$('.images-container').append($dragIcon);
+			e.originalEvent.dataTransfer.setDragImage($dragIcon[0], e.offsetX, e.offsetY);
+
+			$dragSrcEl.addClass('dragging'); // edit original after it's already been cloned
+		},
+		dragenter: function(e) {
+			e.preventDefault();
+			dragCounter++; // needed to account for child elements
+			$('.product-image').removeClass('over');
+			$(this).addClass('over');
+		},
+		dragover: function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+
+			if (!$(this).hasClass('dragging')) {
+				if ($(this).isAfter($dragSrcEl)) {
+					console.log('after?');
+					$(this).after($dragSrcEl);
+					return;
+				} 
+				if ($(this).isBefore($dragSrcEl)) {
+					console.log('before?');
+					$(this).before($dragSrcEl);
+				}
+			}
+		},
+		dragleave: function(e) {
+			dragCounter--; // needed to account for child elements
+			if (dragCounter === 0) {
+				$(this).removeClass('over');
+			}
+		},
+		dragend: function() {
+			$(this).removeClass('dragging');
+			$dragSrcEl.show();
+			$dragIcon.remove();
+		},
+		drop: function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+
+			$('.images-container .product-image').removeClass('over');
+			dragCounter = 0;
+
+		  // Don't do anything if dropping the same item we're dragging.
+		  if ($dragSrcEl != $(this)) {
+		  	var imageOrders = {};
+
+		  	$('.images-container .product-image:not(.ghostImage)').each(function(index, element) {
+		  		imageOrders[$(element).data('id')] = index;
+		  	});
+
+				$.ajax({
+		      type: "POST",
+		      url: '/change-image-order', // sumbits it to the given url of the form
+		      data: {
+		      	id: $('[name="id"]').val(),
+		      	image_orders: imageOrders
+		      },
+		      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+		    }).success(function(images) {
+		    	console.log(images);
+		    }).error(function(error) {
+		    	console.log(error);
+		    });
+		  }
+		}
+	}, '.product-image');
 
 	$('.images-container').on('click', '.icon-preview', function() {
 		var image = $(this).parent().parent().prev().attr('src');
 
 		$('#image-preview').attr('src', image);
 		$('#previewOverlay').addClass('open');
+	});
+
+	$('#preview').click(function(e) {
+		e.stopPropagation();
 	});
 
 	$('.images-container').on('click', '.alt-tag', function() {
@@ -864,18 +959,11 @@ function ready() {
       dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
     }).success(function(alt_tag_metafield) {
     	console.log(alt_tag_metafield);
-    	closeAltTag();
+    	closeModal($('#editAltTagOverlay'));
     }).error(function(error) {
     	console.log(error);
     });
 	});
-
-	function closeAltTag() {
-		$('#editAltTagOverlay').removeClass('open');
-	}
-
-	$('#editAltTagOverlay').click(closeAltTag);
-	$('#editAltTag .cancel').click(closeAltTag);
 
 	$('#editAltTag').click(function(e) {
 		e.stopPropagation();
@@ -897,6 +985,10 @@ function ready() {
 		      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
 		    }).success(function(image) {
 		    	console.log(image);
+		    	$('.variant .variant_image[data-image-id="'+image.id+'"]').prepend('<i class="icon-image"></i>').find('img').remove();
+		    	$('.variant .variant_image[data-image-id="'+image.id+'"]').each(function() {
+		    		$(this).closest('.variant').find('.edit_single_variant').data('image', null);
+		    	});
 
 		    	$('.product-image[data-id="'+image.id+'"]').remove();
 		    	$('#variant-select-image-'+image.id).remove();
