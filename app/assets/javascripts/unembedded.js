@@ -431,6 +431,9 @@ function ready() {
 	});
 
 	$('form.ajax').bind("ajax:success", function(event, product){
+		if (product.created_new_variants) {
+			location.reload();
+		}
   	var variant;
     console.log("success product", product);
     $('.variant_input').prop('disabled', false);
@@ -488,6 +491,19 @@ function ready() {
 		return false; // prevents normal behaviour
 	});
 
+	$('.warning.btn_bottom.variant').click(function(e) {
+		e.preventDefault();
+		var id = $(this).data('id');
+		var resource_title = $(this).data('title');
+
+		confirmBox('Delete '+resource_title+'?', 'Are you sure you want to delete the variant '+resource_title+'? This action cannot be reversed.', 'Delete', {
+			yes: function() {
+				window.location.href = url;
+			}
+		});
+	});
+	// Your variant has been deleted
+
 	// edit single variant
 	$('.edit_single_variant').click(function(e) {
 		e.preventDefault();
@@ -505,6 +521,8 @@ function ready() {
 			$('.image_box .variant_image').data('image-id', '');
 			$('.image_box').prepend('<div class="column twelve type--centered no_margin variant-image"><i class="image icon-image next-icon--size-80"></i><h5>Choose image</h5></div>');
 		}
+
+		$('.warning.btn_bottom.variant').data('id', variant.id).data('title', variant.title);
 
 		$('.new_hsc_name').remove();
 
@@ -533,10 +551,6 @@ function ready() {
 		      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
 		    }).success(function(hsc) {
 		    	console.log(hsc);
-
-				// hsc = metafields.filter(function(m) {
-				//   return m.key === 'harmonized_system_code';
-				// })[0];
 
 					if (hsc) {
 						$this.val(hsc.value);
@@ -591,9 +605,18 @@ function ready() {
 
 	$('.responsive-dropdown-items a').click(function(e) {
 		e.preventDefault();
-
-		var width = $(this).data('width');
-		var height = $(this).data('height');
+		if ($(this).hasClass('rotate')) {
+			if (!$('.responsive-dropdown-items a.active').hasClass('desktop')) {
+				$('.responsive-dropdown-items a.active').toggleClass('rotated');
+				var width = $('#dashboard-iframe').attr('style').match(/height: ([0-9]{0,4}).{1,}/)[1];
+				var height = $('#dashboard-iframe').attr('style').match(/width: ([0-9]{0,4}).{1,}/)[1];
+			}
+		} else {
+			$('.responsive-dropdown-items a').removeClass('active rotated');
+			$(this).addClass('active');
+			var width = $(this).data('width');
+			var height = $(this).data('height');
+		}
 
 		$('#dashboard-iframe').width(width).height(height);
 	});
@@ -1042,12 +1065,12 @@ function ready() {
 		});
 	});
 
-	$('.warning.btn_bottom').click(function(e) {
+	$('.warning.btn_bottom.product').click(function(e) {
 		e.preventDefault();
 		var resource_title = $(this).data('resource');
 		var url = $(this).find('a').attr('href');
 
-		confirmBox('Delete '+resource_title+'?', 'Are you sure you want to delete '+resource_title+'? This action cannot be reversed.', 'Delete', {
+		confirmBox('Delete '+resource_title+'?', 'Are you sure you want to delete the '+resource_title+'? This action cannot be reversed.', 'Delete', {
 			yes: function() {
 				window.location.href = url;
 			}

@@ -30,15 +30,37 @@
   	}
 
   	.wittyEDOpenButton {
-	    background: rgba(49, 55, 61, 0.4);
-	    width: 75px;
-	    height: 60px;
-	    padding: 20px;
+			background: #EBEEF0;
+	    width: 25px;
+	    height: 40px;
+	    margin-top: -20px;
+	    padding: 0;
 	    cursor: pointer;
-			z-index: 9;
+	    z-index: 9;
 	    position: relative;
 	    box-sizing: border-box;
+	    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.12);
+	    clip: rect(-3px, 30px, 45px, 0);
+	    border-radius: 0 3px 3px 0;
+	    position: fixed;
+	    top: 50%;
+	    left: 0;
+	    transition: .5s left ease-in-out;
   	}
+
+  	.wittyEDOpenButton.open {
+	    left: 300px;
+	  }
+
+  	.wittyEDOpenButton #svg_icon_dashboard {
+    	fill: #fff;
+	    width: 16px;
+	    height: 16px;
+	    position: absolute;
+	    top: 12px;
+	    left: 5px;
+	    margin: 0;
+	  }
 
   	.slide-out {
   		background: rgba(49, 55, 61, 0.4);
@@ -50,7 +72,11 @@
   	}
 
     .wittyEDOpenButton .svg_dark {
-    	fill: #fff;
+    	fill: #31373d;
+    }
+
+    .wittyEDOpenButton .svg_dark + .svg_dark {
+    	fill: #00a79d;
     }
 
     #wittyEDselectWindow {
@@ -58,16 +84,18 @@
 	    position: absolute;
 	    top: 0;
 	    left: 0;
-	    width: 75px;
-	    height: 60px;
-	    opacity: 0;
-	    transition: .5s width, .5s height;
+	    width: 300px;
+	    max-width: 0;
+	    height: 100vh;
+	    background: #EBEEF0;
+	    box-shadow: 1px 0 5px rgba(0, 0, 0, 0.12);
+	    transition: .5s max-width ease-in-out;
     }
 
     .wittyEDOpenButton.open ~ #wittyEDselectWindow {
     	opacity: 1;
-    	width: 300px;
-	    height: 548px;
+    	max-width: 300px;
+	    height: 100vh;
       z-index: 7;
     }
   </style>

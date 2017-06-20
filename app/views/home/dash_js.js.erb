@@ -33,17 +33,14 @@
       var top = $('html').css('padding-top');
       $('.wittyEDContainer').css('top', top);
 
-      $('.wittyEDOpenButton').mouseenter(function() {
-      	$(this).addClass('open');
+      $('.wittyEDOpenButton').click(function() {
+      	$(this).toggleClass('open');
       });
 
       // $('.wittyEDContainer').mouseleave(function() {
       // 	$('.wittyEDOpenButton').removeClass('open');
       // });
     }
-
-    
-
 
 	}; // myAppJavaScript() ends here; ALL CUSTOM JS IS TO BE WITHIN THIS FUNCTION!
 

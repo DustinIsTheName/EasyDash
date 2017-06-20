@@ -1,6 +1,7 @@
 class API
 
 	def self.updateProduct(params)
+    created_new_variants = false
     case params[:resource]
     when 'blog'
     when 'collection'
@@ -185,9 +186,12 @@ class API
           @product.save
           puts Colorize.orange(ShopifyAPI.credit_left)
         end
+
+        created_new_variants = true
       end
 
     end
+    @product.created_new_variants = created_new_variants;
 
     @product
 	end
@@ -296,6 +300,8 @@ class API
       resource = ShopifyAPI::Page.find(params[:id])
     when 'blog'
       resource = ShopifyAPI::Article.find(params[:id])
+    when 'variant'
+      resource = ShopifyAPI::Variant.find(params[:id])
     end
     if resource
       resource.destroy
@@ -340,7 +346,7 @@ class API
       product.images[index].position = params["image_orders"][image.id.to_s]
     end
     if product.save
-      puts Colorize.green('images saved')
+      puts Colorize.green('image order saved')
     end
 
     product
