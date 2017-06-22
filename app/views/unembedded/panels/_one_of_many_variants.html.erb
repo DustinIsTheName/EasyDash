@@ -60,9 +60,7 @@
   <%= render partial: 'unembedded/panels/common_variant_fields', locals: {v: v, additional_class: 'variant_input'} %>
   
 <% end %>
-<div class="wittyEDBottomButtons"> 
+<div class="wittyEDBottomButtons">
   <!-- <button class="secondary red btn_bottom">Delete variant</button> -->
-  <button class="warning btn_bottom variant">Delete variant</button>  
-
-  <button class="single_variant_submit">Save Variant</button>
+  <button type="button" data-title="<%= @resource.variants.first.title %>" data-resource="variant" data-id="<%= @resource.variants.first.id %>" class="warning btn_bottom variant-delete">Delete variant</button>  
 </div>  

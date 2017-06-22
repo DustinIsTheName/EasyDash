@@ -89,8 +89,8 @@
               </div>
             </div>
             <div class="buttons">
-              <button class="sidebyside_85 primary next-pannel edit_single_variant" data-image="<%= if variant.image_id then @resource.images.select{ |i| i.id == variant.image_id }.first.src end %>" data-object="<%= variant.to_json %>">Edit variant</button>
-              <button class="sidebyside_15 warning icon-trash tip" data-hover="Delete Variant"></button>
+              <button type="button" class="sidebyside_85 primary next-pannel edit_single_variant" data-image="<%= if variant.image_id then @resource.images.select{ |i| i.id == variant.image_id }.first.src end %>" data-object="<%= variant.to_json %>">Edit variant</button>
+              <button type="button" class="sidebyside_15 warning icon-trash tip variant-delete" data-title="<%= variant.title %>" data-resource="variant" data-id="<%= variant.id %>" data-hover="Delete Variant"></button>
             </div>
           </div>
         <% end %>

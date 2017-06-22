@@ -109,7 +109,12 @@
         </div>
 
         <div class="row no_margin">
-          <label for="shopify_api_product_handle">URL and handle</label>
+          <label class="seo-handle" for="shopify_api_product_handle">URL and handle
+            <span class="info-icon tooltip">
+              i
+              <span class="tooltiptext">https://<%= @shop_session.url %>/products/<%= @resource.handle %></span>
+            </span>
+          </label>
           <%= o.text_field :handle %>
         </div>
       </div>

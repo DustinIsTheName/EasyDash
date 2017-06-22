@@ -108,7 +108,7 @@ function ready() {
 					.append($('<div>', {"class": "card has-sections"})
 						.append(
 							$('<div>', {"class": 'card-section'}).append('<h3>'+confirmHeader+'</h3>')
-							.append('<button class="btn btn--link close-modal" type="button" name="button">Close modal</button>').click(deny_function)
+							.append($('<button class="btn btn--link close-modal" type="button" name="button">Close modal</button>').click(deny_function))
 						).append('<hr>').append(
 							$('<div>', {"class": 'card-section'}).append('<p>'+confirmText+'</p>')
 						).append('<hr>').append(
@@ -147,22 +147,22 @@ function ready() {
 		$('.select-sim').not(this).removeClass('active');
 		$(this).toggleClass('active');
 
-		if (!checkVisible(this.nextElementSibling)) {
-			$(this).toggleClass('reverse');
-			while (!checkVisible(this.nextElementSibling)) {
-				$(this.nextElementSibling).addClass('no-arrow');
+		// if (!checkVisible(this.nextElementSibling)) {
+		// 	$(this).toggleClass('reverse');
+		// 	while (!checkVisible(this.nextElementSibling)) {
+		// 		$(this.nextElementSibling).addClass('no-arrow');
 
-				if ($(this).hasClass('reverse')) {
-					console.log(bottom);
-					var bottom = parseInt($(this.nextElementSibling).css('bottom'));
-					$(this.nextElementSibling).css({'bottom': bottom - 10, 'top': 'auto'});
-				} else {
-					console.log(top);
-					var top = parseInt($(this.nextElementSibling).css('top'));
-					$(this.nextElementSibling).css({'top': top + 10, 'bottom': 'auto'});
-				}
-			}
-		}
+		// 		if ($(this).hasClass('reverse')) {
+		// 			console.log(bottom);
+		// 			var bottom = parseInt($(this.nextElementSibling).css('bottom'));
+		// 			$(this.nextElementSibling).css({'bottom': bottom - 10, 'top': 'auto'});
+		// 		} else {
+		// 			console.log(top);
+		// 			var top = parseInt($(this.nextElementSibling).css('top'));
+		// 			$(this.nextElementSibling).css({'top': top + 10, 'bottom': 'auto'});
+		// 		}
+		// 	}
+		// }
 
 		event.stopPropagation();
 	});
@@ -196,6 +196,8 @@ function ready() {
 	}
       
 	function deleteResource(params) {
+		params.$this.addClass('is-loading');
+
 		$.ajax({
 			type: "POST",
 			url: '/dashboard-delete',
@@ -214,6 +216,7 @@ function ready() {
 	$('.select-sim-dropdown').on('click', '.icon-trash', function() {
 		var resource = $(this).data('resource');
 		var id = $(this).data('id');
+		var $this = $(this);
 		var index_of_id;
 		var resource_title = $(this).next().text();
 
@@ -222,6 +225,7 @@ function ready() {
 		}, {
 			id: id,
 			resource: resource,
+			$this: $this,
 			callback: function(deleted_resource) {
 				console.log(deleted_resource);
 				if (deleted_resource) {
@@ -427,6 +431,7 @@ function ready() {
 
 	// submit form with AJAX
 	$('#save_resource').click(function() {
+		$(this).addClass('is-loading');
 		$('form.ajax').submit();
 	});
 
@@ -443,7 +448,7 @@ function ready() {
     	$('#variant_id_'+variant.id+' .edit_single_variant').data('object', variant);
     }
     // time to provide feedback 
-
+    $('#save_resource').removeClass('is-loading');
 	  flashMessage('Product was successfully saved');
 	});
 
@@ -456,6 +461,7 @@ function ready() {
 
 	// submit single variant
 	$('.single_variant_submit').click(function(e) {
+		$(this).addClass('is-loading');
 		var data;
 
 		$('form.ajax [name]:not(.variant_input)').prop('disabled', true);
@@ -470,15 +476,16 @@ function ready() {
       dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
     }).success(function(variant) {
       console.log("success variant", variant);
+      $('.single_variant_submit').removeClass('is-loading');
       flashMessage('Variant has been updated successfully.');
       $('[data-object*="'+variant.id+'"]').data('object', variant);
-      $('#variants_'+variant.id+'_option1').val();
-      $('#variants_'+variant.id+'_option2').val();
-      $('#variants_'+variant.id+'_option3').val();
-      $('#variants_'+variant.id+'_inventory_quantity').val();
-      $('#variants_'+variant.id+'_compare_at_price').val();
-      $('#variants_'+variant.id+'_price').val();
-      $('#variants_'+variant.id+'_sku').val();
+      $('#variants_'+variant.id+'_option1').val(variant.option1);
+      $('#variants_'+variant.id+'_option2').val(variant.option2);
+      $('#variants_'+variant.id+'_option3').val(variant.option3);
+      $('#variants_'+variant.id+'_inventory_quantity').val(variant.inventory_quantity);
+      $('#variants_'+variant.id+'_compare_at_price').val(variant.compare_at_price);
+      $('#variants_'+variant.id+'_price').val(variant.price);
+      $('#variants_'+variant.id+'_sku').val(variant.sku);
 
       $('form.ajax [name]:not(.variant_input)').prop('disabled', false);
 
@@ -510,7 +517,9 @@ function ready() {
 
 		var image = $(this).data('image');
 		var variant = $(this).data('object');
-		// var metafields = $(this).data('metafields');
+
+		$('#save_resource').hide();
+		$('.single_variant_submit').show();
 
 		$('.variant-image').remove();
 		if (image) {
@@ -522,7 +531,7 @@ function ready() {
 			$('.image_box').prepend('<div class="column twelve type--centered no_margin variant-image"><i class="image icon-image next-icon--size-80"></i><h5>Choose image</h5></div>');
 		}
 
-		$('.warning.btn_bottom.variant').data('id', variant.id).data('title', variant.title);
+		$('.warning.btn_bottom.variant-delete').data('id', variant.id).data('title', variant.title);
 
 		$('.new_hsc_name').remove();
 
@@ -571,7 +580,9 @@ function ready() {
 
 	// pannel navigation
 	$('.prev-pannel').click(function(e) {
-		e.preventDefault();
+		e.preventDefault();		
+		$('#save_resource').show();
+		$('.single_variant_submit').hide();
 		var pannel = $(this).closest('.wittyEDPanel');
 		var tier = parseInt(pannel.data('tier'));
 		pannel.blindRightOut(400, 'swing', function() {
@@ -719,6 +730,7 @@ function ready() {
 	});
 
 	$('.variant-image-save').click(function(e) {
+		$(this).addClass('is-loading');
 		e.preventDefault();
 
 		var variant_id = $('.variant-select-image').attr('name').match(/variants\[([0-9]{11})\]\[image_id\]/)[1],
@@ -747,16 +759,19 @@ function ready() {
     	variant_object.image_id = image.id;
     	$('#variant_id_'+variant_id+' .edit_single_variant').data('object', variant_object);
 
-    	console.log(variant_id);
     	$('.variant-image').remove();
     	$('#variant_id_'+variant_id+' .variant_image *').remove();
     	if (image.id) {
 	    	$('#variant_id_'+variant_id+' .variant_image').prepend('<img src="'+image.src+'">');
 	    	$('.image_box').prepend('<img class="variant-image" src="'+image.src+'">');
+	    	flashMessage('Variant has been updated successfully.');
 	    } else {
 	    	$('#variant_id_'+variant_id+' .variant_image').prepend('<i class="icon-image"></i>');
 	    	$('.image_box').prepend('<div class="column twelve type--centered no_margin variant-image"><i class="image icon-image next-icon--size-80"></i><h5>Choose image</h5></div>');
+	    	flashMessage('Variant image has been removed successfully.');
 	    }
+
+    	$('.variant-image-save').removeClass('is-loading');
     }).error(function(e) {
     	console.log(e);
     });
@@ -817,6 +832,8 @@ function ready() {
       }
   	});
 		
+		$('#variant-add-image').removeClass('is-loading');
+		$('body').removeClass('is-loading-body');
 		flashMessage('Image(s) Added');
 
 		variant_image_page = dataPageTotal;
@@ -828,6 +845,8 @@ function ready() {
 		var data = [];
 		var files = Array.from(this.files);
 		console.log(files);
+		$('#variant-add-image').addClass('is-loading');
+		$('body').addClass('is-loading-body');
 
 		function getBase64(file, total_files, callback) {
 	  	var reader = new FileReader();
@@ -861,6 +880,9 @@ function ready() {
 	});
 
 	$('#add-image-from-url').click(function() {
+		$('#variant-add-image').addClass('is-loading');
+		$('body').addClass('is-loading-body');
+
 		$.ajax({
       type: "POST",
       url: '/add-image-from-url', // sumbits it to the given url of the form
@@ -957,6 +979,12 @@ function ready() {
 		}
 	}, '.product-image');
 
+	$('#shopify_api_product_handle').keyup(function() {
+		var tooltiptext = $('.seo-handle .tooltiptext').text().split('/');
+		tooltiptext[tooltiptext.length - 1] = $(this).val();
+		$('.seo-handle .tooltiptext').text(tooltiptext.join('/'))
+	});
+
 	$('.images-container').on('click', '.icon-preview', function() {
 		var image = $(this).parent().parent().prev().attr('src');
 
@@ -1028,9 +1056,11 @@ function ready() {
 	$('.images-container').on('click', '.image.icon-trash', function() {
 		var product_id = $('[name="id"]').val();
 		var image_id = $(this).closest('.product-image').data('id');
+		var $overlay = $(this).closest('.product-image');
 
 		confirmBox('Delete this image?', 'Are you sure you want to delete this image and remove it from all variants? This action cannot be reversed.', 'Delete', {
 			yes: function(params) {
+				$overlay.addClass('is-loading');
 				$.ajax({
 		      type: "POST",
 		      url: '/delete-image', // sumbits it to the given url of the form
@@ -1041,6 +1071,7 @@ function ready() {
 		      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
 		    }).success(function(image) {
 		    	console.log(image);
+		    	$overlay.addClass('is-loading');
 		    	flashMessage('The image has been deleted.');
 		    	$('.variant .variant_image[data-image-id="'+image.id+'"]').prepend('<i class="icon-image"></i>').find('img').remove();
 		    	$('.variant .variant_image[data-image-id="'+image.id+'"]').each(function() {
@@ -1073,6 +1104,37 @@ function ready() {
 		confirmBox('Delete '+resource_title+'?', 'Are you sure you want to delete the '+resource_title+'? This action cannot be reversed.', 'Delete', {
 			yes: function() {
 				window.location.href = url;
+			}
+		});
+	});
+
+	$('.warning.variant-delete').click(function(e) {
+		e.preventDefault();
+		var resource = $(this).data('resource');
+		var resource_title = $(this).data('title');
+		var resource_id = $(this).data('id');
+		var $this = $(this);
+
+		confirmBox('Delete '+resource_title+'?', 'Are you sure you want to delete the variant '+resource_title+'? This action cannot be reversed.', 'Delete', {
+			yes: deleteResource
+		},
+		{
+			id: resource_id,
+			resource: resource,
+			$this: $this,
+			callback: function(deleted_variant) {
+				console.log(deleted_variant);
+				$('.wittyEDPanel[data-tier="4"]').blindRightOut(400, 'swing', function() {
+					$(this).css({'height': 0, 'opacity': 0});
+				});
+				$('.wittyEDPanel[data-tier="3"]').css({'height': 'auto', 'opacity': 1}).blindLeftIn(400);
+				$('#save_resource').show();
+				$('.single_variant_submit').hide();
+
+				$('#variant_id_'+deleted_variant.id).remove();
+				$('.variant').removeClass('before_variant_open');
+
+				flashMessage('Your variant has been deleted.');
 			}
 		});
 	});
