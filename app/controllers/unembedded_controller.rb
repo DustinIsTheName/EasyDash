@@ -1,4 +1,5 @@
 class UnembeddedController < ApplicationController
+  include UnembeddedHelper
 	before_action :login_again_if_different_shop
   skip_before_filter :verify_authenticity_token, :only => :update_api
   around_filter :shopify_session
@@ -6,6 +7,14 @@ class UnembeddedController < ApplicationController
 
   def quick_select
     get_resources
+  end
+
+  def ajax_get_resources
+    get_resources
+
+    respond_to do |format|
+      format.js { panel "resource_select" }
+    end
   end
 
   def dashboard
@@ -18,7 +27,7 @@ class UnembeddedController < ApplicationController
       @question.valid? # run validations to to populate the errors[]
     else
 
-      get_resources
+      # get_resources
       puts Colorize.cyan(Time.now - t)
       case @type
       when 'blog'
@@ -35,6 +44,8 @@ class UnembeddedController < ApplicationController
         @fulfillment_services = ShopifyAPI::FulfillmentService.find(:all, params: {scope: :all, fields: ['name', 'handle']})
         puts Colorize.cyan(Time.now - t)
         @resource = ShopifyAPI::Product.find(params[:id])
+        puts Colorize.cyan(Time.now - t)
+        @custom_collections = ShopifyAPI::CustomCollection.find(:all, params: {limit: 250, fields: ['title', 'handle', 'id']})
         puts Colorize.cyan(Time.now - t)
         @smart_collections = ShopifyAPI::SmartCollection.find(:all, params: {product_id: params[:id], limit: 250, fields: ['title', 'handle', 'id']})
         puts Colorize.cyan(Time.now - t)

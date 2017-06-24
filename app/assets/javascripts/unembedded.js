@@ -80,6 +80,40 @@ function ready() {
 	General Functions
 	*******************************************/
 
+	function resetResources() {
+		variant_image_page = 0;
+		// JS for the resourse selection
+		resource_infomation = {
+			blogs: $('.select-sim-dropdown.blog').data('object'),
+			collections: $('.select-sim-dropdown.collection').data('object'),
+			smart_collections: $('.select-sim-dropdown.collection').data('smart'),
+			custom_collections: $('.select-sim-dropdown.collection').data('custom'),
+			pages: $('.select-sim-dropdown.page').data('object'),
+			products: $('.select-sim-dropdown.product').data('object'),
+			blog_page: 1,
+			collection_page: 1,
+			page_page: 1,
+			product_page: 1,
+			blog_chunks_loaded: 1,
+			collection_chunks_loaded: 1,
+			page_chunks_loaded: 1,
+			product_chunks_loaded: 1,
+			target: $('#target_attr').data('target'),
+			query: ''
+		}
+
+		console.log(resource_infomation);
+
+		try {
+			resource_infomation.blog_total = resource_infomation.blogs.length;
+			resource_infomation.collection_total = resource_infomation.collections.length;
+			resource_infomation.page_total = resource_infomation.pages.length;
+			resource_infomation.product_total = resource_infomation.products.length;
+		} catch (e) {
+			console.log(e);
+		}
+	}
+
 	function basicError(error) {
 		console.log(error);
   }
@@ -185,6 +219,44 @@ function ready() {
 		$overlay.removeClass('open');
 	}
 
+	function shiftPannelsRight($this) {
+		$('#save_resource').show();
+		$('.single_variant_submit').hide();
+		var pannel = $this.closest('.wittyEDPanel');
+		var tier = parseInt(pannel.data('tier'));
+		pannel.blindRightOut(400, 'swing', function() {
+			$(this).css({'height': 0, 'opacity': 0});
+		});
+		$('.wittyEDPanel[data-tier="'+(tier - 1)+'"]').css({'height': 'auto', 'opacity': 1}).blindLeftIn(400);
+	}
+
+	function shiftPannelsLeft($this) {
+		var pannel = $this.closest('.wittyEDPanel');
+		var tier = parseInt(pannel.data('tier'));
+		pannel.blindLeftOut(400, 'swing', function() {
+			$(this).css({'height': 0, 'opacity': 0});
+		});
+		$('.wittyEDPanel[data-tier="'+(tier + 1)+'"]').css({'height': 'auto', 'opacity': 1}).blindRightIn(400);
+	}
+
+	function loadResouceSelect($this, callback) {
+		if (!$this.hasClass('is-loading')) {
+			$this.addClass('is-loading');
+			$.ajax({
+	      type: "GET",
+	      url: '/ajax-resources', //sumbits it to the given url of the form
+	      dataType: "html" // you want a difference between normal and ajax-calls, and json is standard
+	    }).success(function(html) {
+	    	$('.drop-select-resouces').html(html).data('loaded', true);
+	    	$this.removeClass('is-loading');
+	    	if (typeof callback === 'function') {
+	    		resetResources();
+	    		callback($this);
+	    	}
+	    }).error(basicError);
+	  }
+	}
+
 	/*******************************************
 	Common Events
 	*******************************************/
@@ -201,7 +273,115 @@ function ready() {
 		e.stopPropagation();
 	});
 
-	$('.select-sim').click(function(event) {
+	// pannel navigation
+	$('body').on('click', '.prev-pannel', function(e) {
+		e.preventDefault();
+		if ($(this).hasClass('get-resources') && !$('.drop-select-resouces').data('loaded')) {
+			loadResouceSelect($(this), shiftPannelsRight)
+		} else {
+			shiftPannelsRight($(this));
+		}
+	});
+
+	$('body').on('click', '.next-pannel', function(e) {
+		e.preventDefault();
+		shiftPannelsLeft($(this));
+	});
+
+	// permenatly shows target upon clicking the trigger
+  $('.reveal-trigger').click(function(e) {
+  	e.preventDefault();
+  	var reveal = $(this).data('reveal');
+  	var $this = $(this);
+  	if (reveal === 'seo') {
+    	$this.addClass('is-loading');
+  		$this.off('click');
+			$.ajax({
+	      type: "GET",
+	      url: '/product-seo', //sumbits it to the given url of the form
+	      data: {
+	      	product_id: $('[name="id"]').val()
+	      },
+	      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+	    }).success(function(product_metafields) {
+	    	var new_html = '';
+	    	var description_tag = product_metafields.filter(function(metafield) {
+				  return metafield.key === 'description_tag'
+				})[0];
+				var title_tag = product_metafields.filter(function(metafield) {
+				  return metafield.key === 'title_tag'
+				})[0];
+
+				if (title_tag) {
+          new_html += '<label for="metafields_'+title_tag.id+'_value">Page title</label>';
+          new_html += '<input type="text" value="'+title_tag.value+'" name="metafields['+title_tag.id+'][value]" id="metafields_'+title_tag.id+'_value">';
+					$('.title_tag_container').append(new_html);
+				}	else {
+          new_html += '<input value="title_tag" class="new_field" type="hidden" name="new_metafields[][name]" id="new_metafields__name">';
+          new_html += '<label for="new_field_title">Page title</label>';
+          new_html += '<input class="new_field" id="new_field_title" type="text" name="new_metafields[][value]">';
+					$('.title_tag_container').append(new_html);
+        }
+
+        new_html = '';
+
+				if (description_tag) {
+          new_html += '<label for="metafields_'+description_tag.id+'_value">Page title</label>';
+          new_html += '<textarea type="text" name="metafields['+description_tag.id+'][value]" id="metafields_'+description_tag.id+'_value">'+description_tag.value+'</textarea>';
+					$('.description_tag_container').append(new_html);
+				}	else {
+          new_html += '<input value="description_tag" class="new_field" type="hidden" name="new_metafields[][name]" id="new_metafields__name">';
+          new_html += '<label for="new_field_description">Meta description</label>';
+          new_html += '<textarea class="new_field" id="new_field_description" name="new_metafields[][value]"></textarea>';
+          $('.description_tag_container').append(new_html);
+        }
+
+		  	$this.hide();
+		  	$('.reveal-target[data-reveal="'+reveal+'"]').show(); 
+	    }).error(basicError);
+  	} else {
+	  	$(this).hide();
+	  	$('.reveal-target[data-reveal="'+reveal+'"]').show();  		
+  	}
+  });
+
+	// responsive iframe adjustments
+	$('#responsive-dropdown').click(function() {
+		$('.responsive-dropdown-items-container').toggleClass('active');
+	});
+
+	$(document).click(function() {
+		$('.responsive-dropdown-items-container').removeClass('active');
+	});
+
+	$('.responsive-dropdown-items-container, #responsive-dropdown').click(function(e) {
+		e.stopPropagation();
+	});
+
+	$('.responsive-dropdown-items a').click(function(e) {
+		e.preventDefault();
+		if ($(this).hasClass('rotate')) {
+			if (!$('.responsive-dropdown-items a.active').hasClass('desktop')) {
+				$('.responsive-dropdown-items a.active').toggleClass('rotated');
+				var width = $('#dashboard-iframe').attr('style').match(/height: ([0-9]{0,4}).{1,}/)[1];
+				var height = $('#dashboard-iframe').attr('style').match(/width: ([0-9]{0,4}).{1,}/)[1];
+			}
+		} else {
+			$('.responsive-dropdown-items a').removeClass('active rotated');
+			$(this).addClass('active');
+			var width = $(this).data('width');
+			var height = $(this).data('height');
+		}
+
+		$('#dashboard-iframe').width(width).height(height);
+	});
+
+	$('.wittyEDFullscreenToggle').click(function(e) {
+		e.preventDefault();
+		$('.wittyEDSidebar').toggleClass('closed');
+	});
+
+	$('body').on('click', '.select-sim', function(event) {
 
 		$('.select-sim').not(this).removeClass('active');
 		$(this).toggleClass('active');
@@ -226,7 +406,7 @@ function ready() {
 		event.stopPropagation();
 	});
 
-	$('.select-sim-dropdown-container').click(function(event) {
+	$('body').on('click', '.select-sim-dropdown-container', function(event) {
 		event.stopPropagation();
 	});
 
@@ -234,6 +414,10 @@ function ready() {
 		$('.select-sim').removeClass('active');
 		$('.product-pannel-collection-select').hide();
 	});
+
+	/*******************************************
+	Resource Select functions and events
+	*******************************************/
 
 	function extendResource(resource, page, total) {
 		resource_infomation[resource+'_chunks_loaded']++;
@@ -268,7 +452,7 @@ function ready() {
 		});
 	}
 
-	$('.select-sim-dropdown').on('click', '.icon-trash', function() {
+	$('body').on('click', '.select-sim-dropdown .icon-trash', function() {
 		var resource = $(this).data('resource');
 		var id = $(this).data('id');
 		var $this = $(this);
@@ -382,19 +566,19 @@ function ready() {
 		$('#myshopify_login').val(permanent_domain).closest('#myshopify_login_section').addClass('filled_login');
 	}
 
-	$('.search .icon-next').click(function() {
+	$('body').on('click', '.search .icon-next', function() {
 		if (!$(this).hasClass('disabled')) {
 			pageChangeSetResource($(this), 'next');
 		}
 	});
 
-	$('.search .icon-prev').click(function() {
+	$('body').on('click', '.search .icon-prev', function() {
 		if (!$(this).hasClass('disabled')) {
 			pageChangeSetResource($(this), 'prev');
 		}
 	});
 
-	$('.resource-search').keyup(function() {
+	$('body').on('keyup', '.resource-search', function() {
 		var minimum = 3;
 
 		if ($(this).data('exceptions') === 'product-panel') {
@@ -450,63 +634,6 @@ function ready() {
 		$('input#collection_'+id).remove();
 		$(this).parent().remove();
 	});
-
-	// permenatly shows target upon clicking the trigger
-  $('.reveal-trigger').click(function(e) {
-  	e.preventDefault();
-  	var reveal = $(this).data('reveal');
-  	var $this = $(this);
-  	if (reveal === 'seo') {
-    	$this.addClass('is-loading');
-  		$this.off('click');
-			$.ajax({
-	      type: "GET",
-	      url: '/product-seo', //sumbits it to the given url of the form
-	      data: {
-	      	product_id: $('[name="id"]').val()
-	      },
-	      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
-	    }).success(function(product_metafields) {
-	    	var new_html = '';
-	    	var description_tag = product_metafields.filter(function(metafield) {
-				  return metafield.key === 'description_tag'
-				})[0];
-				var title_tag = product_metafields.filter(function(metafield) {
-				  return metafield.key === 'title_tag'
-				})[0];
-
-				if (title_tag) {
-          new_html += '<label for="metafields_'+title_tag.id+'_value">Page title</label>';
-          new_html += '<input type="text" value="'+title_tag.value+'" name="metafields['+title_tag.id+'][value]" id="metafields_'+title_tag.id+'_value">';
-					$('.title_tag_container').append(new_html);
-				}	else {
-          new_html += '<input value="title_tag" class="new_field" type="hidden" name="new_metafields[][name]" id="new_metafields__name">';
-          new_html += '<label for="new_field_title">Page title</label>';
-          new_html += '<input class="new_field" id="new_field_title" type="text" name="new_metafields[][value]">';
-					$('.title_tag_container').append(new_html);
-        }
-
-        new_html = '';
-
-				if (description_tag) {
-          new_html += '<label for="metafields_'+description_tag.id+'_value">Page title</label>';
-          new_html += '<textarea type="text" name="metafields['+description_tag.id+'][value]" id="metafields_'+description_tag.id+'_value">'+description_tag.value+'</textarea>';
-					$('.description_tag_container').append(new_html);
-				}	else {
-          new_html += '<input value="description_tag" class="new_field" type="hidden" name="new_metafields[][name]" id="new_metafields__name">';
-          new_html += '<label for="new_field_description">Meta description</label>';
-          new_html += '<textarea class="new_field" id="new_field_description" name="new_metafields[][value]"></textarea>';
-          $('.description_tag_container').append(new_html);
-        }
-
-		  	$this.hide();
-		  	$('.reveal-target[data-reveal="'+reveal+'"]').show(); 
-	    }).error(basicError);
-  	} else {
-	  	$(this).hide();
-	  	$('.reveal-target[data-reveal="'+reveal+'"]').show();  		
-  	}
-  });
 
   // checkes variant checkboxes based on option value clicked
   $('.variant-selector-link').click(function() {
@@ -679,65 +806,6 @@ function ready() {
 		    }).error(basicError);
 			}
 		});
-	});
-
-	// pannel navigation
-	$('.prev-pannel').click(function(e) {
-		e.preventDefault();		
-		$('#save_resource').show();
-		$('.single_variant_submit').hide();
-		var pannel = $(this).closest('.wittyEDPanel');
-		var tier = parseInt(pannel.data('tier'));
-		pannel.blindRightOut(400, 'swing', function() {
-			$(this).css({'height': 0, 'opacity': 0});
-		});
-		$('.wittyEDPanel[data-tier="'+(tier - 1)+'"]').css({'height': 'auto', 'opacity': 1}).blindLeftIn(400);
-	});
-
-	$('.next-pannel').click(function(e) {
-		e.preventDefault();
-		var pannel = $(this).closest('.wittyEDPanel');
-		var tier = parseInt(pannel.data('tier'));
-		pannel.blindLeftOut(400, 'swing', function() {
-			$(this).css({'height': 0, 'opacity': 0});
-		});
-		$('.wittyEDPanel[data-tier="'+(tier + 1)+'"]').css({'height': 'auto', 'opacity': 1}).blindRightIn(400);
-	});
-
-	// responsive iframe adjustments
-	$('#responsive-dropdown').click(function() {
-		$('.responsive-dropdown-items-container').toggleClass('active');
-	});
-
-	$(document).click(function() {
-		$('.responsive-dropdown-items-container').removeClass('active');
-	});
-
-	$('.responsive-dropdown-items-container, #responsive-dropdown').click(function(e) {
-		e.stopPropagation();
-	});
-
-	$('.responsive-dropdown-items a').click(function(e) {
-		e.preventDefault();
-		if ($(this).hasClass('rotate')) {
-			if (!$('.responsive-dropdown-items a.active').hasClass('desktop')) {
-				$('.responsive-dropdown-items a.active').toggleClass('rotated');
-				var width = $('#dashboard-iframe').attr('style').match(/height: ([0-9]{0,4}).{1,}/)[1];
-				var height = $('#dashboard-iframe').attr('style').match(/width: ([0-9]{0,4}).{1,}/)[1];
-			}
-		} else {
-			$('.responsive-dropdown-items a').removeClass('active rotated');
-			$(this).addClass('active');
-			var width = $(this).data('width');
-			var height = $(this).data('height');
-		}
-
-		$('#dashboard-iframe').width(width).height(height);
-	});
-
-	$('.wittyEDFullscreenToggle').click(function(e) {
-		e.preventDefault();
-		$('.wittyEDSidebar').toggleClass('closed');
 	});
 
 	// edit variant image

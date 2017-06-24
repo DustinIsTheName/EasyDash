@@ -130,7 +130,7 @@
       <div class="select-sim-dropdown-container product-pannel-collection-select search" data-shop-url="<%= @shop_session.url %>">
         <div class="dropdown-arrow"></div>
         <ul class="select-sim-dropdown collection" data-total="" data-resource="collection" data-object="">
-          <% for collection in @cc.take(8) %>
+          <% for collection in @custom_collections.take(8) %>
             <li class="variable">
               <%= link_to collection.title, '#', data: {handle: collection.handle, id: collection.id} %>
             </li>
@@ -138,7 +138,7 @@
         </ul>
         <div class="arrow-navigation">
           <button class="secondary icon-prev disabled"></button>
-          <button class="secondary icon-next<% if @cc.size <= 8 %> disabled<% end %>"></button>
+          <button class="secondary icon-next<% if @custom_collections.size <= 8 %> disabled<% end %>"></button>
           <div style="clear:both;"></div>
         </div>
       </div>
