@@ -134,6 +134,12 @@ class UnembeddedController < ApplicationController
     render json: hsc_metafield
   end
 
+  def get_product_seo
+    puts Colorize.magenta(params)
+    seo_info = ShopifyAPI::Metafield.find(:all, params: {"metafield[owner_id]" => params[:product_id], "metafield[owner_resource]" => 'product'})
+    render json: seo_info
+  end
+
   private
 
     def get_resources

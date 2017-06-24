@@ -33,6 +33,8 @@ $gutter: 10px;
 $witty-teal: #00a79d;
 $witty-teal-dark: #00968d;
 $witty-dark: #31373d;
+$polaris-red: linear-gradient(to bottom, #ee6b50, #ec5b3e);
+$polaris-red-border: #e83c19;
 
 * { 
   transition: .2s background, border-color;
@@ -53,8 +55,8 @@ button {
   &.secondary {
     &.red:hover,
     &.red.is-loading {
-      background: #ff5d5d;
-      border-color: #ff5d5d;
+      background: $polaris-red;
+      border-color: $polaris-red-border;
       color: #fff;
     }
   }
@@ -209,6 +211,7 @@ label .icon-calendar { float: right; margin-top: 2px; }
   margin-left: 5px;
   font-weight: bold;
   color: #828282;
+  text-decoration: none;
   border: 2px solid #828282;
   border-radius: 50%;
   width: 18px;
@@ -216,6 +219,17 @@ label .icon-calendar { float: right; margin-top: 2px; }
   display: inline-block;
   box-sizing: border-box;
   text-align: center;
+
+  span {
+    position: relative;
+    bottom: 2px;
+    right: 0.3px;
+  }
+
+  &:after {
+    font-style: normal;
+    font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+  }
 }
 
 .is-loading-body {
@@ -242,29 +256,6 @@ label .icon-calendar { float: right; margin-top: 2px; }
     animation: btn-loading-spinner 0.7s linear infinite;
     z-index: 999999999;
   }
-}
-
-.tooltip {
-  position: relative;
-  display: inline-block;
-  border-bottom: 1px dotted black;
-}
-
-.tooltip .tooltiptext {
-  visibility: hidden;
-  width: auto;
-  background-color: black;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-  position: absolute;
-  z-index: 1;
-  bottom: 100%;
-  left: 50%;
-  margin-left: -136px;
-  font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
-  font-style: normal;
 }
 
 .tooltip:hover .tooltiptext {
@@ -295,6 +286,10 @@ label .icon-calendar { float: right; margin-top: 2px; }
   height: 100%;
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
+
+  &.quick-select .wittyEDPanelBody {
+    overflow-y: scroll;
+  }
 
   &.closed {
     width: 0;
@@ -944,7 +939,7 @@ label .icon-calendar { float: right; margin-top: 2px; }
     flex-direction: column;
     height: 100%;
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: hidden;
     
     .theme-editor__header--no-shadow {
       box-shadow: none;
@@ -960,6 +955,7 @@ label .icon-calendar { float: right; margin-top: 2px; }
       -ms-flex: none;
       flex: none;
       background: #ffffff;
+      position: fixed;
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
       
       .btn_more {
@@ -969,6 +965,12 @@ label .icon-calendar { float: right; margin-top: 2px; }
         transform: translateY(-50%);
         margin-top: 2px;
       }
+    }
+
+    .wittyEDPanel .theme-editor__header {
+      position: fixed;
+      top: 54px;
+      width: 300px;
     }
     
     .theme-editor__header-nav {
@@ -1049,6 +1051,8 @@ label .icon-calendar { float: right; margin-top: 2px; }
       margin-left: -300px;
       height: 0;
       opacity: 0;
+      overflow-y: scroll;
+      height: calc(100%) !important;
 
       &.active {
         display: block;
@@ -1069,6 +1073,7 @@ label .icon-calendar { float: right; margin-top: 2px; }
       flex: 1 1 auto;
       height: 100%;
       width: 300px;
+      margin-top: 108px;
       min-height: 0;
       // overflow-y: auto;
       padding: 10px 10px 0;
@@ -1080,10 +1085,14 @@ label .icon-calendar { float: right; margin-top: 2px; }
     }
     .wittyEDTopButtons { 
       /*border-bottom: 1px solid #d9d9d9;*/
-      padding: $gutter;
-      margin: 0 -$gutter;
-      background: #fff;
-      box-sizing: border-box;
+        padding: $gutter;
+        margin: 0 -$gutter;
+        background: #fff;
+        box-sizing: border-box;
+        margin: 0 -10px;
+        position: fixed;
+        width: 100%;
+        top: 54px;
       
       .sidebyside_15.icon-trash {
         background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 27 27' enable-background='new 0 0 27 27'%3E%3Cpath fill='rgb(255,255,255)' d='M27.5,5a2.22,2.22,0,0,1-1.8,2.25H2.3A2.22,2.22,0,0,1,.5,5,2.22,2.22,0,0,1,2.3,2.75H9.5C9.5,1.63,11.07.5,12.2,0.5h3.6c1.13,0,2.7,1.35,2.7,2.25h7.2A2.22,2.22,0,0,1,27.5,5Zm-2.25,5.85V25.7c0,0.9-1.8,1.8-2.7,1.8H5.45c-0.9,0-2.7-.68-2.7-1.8V10.85A3.17,3.17,0,0,1,4.33,9.5H23.9A3.88,3.88,0,0,1,25.25,10.85ZM11.75,14.9a1,1,0,0,0-.9-0.9H10.4a1,1,0,0,0-.9.9v7.2a1,1,0,0,0,.9.9h0.45a1,1,0,0,0,.9-0.9V14.9Zm6.75,0a1,1,0,0,0-.9-0.9H17.15a1,1,0,0,0-.9.9v7.2a1,1,0,0,0,.9.9H17.6a1,1,0,0,0,.9-0.9V14.9Z' transform='translate(-0.5 -0.5)' /%3E%3C/svg%3E");
@@ -1102,7 +1111,7 @@ label .icon-calendar { float: right; margin-top: 2px; }
       .extra_margin { margin-bottom: 1rem; }
     }
     .theme-editor__subheading {
-      margin: 20px 0 10px 20px;
+      margin: 7px 0 10px 20px;
       
       &:first-child {
         margin-top: 0;
@@ -1846,6 +1855,30 @@ button.variant {padding: .9rem 1.5rem;}
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
+#myshopify_login_section {
+  justify-content: center;
+
+  &.filled_login {
+    width: 170px;
+
+    label {display: none;}
+
+    .input-group {
+      justify-content: center;
+
+      #myshopify_login {
+        display:none;
+
+        &+ button[type="submit"] {
+          border-radius: .3rem;
+          font-size: 4rem;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}
+
 .editModalOverlay {
   position: fixed;
   width: 100%;
@@ -2038,7 +2071,7 @@ button.variant {padding: .9rem 1.5rem;}
     }
     &#preview {
       .product-image {
-        overflow: scroll;
+        overflow: auto;
         max-height: 400px;
         text-align: center;
 
@@ -2063,6 +2096,10 @@ button.variant {padding: .9rem 1.5rem;}
       .card-section:last-child {
         text-align: right;
       }
+    }
+    &#SEOURL {
+      width: auto;
+      max-width: calc(100% - 20px);
     }
   }
 }

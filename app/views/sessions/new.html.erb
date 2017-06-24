@@ -5,13 +5,21 @@
 </head>
 <body>
 
-  <h2>Install the application</h2>
+  <header>
+  	<h2>Login to EasyDash</h2>
+  </header>
 
-  <form method="GET" action="login">
-    <label>Type shop name:</label>
-    <input type="text" name="shop" placeholder="your-store.myshopify.com"/>
-    <button type='submit'>Install</button>
-  </form>
+	<section id="myshopify_login_section">
+	  <div class="card">
+		  <form method="GET" action="login">
+		    <label>Type shop name:</label>
+	  		<div class="input-group">
+			    <input id="myshopify_login" type="text" name="shop" placeholder="your-store.myshopify.com" value=""/>
+			    <button type='submit'>Login</button>
+			  </div>
+		  </form>
+	  </div>
+	</section>
 
 </body>
 </html>

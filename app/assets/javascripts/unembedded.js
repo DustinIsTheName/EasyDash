@@ -1,5 +1,9 @@
 function ready() {
 
+	/*******************************************
+	Variable Declarations
+	*******************************************/
+
 	var variant_image_page = 0;
 	// JS for the resourse selection
 	var resource_infomation = {
@@ -32,6 +36,33 @@ function ready() {
 		console.log(e);
 	}
 
+	/*******************************************
+	Javascript Object Extentions
+	*******************************************/
+
+	if (!Array.prototype.filter) {
+	  Array.prototype.filter = function(fun /*, thisp*/) {
+	    var len = this.length >>> 0;
+	    if (typeof fun != "function")
+	    throw new TypeError();
+
+	    var res = [];
+	    var thisp = arguments[1];
+	    for (var i = 0; i < len; i++) {
+	      if (i in this) {
+	        var val = this[i]; // in case fun mutates this
+	        if (fun.call(thisp, val, i, this))
+	        res.push(val);
+	      }
+	    }
+	    return res;
+	  };
+	}
+
+	/*******************************************
+	jQuery Extentions
+	*******************************************/
+
 	$.ajaxSetup({
   	dataType: 'json'
 	});
@@ -43,6 +74,30 @@ function ready() {
 	$.fn.isBefore= function(sel){
 		return this.index() < sel.index();
 	  // return this.nextAll(sel).length !== 0;
+	}
+
+	/*******************************************
+	General Functions
+	*******************************************/
+
+	function basicError(error) {
+		console.log(error);
+  }
+
+	function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
 	}
 
 	function flashMessage(message, type) {
@@ -130,6 +185,10 @@ function ready() {
 		$overlay.removeClass('open');
 	}
 
+	/*******************************************
+	Common Events
+	*******************************************/
+
 	$('.editModalOverlay').click(function() {
 		closeModal($(this));
 	});
@@ -189,9 +248,7 @@ function ready() {
 				}
 				console.log(extension);
 			},
-			error: function(error) {
-				console.log(error);
-			}
+			error: basicError
 		});
 	}
       
@@ -207,9 +264,7 @@ function ready() {
       },
 			dataType: "JSON",
 			success: params.callback,
-			error: function(error) {
-				console.log(error);
-			}
+			error: basicError
 		});
 	}
 
@@ -322,6 +377,11 @@ function ready() {
 		changePage(resource, resource_infomation[resource+'s'], resource_infomation[resource+'_page'], resource_infomation[resource+'_total']);
 	}
 
+	var permanent_domain = getCookie('permanent_domain');
+	if (permanent_domain) {
+		$('#myshopify_login').val(permanent_domain).closest('#myshopify_login_section').addClass('filled_login');
+	}
+
 	$('.search .icon-next').click(function() {
 		if (!$(this).hasClass('disabled')) {
 			pageChangeSetResource($(this), 'next');
@@ -355,9 +415,7 @@ function ready() {
 					console.log(filtered_resource);
 					changePage(resource, filtered_resource, 1, filtered_resource.length);
 				},
-				error: function(error) {
-					console.log(error);
-				}
+				error: basicError
 			});
 		}
 	});
@@ -397,9 +455,57 @@ function ready() {
   $('.reveal-trigger').click(function(e) {
   	e.preventDefault();
   	var reveal = $(this).data('reveal');
-  	$(this).hide();
+  	var $this = $(this);
+  	if (reveal === 'seo') {
+    	$this.addClass('is-loading');
+  		$this.off('click');
+			$.ajax({
+	      type: "GET",
+	      url: '/product-seo', //sumbits it to the given url of the form
+	      data: {
+	      	product_id: $('[name="id"]').val()
+	      },
+	      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+	    }).success(function(product_metafields) {
+	    	var new_html = '';
+	    	var description_tag = product_metafields.filter(function(metafield) {
+				  return metafield.key === 'description_tag'
+				})[0];
+				var title_tag = product_metafields.filter(function(metafield) {
+				  return metafield.key === 'title_tag'
+				})[0];
 
-  	$('.reveal-target[data-reveal="'+reveal+'"]').show();
+				if (title_tag) {
+          new_html += '<label for="metafields_'+title_tag.id+'_value">Page title</label>';
+          new_html += '<input type="text" value="'+title_tag.value+'" name="metafields['+title_tag.id+'][value]" id="metafields_'+title_tag.id+'_value">';
+					$('.title_tag_container').append(new_html);
+				}	else {
+          new_html += '<input value="title_tag" class="new_field" type="hidden" name="new_metafields[][name]" id="new_metafields__name">';
+          new_html += '<label for="new_field_title">Page title</label>';
+          new_html += '<input class="new_field" id="new_field_title" type="text" name="new_metafields[][value]">';
+					$('.title_tag_container').append(new_html);
+        }
+
+        new_html = '';
+
+				if (description_tag) {
+          new_html += '<label for="metafields_'+description_tag.id+'_value">Page title</label>';
+          new_html += '<textarea type="text" name="metafields['+description_tag.id+'][value]" id="metafields_'+description_tag.id+'_value">'+description_tag.value+'</textarea>';
+					$('.description_tag_container').append(new_html);
+				}	else {
+          new_html += '<input value="description_tag" class="new_field" type="hidden" name="new_metafields[][name]" id="new_metafields__name">';
+          new_html += '<label for="new_field_description">Meta description</label>';
+          new_html += '<textarea class="new_field" id="new_field_description" name="new_metafields[][value]"></textarea>';
+          $('.description_tag_container').append(new_html);
+        }
+
+		  	$this.hide();
+		  	$('.reveal-target[data-reveal="'+reveal+'"]').show(); 
+	    }).error(basicError);
+  	} else {
+	  	$(this).hide();
+	  	$('.reveal-target[data-reveal="'+reveal+'"]').show();  		
+  	}
   });
 
   // checkes variant checkboxes based on option value clicked
@@ -509,7 +615,6 @@ function ready() {
 			}
 		});
 	});
-	// Your variant has been deleted
 
 	// edit single variant
 	$('.edit_single_variant').click(function(e) {
@@ -571,9 +676,7 @@ function ready() {
 						$this.attr('name', 'variants['+variant.id+']new_metafields[][value]');
 						$this.attr('id', 'variants_'+variant.id+'_new_metafields__value');
 					}
-		    }).error(function(error) {
-		    	console.log(error);
-		    });
+		    }).error(basicError);
 			}
 		});
 	});
@@ -891,9 +994,7 @@ function ready() {
       	src: $('#addImageUrlInput').val()
       },
       dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
-    }).success(addImagesCallback).error(function(error) {
-    	console.log(error);
-    });
+    }).success(addImagesCallback).error(basicError);
 	});
 
 	var dragCounter = 0;
@@ -980,9 +1081,9 @@ function ready() {
 	}, '.product-image');
 
 	$('#shopify_api_product_handle').keyup(function() {
-		var tooltiptext = $('.seo-handle .tooltiptext').text().split('/');
+		var tooltiptext = $('#SEOURL h3').text().split('/');
 		tooltiptext[tooltiptext.length - 1] = $(this).val();
-		$('.seo-handle .tooltiptext').text(tooltiptext.join('/'))
+		$('#SEOURL h3').text(tooltiptext.join('/'))
 	});
 
 	$('.images-container').on('click', '.icon-preview', function() {
@@ -1020,9 +1121,7 @@ function ready() {
 			}
 
 			$('#editAltTagOverlay').addClass('open');
-    }).error(function(error) {
-    	console.log(error);
-    });
+    }).error(basicError);
 	});
 
 	$('#editAltTag #image-alt-tag-save').click(function() {
@@ -1094,6 +1193,10 @@ function ready() {
 			product_id: product_id,
 			image_id: image_id
 		});
+	});
+
+	$('.info-icon').click(function() {
+		$('#SEOURLOverlay').addClass('open');
 	});
 
 	$('.warning.btn_bottom.product').click(function(e) {

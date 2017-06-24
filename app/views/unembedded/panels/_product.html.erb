@@ -61,58 +61,17 @@
     <div class="card">
       <h5>Search engine listing preview</h5>
       <p>Add a description to see how this product might appear in a search engine listing.</p>
-      <button class="secondary reveal-trigger" data-reveal="seo">Edit website SEO</button>
+      <button type="button" class="secondary reveal-trigger" data-reveal="seo">Edit website SEO</button>
       <div class="edit reveal-target" data-reveal="seo">
 
-        <% title_tag_index = false %>
-        <% description_tag_index = false %>
+        <div class="row title_tag_container"> </div>
 
-        <% @resource.metafields.each_with_index do |metafield, index| %>
-          <% if metafield.key == 'title_tag' %>
-            <% title_tag_index = index %>
-          <% end %>
-          <% if metafield.key == 'description_tag' %>
-            <%= fields_for 'metafields[]', metafield do |m| %>
-              <% description_tag_index = index %>
-            <% end %>
-          <% end %>
-        <% end %>
-
-        <div class="row">
-          <% if title_tag_index %>
-            <%= fields_for 'metafields[]', @resource.metafields[title_tag_index] do |m| %>
-              <label for="metafields_<%= @resource.metafields[title_tag_index].id %>_value">Page title</label>
-              <%= m.text_field :value %>
-            <% end %>
-          <% else %>
-            <%= fields_for 'new_metafields[]', ShopifyAPI::Metafield.new do |m| %>
-              <%= m.hidden_field :name, value: 'title_tag', class: "new_field" %>
-              <label for="new_field_title">Page title</label>
-              <%= m.text_field :value, class: "new_field", id: "new_field_title" %>
-            <% end %>
-          <% end %>
-        </div>
-
-        <div class="row">
-          <% if description_tag_index %>
-            <%= fields_for 'metafields[]',  @resource.metafields[description_tag_index] do |m| %>
-              <label for="metafields_<%= @resource.metafields[description_tag_index].id %>_value">Meta description</label>
-              <%= m.text_area :value %>
-            <% end %>
-          <% else %>
-            <%= fields_for 'new_metafields[]', ShopifyAPI::Metafield.new do |m| %>
-              <%= m.hidden_field :name, value: 'description_tag', class: "new_field" %>
-              <label for="new_field_description">Meta description</label>
-              <%= m.text_area :value, class: "new_field", id: "new_field_description" %>
-            <% end %>
-          <% end %>
-        </div>
+        <div class="row description_tag_container"></div>
 
         <div class="row no_margin">
           <label class="seo-handle" for="shopify_api_product_handle">URL and handle
-            <span class="info-icon tooltip">
-              i
-              <span class="tooltiptext">https://<%= @shop_session.url %>/products/<%= @resource.handle %></span>
+            <span class="info-icon">
+              <span>i</span>
             </span>
           </label>
           <%= o.text_field :handle %>

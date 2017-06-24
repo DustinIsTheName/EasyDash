@@ -32,6 +32,7 @@ Rails.application.routes.draw do
     get '/alt-tag' => :get_alt_tag
     post '/alt-tag' => :edit_alt_tag
     get '/variant-hsc' => :get_variant_hsc
+    get '/product-seo' => :get_product_seo
   end
   
   # The priority is based upon order of creation: first created -> highest priority.
