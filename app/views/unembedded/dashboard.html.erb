@@ -37,7 +37,7 @@
                 <%= render partial: 'unembedded/panels/' + @type, locals: {o: o} %>
               </div><!-- .wittyEDPanelBody -->
             </div>
-            <% if @type == 'product' %>
+            <% if @type == 'product' && @resource.variants.first&.title != 'Default Title' %>
               <div class="wittyEDPanel" data-tier="3">
                 <header class="theme-editor__header theme-editor__header--no-shadow">
                   <button class="btn btn--plain theme-editor__header-action icon-prev prev-pannel" aria-label="Back to sections" type="button" name="button"></button>
@@ -77,22 +77,22 @@
               <a href="#" data-width="100%" data-height="100%" class="active desktop"><%= svgs 'monitor_teal' %>Fit Screen</a>
             </li>
             <li>
-              <a href="#" data-width="1440" data-height="900" class="desktop"><%= svgs 'monitor_teal' %>Desktop - M</a>
+              <a href="#" data-width="1440" data-height="900" class="desktop"><%= svgs 'monitor_teal' %>Desktop (Medium)</a>
             </li>
             <li>
-              <a href="#" data-width="1280" data-height="800" class="desktop"><%= svgs 'monitor_teal' %>Desktop - S</a>
+              <a href="#" data-width="1280" data-height="800" class="desktop"><%= svgs 'monitor_teal' %>Desktop (Small)</a>
             </li>
             <li>
               <a href="#" data-width="768" data-height="1024"><%= svgs 'tablet_teal' %>Tablet</a>
             </li>
             <li>
-              <a href="#" data-width="425" data-height="736"><%= svgs 'mobile_teal' %>Mobile - L</a>
+              <a href="#" data-width="425" data-height="736"><%= svgs 'mobile_teal' %>Mobile (Large)</a>
             </li>
             <li>
-              <a href="#" data-width="375" data-height="667"><%= svgs 'mobile_teal' %>Mobile - M</a>
+              <a href="#" data-width="375" data-height="667"><%= svgs 'mobile_teal' %>Mobile (Medium)</a>
             </li>
             <li>
-              <a href="#" data-width="320" data-height="568"><%= svgs 'mobile_teal' %>Mobile - S</a>
+              <a href="#" data-width="320" data-height="568"><%= svgs 'mobile_teal' %>Mobile (Small)</a>
             </li>
             <li>
               <a href="#" class="rotate"><%= svgs 'rotate_teal' %>Rotate</a>
@@ -107,16 +107,16 @@
   	  </button>
 
       <div class="ui-stack-item ui-stack-item--fill type--right">
-        <ul class="segmented">
+        <!-- <ul class="segmented">
           <li>
             <button class="btn btn--icon tip icon-undo" disabled="disabled" data-hover="Undo" aria-label="Undo" type="button" name="button"></button>          
           </li>
           <li>
             <button class="btn btn--icon tip icon-redo" disabled="disabled" data-hover="Redo" aria-label="Redo" type="button" name="button"></button>
           </li>
-        </ul>
+        </ul> -->
         <button id="save_resource" class="btn btn-primary" type="button" name="button">Save</button>
-        <button type="button" class="single_variant_submit" style="display:none;">Save</button>
+        <button type="button" class="single_variant_submit" style="display:none;">Save Variant</button>
       </div>
     </div>
   </div><!-- .wittyEDEditorFooter -->
@@ -170,7 +170,7 @@
         </div>
         <div class="field-for-alt-tag">
           <label for="image-alt-tag">Image alt text</label>
-          <input type="text" id="image-alt-tag" class="variant-select-image">
+          <input type="text" id="image-alt-tag">
           <p class="type--subdued">Write a brief description of this image to improve search engine optimization (SEO) and accessibility for visually impaired customers.</p>
         </div>
       </div>

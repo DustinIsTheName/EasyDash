@@ -1,5 +1,11 @@
-<%= fields_for 'variants[]', @resource.variants.first do |v| %>
-  <%= render partial: 'unembedded/panels/common_variant_fields', locals: {v: v, additional_class: ''} %>
+<% if @resource.id == 'new' %>
+  <%= fields_for 'variants', @resource.variants.first do |v| %>
+    <%= render partial: 'unembedded/panels/common_variant_fields', locals: {v: v, additional_class: ''} %>
+  <% end %>
+<% else %>
+  <%= fields_for 'variants[]', @resource.variants.first do |v| %>
+    <%= render partial: 'unembedded/panels/common_variant_fields', locals: {v: v, additional_class: ''} %>
+  <% end %>
 <% end %>
 
 <article>

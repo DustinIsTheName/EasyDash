@@ -680,9 +680,10 @@ label .icon-calendar { float: right; margin-top: 2px; }
         .column.twelve {
           position: relative;
           padding-bottom: 100%;
-          margin-top: 2rem;
+          // margin-top: 2rem;
           width: 100%;
           background: #fff;
+          margin-left: 5px;
           border: 1px solid rgba(195,207,216,.3);
           
           img { width: 100%; }
@@ -723,7 +724,7 @@ label .icon-calendar { float: right; margin-top: 2px; }
             box-sizing: border-box;
             margin-left: 10px;
 
-            &+ .product-image {margin-top: 10px;}
+            &~ .product-image {margin-top: 10px;}
 
             &.ghostImage {
               position: fixed;
@@ -954,7 +955,7 @@ label .icon-calendar { float: right; margin-top: 2px; }
     }
     .theme-editor__header {
       position: relative;
-      z-index: 2;
+      z-index: 4;
       padding-top: 0;
       width: 300px;
       min-height: auto;

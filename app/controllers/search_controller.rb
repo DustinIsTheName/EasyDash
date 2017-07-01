@@ -28,7 +28,13 @@ class SearchController < AuthenticatedController
 		 @collections << c
 		end
 
-  	render json: @collections
+  	render json: { collections: @collections, smart_collections: @sc, custom_collections: @cc }
+  end
+
+  def custom_collection
+    custom_collections = ShopifyAPI::CustomCollection.find(:all, params: @api_params)
+
+    render json: custom_collections
   end
 
   def pages

@@ -28,31 +28,30 @@ class UnembeddedController < ApplicationController
     else
 
       # get_resources
-      puts Colorize.cyan(Time.now - t)
       case @type
       when 'blog'
-        @resource = ShopifyAPI::Article.find(params[:id])
+        @resource = params[:id] == 'new' ? ShopifyAPI::Article.new : ShopifyAPI::Article.find(params[:id])
       when 'custom_collection'
-        @resource = ShopifyAPI::CustomCollection.find(params[:id])
+        @resource = params[:id] == 'new' ? ShopifyAPI::CustomCollection.new : ShopifyAPI::CustomCollection.find(params[:id])
       when 'smart_collection'
-        @resource = ShopifyAPI::SmartCollection.find(params[:id])
+        @resource = params[:id] == 'new' ? ShopifyAPI::SmartCollection.new : ShopifyAPI::SmartCollection.find(params[:id])
       when 'page'
-        @resource = ShopifyAPI::Page.find(params[:id])
+        @resource = params[:id] == 'new' ? ShopifyAPI::Page.new : ShopifyAPI::Page.find(params[:id])
       when 'product'
+        if params[:id] == 'new'
+          @resource = ShopifyAPI::Product.new(id: 'new',title: '', body_html: '', vendor: '', product_type: '', created_at: '', handle: '', updated_at: '', published_at: '', template_suffix: '', published_scope: '', tags: '', variants: [], collections: [], options: [], images: [], image: '')
+          @resource.variants << ShopifyAPI::Variant.new(title: 'Default Title', price: '', sku: '', position: '', grams: '', inventory_policy: '', compare_at_price: '', fulfillment_service: '', inventory_management: '', option1: 'Default Title', option2: nil, option3: nil, taxable: '', barcode: '', image_id: '', inventory_quantity: '', weight: '', weight_unit: '', old_inventory_quantity: '', requires_shipping: '')
+        else
+          @resource = ShopifyAPI::Product.find(params[:id])
+        end
         @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
-        puts Colorize.cyan(Time.now - t)
         @fulfillment_services = ShopifyAPI::FulfillmentService.find(:all, params: {scope: :all, fields: ['name', 'handle']})
-        puts Colorize.cyan(Time.now - t)
-        @resource = ShopifyAPI::Product.find(params[:id])
-        puts Colorize.cyan(Time.now - t)
         @custom_collections = ShopifyAPI::CustomCollection.find(:all, params: {limit: 250, fields: ['title', 'handle', 'id']})
-        puts Colorize.cyan(Time.now - t)
         @smart_collections = ShopifyAPI::SmartCollection.find(:all, params: {product_id: params[:id], limit: 250, fields: ['title', 'handle', 'id']})
-        puts Colorize.cyan(Time.now - t)
       else
+        get_resources
         @type = 'resource_select'
       end
-      puts Colorize.cyan(Time.now - t)
     end
   end
 
@@ -74,13 +73,13 @@ class UnembeddedController < ApplicationController
   end
 
   def add_images
-    puts Colorize.magenta(params)
+    # puts Colorize.magenta(params)
     product = API.addImages(params)
     render json: product.images
   end
 
   def add_image_from_url
-    puts Colorize.magenta(params)
+    # puts Colorize.magenta(params)
     product = API.addImageFromURL(params)
     render json: product.images
   end
@@ -117,6 +116,8 @@ class UnembeddedController < ApplicationController
   def hard_delete_api
     puts Colorize.magenta(params)
     resource = API.deleteResource(params)
+    get_resources
+    @type = 'resource_select'
     render :dashboard
   end
 

@@ -38,9 +38,11 @@
             <% end %>
           </div>
         <% else %>
-        <div class="column twelve type--centered no_margin">
-          <i class="image icon-photos next-icon--size-80"></i>
-          <h5>Drop images to upload</h5>
+        <div class="images-container">
+          <div class="column twelve type--centered no_margin">
+            <i class="image icon-photos next-icon--size-80"></i>
+            <h5>Drop images to upload</h5>
+          </div>
         </div>
         <% end %>
       </div>
@@ -48,7 +50,7 @@
   <!-- </a> -->
 </article>
 
-<% if @resource.variants.first.title == 'Default Title' %>
+<% if @resource.variants.first&.title == 'Default Title' %>
   <%= panel 'default_title' %>
 <% else %>
   <div class="card">
@@ -64,7 +66,7 @@
       <button type="button" class="secondary reveal-trigger" data-reveal="seo">Edit website SEO</button>
       <div class="edit reveal-target" data-reveal="seo">
 
-        <div class="row title_tag_container"> </div>
+        <div class="row title_tag_container"></div>
 
         <div class="row description_tag_container"></div>
 
@@ -121,15 +123,17 @@
     <div class="divider"></div>
     <div class="row product-collections-select">
       <label class="extra_margin">Collection</label>
-      <% for collection in @resource.collections %>
-        <%= fields_for 'collections', '' do |c| %>
-          <%= c.hidden_field '', value: collection.id, id: "collection_#{collection.id}" %>
+      <% if @resource.collections %>
+        <% for collection in @resource.collections %>
+          <%= fields_for 'collections', '' do |c| %>
+            <%= c.hidden_field '', value: collection.id, id: "collection_#{collection.id}" %>
+          <% end %>
         <% end %>
       <% end %>
-      <input type="search" class="resource-search" name="collection-search" placeholder="Search for collections" data-resource="collection" data-exceptions="product-panel">
+      <input type="search" class="resource-search" name="collection-search" placeholder="Search for collections" data-resource="custom_collection" data-exceptions="product-panel">
       <div class="select-sim-dropdown-container product-pannel-collection-select search" data-shop-url="<%= @shop_session.url %>">
         <div class="dropdown-arrow"></div>
-        <ul class="select-sim-dropdown collection" data-total="" data-resource="collection" data-object="">
+        <ul class="select-sim-dropdown custom_collection" data-total="" data-resource="custom_collection" data-object="">
           <% for collection in @custom_collections.take(8) %>
             <li class="variable">
               <%= link_to collection.title, '#', data: {handle: collection.handle, id: collection.id} %>
@@ -137,29 +141,33 @@
           <% end %>
         </ul>
         <div class="arrow-navigation">
-          <button class="secondary icon-prev disabled"></button>
-          <button class="secondary icon-next<% if @custom_collections.size <= 8 %> disabled<% end %>"></button>
+          <button type="button" class="secondary icon-prev disabled"></button>
+          <button type="button" class="secondary icon-next<% if @custom_collections.size <= 8 %> disabled<% end %>"></button>
           <div style="clear:both;"></div>
         </div>
       </div>
-      <% for collection in @resource.collections %>
-        <div class="collection" data-collection="<%= collection.to_json %>">
-          <a target="_blank" href="https://<%= @shop_session.url %>/admin/collections/<%= collection.id %>">
-            <%= collection.title %>
-          </a>
-          <span class="icon-close"></span>
-        </div>
+      <% if @resource.collections %>
+        <% for collection in @resource.collections %>
+          <div class="collection" data-collection="<%= collection.to_json %>">
+            <a target="_blank" href="https://<%= @shop_session.url %>/admin/collections/<%= collection.id %>">
+              <%= collection.title %>
+            </a>
+            <span class="icon-close"></span>
+          </div>
+        <% end %>
       <% end %>
-      <% for collection in @smart_collections %>
-        <div class="collection" data-collection="<%= collection.to_json %>">
-          <a target="_blank" href="https://<%= @shop_session.url %>/admin/collections/<%= collection.id %>">
-            <%= collection.title %> 
-          </a>
-          <span class="auto">auto</span>
-        </div>
-      <% end %>
-      <% if @smart_collections.size == 0 and @resource.collections.size == 0 %>
-        <em>Add this product to a collection so it’s easy to find in your store.</em>
+      <% if @smart_collections %>
+        <% for collection in @smart_collections %>
+          <div class="collection" data-collection="<%= collection.to_json %>">
+            <a target="_blank" href="https://<%= @shop_session.url %>/admin/collections/<%= collection.id %>">
+              <%= collection.title %> 
+            </a>
+            <span class="auto">auto</span>
+          </div>
+        <% end %>
+        <% if @smart_collections.size == 0 and @resource.collections.size == 0 %>
+          <em>Add this product to a collection so it’s easy to find in your store.</em>
+        <% end %>
       <% end %>
     </div>
     <div class="divider"></div>
@@ -187,7 +195,9 @@
     <em class="no_margin">The template customers see when viewing this product in your store.</em>
   </div>
 </article>
+<% unless @resource.id == 'new' %>
 <div class="wittyEDBottomButtons"> 
   <!-- <button class="secondary red btn_bottom">Delete product</button> -->
   <button type="button" class="warning btn_bottom product" data-id="<%= @resource.id %>" data-resource="<%= @type %>"><%= link_to 'Delete product', dashboard_hard_delete_path(id: @resource.id, resource: @type) %></button>  
 </div>
+<% end %>

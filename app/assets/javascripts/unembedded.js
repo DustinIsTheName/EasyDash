@@ -15,10 +15,12 @@ function ready() {
 		products: $('.select-sim-dropdown.product').data('object'),
 		blog_page: 1,
 		collection_page: 1,
+		custom_collection_page: 1,
 		page_page: 1,
 		product_page: 1,
 		blog_chunks_loaded: 1,
 		collection_chunks_loaded: 1,
+		custom_collection_chunks_loaded: 1,
 		page_chunks_loaded: 1,
 		product_chunks_loaded: 1,
 		target: $('#target_attr').data('target'),
@@ -294,51 +296,70 @@ function ready() {
   	var reveal = $(this).data('reveal');
   	var $this = $(this);
   	if (reveal === 'seo') {
-    	$this.addClass('is-loading');
+  		$this.addClass('is-loading');
   		$this.off('click');
-			$.ajax({
-	      type: "GET",
-	      url: '/product-seo', //sumbits it to the given url of the form
-	      data: {
-	      	product_id: $('[name="id"]').val()
-	      },
-	      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
-	    }).success(function(product_metafields) {
-	    	var new_html = '';
-	    	var description_tag = product_metafields.filter(function(metafield) {
-				  return metafield.key === 'description_tag'
-				})[0];
-				var title_tag = product_metafields.filter(function(metafield) {
-				  return metafield.key === 'title_tag'
-				})[0];
-
-				if (title_tag) {
-          new_html += '<label for="metafields_'+title_tag.id+'_value">Page title</label>';
-          new_html += '<input type="text" value="'+title_tag.value+'" name="metafields['+title_tag.id+'][value]" id="metafields_'+title_tag.id+'_value">';
-					$('.title_tag_container').append(new_html);
-				}	else {
-          new_html += '<input value="title_tag" class="new_field" type="hidden" name="new_metafields[][name]" id="new_metafields__name">';
-          new_html += '<label for="new_field_title">Page title</label>';
-          new_html += '<input class="new_field" id="new_field_title" type="text" name="new_metafields[][value]">';
-					$('.title_tag_container').append(new_html);
-        }
-
-        new_html = '';
-
-				if (description_tag) {
-          new_html += '<label for="metafields_'+description_tag.id+'_value">Page title</label>';
-          new_html += '<textarea type="text" name="metafields['+description_tag.id+'][value]" id="metafields_'+description_tag.id+'_value">'+description_tag.value+'</textarea>';
-					$('.description_tag_container').append(new_html);
-				}	else {
-          new_html += '<input value="description_tag" class="new_field" type="hidden" name="new_metafields[][name]" id="new_metafields__name">';
-          new_html += '<label for="new_field_description">Meta description</label>';
-          new_html += '<textarea class="new_field" id="new_field_description" name="new_metafields[][value]"></textarea>';
-          $('.description_tag_container').append(new_html);
-        }
-
+  		if ($('[name="id"]').val() === 'new') {
+  			var new_html = '';
+	      new_html += '<input value="title_tag" class="new_field" type="hidden" name="new_metafields[][name]" id="new_metafields__name">';
+	      new_html += '<label for="new_field_title">Page title</label>';
+	      new_html += '<input class="new_field" id="new_field_title" type="text" name="new_metafields[][value]">';
+				$('.title_tag_container').append(new_html);
+				new_html = '';
+        new_html += '<input value="description_tag" class="new_field" type="hidden" name="new_metafields[][name]" id="new_metafields__name">';
+        new_html += '<label for="new_field_description">Meta description</label>';
+        new_html += '<textarea class="new_field" id="new_field_description" name="new_metafields[][value]"></textarea>';
+        $('.description_tag_container').append(new_html);
 		  	$this.hide();
 		  	$('.reveal-target[data-reveal="'+reveal+'"]').show(); 
-	    }).error(basicError);
+			} else {
+				$.ajax({
+		      type: "GET",
+		      url: '/product-seo', //sumbits it to the given url of the form
+		      data: {
+		      	product_id: $('[name="id"]').val()
+		      },
+		      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+		    }).success(function(product_metafields) {
+		    	var new_html = '';
+		    	var description_tag = product_metafields.filter(function(metafield) {
+					  return metafield.key === 'description_tag'
+					})[0];
+					var title_tag = product_metafields.filter(function(metafield) {
+					  return metafield.key === 'title_tag'
+					})[0];
+
+					if (title_tag) {
+	          new_html += '<label for="metafields_'+title_tag.id+'_value">Page title</label>';
+	          new_html += '<input type="text" value="'+title_tag.value+'" name="metafields['+title_tag.id+'][value]" id="metafields_'+title_tag.id+'_value">';
+						$('.title_tag_container').append(new_html);
+					}	else {
+	          new_html += '<input value="title_tag" class="new_field" type="hidden" name="new_metafields[][name]" id="new_metafields__name">';
+	          new_html += '<label for="new_field_title">Page title</label>';
+	          new_html += '<input class="new_field" id="new_field_title" type="text" name="new_metafields[][value]">';
+						$('.title_tag_container').append(new_html);
+	        }
+
+	        new_html = '';
+
+					if (description_tag) {
+	          new_html += '<label for="metafields_'+description_tag.id+'_value">Page title</label>';
+	          new_html += '<textarea type="text" name="metafields['+description_tag.id+'][value]" id="metafields_'+description_tag.id+'_value">'+description_tag.value+'</textarea>';
+						$('.description_tag_container').append(new_html);
+					}	else {
+	          new_html += '<input value="description_tag" class="new_field" type="hidden" name="new_metafields[][name]" id="new_metafields__name">';
+	          new_html += '<label for="new_field_description">Meta description</label>';
+	          new_html += '<textarea class="new_field" id="new_field_description" name="new_metafields[][value]"></textarea>';
+	          $('.description_tag_container').append(new_html);
+	        }
+
+			  	$this.hide();
+			  	$('.reveal-target[data-reveal="'+reveal+'"]').show(); 
+		    }).error(function() {
+		    	basicError();
+		    	$this.removeClass('is-loading');
+		    });
+
+		  }
   	} else {
 	  	$(this).hide();
 	  	$('.reveal-target[data-reveal="'+reveal+'"]').show();  		
@@ -580,8 +601,9 @@ function ready() {
 
 	$('body').on('keyup', '.resource-search', function() {
 		var minimum = 3;
+		var exceptions = $(this).data('exceptions');
 
-		if ($(this).data('exceptions') === 'product-panel') {
+		if (exceptions === 'product-panel') {
 			minimum = 0;
 		}
 
@@ -591,13 +613,22 @@ function ready() {
 			$.ajax({
 				url: '/search/'+resource+'?q='+resource_infomation.query+'&page=1',
 				success: function(filtered_resource) {
-					resource_infomation[resource+'s'] = filtered_resource;
-					resource_infomation[resource+'_page'] = 1;
-					resource_infomation[resource+'_total'] = filtered_resource.length;
-					resource_infomation[resource+'_chunks_loaded'] = 1;
-
 					console.log(filtered_resource);
-					changePage(resource, filtered_resource, 1, filtered_resource.length);
+					if (resource === 'collection') {
+						resource_infomation[resource+'s'] = filtered_resource.collections;
+						resource_infomation['smart_collections'] = filtered_resource.smart_collections;
+						resource_infomation['custom_collections'] = filtered_resource.custom_collections;
+						resource_infomation[resource+'_page'] = 1;
+						resource_infomation[resource+'_total'] = filtered_resource.collections.length;
+						resource_infomation[resource+'_chunks_loaded'] = 1;
+						changePage(resource, filtered_resource.collections, 1, filtered_resource.collections.length);
+					} else {
+						resource_infomation[resource+'s'] = filtered_resource;
+						resource_infomation[resource+'_page'] = 1;
+						resource_infomation[resource+'_total'] = filtered_resource.length;
+						resource_infomation[resource+'_chunks_loaded'] = 1;
+						changePage(resource, filtered_resource, 1, filtered_resource.length);
+					}
 				},
 				error: basicError
 			});
@@ -668,21 +699,32 @@ function ready() {
 		$('form.ajax').submit();
 	});
 
-	$('form.ajax').bind("ajax:success", function(event, product){
-		if (product.created_new_variants) {
-			location.reload();
-		}
-  	var variant;
-    console.log("success product", product);
-    $('.variant_input').prop('disabled', false);
+	$('form.ajax').bind("ajax:success", function(event, product) {
+		if (product.id) {
+		  if (product.created_new_product) {
+			  window.location.href = '/dashboard?id='+product.id+'&resource=product'
+			} else {
+				if (product.created_new_variants) {
+					location.reload();
+				}
+			}
+	  	var variant;
+	    console.log("success product", product);
+	    $('.variant_input').prop('disabled', false);
 
-    for (var i = 0; i < product.variants.length; i++) {
-    	variant = product.variants[i];
-    	$('#variant_id_'+variant.id+' .edit_single_variant').data('object', variant);
-    }
-    // time to provide feedback 
-    $('#save_resource').removeClass('is-loading');
-	  flashMessage('Product was successfully saved');
+	    if (product.variants) {
+		    for (var i = 0; i < product.variants.length; i++) {
+		    	variant = product.variants[i];
+		    	$('#variant_id_'+variant.id+' .edit_single_variant').data('object', variant);
+		    }
+		  }
+	    // time to provide feedback 
+	    $('#save_resource').removeClass('is-loading');
+		  flashMessage('Product was successfully saved');
+		} else {
+			console.log(product);
+			flashMessage('Product was not saved', 'error');
+		}
 	});
 
 	$('form.ajax').bind("ajax:error", function(event, error){
@@ -968,14 +1010,18 @@ function ready() {
 	});
 
 	function addImagesCallback(images) {
+		$('.images-container .column.twelve').remove();
   	$('#shopify_api_product_file').val('');
   	console.log(images);
   	var dataPageTotal = Math.floor(($('.variant-select-image-label').length-1)/10);
-  	var variantIdRegex = $('.variant-select-image').attr('name').match(/[0-9]{11}/);
+  	if ($('.variant-select-image').attr('name')) {
+	  	var variantIdRegex = $('.variant-select-image').attr('name').match(/[0-9]{11}/);
+	  }
   	var variantId = '';
   	if (variantIdRegex) {variantId = variantIdRegex[0]}
 
   	images.forEach(function(image, index) {
+
     	var image_html = '';
     	var variant_image_html = '';
   		image_html += '<div class="product-image" data-id="'+image.id+'" draggable="true">';
@@ -1035,17 +1081,47 @@ function ready() {
 
 		files.forEach(function(file) {
 			getBase64(file, files.length, function(data) {
-				$.ajax({
-		      type: "POST",
-		      url: '/add-images', // sumbits it to the given url of the form
-		      data: {
-		      	id: $('[name="id"]').val(),
-		      	images: data
-		      },
-		      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
-		    }).success(addImagesCallback).error(function(e) {
-		    	console.log(e);
-		    });
+				if ($('[name="id"]').val() === 'new') {
+					$('.images-container .column.twelve').remove();
+			  	$('#shopify_api_product_file').val('');
+			  	console.log(data);
+			  	var dataPageTotal = Math.floor(($('.variant-select-image-label').length-1)/10);
+
+			  	data.forEach(function(imageBase64, index) {
+
+			    	var image_html = '';
+			  		image_html += '<div class="product-image" draggable="true">';
+				    	image_html += '<input type="hidden" name="shopify_api_product[files][]" value="'+imageBase64+'">';
+			      	image_html += '<img src="data:image/png;base64,'+imageBase64+'">';
+			        image_html += '<div class="overlay">';
+			          image_html += '<div class="icons-container">';
+			            image_html += '<i class="image icon-preview next-icon--size-16"></i>';
+			            image_html += '<i class="next-icon--size-16 alt-tag">ALT</i>';
+			            image_html += '<i class="image icon-trash next-icon--size-16"></i>';
+			          image_html += '</div>';
+			        image_html += '</div>';
+			      image_html += '</div>';
+
+			      $('.images-container').append(image_html);
+			  	});
+
+					$('#variant-add-image').removeClass('is-loading');
+					$('body').removeClass('is-loading-body');
+
+					closeModal($('#addImageUrlOverlay'));
+				} else {
+					$.ajax({
+			      type: "POST",
+			      url: '/add-images', // sumbits it to the given url of the form
+			      data: {
+			      	id: $('[name="id"]').val(),
+			      	images: data
+			      },
+			      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+					}).success(addImagesCallback).error(function(e) {
+			    	console.log(e);
+			    });
+			  }
 			});
 		});
 	});
@@ -1056,12 +1132,12 @@ function ready() {
 
 		$.ajax({
       type: "POST",
-      url: '/add-image-from-url', // sumbits it to the given url of the form
+      url: '/add-image-from-url',
       data: {
       	id: $('[name="id"]').val(),
       	src: $('#addImageUrlInput').val()
       },
-      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+      dataType: "JSON"
     }).success(addImagesCallback).error(basicError);
 	});
 
@@ -1077,11 +1153,11 @@ function ready() {
 
 			$dragIcon = $dragSrcEl.clone(); // copy original element for ghost image
 			$dragIcon.addClass('ghostImage').find('.overlay').remove();
-			if ($dragSrcEl.index() === 0) {$dragIcon.addClass('first')} // for proper width
+			if ($dragSrcEl.index() === 0) {$dragIcon.addClass('first')} // for proper width; the first image is wider
 			$('.images-container').append($dragIcon);
 			e.originalEvent.dataTransfer.setDragImage($dragIcon[0], e.offsetX, e.offsetY);
 
-			$dragSrcEl.addClass('dragging'); // edit original after it's already been cloned
+			$dragSrcEl.addClass('dragging'); // this class makes it look like a blank square; only editing the original after it's already been cloned 
 		},
 		dragenter: function(e) {
 			e.preventDefault();
@@ -1129,21 +1205,23 @@ function ready() {
 		  		imageOrders[$(element).data('id')] = index;
 		  	});
 
-				$.ajax({
-		      type: "POST",
-		      url: '/change-image-order', // sumbits it to the given url of the form
-		      data: {
-		      	id: $('[name="id"]').val(),
-		      	image_orders: imageOrders
-		      },
-		      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
-		    }).success(function(images) {
-		    	console.log(images);
-		    	flashMessage('Image order has been saved.');
-		    }).error(function(error) {
-		    	console.log(error);
-		    	flashMessage('Image order failed to save.', 'error');
-		    });
+		  	if ($('[name="id"]').val() === 'new') {
+					$.ajax({
+			      type: "POST",
+			      url: '/change-image-order',
+			      data: {
+			      	id: $('[name="id"]').val(),
+			      	image_orders: imageOrders
+			      },
+			      dataType: "JSON"
+			    }).success(function(images) {
+			    	console.log(images);
+			    	flashMessage('Image order has been saved.');
+			    }).error(function(error) {
+			    	console.log(error);
+			    	flashMessage('Image order failed to save.', 'error');
+			    });
+			  }
 		  }
 		}
 	}, '.product-image');
@@ -1168,19 +1246,23 @@ function ready() {
 	$('.images-container').on('click', '.alt-tag', function() {
 		var image = $(this).parent().parent().prev().attr('src');
 		var image_id = $(this).parent().parent().parent().data('id');
+		var $productImage = $(this).closest('.product-image');
+
+		$productImage.addClass('is-loading');
 
 		$('#image-for-alt-tag').attr('src', image);
 		$('#image-for-alt-tag').data('image-id', image_id);
 
 		$.ajax({
       type: "GET",
-      url: '/alt-tag', //sumbits it to the given url of the form
+      url: '/alt-tag',
       data: {
       	image_id: image_id
       },
-      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+      dataType: "JSON"
     }).success(function(alt_tag_metafield) {
     	console.log(alt_tag_metafield);
+    	$productImage.removeClass('is-loading');
 
     	if (alt_tag_metafield) {
 	    	$('#image-alt-tag').data('metafield-id', alt_tag_metafield.id).val(alt_tag_metafield.value);
@@ -1197,21 +1279,25 @@ function ready() {
 		var image_id = $('#image-for-alt-tag').data('image-id');
 		var alt_tag = $('#image-alt-tag').val();
 
+		$('#image-alt-tag-save').addClass('is-loading');
+
 		$.ajax({
       type: "POST",
-      url: '/alt-tag', //sumbits it to the given url of the form
+      url: '/alt-tag',
       data: {
       	metafield_id: metafield_id,
       	image_id: image_id,
       	alt_tag: alt_tag
       },
-      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+      dataType: "JSON"
     }).success(function(alt_tag_metafield) {
     	console.log(alt_tag_metafield);
+    	$('#image-alt-tag-save').removeClass('is-loading');
     	flashMessage('The image has been updated.');
     	closeModal($('#editAltTagOverlay'));
     }).error(function(error) {
     	console.log(error);
+    	$('#image-alt-tag-save').removeClass('is-loading');
     	flashMessage('The image failed to update.');
     });
 	});
@@ -1227,34 +1313,56 @@ function ready() {
 
 		confirmBox('Delete this image?', 'Are you sure you want to delete this image and remove it from all variants? This action cannot be reversed.', 'Delete', {
 			yes: function(params) {
+				var no_image_html = '';
 				$overlay.addClass('is-loading');
-				$.ajax({
-		      type: "POST",
-		      url: '/delete-image', // sumbits it to the given url of the form
-		      data: {
-		      	product_id: params.product_id,
-		      	image_id: params.image_id
-		      },
-		      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
-		    }).success(function(image) {
-		    	console.log(image);
-		    	$overlay.addClass('is-loading');
-		    	flashMessage('The image has been deleted.');
-		    	$('.variant .variant_image[data-image-id="'+image.id+'"]').prepend('<i class="icon-image"></i>').find('img').remove();
-		    	$('.variant .variant_image[data-image-id="'+image.id+'"]').each(function() {
-		    		$(this).closest('.variant').find('.edit_single_variant').data('image', null);
-		    	});
+				if ($('[name="id"]').val() === 'new') {
+					$overlay.remove();
+		    	if ($('.images-container .product-image').length === 0) {
+						no_image_html += '<div class="column twelve type--centered no_margin">';
+	            no_image_html += '<i class="image icon-photos next-icon--size-80"></i>';
+	            no_image_html += '<h5>Drop images to upload</h5>';
+	          no_image_html += '</div>';
+	          $('.images-container').append(no_image_html);
+	        }
+    		} else {
+					$.ajax({
+			      type: "POST",
+			      url: '/delete-image', // sumbits it to the given url of the form
+			      data: {
+			      	product_id: params.product_id,
+			      	image_id: params.image_id
+			      },
+			      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+			    }).success(function(image) {
+			    	var no_image_html = '';
+			    	console.log(image);
+			    	flashMessage('The image has been deleted.');
+			    	$('.variant .variant_image[data-image-id="'+image.id+'"]').prepend('<i class="icon-image"></i>').find('img').remove();
+			    	$('.variant .variant_image[data-image-id="'+image.id+'"]').each(function() {
+			    		$(this).closest('.variant').find('.edit_single_variant').data('image', null);
+			    	});
 
-		    	$('.product-image[data-id="'+image.id+'"]').remove();
-		    	$('#variant-select-image-'+image.id).remove();
-		    	$('.variant-select-image-label[for="variant-select-image-'+image.id+'"]').remove();
-		    	$('.variant-select-image-label').each(function(index) {
-		    		$(this).attr('data-page', Math.floor(index/10));
-		    	});
-		    }).error(function(e) {
-		    	console.log(e);
-		    	flashMessage('The image failed to be deleted.', 'error');
-		    });
+			    	$('.product-image[data-id="'+image.id+'"]').remove();
+
+			    	if ($('.images-container .product-image').length === 0) {
+							no_image_html += '<div class="column twelve type--centered no_margin">';
+		            no_image_html += '<i class="image icon-photos next-icon--size-80"></i>';
+		            no_image_html += '<h5>Drop images to upload</h5>';
+		          no_image_html += '</div>';
+		          $('.images-container').append(no_image_html);
+		        }
+
+			    	$('#variant-select-image-'+image.id).remove();
+			    	$('.variant-select-image-label[for="variant-select-image-'+image.id+'"]').remove();
+
+			    	$('.variant-select-image-label').each(function(index) {
+			    		$(this).attr('data-page', Math.floor(index/10));
+			    	});
+			    }).error(function(e) {
+			    	console.log(e);
+			    	flashMessage('The image failed to be deleted.', 'error');
+			    });
+			  }
 			}
 		},
 		{

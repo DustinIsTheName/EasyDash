@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     get '/product' => :products
     get '/blog' => :blogs
     get '/collection' => :collections
+    get '/custom_collection' => :custom_collection
     get '/page' => :pages
   end
 
