@@ -65,21 +65,22 @@
       <% if @resource.id == 'new' %>
         <%= fields_for 'variants[new_metafields[]]', ShopifyAPI::Metafield.new do |m| %>
           <%= m.hidden_field :name, value: "harmonized_system_code", class: "new_hsc_name " + additional_class %>
-          <%= m.text_field :value, class: "new_field " + additional_class %>
+          <%= m.number_field :value, class: "new_field harmonized_system_code " + additional_class %>
         <% end %>
       <% else %>
         <% if v.object.metafields.count > 0 %>
           <% v.object.metafields.each do |metafield| %>
             <% if metafield.key == 'harmonized_system_code' %>
               <%= fields_for 'variants['+v.object.id.to_s+']metafields[]', metafield do |m| %>
-                <%= m.text_field :value, class: additional_class %>
+                <%= m.hidden_field :name, value: "harmonized_system_code", class: "new_hsc_name " + additional_class %>
+                <%= m.number_field :value, class: "harmonized_system_code " + additional_class %>
               <% end %>
             <% end %>
           <% end %>
         <% else %>
           <%= fields_for 'variants['+v.object.id.to_s+']new_metafields[]', ShopifyAPI::Metafield.new do |m| %>
             <%= m.hidden_field :name, value: "harmonized_system_code", class: "new_hsc_name " + additional_class %>
-            <%= m.text_field :value, class: "new_field " + additional_class %>
+            <%= m.number_field :value, class: "new_field harmonized_system_code " + additional_class %>
           <% end %>
         <% end %>
       <% end %>

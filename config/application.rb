@@ -9,6 +9,7 @@ Bundler.require(*Rails.groups)
 
 module EasyDash
   class Application < Rails::Application
+    require 'functions/string'
     config.autoload_paths += %W(#{config.root}/lib)
     config.autoload_paths += %W(#{config.root}/lib/functions)
     

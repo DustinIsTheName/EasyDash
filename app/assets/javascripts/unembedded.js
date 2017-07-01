@@ -582,6 +582,7 @@ function ready() {
 		changePage(resource, resource_infomation[resource+'s'], resource_infomation[resource+'_page'], resource_infomation[resource+'_total']);
 	}
 
+	// pull login from cookie if it exists and autofill form
 	var permanent_domain = getCookie('permanent_domain');
 	if (permanent_domain) {
 		$('#myshopify_login').val(permanent_domain).closest('#myshopify_login_section').addClass('filled_login');
@@ -700,6 +701,7 @@ function ready() {
 	});
 
 	$('form.ajax').bind("ajax:success", function(event, product) {
+		$('#save_resource').removeClass('is-loading');
 		if (product.id) {
 		  if (product.created_new_product) {
 			  window.location.href = '/dashboard?id='+product.id+'&resource=product'
@@ -719,11 +721,14 @@ function ready() {
 		    }
 		  }
 	    // time to provide feedback 
-	    $('#save_resource').removeClass('is-loading');
 		  flashMessage('Product was successfully saved');
 		} else {
 			console.log(product);
-			flashMessage('Product was not saved', 'error');
+			if (product.error_message) {
+				flashMessage(product.error_message, 'error');
+			} else {
+				flashMessage('Product was not saved', 'error');
+			}
 		}
 	});
 
@@ -750,20 +755,48 @@ function ready() {
       data: data,
       dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
     }).success(function(variant) {
-      console.log("success variant", variant);
+      console.log(variant);
       $('.single_variant_submit').removeClass('is-loading');
-      flashMessage('Variant has been updated successfully.');
-      $('[data-object*="'+variant.id+'"]').data('object', variant);
-      $('#variants_'+variant.id+'_option1').val(variant.option1);
-      $('#variants_'+variant.id+'_option2').val(variant.option2);
-      $('#variants_'+variant.id+'_option3').val(variant.option3);
-      $('#variants_'+variant.id+'_inventory_quantity').val(variant.inventory_quantity);
-      $('#variants_'+variant.id+'_compare_at_price').val(variant.compare_at_price);
-      $('#variants_'+variant.id+'_price').val(variant.price);
-      $('#variants_'+variant.id+'_sku').val(variant.sku);
-
       $('form.ajax [name]:not(.variant_input)').prop('disabled', false);
+    	if (variant.error_message) {
+    		flashMessage(variant.error_message, 'error');
+    	}	else {
+	      flashMessage('Variant has been updated successfully.');
+	      $('[data-object*="'+variant.id+'"]').data('object', variant);
+	      $('#variants_'+variant.id+'_option1').val(variant.option1);
+	      $('#variants_'+variant.id+'_option2').val(variant.option2);
+	      $('#variants_'+variant.id+'_option3').val(variant.option3);
+	      $('#variants_'+variant.id+'_inventory_quantity').val(variant.inventory_quantity);
+	      $('#variants_'+variant.id+'_compare_at_price').val(variant.compare_at_price);
+	      $('#variants_'+variant.id+'_price').val(variant.price);
+	      $('#variants_'+variant.id+'_sku').val(variant.sku);
 
+	      $('.new_hsc_name').remove();
+
+				$.ajax({
+		      type: "GET",
+		      url: '/variant-hsc', //sumbits it to the given url of the form
+		      data: {
+		      	variant_id: variant.id
+		      },
+		      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+		    }).success(function(hsc) {
+		    	var $this = $('.harmonized_system_code');
+		    	console.log(hsc);
+
+					if (hsc) {
+						$this.val(hsc.value);
+						$this.before('<input value="harmonized_system_code" class="new_hsc_name variant_input" type="hidden" name="variants['+variant.id+']metafields['+hsc.id+'][name]" id="variants_'+variant.id+'_new_metafields__name">');
+						$this.attr('name', 'variants['+variant.id+']metafields['+hsc.id+'][value]');
+						$this.attr('id', 'variants_'+variant.id+'_metafields_'+hsc.id+'_value');
+					} else {
+						$this.val('');
+						$this.before('<input value="harmonized_system_code" class="new_hsc_name variant_input" type="hidden" name="variants['+variant.id+']new_metafields[][name]" id="variants_'+variant.id+'_new_metafields__name">');
+						$this.attr('name', 'variants['+variant.id+']new_metafields[][value]');
+						$this.attr('id', 'variants_'+variant.id+'_new_metafields__value');
+					}
+		    }).error(basicError);
+	    }
       // time to provide feedback 
     }).error(function(e) {
     	console.log(e);
@@ -834,9 +867,9 @@ function ready() {
 		      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
 		    }).success(function(hsc) {
 		    	console.log(hsc);
-
 					if (hsc) {
 						$this.val(hsc.value);
+						$this.before('<input value="harmonized_system_code" class="new_hsc_name variant_input" type="hidden" name="variants['+variant.id+']metafields['+hsc.id+'][name]" id="variants_'+variant.id+'_new_metafields__name">');
 						$this.attr('name', 'variants['+variant.id+']metafields['+hsc.id+'][value]');
 						$this.attr('id', 'variants_'+variant.id+'_metafields_'+hsc.id+'_value');
 					} else {
@@ -1227,9 +1260,9 @@ function ready() {
 	}, '.product-image');
 
 	$('#shopify_api_product_handle').keyup(function() {
-		var tooltiptext = $('#SEOURL h3').text().split('/');
+		var tooltiptext = $('#SEOURL #SEOURL-url').text().split('/');
 		tooltiptext[tooltiptext.length - 1] = $(this).val();
-		$('#SEOURL h3').text(tooltiptext.join('/'))
+		$('#SEOURL #SEOURL-url').text(tooltiptext.join('/'))
 	});
 
 	$('.images-container').on('click', '.icon-preview', function() {

@@ -290,7 +290,7 @@ label .icon-calendar { float: right; margin-top: 2px; }
   box-shadow: 1px 0 5px rgba(0,0,0,0.12);
   overflow: hidden;
   // transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
-  transition: width 1s;
+  transition: width .3s;
   height: 100%;
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
@@ -1088,7 +1088,6 @@ label .icon-calendar { float: right; margin-top: 2px; }
       -webkit-flex: 1 1 auto;
       -ms-flex: 1 1 auto;
       flex: 1 1 auto;
-      height: 100%;
       width: 300px;
       margin-top: 108px;
       min-height: 0;
@@ -1100,6 +1099,11 @@ label .icon-calendar { float: right; margin-top: 2px; }
       .sidebyside_large {width: calc(85% - 9px);}
       .icon-trash {background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 27 27' enable-background='new 0 0 27 27'%3E%3Cpath fill='rgb(255,255,255)' d='M27.5,5a2.22,2.22,0,0,1-1.8,2.25H2.3A2.22,2.22,0,0,1,.5,5,2.22,2.22,0,0,1,2.3,2.75H9.5C9.5,1.63,11.07.5,12.2,0.5h3.6c1.13,0,2.7,1.35,2.7,2.25h7.2A2.22,2.22,0,0,1,27.5,5Zm-2.25,5.85V25.7c0,0.9-1.8,1.8-2.7,1.8H5.45c-0.9,0-2.7-.68-2.7-1.8V10.85A3.17,3.17,0,0,1,4.33,9.5H23.9A3.88,3.88,0,0,1,25.25,10.85ZM11.75,14.9a1,1,0,0,0-.9-0.9H10.4a1,1,0,0,0-.9.9v7.2a1,1,0,0,0,.9.9h0.45a1,1,0,0,0,.9-0.9V14.9Zm6.75,0a1,1,0,0,0-.9-0.9H17.15a1,1,0,0,0-.9.9v7.2a1,1,0,0,0,.9.9H17.6a1,1,0,0,0,.9-0.9V14.9Z' transform='translate(-0.5 -0.5)' /%3E%3C/svg%3E");}
     }
+
+    .quick-select .wittyEDPanelBody {
+      height: 100%;
+    }
+
     .wittyEDTopButtons { 
       /*border-bottom: 1px solid #d9d9d9;*/
         padding: $gutter;
@@ -1198,7 +1202,7 @@ label .icon-calendar { float: right; margin-top: 2px; }
   clip: rect(-3px, 30px, 45px, 0);
   color: #212529;
   // transition: all 300ms cubic-bezier(0.19, 1, 0.22, 1);
-  transition: left 1s;
+  transition: left .3s;
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
   
@@ -1873,7 +1877,7 @@ button.variant {padding: .9rem 1.5rem;}
   -webkit-transform: translate(-50%,-50%);
   -moz-transform: translate(-50%,-50%);
   transform: translate(-50%,-50%);
-  transition: height 1s, width 1s, max-width 1s, left 1s;
+  transition: height .3s, width .3s, max-width .3s, left .3s;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 

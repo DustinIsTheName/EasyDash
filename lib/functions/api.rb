@@ -335,17 +335,23 @@ class API
         m = v["metafields"][metafield.id.to_s]
 
         if m
-          metafield.value = m["value"]
-
-          # save metafield if information has changed
-          if old_metafield.attributes == metafield.attributes
-            puts Colorize.cyan(metafield.key + ' skipped')
+          if m["value"].blank?
+            metafield.destroy
           else
-            if metafield.save
-              puts Colorize.green(metafield.key + ' saved ') + Colorize.orange(ShopifyAPI.credit_left)
+
+            metafield.value = m["value"]
+
+            # save metafield if information has changed
+            if old_metafield.attributes == metafield.attributes
+              puts Colorize.cyan(metafield.key + ' skipped')
             else
-              puts Colorize.red(metafield.errors.messages)
+              if metafield.save
+                puts Colorize.green(metafield.key + ' saved ') + Colorize.orange(ShopifyAPI.credit_left)
+              else
+                puts Colorize.red(metafield.errors.messages)
+              end
             end
+
           end
         end
       end

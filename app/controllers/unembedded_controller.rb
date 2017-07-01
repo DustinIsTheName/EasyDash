@@ -58,18 +58,26 @@ class UnembeddedController < ApplicationController
   def update_api
     puts Colorize.magenta(params)
 
-    product = API.updateProduct(params)
-
-    # redirect_to dashboard_path(resource: params[:resource], id: params[:id])
-    render json: product
+    validation = Validate.product(params)
+    if validation.is_valid
+      product = API.updateProduct(params)
+      render json: product
+    else
+      render json: validation
+    end
   end
 
   def update_variant
-    # puts Colorize.magenta(params)
+    puts Colorize.magenta(params)
     @variant = ShopifyAPI::Variant.find(params['variants'].keys[0])
 
-    variant = API.updateVariant(params, @variant)
-    render json: variant
+    validation = Validate.variant(params, @variant)
+    if validation.is_valid
+      variant = API.updateVariant(params, @variant)
+      render json: variant
+    else
+      render json: validation
+    end
   end
 
   def add_images
