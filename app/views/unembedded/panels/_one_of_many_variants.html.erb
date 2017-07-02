@@ -29,20 +29,20 @@
       <h5>Options</h5>
       <div class="row">
         <label><%= @resource.options[0].name %></label>
-        <input type="hidden" name="options[]" value="<%= @resource.options[0].name %>" class="variant_input">
+        <input type="hidden" name="options[]" value="<%= @resource.options[0].name %>" class="variant_input option1_info">
         <%= v.text_field :option1, placeholder: "Option 1", class: "option_1 variant_input" %>
       </div>
       <% if v.object.option2 %>
       <div class="row">
         <label><%= @resource.options[1].name %></label>
-        <input type="hidden" name="options[]" value="<%= @resource.options[1].name %>" class="variant_input">
+        <input type="hidden" name="options[]" value="<%= @resource.options[1].name %>" class="variant_input option2_info">
         <%= v.text_field :option2, placeholder: "Option 2", class: "option_2 variant_input" %>
       </div>
       <% end %>
       <% if v.object.option3 %>
       <div class="row">
         <label><%= @resource.options[2].name %></label>
-        <input type="hidden" name="options[]" value="<%= @resource.options[2].name %>" class="variant_input">
+        <input type="hidden" name="options[]" value="<%= @resource.options[2].name %>" class="variant_input option3_info">
         <%= v.text_field :option3, placeholder: "Option 3", class: "option_3 variant_input" %>
       </div>
       <% end %>

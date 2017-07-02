@@ -697,11 +697,14 @@ function ready() {
 	// submit form with AJAX
 	$('#save_resource').click(function() {
 		$(this).addClass('is-loading');
+		$('.variant_input').prop('disabled', true);
 		$('form.ajax').submit();
 	});
 
 	$('form.ajax').bind("ajax:success", function(event, product) {
 		$('#save_resource').removeClass('is-loading');
+		$('#shopify_api_product_handle').val(product.handle);
+    $('.variant_input').prop('disabled', false);
 		if (product.id) {
 		  if (product.created_new_product) {
 			  window.location.href = '/dashboard?id='+product.id+'&resource=product'
@@ -712,7 +715,6 @@ function ready() {
 			}
 	  	var variant;
 	    console.log("success product", product);
-	    $('.variant_input').prop('disabled', false);
 
 	    if (product.variants) {
 		    for (var i = 0; i < product.variants.length; i++) {
