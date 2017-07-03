@@ -480,7 +480,7 @@ function ready() {
 		var index_of_id;
 		var resource_title = $(this).next().text();
 
-		confirmBox('Delete '+resource_title+'?', 'Are you sure you want to delete this '+resource_title+'? This action cannot be reversed.', 'Delete', {
+		confirmBox('Delete '+resource_title+'?', 'Are you sure you want to delete '+resource_title+'? This action cannot be reversed.', 'Delete', {
 			yes: deleteResource
 		}, {
 			id: id,
@@ -500,6 +500,33 @@ function ready() {
 					resource_infomation[resource+'_total'] = resource_infomation[resource+'_total'] - 1;
 
 					changePage(resource, resource_infomation[resource+'s'], resource_infomation[resource+'_page'], resource_infomation[resource+'_total']);
+				}
+			}
+		});
+	});
+
+	$('body').on('click', '.wittyEDTopButtons .delete-viewed-resource', function() {
+		var resource = $(this).data('resource');
+		var id = $(this).data('id');
+		var $this = $(this);
+		var index_of_id;
+		var resource_title = $(this).data('title');
+		var url = new URL(window.location.href);
+
+		confirmBox('Delete '+resource_title+'?', 'Are you sure you want to delete '+resource_title+'? This action cannot be reversed.', 'Delete', {
+			yes: deleteResource
+		}, {
+			id: id,
+			resource: resource,
+			$this: $this,
+			callback: function(deleted_resource) {
+				console.log(deleted_resource);
+				$this.removeClass('is-loading');
+				flashMessage(resource_title + ' deleted.');
+				if (url.searchParams.get("referrer")) {
+					window.top.location.href = url.searchParams.get("referrer");
+				} else {
+					window.top.location.href = 'http://' + $('body').data('shopify-url');
 				}
 			}
 		});
@@ -554,7 +581,11 @@ function ready() {
 
 			  new_html += '<li class="variable">';
 			  new_html += '<button type="button" class="sidebyside_small warning icon-trash" data-id="'+resource_object[i].id+'" data-resource="'+data_resource+'"></button>'
-				new_html += '<a href="/dashboard?resource='+data_resource+'&id='+resource_object[i].id+'" target="'+resource_infomation.target+'" data-handle="' + resource_object[i].handle + '" data-id="'+resource_object[i].id+'">';
+			  if (data_resource === 'product') {
+					new_html += '<a href="/dashboard?resource='+data_resource+'&id='+resource_object[i].id+'" target="'+resource_infomation.target+'" data-handle="' + resource_object[i].handle + '" data-id="'+resource_object[i].id+'">';
+				} else {
+					new_html += '<a href="https://'+$('body').data('shopify-url')+'/admin/'+data_resource.replace('blog', 'article').replace(/smart_|custom_/, '')+'s/'+resource_object[i].id+'" target="_blank" data-handle="' + resource_object[i].handle + '" data-id="'+resource_object[i].id+'">';
+				}
 			  new_html += resource_object[i].title;
 			  new_html += '</a>'
 			  new_html += '</li>'

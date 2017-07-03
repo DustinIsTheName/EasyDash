@@ -8,11 +8,18 @@
       	<%= svgs 'logo_white' %>
       </h2>
     </header><!-- .theme-editor__header -->
-    <div class="wittyEDPanelBody" data-scrollable="">
-      <div class="wittyEDTopButtons"> 
-        <button class="sidebyside_large primary">Edit Product</button>
-        <button class="sidebyside_small warning icon-trash"></button>
-      </div>
+    <div class="wittyEDPanelBody" data-scrollable=""<% unless @viewed_resource %> style="margin-top: 56px;"<% end %>>
+      <% if @viewed_resource %>
+        <div class="wittyEDTopButtons">
+          <% if @viewed_resource.class.to_s.gsub(/shopifyapi::/i, '').underscore == 'product' %>
+            <%= link_to 'Edit ' + @viewed_resource.class.to_s.gsub(/shopifyapi::|custom|smart/i, ''), dashboard_path(resource: @viewed_resource.class.to_s.gsub(/shopifyapi::/i, '').underscore, id: @viewed_resource.id), class: 'button sidebyside_large primary', target: '_blank', data: {handle: @viewed_resource.handle, id: @viewed_resource.id} %>
+          <% else %>
+            <a class="button sidebyside_large primary" target="_blank" data-handle="<%= @viewed_resource.handle %>" data-id="<%= @viewed_resource.id %>" href="https://<%= @shop_session.url %>/admin/<%= @viewed_resource.class.to_s.gsub(/shopifyapi::|custom|smart/i, '').underscore %>s/<%= @viewed_resource.id %>">Edit <%= @viewed_resource.class.to_s.gsub(/shopifyapi::|custom|smart/i, '') %></a>
+          <% end %>
+
+          <button class="sidebyside_small warning icon-trash delete-viewed-resource" data-id="<%= @viewed_resource.id %>" data-title="<%= @viewed_resource.title %>" data-resource="<%= @viewed_resource.class.to_s.downcase.gsub(/shopifyapi::|custom|smart/i, '') %>"></button>
+        </div>
+      <% end %>
       <h3 class="ui-subheading ui-subheading--subdued theme-editor__subheading">Choose your option</h3>
       <input type="hidden" id="target_attr" data-target="_blank">
       <article class="next-card theme-editor__card">

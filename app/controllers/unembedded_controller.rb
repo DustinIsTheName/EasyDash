@@ -6,6 +6,17 @@ class UnembeddedController < ApplicationController
   layout 'application'
 
   def quick_select
+    if params["resource"] == 'product'
+      @viewed_resource = ShopifyAPI::Product.find(:first, params: {handle: params["handle"]})      
+    elsif params["resource"] == 'collection'
+      @viewed_resource = ShopifyAPI::CustomCollection.find(:first, params: {handle: params["handle"]})
+      @viewed_resource = ShopifyAPI::SmartCollection.find(:first, params: {handle: params["handle"]}) unless @viewed_resource
+    elsif params["resource"] == 'page'
+      @viewed_resource = ShopifyAPI::Page.find(:first, params: {handle: params["handle"]})
+    elsif params["resource"] == 'blog'
+      @viewed_resource = ShopifyAPI::Article.find(:first, params: {handle: params["handle"]})
+    end
+
     get_resources
   end
 

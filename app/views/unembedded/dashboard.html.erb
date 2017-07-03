@@ -14,7 +14,7 @@
         </nav><!-- .theme-editor__header-nav -->
       </header><!-- .theme-editor__header -->
       <% if @type == 'resource_select' %>
-      <div class="dddd wittyEDPanel<% if @type == 'resource_select' %> active<% end %>" data-tier="1">
+      <div class="wittyEDPanel<% if @type == 'resource_select' %> active<% end %>" data-tier="1">
         <div class="wittyEDPanelBody">
           <%= panel 'resource_select' %>
         </div><!-- .wittyEDPanelBody -->
@@ -244,4 +244,18 @@
 </button><!-- .wittyEDEditorFullscreenToggle -->
 <!-- End WITTY EasyDash - Sidebar Code -->
 
-<iframe id="dashboard-iframe" src="https://easy-dash.myshopify.com/?ediframe=true"></iframe>
+<% unless @type == 'resource_select' %>
+  <% if @type.include? 'collection' %>
+    <% resource_url = 'collections/' %>
+  <% else %>
+    <% resource_url = @type + 's/' %>
+  <% end %>
+  
+  <% resource_url = resource_url + @resource.handle %>
+<% else %>
+  <% resource_url = '' %>
+<% end %>
+
+
+
+<iframe id="dashboard-iframe" src="https://easy-dash.myshopify.com/<%= resource_url %>?ediframe=true"></iframe>

@@ -7,7 +7,7 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
-<body>
+<body data-shopify-url="<%= @shop_session.url %>">
 	<%= yield %>
 	<div class="flash-message"></div>
 </body>

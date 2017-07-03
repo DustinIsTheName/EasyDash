@@ -18,7 +18,11 @@
           <% end %>
 	    		<li class="variable">
             <button type="button" class="sidebyside_small warning icon-trash" data-id="<%= resource.id %>" data-resource="<%= resource_name %>"></button>
-            <%= link_to resource.title, dashboard_path(resource: resource_name, id: resource.id), target: target, data: {handle: resource.handle, id: resource.id} %>
+            <% if resource_name == 'product' %>
+              <%= link_to resource.title, dashboard_path(resource: resource_name, id: resource.id), target: target, data: {handle: resource.handle, id: resource.id} %>
+            <% else %>
+              <a href="https://<%= @shop_session.url %>/admin/<%= resource_name.gsub(/custom_|smart_/, '').gsub('blog', 'article') %>s/<%= resource.id %>" target="_blank" data-handle="<%= resource.handle %>" data-id="<%= resource.id %>"><%= resource.title %></a>
+            <% end %>
 	    		</li>
 	    	<% end %>
     	<% else %>
