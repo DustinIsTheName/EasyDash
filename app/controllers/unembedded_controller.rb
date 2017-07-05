@@ -31,39 +31,56 @@ class UnembeddedController < ApplicationController
   def dashboard
     t = Time.now
     @type = params[:resource]
+    @frame_url = params[:frame_url]
 
-    if session[:question]
-      @question = @user.questions.new(session[:question])
-      session[:question] = nil
-      @question.valid? # run validations to to populate the errors[]
-    else
-
-      # get_resources
-      case @type
-      when 'blog'
+    # get_resources
+    case @type
+    when 'blog'
+      if params[:id] == 'handle'
+        @resource = ShopifyAPI::Article.find(:first, params: {handle: params["handle"]})
+      else
         @resource = params[:id] == 'new' ? ShopifyAPI::Article.new : ShopifyAPI::Article.find(params[:id])
-      when 'custom_collection'
+      end
+    when 'custom_collection'
+      if params[:id] == 'handle'
+        @resource = ShopifyAPI::CustomCollection.find(:first, params: {handle: params["handle"]})
+      else
         @resource = params[:id] == 'new' ? ShopifyAPI::CustomCollection.new : ShopifyAPI::CustomCollection.find(params[:id])
-      when 'smart_collection'
+      end
+    when 'smart_collection'
+      if params[:id] == 'handle'
+        @resource = ShopifyAPI::SmartCollection.find(:first, params: {handle: params["handle"]})
+      else
         @resource = params[:id] == 'new' ? ShopifyAPI::SmartCollection.new : ShopifyAPI::SmartCollection.find(params[:id])
-      when 'page'
+      end
+    when 'page'
+      if params[:id] == 'handle'
+        @resource = ShopifyAPI::Page.find(:first, params: {handle: params["handle"]})
+      else
         @resource = params[:id] == 'new' ? ShopifyAPI::Page.new : ShopifyAPI::Page.find(params[:id])
-      when 'product'
+      end
+    when 'product'
+      if params[:id] == 'handle'
+        @resource = ShopifyAPI::Product.find(:first, params: {handle: params["handle"]})
+      else
         if params[:id] == 'new'
           @resource = ShopifyAPI::Product.new(id: 'new',title: '', body_html: '', vendor: '', product_type: '', created_at: '', handle: '', updated_at: '', published_at: '', template_suffix: '', published_scope: '', tags: '', variants: [], collections: [], options: [], images: [], image: '')
           @resource.variants << ShopifyAPI::Variant.new(title: 'Default Title', price: '', sku: '', position: '', grams: '', inventory_policy: '', compare_at_price: '', fulfillment_service: '', inventory_management: '', option1: 'Default Title', option2: nil, option3: nil, taxable: '', barcode: '', image_id: '', inventory_quantity: '', weight: '', weight_unit: '', old_inventory_quantity: '', requires_shipping: '')
         else
           @resource = ShopifyAPI::Product.find(params[:id])
         end
-        @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
-        @fulfillment_services = ShopifyAPI::FulfillmentService.find(:all, params: {scope: :all, fields: ['name', 'handle']})
-        @custom_collections = ShopifyAPI::CustomCollection.find(:all, params: {limit: 250, fields: ['title', 'handle', 'id']})
-        @smart_collections = ShopifyAPI::SmartCollection.find(:all, params: {product_id: params[:id], limit: 250, fields: ['title', 'handle', 'id']})
-      else
-        get_resources
-        @type = 'resource_select'
       end
+      @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
+      @fulfillment_services = ShopifyAPI::FulfillmentService.find(:all, params: {scope: :all, fields: ['name', 'handle']})
+      @custom_collections = ShopifyAPI::CustomCollection.find(:all, params: {limit: 250, fields: ['title', 'handle', 'id']})
+      @smart_collections = ShopifyAPI::SmartCollection.find(:all, params: {product_id: params[:id], limit: 250, fields: ['title', 'handle', 'id']})
     end
+
+    unless @resource
+      get_resources
+      @type = 'resource_select'
+    end
+
   end
 
   def update_api

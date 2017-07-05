@@ -27,7 +27,7 @@
 
 	/* This is my app's JavaScript */
 	var myAppJavaScript = function($) {
-		console.log(document.referrer);
+
     if ( $('#admin_bar_iframe')[0] && window.location.href.indexOf('ediframe=true') === -1 ) {
     	var addendum = '?referrer=' + document.referrer;
     	var handle;
@@ -52,6 +52,8 @@
       $('.wittyEDOpenButton').click(function() {
       	$(this).toggleClass('open');
       });
+
+      parent.postMessage(window.location.href, '<%= Rails.env.production? ? "https://easydash.herokuapp.com" : "https://localhost:3000" %>');
 
       // $('.wittyEDContainer').mouseleave(function() {
       // 	$('.wittyEDOpenButton').removeClass('open');

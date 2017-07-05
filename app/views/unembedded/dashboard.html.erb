@@ -286,6 +286,8 @@
   <% resource_url = '' %>
 <% end %>
 
-
-
-<iframe id="dashboard-iframe" src="https://easy-dash.myshopify.com/<%= resource_url %>?ediframe=true"></iframe>
+<% if @frame_url %>
+  <iframe id="dashboard-iframe" src="https://<%= @shop_session.url %><%= @frame_url %>?ediframe=true"></iframe>
+<% else %>
+  <iframe id="dashboard-iframe" src="https://<%= @shop_session.url %>/<%= resource_url %>?ediframe=true"></iframe>
+<% end %>
