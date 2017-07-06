@@ -1,3 +1,4 @@
+<!-- resources, total, resource_name, target -->
 <div class="select-sim-dropdown-container">
   <div class="dropdown-arrow"></div>
 	<div class="search container">
@@ -5,33 +6,14 @@
 			<i class="icon-search"></i>
     	<input type="text" class="resource-search" name="<%= resource_name %>-search" placeholder="Search <%= resource_name %>s" data-resource="<%= resource_name %>">
     </div>
-    <ul class="select-sim-dropdown <%= resource_name %>" data-total="<%= total %>" data-resource="<%= resource_name %>" data-object="<%= resources.to_json %>"<% if resource_name == 'collection' %> data-smart="<%= @sc.to_json %>" data-custom="<%= @cc.to_json %>"<% end %>>
+    <ul class="select-sim-dropdown <%= resource_name %>" data-resource="<%= resource_name %>">
   		<li>
         <%= link_to "Add #{resource_name}", dashboard_path(resource: resource_name, id: 'new'), target: target, class: 'new' %>
   		</li>
-    	<% if resources.length > 0 %>
-	    	<% for resource in resources.take(8) %>
-          <% if @sc.include?(resource) %>
-            <% resource_name = 'smart_collection' %>
-          <% elsif @cc.include?(resource) %>
-            <% resource_name = 'custom_collection' %>
-          <% end %>
-	    		<li class="variable">
-            <button type="button" class="sidebyside_small warning icon-trash" data-id="<%= resource.id %>" data-resource="<%= resource_name %>"></button>
-            <% if resource_name == 'product' %>
-              <%= link_to resource.title, dashboard_path(resource: resource_name, id: resource.id), target: target, data: {handle: resource.handle, id: resource.id} %>
-            <% else %>
-              <a href="https://<%= @shop_session.url %>/admin/<%= resource_name.gsub(/custom_|smart_/, '').gsub('blog', 'article') %>s/<%= resource.id %>" target="_blank" data-handle="<%= resource.handle %>" data-id="<%= resource.id %>"><%= resource.title %></a>
-            <% end %>
-	    		</li>
-	    	<% end %>
-    	<% else %>
-    		<li class="variable"><span>No results found.</span></li>
-    	<% end %>
     </ul>
     <div class="arrow-navigation">
     	<button type="button" class="secondary icon-prev disabled"></button>
-    	<button type="button" class="secondary icon-next<% if total <= 8 %> disabled<% end %>"></button>
+    	<button type="button" class="secondary icon-next"></button>
     	<div style="clear:both;"></div>
     </div>
   </div>

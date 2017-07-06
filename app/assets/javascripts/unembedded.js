@@ -7,12 +7,12 @@ function ready() {
 	var variant_image_page = 0;
 	// JS for the resourse selection
 	var resource_infomation = {
-		blogs: $('.select-sim-dropdown.blog').data('object'),
-		collections: $('.select-sim-dropdown.collection').data('object'),
-		smart_collections: $('.select-sim-dropdown.collection').data('smart'),
-		custom_collections: $('.select-sim-dropdown.collection').data('custom'),
-		pages: $('.select-sim-dropdown.page').data('object'),
-		products: $('.select-sim-dropdown.product').data('object'),
+		blogs: [],
+		collections: [],
+		smart_collections: [],
+		custom_collections: [],
+		pages: [],
+		products: [],
 		blog_page: 1,
 		collection_page: 1,
 		custom_collection_page: 1,
@@ -86,12 +86,12 @@ function ready() {
 		variant_image_page = 0;
 		// JS for the resourse selection
 		resource_infomation = {
-			blogs: $('.select-sim-dropdown.blog').data('object'),
-			collections: $('.select-sim-dropdown.collection').data('object'),
-			smart_collections: $('.select-sim-dropdown.collection').data('smart'),
-			custom_collections: $('.select-sim-dropdown.collection').data('custom'),
-			pages: $('.select-sim-dropdown.page').data('object'),
-			products: $('.select-sim-dropdown.product').data('object'),
+			blogs: [],
+			collections: [],
+			smart_collections: [],
+			custom_collections: [],
+			pages: [],
+			products: [],
 			blog_page: 1,
 			collection_page: 1,
 			page_page: 1,
@@ -241,24 +241,6 @@ function ready() {
 		$('.wittyEDPanel[data-tier="'+(tier + 1)+'"]').css({'height': 'auto', 'opacity': 1}).blindRightIn(400);
 	}
 
-	function loadResouceSelect($this, callback) {
-		if (!$this.hasClass('is-loading')) {
-			$this.addClass('is-loading');
-			$.ajax({
-	      type: "GET",
-	      url: '/ajax-resources', //sumbits it to the given url of the form
-	      dataType: "html" // you want a difference between normal and ajax-calls, and json is standard
-	    }).success(function(html) {
-	    	$('.drop-select-resouces').html(html).data('loaded', true);
-	    	$this.removeClass('is-loading');
-	    	if (typeof callback === 'function') {
-	    		resetResources();
-	    		callback($this);
-	    	}
-	    }).error(basicError);
-	  }
-	}
-
 	/*******************************************
 	Common Events
 	*******************************************/
@@ -278,11 +260,7 @@ function ready() {
 	// pannel navigation
 	$('body').on('click', '.prev-pannel', function(e) {
 		e.preventDefault();
-		if ($(this).hasClass('get-resources') && !$('.drop-select-resouces').data('loaded')) {
-			loadResouceSelect($(this), shiftPannelsRight)
-		} else {
-			shiftPannelsRight($(this));
-		}
+		shiftPannelsRight($(this));
 	});
 
 	$('body').on('click', '.next-pannel', function(e) {
@@ -427,9 +405,15 @@ function ready() {
 	});
 
 	$('body').on('click', '.select-sim', function(event) {
+		var resource = $(this).next().find('.select-sim-dropdown').data('resource');;
 
 		$('.select-sim').not(this).removeClass('active');
 		$(this).toggleClass('active');
+
+		if (resource_infomation[resource+'s'].length === 0) {
+			$(this).next().find('.select-sim-dropdown').addClass('is-loading');
+			$(this).next().find('.resource-search').keyup();
+		}
 
 		// if (!checkVisible(this.nextElementSibling)) {
 		// 	$(this).toggleClass('reverse');
@@ -670,6 +654,8 @@ function ready() {
 				url: '/search/'+resource+'?q='+resource_infomation.query+'&page=1',
 				success: function(filtered_resource) {
 					console.log(filtered_resource);
+					$('.select-sim-dropdown').removeClass('is-loading');
+
 					if (resource === 'collection') {
 						resource_infomation[resource+'s'] = filtered_resource.collections;
 						resource_infomation['smart_collections'] = filtered_resource.smart_collections;

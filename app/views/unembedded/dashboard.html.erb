@@ -24,12 +24,14 @@
         <%= form_for @resource, remote: true, url: url_for(controller: 'unembedded', action: 'update_api'), method: :put, html: {class: 'ajax'} do |o| %>
 
           <div class="wittyEDPanel<% if @type == 'resource_select' %> active<% end %>" data-tier="1">
-            <div class="drop-select-resouces wittyEDPanelBody"></div><!-- .wittyEDPanelBody -->
+            <div class="drop-select-resouces wittyEDPanelBody">
+              <%= panel 'resource_select' %>
+            </div><!-- .wittyEDPanelBody -->
           </div>
           <% unless @type == 'resource_select' %>
             <div class="wittyEDPanel active" data-tier="2">
               <header class="theme-editor__header theme-editor__header--no-shadow">
-                <button class="btn btn--plain theme-editor__header-action icon-prev prev-pannel get-resources" aria-label="Back to sections" type="button" name="button"></button>
+                <button class="btn btn--plain theme-editor__header-action icon-prev prev-pannel" aria-label="Back to sections" type="button" name="button"></button>
                 <h2 class="ui-heading theme-editor__heading"><%= @type %></h2>
                 <a class="btn_more" href=""><% svgs 'more_teal' %></a>
               </header><!-- .theme-editor__header -->

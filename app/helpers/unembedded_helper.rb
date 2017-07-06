@@ -8,8 +8,8 @@ module UnembeddedHelper
 		render partial: 'unembedded/panels/' + panel
 	end
 
-	def dropdown(resources, total, resource_name, target)
-		render partial: 'select_dropdown', locals: {resources: resources, total: total, resource_name: resource_name, target: target}
+	def dropdown(resource_name, target)
+		render partial: 'select_dropdown', locals: {resource_name: resource_name, target: target}
 	end
 
 end

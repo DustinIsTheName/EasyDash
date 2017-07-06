@@ -1391,6 +1391,12 @@ label .icon-calendar { float: right; margin-top: 2px; }
       &:hover .icon-trash {display: block;}
     }
 
+    &.is-loading {
+      li {visibility: hidden;}
+
+      &:before {border-color: $witty-teal;}
+    }
+
     li + li {border-top: 1px solid #ebeef0;}
 
     a, 

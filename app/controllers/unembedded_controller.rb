@@ -17,11 +17,11 @@ class UnembeddedController < ApplicationController
       @viewed_resource = ShopifyAPI::Article.find(:first, params: {handle: params["handle"]})
     end
 
-    get_resources
+    # get_resources
   end
 
   def ajax_get_resources
-    get_resources
+    # get_resources
 
     respond_to do |format|
       format.js { panel "resource_select" }
