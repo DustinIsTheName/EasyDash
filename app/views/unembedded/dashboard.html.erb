@@ -74,25 +74,25 @@
         <div class="responsive-dropdown-items">
           <ul>
             <li>
-              <a href="#" data-width="100%" data-height="100%" class="active desktop">
+              <a href="#" data-width="100%" data-height="100%" class="active desktop" data-icon="monitor">
                 <%= svgs 'monitor_teal' %>
                 Fit Screen
               </a>
             </li>
             <li>
-              <a href="#" data-width="1440" data-height="900" class="desktop">
+              <a href="#" data-width="1440" data-height="900" class="desktop" data-icon="monitor">
                 <%= svgs 'monitor_teal' %>
                 Desktop (Medium)
               </a>
             </li>
             <li>
-              <a href="#" data-width="1280" data-height="800" class="desktop">
+              <a href="#" data-width="1280" data-height="800" class="desktop" data-icon="monitor">
                 <%= svgs 'monitor_teal' %>
                 Desktop (Small)
               </a>
             </li>
             <li>
-              <a href="#" data-width="768" data-height="1024">
+              <a href="#" data-width="768" data-height="1024" data-icon="tablet">
                 <%= svgs 'tablet_teal' %>
                 <span href="#" class="rotate">
                   <%= svgs 'rotate_teal' %>
@@ -101,7 +101,7 @@
               </a>
             </li>
             <li>
-              <a href="#" data-width="425" data-height="736">
+              <a href="#" data-width="425" data-height="736" data-icon="mobile">
                 <%= svgs 'mobile_teal' %>
                 <span href="#" class="rotate">
                   <%= svgs 'rotate_teal' %>
@@ -110,7 +110,7 @@
               </a>
             </li>
             <li>
-              <a href="#" data-width="375" data-height="667">
+              <a href="#" data-width="375" data-height="667" data-icon="mobile">
                 <%= svgs 'mobile_teal' %>
                 <span href="#" class="rotate">
                   <%= svgs 'rotate_teal' %>
@@ -119,7 +119,7 @@
               </a>
             </li>
             <li>
-              <a href="#" data-width="320" data-height="568">
+              <a href="#" data-width="320" data-height="568" data-icon="mobile">
                 <%= svgs 'mobile_teal' %>
                 <span href="#" class="rotate">
                   <%= svgs 'rotate_teal' %>
@@ -132,7 +132,9 @@
         <div class="dropdown-arrow"></div>
       </div>
       <button class="btn secondary views_button" title="Viewport selector" type="button" name="button" id="responsive-dropdown">
-        <%= svgs 'monitor_teal' %>
+        <span class="monitor active"><%= svgs 'monitor_teal' %></span>
+        <span class="tablet"><%= svgs 'tablet_teal' %></span>
+        <span class="mobile"><%= svgs 'mobile_teal' %></span>
         <div class="icon-down teal"></div>
   	  </button>
 

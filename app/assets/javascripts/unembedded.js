@@ -401,6 +401,9 @@ function ready() {
 		$(this).addClass('active');
 		var width = $(this).data('width');
 		var height = $(this).data('height');
+		var icon = $(this).data('icon');
+		$('.views_button span').removeClass('active rotated');
+		$('.views_button span.'+icon).addClass('active');
 
 		$('#dashboard-iframe').width(width).height(height);
 	});
@@ -412,6 +415,7 @@ function ready() {
 			$('.responsive-dropdown-items a.active').toggleClass('rotated');
 			var width = $('#dashboard-iframe').attr('style').match(/height: ([0-9]{0,4}).{1,}/)[1];
 			var height = $('#dashboard-iframe').attr('style').match(/width: ([0-9]{0,4}).{1,}/)[1];
+			$('.views_button .active').toggleClass('rotated');
 
 			$('#dashboard-iframe').width(width).height(height);
 		}
