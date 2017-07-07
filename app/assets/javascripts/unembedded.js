@@ -27,6 +27,10 @@ function ready() {
 		query: ''
 	}
 
+	$('.variant_input').prop('disabled', true);
+	var previousFormState = $('form.ajax').serialize();
+	$('.variant_input').prop('disabled', false);
+
 	console.log(resource_infomation);
 
 	try {
@@ -158,6 +162,13 @@ function ready() {
 	  var rect = elm.getBoundingClientRect();
 	  var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
 	  return (rect.bottom <= viewHeight && rect.top >= 0);
+	}
+
+	function isUnsaved() {
+		$('.variant_input').prop('disabled', true);
+		var currentFormState = $('form.ajax').serialize();
+		$('.variant_input').prop('disabled', false);
+		return currentFormState !== previousFormState;
 	}
 
 	function confirmBox(confirmHeader, confirmText, confirmAction, callbackFunctions, callbackParams) {
@@ -745,6 +756,7 @@ function ready() {
 	$('form.ajax').bind("ajax:success", function(event, product) {
 		$('#save_resource').removeClass('is-loading');
 		$('#shopify_api_product_handle').val(product.handle);
+		previousFormState = $('form.ajax').serialize();
     $('.variant_input').prop('disabled', false);
 		if (product.id) {
 		  if (product.created_new_product) {
@@ -1494,11 +1506,27 @@ function ready() {
 		});
 	});
 
-	// window.onbeforeunload = function () {
-	//   if (!confirm("Do you really want to close?")) {
-	//   	return false;
-	//   }
-	// };
+	$('.check-for-unsaved').click(function(e) {
+		e.stopImmediatePropagation();
+		var $this = $(this);
+		if (isUnsaved()) {
+		  confirmBox('You have unsaved changes on this page', 'If you leave this page, all unsaved changes will be lost. Are you sure you want to leave this page?', 'Leave Page', {
+		  	yes: function() {
+		  		shiftPannelsRight($this);
+		  	}
+		  });
+		} else {
+			shiftPannelsRight($this);
+		}
+	});
+
+	window.onbeforeunload = function () {
+		if (isUnsaved()) {
+		  if (!confirm("Changes you made may not be saved.")) {
+		  	return false;
+		  }
+		}
+	};
 }
 
 $(document).on('turbolinks:load', ready);

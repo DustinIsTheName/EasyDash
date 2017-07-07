@@ -2024,7 +2024,8 @@ button.variant {padding: .9rem 1.5rem;}
         }
       }
 
-      &.delete {
+      &.delete,
+      &.leave.page {
 
         #confirm {
           background-color: #d83e3e;
