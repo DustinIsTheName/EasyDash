@@ -27,8 +27,10 @@ function ready() {
 		query: ''
 	}
 
+	$('#section-edit-variant [name^="variants"]').addClass('variant_input');
 	$('.variant_input').prop('disabled', true);
 	var previousFormState = $('form.ajax').serialize();
+	var previousVariantState;
 	$('.variant_input').prop('disabled', false);
 
 	console.log(resource_infomation);
@@ -168,10 +170,18 @@ function ready() {
 		$('.variant_input').prop('disabled', true);
 		var currentFormState = $('form.ajax').serialize();
 		$('.variant_input').prop('disabled', false);
+		console.log(currentFormState, '=========', previousFormState);
 		return currentFormState !== previousFormState;
 	}
 
-	function confirmBox(confirmHeader, confirmText, confirmAction, callbackFunctions, callbackParams) {
+	function isVariantUnsaved() {
+		$('form.ajax [name]:not(.variant_input)').prop('disabled', true);
+		var currentVariantState = $('form.ajax').serialize();
+		$('form.ajax [name]:not(.variant_input)').prop('disabled', false);
+		return currentVariantState !== previousVariantState;
+	}
+
+	function confirmBox(confirmHeader, confirmText, confirmAction, callbackFunctions, callbackParams, extra_button) {
 		var confirm_function,
 				deny_function;
 		if (typeof callbackFunctions.yes === 'function') {
@@ -224,6 +234,10 @@ function ready() {
 				).click(function(e) {
 					e.stopPropagation();
 				});
+
+		if (extra_button) {
+			$confirmBox.find('#confirm').before($('<button id="extra" type="button">'+extra_button.text+'</button>').click(extra_button.function));
+		}
 
 		$('body').append($confirmBox);
 	}
@@ -499,29 +513,35 @@ function ready() {
 		var index_of_id;
 		var resource_title = $(this).next().text();
 
-		confirmBox('Delete '+resource_title+'?', 'Are you sure you want to delete '+resource_title+'? This action cannot be reversed.', 'Delete', {
-			yes: deleteResource
-		}, {
-			id: id,
-			resource: resource,
-			$this: $this,
-			callback: function(deleted_resource) {
-				console.log(deleted_resource);
-				if (deleted_resource) {
-					index_of_id = resource_infomation[resource+'s'].map(function(a) {return a.id}).indexOf(deleted_resource.id);
-					resource_infomation[resource+'s'].splice(index_of_id, 1);
+		confirmBox(
+			'Delete '+resource_title+'?', // confirm box title
+			'Are you sure you want to delete '+resource_title+'? This action cannot be reversed.', // confirm box text
+			'Delete', // confirm button text
+			{
+			yes: deleteResource // confirm function
+			}, 
+			{ // confirm function parameters 
+				id: id,
+				resource: resource,
+				$this: $this,
+				callback: function(deleted_resource) {
+					console.log(deleted_resource);
+					if (deleted_resource) {
+						index_of_id = resource_infomation[resource+'s'].map(function(a) {return a.id}).indexOf(deleted_resource.id);
+						resource_infomation[resource+'s'].splice(index_of_id, 1);
 
-					if (resource.indexOf('collection') > -1) {
-						index_of_id = resource_infomation['collections'].map(function(a) {return a.id}).indexOf(deleted_resource.id);
-						resource_infomation['collections'].splice(index_of_id, 1);
-						resource = 'collection';
+						if (resource.indexOf('collection') > -1) {
+							index_of_id = resource_infomation['collections'].map(function(a) {return a.id}).indexOf(deleted_resource.id);
+							resource_infomation['collections'].splice(index_of_id, 1);
+							resource = 'collection';
+						}
+						resource_infomation[resource+'_total'] = resource_infomation[resource+'_total'] - 1;
+
+						changePage(resource, resource_infomation[resource+'s'], resource_infomation[resource+'_page'], resource_infomation[resource+'_total']);
 					}
-					resource_infomation[resource+'_total'] = resource_infomation[resource+'_total'] - 1;
-
-					changePage(resource, resource_infomation[resource+'s'], resource_infomation[resource+'_page'], resource_infomation[resource+'_total']);
 				}
 			}
-		});
+		);
 	});
 
 	$('body').on('click', '.wittyEDTopButtons .delete-viewed-resource', function() {
@@ -532,23 +552,29 @@ function ready() {
 		var resource_title = $(this).data('title');
 		var url = new URL(window.location.href);
 
-		confirmBox('Delete '+resource_title+'?', 'Are you sure you want to delete '+resource_title+'? This action cannot be reversed.', 'Delete', {
+		confirmBox(
+			'Delete '+resource_title+'?', 
+			'Are you sure you want to delete '+resource_title+'? This action cannot be reversed.', 
+			'Delete', 
+			{
 			yes: deleteResource
-		}, {
-			id: id,
-			resource: resource,
-			$this: $this,
-			callback: function(deleted_resource) {
-				console.log(deleted_resource);
-				$this.removeClass('is-loading');
-				flashMessage(resource_title + ' deleted.');
-				if (url.searchParams.get("referrer")) {
-					window.top.location.href = url.searchParams.get("referrer");
-				} else {
-					window.top.location.href = 'http://' + $('body').data('shopify-url');
+			}, 
+			{
+				id: id,
+				resource: resource,
+				$this: $this,
+				callback: function(deleted_resource) {
+					console.log(deleted_resource);
+					$this.removeClass('is-loading');
+					flashMessage(resource_title + ' deleted.');
+					if (url.searchParams.get("referrer")) {
+						window.top.location.href = url.searchParams.get("referrer");
+					} else {
+						window.top.location.href = 'http://' + $('body').data('shopify-url');
+					}
 				}
 			}
-		});
+		);
 	});
 
 	function changePage(resource, resource_object, page, total) {
@@ -777,6 +803,11 @@ function ready() {
 		  }
 	    // time to provide feedback 
 		  flashMessage('Product was successfully saved');
+
+		  if ($('#confirmBoxOverlay #extra').length > 0) {
+		  	$('#confirmBoxOverlay').remove();
+		  	shiftPannelsRight($('.check-for-unsaved'));
+		  }
 		} else {
 			console.log(product);
 			if (product.error_message) {
@@ -797,10 +828,9 @@ function ready() {
 	// submit single variant
 	$('.single_variant_submit').click(function(e) {
 		$(this).addClass('is-loading');
-		var data;
 
 		$('form.ajax [name]:not(.variant_input)').prop('disabled', true);
-		data = $('form.ajax').serialize();
+		var data = $('form.ajax').serialize();
 		$('form.ajax [name]:not(.variant_input)').prop('disabled', false);
 
 		// submit form with AJAX
@@ -813,6 +843,8 @@ function ready() {
       console.log(variant);
       $('.single_variant_submit').removeClass('is-loading');
       $('form.ajax [name]:not(.variant_input)').prop('disabled', false);
+      previousVariantState = data;
+
     	if (variant.error_message) {
     		flashMessage(variant.error_message, 'error');
     	}	else {
@@ -850,6 +882,10 @@ function ready() {
 						$this.attr('name', 'variants['+variant.id+']new_metafields[][value]');
 						$this.attr('id', 'variants_'+variant.id+'_new_metafields__value');
 					}
+
+					$('form.ajax [name]:not(.variant_input)').prop('disabled', true);
+					previousVariantState = $('form.ajax').serialize();
+					$('form.ajax [name]:not(.variant_input)').prop('disabled', false);
 		    }).error(basicError);
 	    }
       // time to provide feedback 
@@ -876,12 +912,13 @@ function ready() {
 	// edit single variant
 	$('.edit_single_variant').click(function(e) {
 		e.preventDefault();
+		e.stopImmediatePropagation();
 
+		var $panelThis = $(this);
 		var image = $(this).data('image');
 		var variant = $(this).data('object');
 
-		$('#save_resource').hide();
-		$('.single_variant_submit').show();
+		$panelThis.addClass('is-loading');
 
 		$('.variant-image').remove();
 		if (image) {
@@ -933,6 +970,15 @@ function ready() {
 						$this.attr('name', 'variants['+variant.id+']new_metafields[][value]');
 						$this.attr('id', 'variants_'+variant.id+'_new_metafields__value');
 					}
+
+					$('form.ajax [name]:not(.variant_input)').prop('disabled', true);
+					previousVariantState = $('form.ajax').serialize();
+					$('form.ajax [name]:not(.variant_input)').prop('disabled', false);
+
+					$('#save_resource').hide();
+					$('.single_variant_submit').show();
+					$panelThis.removeClass('is-loading');
+					shiftPannelsLeft($panelThis);
 		    }).error(basicError);
 			}
 		});
@@ -1468,8 +1514,12 @@ function ready() {
 		var resource_title = $(this).data('resource');
 		var url = $(this).find('a').attr('href');
 
-		confirmBox('Delete '+resource_title+'?', 'Are you sure you want to delete the '+resource_title+'? This action cannot be reversed.', 'Delete', {
-			yes: function() {
+		confirmBox(
+			'Delete '+resource_title+'?', // title for confirm box
+			'Are you sure you want to delete the '+resource_title+'? This action cannot be reversed.', // text for confirm box
+			'Delete', // confirm button text
+			{
+			yes: function() { // confirm function
 				window.location.href = url;
 			}
 		});
@@ -1482,8 +1532,12 @@ function ready() {
 		var resource_id = $(this).data('id');
 		var $this = $(this);
 
-		confirmBox('Delete '+resource_title+'?', 'Are you sure you want to delete the variant '+resource_title+'? This action cannot be reversed.', 'Delete', {
-			yes: deleteResource
+		confirmBox(
+			'Delete '+resource_title+'?', // title for confirm box
+			'Are you sure you want to delete the variant '+resource_title+'? This action cannot be reversed.', // text for confirm box
+			'Delete', // confirm button text
+			{
+			yes: deleteResource // confirm function
 		},
 		{
 			id: resource_id,
@@ -1510,11 +1564,86 @@ function ready() {
 		e.stopImmediatePropagation();
 		var $this = $(this);
 		if (isUnsaved()) {
-		  confirmBox('You have unsaved changes on this page', 'If you leave this page, all unsaved changes will be lost. Are you sure you want to leave this page?', 'Leave Page', {
-		  	yes: function() {
+		  confirmBox(
+		  	'You have unsaved changes on this page', // Title of confirm Box
+		  	'If you leave this page, all unsaved changes will be lost. Are you sure you want to leave this page?', // Text of confirm Box
+		  	'Leave Page', // Confirm Button Text
+		  	{
+		  	yes: function() { // function for confirm button
 		  		shiftPannelsRight($this);
 		  	}
+		  },
+		  {}, // function parameters; unneeded here
+		  {
+		  	text: "Save & Leave", // extra button text
+		  	function: function() {
+		  		$(this).addClass('is-loading');
+		  		$('#save_resource').click();
+		  	}
 		  });
+		} else {
+			shiftPannelsRight($this);
+		}
+	});
+
+	$('.check-for-variant-unsaved').click(function(e) {
+		e.stopImmediatePropagation();
+		var $this = $(this);
+		if (isVariantUnsaved()) {
+		  confirmBox(
+		  	'You have unsaved changes on this page', // Title of confirm Box
+		  	'If you leave this page, all unsaved changes will be lost. Are you sure you want to leave this page?', // Text of confirm Box
+		  	'Leave Page', { // Confirm Button Text
+		  	yes: function() { // function for confirm button
+		  		shiftPannelsRight($this);
+		  	}
+		  },
+		  {}, // function parameters; unneeded here
+	  	{
+	  		text: "Save & Leave", // extra button text
+	  		function: function() { // extra button function
+	  			$(this).addClass('is-loading');
+
+					$('form.ajax [name]:not(.variant_input)').prop('disabled', true);
+					var data = $('form.ajax').serialize();
+					$('form.ajax [name]:not(.variant_input)').prop('disabled', false);
+
+					// submit form with AJAX
+			    $.ajax({
+			      type: "POST",
+			      url: '/variant-update', //sumbits it to the given url of the form
+			      data: data,
+			      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+			    }).success(function(variant) {
+			      console.log(variant);
+			      $('.single_variant_submit').removeClass('is-loading');
+			      $('form.ajax [name]:not(.variant_input)').prop('disabled', false);
+			      previousVariantState = data;
+
+			    	if (variant.error_message) {
+			    		flashMessage(variant.error_message, 'error');
+			    	}	else {
+				      flashMessage('Variant has been updated successfully.');
+				      $('[data-object*="'+variant.id+'"]').data('object', variant);
+				      $('#variants_'+variant.id+'_option1').val(variant.option1);
+				      $('#variants_'+variant.id+'_option2').val(variant.option2);
+				      $('#variants_'+variant.id+'_option3').val(variant.option3);
+				      $('#variants_'+variant.id+'_inventory_quantity').val(variant.inventory_quantity);
+				      $('#variants_'+variant.id+'_compare_at_price').val(variant.compare_at_price);
+				      $('#variants_'+variant.id+'_price').val(variant.price);
+				      $('#variants_'+variant.id+'_sku').val(variant.sku);
+				    }
+
+				    $('#confirmBoxOverlay').remove();
+				    shiftPannelsRight($this);
+			      // time to provide feedback 
+			    }).error(function(e) {
+			    	console.log(e);
+			    	flashMessage('Variant failed to update successfully.', 'error');
+			    	$('form.ajax [name]:not(.variant_input)').prop('disabled', false);
+			    });
+	  		}
+	  	});
 		} else {
 			shiftPannelsRight($this);
 		}
