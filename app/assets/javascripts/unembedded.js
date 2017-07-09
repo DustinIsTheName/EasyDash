@@ -27,6 +27,7 @@ function ready() {
 		query: ''
 	}
 
+	var currentIframeUrl = $('#dashboard-iframe').attr('src');
 	$('#section-edit-variant [name^="variants"]').addClass('variant_input');
 	$('.variant_input').prop('disabled', true);
 	var previousFormState = $('form.ajax').serialize();
@@ -180,6 +181,10 @@ function ready() {
 		return currentVariantState !== previousVariantState;
 	}
 
+	function refreshIframe() {
+		$('#dashboard-iframe').attr('src', currentIframeUrl);
+	}
+
 	function confirmBox(confirmHeader, confirmText, confirmAction, callbackFunctions, callbackParams, extra_button) {
 		var confirm_function,
 				deny_function;
@@ -301,7 +306,8 @@ function ready() {
 	});
 
 	window.addEventListener("message", function(event) {
-		var url = event.data.replace(event.origin, '').split('?')[0]
+		currentIframeUrl = event.data;
+		var url = event.data.replace(event.origin, '').split('?')[0];
 		resource_handle = url.match(/^\/([a-z]+)\/?[a-z-0-9]*\/([a-z-0-9]+)$/);
 
 		$('#resource-section').append('<div id="refreshing-resource" class="is-loading">');
@@ -316,7 +322,6 @@ function ready() {
 				},
 				dataType: 'json'
 			}).success(function(new_html) {
-				console.log(new_html);
 				$('#resource-section').html(new_html.form_html);
 				$('#modals-container').html(new_html.modals);
 				$('.variant_input').prop('disabled', true);
@@ -839,6 +844,7 @@ function ready() {
 		  }
 	    // time to provide feedback 
 		  flashMessage('Product was successfully saved');
+		  refreshIframe();
 			previousFormState = $('form.ajax').serialize();
 
 		  if ($('#confirmBoxOverlay #extra').length > 0) {
@@ -886,6 +892,7 @@ function ready() {
       $('.single_variant_submit').removeClass('is-loading');
       $('form.ajax [name]:not(.variant_input)').prop('disabled', false);
       previousVariantState = data;
+      refreshIframe();
 
     	if (variant.error_message) {
     		flashMessage(variant.error_message, 'error');
@@ -1160,6 +1167,7 @@ function ready() {
 	    	flashMessage('Variant image has been removed successfully.');
 	    }
 
+	    refreshIframe();
     	$('.variant-image-save').removeClass('is-loading');
     }).error(function(e) {
     	console.log(e);
@@ -1228,6 +1236,7 @@ function ready() {
 		$('#variant-add-image').removeClass('is-loading');
 		$('body').removeClass('is-loading-body');
 		flashMessage('Image(s) Added');
+		refreshIframe();
 
 		variant_image_page = dataPageTotal;
 		changeVariantImagePage(variant_image_page);
@@ -1393,6 +1402,7 @@ function ready() {
 			    }).success(function(images) {
 			    	console.log(images);
 			    	flashMessage('Image order has been saved.');
+			    	refreshIframe();
 			    }).error(function(error) {
 			    	console.log(error);
 			    	flashMessage('Image order failed to save.', 'error');
@@ -1470,6 +1480,7 @@ function ready() {
     	console.log(alt_tag_metafield);
     	$('#image-alt-tag-save').removeClass('is-loading');
     	flashMessage('The image has been updated.');
+    	refreshIframe();
     	closeModal($('#editAltTagOverlay'));
     }).error(function(error) {
     	console.log(error);
@@ -1513,6 +1524,7 @@ function ready() {
 			    	var no_image_html = '';
 			    	console.log(image);
 			    	flashMessage('The image has been deleted.');
+			    	refreshIframe();
 			    	$('.variant .variant_image[data-image-id="'+image.id+'"]').prepend('<i class="icon-image"></i>').find('img').remove();
 			    	$('.variant .variant_image[data-image-id="'+image.id+'"]').each(function() {
 			    		$(this).closest('.variant').find('.edit_single_variant').data('image', null);
@@ -1598,6 +1610,7 @@ function ready() {
 				$('.variant').removeClass('before_variant_open');
 
 				flashMessage('Your variant has been deleted.');
+				refreshIframe();
 			}
 		});
 	});
@@ -1667,6 +1680,7 @@ function ready() {
 			    		flashMessage(variant.error_message, 'error');
 			    	}	else {
 				      flashMessage('Variant has been updated successfully.');
+				      refreshIframe();
 				      $('[data-object*="'+variant.id+'"]').data('object', variant);
 				      $('#variants_'+variant.id+'_option1').val(variant.option1);
 				      $('#variants_'+variant.id+'_option2').val(variant.option2);
