@@ -182,7 +182,9 @@ function ready() {
 	}
 
 	function refreshIframe() {
-		$('#dashboard-iframe').attr('src', currentIframeUrl);
+		setTimeout(function() {
+			$('#dashboard-iframe').attr('src', currentIframeUrl);
+		}, 500);
 	}
 
 	function confirmBox(confirmHeader, confirmText, confirmAction, callbackFunctions, callbackParams, extra_button) {
@@ -306,45 +308,41 @@ function ready() {
 	});
 
 	window.addEventListener("message", function(event) {
-		currentIframeUrl = event.data;
-		var url = event.data.replace(event.origin, '').split('?')[0];
-		resource_handle = url.match(/^\/([a-z]+)\/?[a-z-0-9]*\/([a-z-0-9]+)$/);
+		if (currentIframeUrl !== event.data) {
+			currentIframeUrl = event.data;
+			var url = event.data.replace(event.origin, '').split('?')[0];
+			resource_handle = url.match(/^\/([a-z]+)\/?[a-z-0-9]*\/([a-z-0-9]+)$/);
 
-		$('#resource-section').append('<div id="refreshing-resource" class="is-loading">');
+			$('#resource-section').append('<div id="refreshing-resource" class="is-loading">');
 
-		if (resource_handle) {
-			$.ajax({
-				type: 'GET',
-				url: '/refresh-form',
-				data: {
-					resource: resource_handle[1].replace(/s$/, ''),
-					handle: resource_handle[2]
-				},
-				dataType: 'json'
-			}).success(function(new_html) {
-				$('#resource-section').html(new_html.form_html);
-				$('#modals-container').html(new_html.modals);
-				$('.variant_input').prop('disabled', true);
-				previousFormState = $('form.ajax').serialize();
-				$('.variant_input').prop('disabled', false);
-			}).error(function(e) {
-				console.log(e);
-			});
-		} else {
-			$.ajax({
-				type: 'GET',
-				url: '/refresh-form',
-				dataType: 'html'
-			}).success(function(new_html) {
-				$('#resource-section').html(new_html.form_html);
-				$('#modals-container').html(new_html.modals);
-			}).error(basicError);
-		}
-
-		if (resource_handle) {
-			resource_url = '/dashboard?id=handle&resource=' + resource_handle[1].replace(/s$/, '') + '&handle=' + resource_handle[2] + '&frame_url=' + event.data.replace(event.origin, '');
-		} else {
-			resource_url = '/dashboard';
+			if (resource_handle) {
+				$.ajax({
+					type: 'GET',
+					url: '/refresh-form',
+					data: {
+						resource: resource_handle[1].replace(/s$/, ''),
+						handle: resource_handle[2]
+					},
+					dataType: 'json'
+				}).success(function(new_html) {
+					$('#resource-section').html(new_html.form_html);
+					$('#modals-container').html(new_html.modals);
+					$('.variant_input').prop('disabled', true);
+					previousFormState = $('form.ajax').serialize();
+					$('.variant_input').prop('disabled', false);
+				}).error(function(e) {
+					console.log(e);
+				});
+			} else {
+				$.ajax({
+					type: 'GET',
+					url: '/refresh-form',
+					dataType: 'html'
+				}).success(function(new_html) {
+					$('#resource-section').html(new_html.form_html);
+					$('#modals-container').html(new_html.modals);
+				}).error(basicError);
+			}
 		}
 
 	}, false);

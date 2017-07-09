@@ -5,21 +5,35 @@
 </head>
 <body>
 
-  <header>
-  	<h2>Login to EasyDash</h2>
-  </header>
+	<div class="wittyEDSidebar quick-select">
+		<section class="wittyEDEditorMain">
+		  <header class="theme-editor__header theme-editor__header--no-shadow">
+		    <h2 class="wittyEDLogoHeading ui-heading theme-editor__heading">
+		    	<%= svgs 'logo_white' %>
+		    </h2>
+		  </header><!-- .theme-editor__header -->
 
-	<section id="myshopify_login_section">
-	  <div class="card">
-		  <form method="GET" action="login">
-		    <label>Type shop name:</label>
-	  		<div class="input-group">
-			    <input id="myshopify_login" type="text" name="shop" placeholder="your-store.myshopify.com" value=""/>
-			    <button type='submit'>Login</button>
-			  </div>
-		  </form>
-	  </div>
-	</section>
+		  <div class="wittyEDPanel active">
+        <header class="theme-editor__header theme-editor__header--no-shadow">
+          <h2 class="ui-heading theme-editor__heading">Login</h2>
+          <a class="btn_more" href=""><% svgs 'more_teal' %></a>
+        </header><!-- .theme-editor__header -->
+        <div class="wittyEDPanelBody">
+					<section id="myshopify_login_section">
+					  <div class="card">
+						  <form method="GET" action="login">
+						    <label>Type shop name:</label>
+					  		<div class="input-group">
+							    <input id="myshopify_login" type="text" name="shop" placeholder="your-store.myshopify.com" value=""/>
+							    <button type='submit'>Login</button>
+							  </div>
+						  </form>
+					  </div>
+					</section>
+				</div>
+			</div>
+		</section>
+	</div>
 
 </body>
 </html>
