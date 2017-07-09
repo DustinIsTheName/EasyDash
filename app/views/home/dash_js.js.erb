@@ -53,8 +53,6 @@
       	$(this).toggleClass('open');
       });
 
-      console.log('<%= Rails.env.production? %>');
-
       parent.postMessage(window.location.href, '<%= Rails.env.production? ? "https://easydash.herokuapp.com" : "https://localhost:3000" %>');
 
       // $('.wittyEDContainer').mouseleave(function() {

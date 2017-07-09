@@ -272,6 +272,44 @@ function ready() {
 		$('.wittyEDPanel[data-tier="'+(tier + 1)+'"]').css({'height': 'auto', 'opacity': 1}).blindRightIn(400);
 	}
 
+	function refreshForm(messageEvent) {
+		currentIframeUrl = messageEvent.data;
+		var url = messageEvent.data.replace(messageEvent.origin, '').split('?')[0];
+		var resource_handle = url.match(/^\/([a-z]+)\/?[a-z-0-9]*\/([a-z-0-9]+)$/);
+
+		$('#resource-section').append('<div id="refreshing-resource" class="is-loading">');
+
+		if (resource_handle) {
+			$.ajax({
+				type: 'GET',
+				url: '/refresh-form',
+				data: {
+					resource: resource_handle[1].replace(/s$/, ''),
+					handle: resource_handle[2]
+				},
+				dataType: 'json'
+			}).success(function(new_html) {
+				$('#resource-section').html(new_html.form_html);
+				$('#modals-container').html(new_html.modals);
+				$('.variant_input').prop('disabled', true);
+				previousFormState = $('form.ajax').serialize();
+				$('.variant_input').prop('disabled', false);
+			}).error(basicError);
+		} else {
+			$.ajax({
+				type: 'GET',
+				url: '/refresh-form',
+				dataType: 'json'
+			}).success(function(new_html) {
+				$('#resource-section').html(new_html.form_html);
+				$('#modals-container').html(new_html.modals);
+				$('.variant_input').prop('disabled', true);
+				previousFormState = $('form.ajax').serialize();
+				$('.variant_input').prop('disabled', false);
+			}).error(basicError);
+		}
+	}
+
 	/*******************************************
 	Common Events
 	*******************************************/
@@ -307,41 +345,49 @@ function ready() {
 		}
 	});
 
-	window.addEventListener("message", function(event) {
-		if (currentIframeUrl !== event.data) {
-			currentIframeUrl = event.data;
-			var url = event.data.replace(event.origin, '').split('?')[0];
-			resource_handle = url.match(/^\/([a-z]+)\/?[a-z-0-9]*\/([a-z-0-9]+)$/);
+	window.addEventListener("message", function(messageEvent) {
+		if (currentIframeUrl !== messageEvent.data) {
 
-			$('#resource-section').append('<div id="refreshing-resource" class="is-loading">');
+			if (isUnsaved()) {
+			  confirmBox(
+			  	'You have unsaved changes on this page', // Title of confirm Box
+			  	'If you leave this page, all unsaved changes will be lost. Are you sure you want to leave this page?', // Text of confirm Box
+			  	'Leave Page', // Confirm Button Text
+			  	{
+			  	yes: function() { // function for confirm button
+			  		refreshForm(messageEvent);
+			  	},
+			  	no: function() {
+			  		refreshIframe();
+			  	}
+			  },
+			  {}, // function parameters; unneeded here
+			  {
+			  	text: "Save & Leave", // extra button text
+			  	function: function() {
+			  		$(this).addClass('is-loading');
+			  		$('.variant_input').prop('disabled', true);
+			  		var data = $('form.ajax').serialize();
+			  		$.ajax({
+				      type: "POST",
+				      url: '/dashboard-update', //sumbits it to the given url of the form
+				      data: data,
+				      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+				    }).success(function(event, product) {
+				    	$('#confirmBoxOverlay').remove();
 
-			if (resource_handle) {
-				$.ajax({
-					type: 'GET',
-					url: '/refresh-form',
-					data: {
-						resource: resource_handle[1].replace(/s$/, ''),
-						handle: resource_handle[2]
-					},
-					dataType: 'json'
-				}).success(function(new_html) {
-					$('#resource-section').html(new_html.form_html);
-					$('#modals-container').html(new_html.modals);
-					$('.variant_input').prop('disabled', true);
-					previousFormState = $('form.ajax').serialize();
-					$('.variant_input').prop('disabled', false);
-				}).error(function(e) {
-					console.log(e);
-				});
+				    	flashMessage('Product was successfully saved');
+				    	refreshForm(messageEvent); // qw12
+				    }).error(function(event, error) {
+		    	  	console.log(event, error);
+
+					  	$('.variant_input').prop('disabled', false);
+					  	flashMessage('Product was not saved', 'error');
+				    });
+			  	}
+			  });
 			} else {
-				$.ajax({
-					type: 'GET',
-					url: '/refresh-form',
-					dataType: 'html'
-				}).success(function(new_html) {
-					$('#resource-section').html(new_html.form_html);
-					$('#modals-container').html(new_html.modals);
-				}).error(basicError);
+				refreshForm(messageEvent);
 			}
 		}
 
