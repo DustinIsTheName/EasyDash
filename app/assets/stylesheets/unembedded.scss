@@ -2227,9 +2227,15 @@ button.variant {padding: .9rem 1.5rem;}
   left: 50%;
   -webkit-transform: translateX(-50%);
   -moz-transform: translateX(-50%);
-  transform: translateX(-50%);
+  transform: translateX(-50%);  
+}
 
-  
+#refreshing-resource {
+  background: rgba(49, 55, 61, 0.75);
+  position: absolute !important;
+  height: calc(100% - 108px);
+  width: 100%;
+  top: 108px;
 }
 
 .tags-container {

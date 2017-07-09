@@ -2,69 +2,8 @@
 <div class="wittyEDSidebar">
 
   <section class="wittyEDEditorMain">
-    <div class="theme-editor__panel" id="section-product" data-panel-id="product" tabindex="-1">
-      <header class="theme-editor__header theme-editor__header--no-shadow">
-        <nav class="theme-editor__header-nav wittyEDLogoHeading">
-          <% if @type == 'resource_select' %>
-            <button class="btn btn--plain theme-editor__header-action tip icon-prev white" data-hover="Back to your store" aria-label="Back to your store" type="button" name="button"></button>
-          <% end %>
-          <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">
-            <%= svgs 'logo_white' %>
-          </h2>
-        </nav><!-- .theme-editor__header-nav -->
-      </header><!-- .theme-editor__header -->
-      <% if @type == 'resource_select' %>
-      <div class="wittyEDPanel<% if @type == 'resource_select' %> active<% end %>" data-tier="1">
-        <div class="wittyEDPanelBody">
-          <%= panel 'resource_select' %>
-        </div><!-- .wittyEDPanelBody -->
-      </div>
-      <% end %>
-      <% if @resource %>
-        <%= form_for @resource, remote: true, url: url_for(controller: 'unembedded', action: 'update_api'), method: :put, html: {class: 'ajax'} do |o| %>
-
-          <div class="wittyEDPanel<% if @type == 'resource_select' %> active<% end %>" data-tier="1">
-            <div class="drop-select-resouces wittyEDPanelBody">
-              <%= panel 'resource_select' %>
-            </div><!-- .wittyEDPanelBody -->
-          </div>
-          <% unless @type == 'resource_select' %>
-            <div class="wittyEDPanel active" data-tier="2">
-              <header class="theme-editor__header theme-editor__header--no-shadow">
-                <button class="btn btn--plain theme-editor__header-action icon-prev prev-pannel check-for-unsaved" aria-label="Back to sections" type="button" name="button"></button>
-                <h2 class="ui-heading theme-editor__heading"><%= @type %></h2>
-                <a class="btn_more" href=""><% svgs 'more_teal' %></a>
-              </header><!-- .theme-editor__header -->
-              <div class="wittyEDPanelBody">
-                <%= render partial: 'unembedded/panels/' + @type, locals: {o: o} %>
-              </div><!-- .wittyEDPanelBody -->
-            </div>
-            <% if @type == 'product' && @resource.variants.first&.title != 'Default Title' %>
-              <div class="wittyEDPanel" data-tier="3">
-                <header class="theme-editor__header theme-editor__header--no-shadow">
-                  <button class="btn btn--plain theme-editor__header-action icon-prev prev-pannel" aria-label="Back to sections" type="button" name="button"></button>
-                  <h2 class="ui-heading theme-editor__heading">Variants</h2>
-                  <a class="btn_more" href=""><% svgs 'more_teal' %></a>
-                </header><!-- .theme-editor__header -->
-                <div class="wittyEDPanelBody">
-                  <%= panel 'all_variants' %>
-                </div><!-- .wittyEDPanelBody -->
-              </div>
-              <div class="wittyEDPanel" data-tier="4">
-                <header class="theme-editor__header theme-editor__header--no-shadow">
-                  <button class="btn btn--plain theme-editor__header-action icon-prev prev-pannel check-for-variant-unsaved" aria-label="Back to sections" type="button" name="button"></button>
-                  <h2 class="ui-heading theme-editor__heading">Variant</h2>
-                  <a class="btn_more" href=""><% svgs 'more_teal' %></a>
-                </header><!-- .theme-editor__header -->
-                <div id="section-edit-variant" class="wittyEDPanelBody">
-                  <%= panel 'one_of_many_variants' %>
-                </div><!-- .wittyEDPanelBody -->
-              </div>
-            <% end %>
-          <% end %>
-
-        <% end %>
-      <% end %>
+    <div id="resource-section" class="theme-editor__panel" data-panel-id="product" tabindex="-1">
+      <%= render partial: 'resource_form' %>
     </div><!-- .theme-editor__panel#section-product -->
 
   </section><!-- .wittyEDEditorMain -->
@@ -157,121 +96,9 @@
 
 </div><!-- .wittyEDSidebar -->
 
-<% if @type == 'product' %>
-<div id="editVariantImageOverlay" class="editModalOverlay">
-  <section id="editVariantImage" class="editModal">
-    <div class="card has-sections">
-      <div class="card-section">
-        <h3>Update variant image</h3>
-        <!-- <a href="#" class="close" role="button" aria-label="Close dialog">x</a> -->
-      </div>
-      <hr>
-      <div class="card-section" style="padding-bottom: 0;">
-        <% @resource.images.each_with_index do |image, index| %>
-          <input type="radio" id="variant-select-image-<%= image.id %>" class="variant-select-image" name="variants[<%= @resource.variants.first.id %>][image_id]" value="<%= image.id %>">
-          <label for="variant-select-image-<%= image.id %>" class="variant-select-image-label" data-page="<%= index/10 %>"<% if index > 9 %> style="display: none;"<% end %>>
-            <img src="<%= image.src %>">
-          </label>
-        <% end %>
-      </div>
-      <hr>
-      <div class="card-section">
-        <div class="arrow-navigation">
-          <button class="secondary icon-prev disabled"></button>
-          <button class="secondary icon-next"></button>
-          <div style="clear:both;"></div>
-        </div>
-        <button type="button" id="variant-image-destroy" class="secondary red variant-image-save" href="#">Remove image</button>
-
-        <button type="button" class="secondary cancel" href="#">Cancel</button>
-        <button type="button" id="variant-add-image" class="secondary" href="#">Add Image</button>
-        <button type="button" id="variant-image-save" class="primary variant-image-save" href="#">Save</button>
-      </div>
-    </div>
-  </section>
+<div id="modals-container">
+  <%= render partial: 'product_modals' %>
 </div>
-<div id="editAltTagOverlay" class="editModalOverlay">
-  <section id="editAltTag" class="editModal">
-    <div class="card has-sections">
-      <div class="card-section">
-        <h3>Edit image alt text</h3>
-        <!-- <a href="#" class="close" role="button" aria-label="Close dialog">x</a> -->
-      </div>
-      <hr>
-      <div class="card-section" style="padding-bottom: 0;">
-        <div class="product-image">
-          <img id="image-for-alt-tag">
-        </div>
-        <div class="field-for-alt-tag">
-          <label for="image-alt-tag">Image alt text</label>
-          <input type="text" id="image-alt-tag">
-          <p class="type--subdued">Write a brief description of this image to improve search engine optimization (SEO) and accessibility for visually impaired customers.</p>
-        </div>
-      </div>
-      <hr>
-      <div class="card-section">
-        <button type="button" class="secondary cancel" href="#">Cancel</button>
-        <button type="button" id="image-alt-tag-save" class="primary" href="#">Save</button>
-      </div>
-    </div>
-  </section>
-</div>
-<div id="previewOverlay" class="editModalOverlay">
-  <section id="preview" class="editModal">
-    <div class="card has-sections">
-      <div class="card-section" style="padding-bottom: 0;">
-        <div class="product-image">
-          <img id="image-preview">
-        </div>
-      </div>
-      <hr>
-      <div class="card-section">
-        <button type="button" class="secondary cancel" href="#">Done</button>
-      </div>
-    </div>
-  </section>
-</div>
-<div id="addImageUrlOverlay" class="editModalOverlay">
-  <section id="addImageUrl" class="editModal">
-    <div class="card has-sections">
-      <div class="card-section">
-        <h3>Add image from URL</h3>
-        <!-- <a href="#" class="close" role="button" aria-label="Close dialog">x</a> -->
-      </div>
-      <hr>
-      <div class="card-section" style="padding-bottom: 0;">
-        <div class="product-image">
-          <label for="addImageUrlInput">Paste image URL</label>
-          <input type="text" id="addImageUrlInput" placeholder="http://">
-        </div>
-      </div>
-      <hr>
-      <div class="card-section">
-        <button type="button" class="secondary cancel" href="#">Cancel</button>
-        <button type="button" id="add-image-from-url" class="primary" href="#">Add image</button>
-      </div>
-    </div>
-  </section>
-</div>
-<div id="SEOURLOverlay" class="editModalOverlay">
-  <section id="SEOURL" class="editModal">
-    <div class="card has-sections">
-      <div class="card-section" style="padding-bottom: 0;">
-        <h3>Product URL</h3>
-        <!-- <a href="#" class="close" role="button" aria-label="Close dialog">x</a> -->
-      </div>
-      <hr>
-      <div class="card-section" style="padding-bottom: 0;">
-        <h3 id="SEOURL-url">https://<%= @shop_session.url %>/products/<%= @resource.handle %></h3>
-      </div>
-      <hr>
-      <div class="card-section">
-        <button type="button" class="secondary cancel" href="#">Done</button>
-      </div>
-    </div>
-  </section>
-</div>
-<% end %>
 
 <button class="wittyEDFullscreenToggle" aria-label="Toggle sidebar" type="button" name="button">
   <%= svgs 'dashboard_dark' %>
@@ -290,8 +117,4 @@
   <% resource_url = '' %>
 <% end %>
 
-<% if @frame_url %>
-  <iframe id="dashboard-iframe" src="https://<%= @shop_session.url %><%= @frame_url %>?ediframe=true"></iframe>
-<% else %>
-  <iframe id="dashboard-iframe" src="https://<%= @shop_session.url %>/<%= resource_url %>?ediframe=true"></iframe>
-<% end %>
+<iframe id="dashboard-iframe" src="https://<%= @shop_session.url %>/<%= resource_url %>?ediframe=true"></iframe>

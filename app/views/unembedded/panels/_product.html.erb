@@ -110,14 +110,14 @@
       <label>Product type</label>
       <div class="input-group">
         <%= o.text_field :product_type, placeholder: "Shirts" %>
-        <button class="secondary icon-down"></button>
+        <button type="button" class="secondary icon-down"></button>
       </div>
     </div>
     <div class="row">
       <label>Vendor</label>
       <div class="input-group">
         <%= o.text_field :vendor, placeholder: "Nike" %>
-        <button class="secondary icon-down"></button>
+        <button type="button" class="secondary icon-down"></button>
       </div>
     </div>
     <div class="divider"></div>
@@ -134,15 +134,13 @@
       <div class="select-sim-dropdown-container product-pannel-collection-select search" data-shop-url="<%= @shop_session.url %>">
         <div class="dropdown-arrow"></div>
         <ul class="select-sim-dropdown custom_collection" data-total="" data-resource="custom_collection" data-object="">
-          <% for collection in @custom_collections.take(8) %>
-            <li class="variable">
-              <%= link_to collection.title, '#', data: {handle: collection.handle, id: collection.id} %>
-            </li>
-          <% end %>
+          <li class="variable">
+            Placeholder
+          </li>
         </ul>
         <div class="arrow-navigation">
           <button type="button" class="secondary icon-prev disabled"></button>
-          <button type="button" class="secondary icon-next<% if @custom_collections.size <= 8 %> disabled<% end %>"></button>
+          <button type="button" class="secondary icon-next"></button>
           <div style="clear:both;"></div>
         </div>
       </div>

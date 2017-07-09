@@ -8,8 +8,6 @@ class Validate
 			}.extend(LookLikeJSON)
 		end
 
-		puts Colorize.yellow(params["variants"])
-
 		if params[:id] == 'new'
 			variant_validations = variant(params["variants"], params)
 
@@ -35,14 +33,16 @@ class Validate
 	def self.variant(v, params)
 
 		unless params[:id] == 'new'
-	    for i in 0..2
-		    if params["options"][i] and v["option#{i+1}"].blank?
-					return {
-						error_message: "You need to add option values for #{params["options"][i]}",
-						is_valid: false
-					}.extend(LookLikeJSON)
-				end
-	    end
+			if params["options"]
+		    for i in 0..2
+			    if params["options"][i] and v["option#{i+1}"].blank?
+						return {
+							error_message: "You need to add option values for #{params["options"][i]}",
+							is_valid: false
+						}.extend(LookLikeJSON)
+					end
+		    end
+		  end
 	  end
 
 	  puts v

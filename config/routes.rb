@@ -35,6 +35,7 @@ Rails.application.routes.draw do
     get '/variant-hsc' => :get_variant_hsc
     get '/product-seo' => :get_product_seo
     get '/ajax-resources' => :ajax_get_resources
+    get '/refresh-form' => :refresh_form
   end
   
   # The priority is based upon order of creation: first created -> highest priority.

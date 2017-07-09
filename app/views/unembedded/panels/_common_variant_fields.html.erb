@@ -17,7 +17,8 @@
     </div>
     <div class="row no_margin">
       <label>
-        <%= v.check_box :taxable, class: additional_class %>
+        <input type="checkbox" class="hidden_checkbox"<% if v.object.taxable %> checked="checked"<% end %>>
+        <%= v.hidden_field :taxable, class: additional_class %>
         Charge taxes on this product
       </label>
     </div>
@@ -45,7 +46,8 @@
     <h5>Shipping</h5>
     <div class="row">
       <label>
-        <%= v.check_box :requires_shipping, class: additional_class %>
+        <input type="checkbox" class="hidden_checkbox"<% if v.object.requires_shipping %> checked="checked"<% end %>>
+        <%= v.hidden_field :requires_shipping, class: additional_class %>
         This product requires shipping
       </label>
     </div>
