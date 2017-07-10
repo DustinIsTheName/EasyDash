@@ -1118,7 +1118,7 @@ input[type="url"],
 input[type="password"],
 textarea,
 select,
-.select-sim {
+.select-sim:not(.no-style) {
   padding: .5rem 1rem;
   background-color: #fff;
   border: .1rem solid #d3dbe2;
@@ -1231,7 +1231,7 @@ select {
   min-height: 3.4rem; }
 
 select,
-.select-sim {
+.select-sim:not(.no-style) {
   text-align: left;
   padding-right: 3.2rem;
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' enable-background='new 0 0 24 24'%3E%3Cpath fill='rgb(121,140,156)' d='M21 5.176l-9.086 9.353-8.914-9.353-2.314 2.471 11.314 11.735 11.314-11.735-2.314-2.471z'/%3E%3C/svg%3E");

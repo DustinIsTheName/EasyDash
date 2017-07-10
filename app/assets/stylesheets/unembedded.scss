@@ -1326,7 +1326,8 @@ label .icon-calendar { float: right; margin-top: 2px; }
     }
   }
 
-  .select-sim.active + & {
+  .select-sim.active + &,
+  .select-sim.no-style.active {
     display: block;
 
     &.no-arrow .dropdown-arrow {display:none;}
@@ -1414,6 +1415,11 @@ label .icon-calendar { float: right; margin-top: 2px; }
       text-decoration: none;
       background: rgba(0, 167, 157, .05);
     }
+  }
+
+  &.scroll .select-sim-dropdown {
+    max-height: 250px;
+    overflow: scroll;
   }
 
   .arrow-navigation {

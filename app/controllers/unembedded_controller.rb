@@ -205,6 +205,18 @@ class UnembeddedController < ApplicationController
     render json: response
   end
 
+  def get_product_types
+    response = open("https://#{@shop_session.url}/search?view=easy_dash_types").read
+
+    render json: response
+  end
+  
+  def get_product_vendors
+    response = open("https://#{@shop_session.url}/search?view=easy_dash_vendors").read
+
+    render json: response
+  end
+
   private
 
     def get_resources

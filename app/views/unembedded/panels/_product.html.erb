@@ -108,16 +108,24 @@
     <h5>Organization</h5>
     <div class="row extra_margin">
       <label>Product type</label>
-      <div class="input-group">
+      <div class="input-group select-sim no-style">
         <%= o.text_field :product_type, placeholder: "Shirts" %>
-        <button type="button" class="secondary icon-down"></button>
+        <button id="view-all-types" type="button" class="secondary icon-down"></button>
+      </div>
+      <div class="select-sim-dropdown-container product-types scroll" data-shop-url="<%= @shop_session.url %>">
+        <div class="dropdown-arrow"></div>
+        <ul class="select-sim-dropdown product-types" data-total="" data-resource="types" data-object="">
+          <li class="variable">
+            <a href="#">Placeholder</a>
+          </li>
+        </ul>
       </div>
     </div>
     <div class="row">
       <label>Vendor</label>
       <div class="input-group">
         <%= o.text_field :vendor, placeholder: "Nike" %>
-        <button type="button" class="secondary icon-down"></button>
+        <button id="view-all-vendors" type="button" class="secondary icon-down"></button>
       </div>
     </div>
     <div class="divider"></div>

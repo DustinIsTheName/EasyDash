@@ -1,7 +1,7 @@
 {% layout none %}
 {% capture output %}
     {% for product_type in shop.types %}    
-        {"type":"{{product_type}}"}{% unless forloop.last %},{% endunless %}
+        "{{product_type}}"{% unless forloop.last %},{% endunless %}
     {% endfor %}
 {% endcapture %}
 {{ output | strip_newlines | prepend: '[' | append: ']' }}
