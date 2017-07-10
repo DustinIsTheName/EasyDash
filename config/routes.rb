@@ -36,6 +36,7 @@ Rails.application.routes.draw do
     get '/product-seo' => :get_product_seo
     get '/ajax-resources' => :ajax_get_resources
     get '/refresh-form' => :refresh_form
+    get '/product-tags' => :get_product_tags
   end
   
   # The priority is based upon order of creation: first created -> highest priority.

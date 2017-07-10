@@ -1218,6 +1218,80 @@ function ready() {
     });
 	});
 
+	$('#resource-section').on('click', '#view-all-tags', function(e) {
+		e.preventDefault();
+		$(this).addClass('is-loading');
+
+		$.ajax({
+      type: "GET",
+      url: '/product-tags'
+    }).success(function(tags) {
+    	console.log(tags);
+    	$('#view-all-tags').removeClass('is-loading');
+  		$('#viewAllTagsOverlay .all-tags').empty();
+  		$('#viewAllTagsOverlay .applied-tags').empty();
+
+    	for (var i = 0; i < tags.length; i++) {
+    		if (tags[i].trim() !== "") {
+		    	$('#viewAllTagsOverlay .all-tags').append('<span class="tag teal" data-tag="'+tags[i]+'">'+tags[i]+'</span>');
+		    }
+	    }
+
+    	$('#viewAllTagsOverlay').addClass('open');
+    }).error(basicError);
+	});
+
+	$('#modals-container').on('click', '.all-tags .tag', function() {
+		var tag = $(this).data('tag');
+		if ($('.applied-tags .tag[data-tag="'+tag+'"]').length > 0) {
+			$('.applied-tags .tag[data-tag="'+tag+'"]').remove();
+			$(this).removeClass('greyed-out');
+		} else {
+			$('.applied-tags').append('<span class="tag teal remove" data-tag="'+tag+'">'+tag+'<a href="#"></a></span>');
+			$(this).addClass('greyed-out');
+		}
+
+		if ($('.applied-tags .tag').length > 0) {
+			$('.applied-tags').next().hide();
+		} else {
+			$('.applied-tags').next().show();
+		}
+	});
+
+	$('#modals-container').on('click', '.applied-tags .tag.remove a', function() {
+		var tag = $(this).parent().data('tag');
+
+		$('.all-tags .tag[data-tag="'+tag+'"]').removeClass('greyed-out');
+		$(this).parent().remove();
+
+		if ($('.applied-tags .tag').length > 0) {
+			$('.applied-tags').next().hide();
+		} else {
+			$('.applied-tags').next().show();
+		}
+	});
+
+	$('#modals-container').on('click', '#apply-tag-changes', function() {
+		$('.applied-tags .tag').each(function() {
+			var tag_text = $(this).data('tag');
+    	var tag_list = $('#shopify_api_product_tags').val().split(',').filter(function(value) {
+    		return value !== '';
+    	}).map(function(value, index) {
+	  		return value.trim();
+    	});
+
+      if (tag_list.indexOf(tag_text.trim()) === -1) {
+	    	tag_list.push(tag_text.trim())
+				$('#shopify_api_product_tags').val(tag_list.join(','));
+	    	$(this).val('');
+	    	tag = '<span class="tag teal remove">'+tag_text+'<a href="#"></a></span>';
+	    	$('.tags-container').append(tag);
+	    }
+		});
+
+		$('#viewAllTagsOverlay').removeClass('open');
+	});
+
 	$('#modals-container').on('click', '#editVariantImage #variant-add-image', function() {
 		$('.link_label[for="shopify_api_product_file"]').click();
 	});

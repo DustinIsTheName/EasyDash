@@ -1,0 +1,7 @@
+{% layout none %}
+{% capture output %}
+    {% for product_vendor in shop.vendors %}     
+            {"vendor":"{{product_vendor}}"}{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+{% endcapture %}
+{{ output | strip_newlines | prepend: '[' | append: ']' }}

@@ -199,6 +199,12 @@ class UnembeddedController < ApplicationController
     render json: seo_info
   end
 
+  def get_product_tags
+    response = open("https://#{@shop_session.url}/search?view=easy_dash_tags").read
+
+    render json: response
+  end
+
   private
 
     def get_resources

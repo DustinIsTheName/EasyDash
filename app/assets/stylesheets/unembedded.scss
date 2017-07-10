@@ -319,6 +319,10 @@ label .icon-calendar { float: right; margin-top: 2px; }
       width: 0;
     }
   }
+
+  .tag.remove {
+    white-space: normal;
+  }
   
   /* Misc Styles */
   .ui-stack {
@@ -2004,6 +2008,8 @@ button.variant {padding: .9rem 1.5rem;}
     -moz-transform: translateX(-50%);
     transform: translateX(-50%);
 
+    hr {clear: both;}
+
     &#confirmBox{
       .card {
         border-radius: .3rem;
@@ -2202,6 +2208,33 @@ button.variant {padding: .9rem 1.5rem;}
       width: auto;
       max-width: calc(100% - 20px);
     }
+    &#viewAllTags {
+      .card-section:last-child {
+        text-align: right;
+      }
+
+      .applied-tags {
+        float: left;
+        width: 100%;
+        padding-bottom: 2rem;
+
+        &:empty {padding-bottom:0;}
+      }
+
+      .all-tags {
+        float: left;
+        width: 100%;
+        padding-bottom: 2rem;
+
+        .tag {
+          cursor: pointer;
+
+          &.greyed-out {
+            opacity: .65;
+          }
+        }
+      }
+    }
   }
 }
 
@@ -2247,6 +2280,12 @@ button.variant {padding: .9rem 1.5rem;}
 
   &:hover {
     text-decoration: none;
+  }
+}
+
+#view-all-tags {
+  &.is-loading:before {
+    border-color: $witty-teal;
   }
 }
 
