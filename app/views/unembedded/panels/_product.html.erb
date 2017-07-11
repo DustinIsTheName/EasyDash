@@ -123,9 +123,17 @@
     </div>
     <div class="row">
       <label>Vendor</label>
-      <div class="input-group">
+      <div class="input-group select-sim no-style">
         <%= o.text_field :vendor, placeholder: "Nike" %>
         <button id="view-all-vendors" type="button" class="secondary icon-down"></button>
+      </div>
+      <div class="select-sim-dropdown-container product-vendors scroll" data-shop-url="<%= @shop_session.url %>">
+        <div class="dropdown-arrow"></div>
+        <ul class="select-sim-dropdown product-vendors" data-total="" data-resource="vendors" data-object="">
+          <li class="variable">
+            <a href="#">Placeholder</a>
+          </li>
+        </ul>
       </div>
     </div>
     <div class="divider"></div>

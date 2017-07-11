@@ -143,6 +143,10 @@ function ready() {
     return "";
 	}
 
+	function onlyUnique(value, index, self) { 
+	  return self.indexOf(value) === index;
+	}
+
 	function flashMessage(message, type) {
 		type = type || 'success';
 
@@ -377,7 +381,7 @@ function ready() {
 				    	$('#confirmBoxOverlay').remove();
 
 				    	flashMessage('Product was successfully saved');
-				    	refreshForm(messageEvent); // qw12
+				    	refreshForm(messageEvent);
 				    }).error(function(event, error) {
 		    	  	console.log(event, error);
 
@@ -1226,7 +1230,8 @@ function ready() {
       type: "GET",
       url: '/product-tags'
     }).success(function(tags) {
-    	console.log(tags);
+    	tags = tags.filter(onlyUnique);
+
     	$('#view-all-tags').removeClass('is-loading');
   		$('#viewAllTagsOverlay .all-tags').empty();
   		$('#viewAllTagsOverlay .applied-tags').empty();
@@ -1329,12 +1334,37 @@ function ready() {
 	});
 
 	$('#resource-section').on('click', '#view-all-vendors', function(e) {
+		e.stopPropagation();
+
+  	$('.product-vendors .select-sim-dropdown').addClass('is-loading');
+		$(this).parent().addClass('active');
 		$.ajax({
       type: "GET",
       url: '/product-vendors'
     }).success(function(vendors) {
     	console.log(vendors);
+    	var new_html = '';
+
+    	for (var i = 0; i < vendors.length; i++) {
+    		if (vendors[i] !== '') {
+		    	new_html += '<li class="variable">';
+			    	new_html += '<a class="product-vendor-selector" href="#">';
+				    	new_html += vendors[i];
+			    	new_html += '</a>';
+		    	new_html += '</li>';
+		    }
+	    }
+
+	    $('.product-vendors .select-sim-dropdown .variable').remove();
+	    $('.product-vendors .select-sim-dropdown').removeClass('is-loading').append(new_html);
     }).error(basicError);
+	});
+
+	$('#resource-section').on('click', '.product-vendor-selector', function(e) {
+		e.preventDefault();
+
+		$('#shopify_api_product_vendor').val($(this).text());
+		$(this).closest('.select-sim-dropdown-container').prev().removeClass('active');
 	});
 
 	$('#modals-container').on('click', '#editVariantImage #variant-add-image', function() {

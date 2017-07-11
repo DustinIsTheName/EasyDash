@@ -995,7 +995,6 @@ label .icon-calendar { float: right; margin-top: 2px; }
       overflow: hidden;
       top: 54px;
       width: 300px;
-
       transition: width .3s;
       white-space: nowrap;
     }
@@ -1003,12 +1002,12 @@ label .icon-calendar { float: right; margin-top: 2px; }
     .theme-editor__header-nav {
       line-height: 32px;
       background: $witty-dark;
-  }
+    }
     .theme-editor__header-nav-link {
       display: inline-block;
       color: #ebeef0;
       padding: 0 10px;
-  }
+    }
     .theme-editor__title-bar {
       padding: 10px;
     }
@@ -1298,6 +1297,10 @@ label .icon-calendar { float: right; margin-top: 2px; }
   width: calc(100% - 4rem);
   z-index: 3;
   top: 85px;
+
+  &.scroll {
+    top: 66px;
+  }
 
   .dropdown-arrow {
     width: 20px;

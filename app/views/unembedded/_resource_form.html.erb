@@ -1,8 +1,5 @@
 <header class="theme-editor__header theme-editor__header--no-shadow">
   <nav class="theme-editor__header-nav wittyEDLogoHeading">
-    <% if @type == 'resource_select' %>
-      <button class="btn btn--plain theme-editor__header-action tip icon-prev white" data-hover="Back to your store" aria-label="Back to your store" type="button" name="button"></button>
-    <% end %>
     <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">
       <%= svgs 'logo_white' %>
     </h2>
@@ -10,6 +7,9 @@
 </header><!-- .theme-editor__header -->
 <% if @type == 'resource_select' %>
 <div class="wittyEDPanel<% if @type == 'resource_select' %> active<% end %>" data-tier="1">
+  <header class="theme-editor__header theme-editor__header--no-shadow"> 
+    <h2 class="ui-heading theme-editor__heading">Resource Select</h2>
+  </header>
   <div class="wittyEDPanelBody">
     <%= panel 'resource_select' %>
   </div><!-- .wittyEDPanelBody -->
@@ -21,6 +21,10 @@
 
     <div class="wittyEDPanel<% if @type == 'resource_select' %> active<% end %>" data-tier="1">
       <div class="drop-select-resouces wittyEDPanelBody">
+        <div class="wittyEDTopButtons theme-editor__header"> 
+          <button type="button" class="sidebyside_85 primary next-pannel">Edit Product</button>
+          <button type="button" class="sidebyside_15 warning icon-trash tip" data-hover="Delete Product"></button>
+        </div>
         <%= panel 'resource_select' %>
       </div><!-- .wittyEDPanelBody -->
     </div>

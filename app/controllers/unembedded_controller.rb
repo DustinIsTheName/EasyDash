@@ -201,19 +201,16 @@ class UnembeddedController < ApplicationController
 
   def get_product_tags
     response = open("https://#{@shop_session.url}/search?view=easy_dash_tags").read
-
     render json: response
   end
 
   def get_product_types
     response = open("https://#{@shop_session.url}/search?view=easy_dash_types").read
-
     render json: response
   end
-  
+
   def get_product_vendors
     response = open("https://#{@shop_session.url}/search?view=easy_dash_vendors").read
-
     render json: response
   end
 
