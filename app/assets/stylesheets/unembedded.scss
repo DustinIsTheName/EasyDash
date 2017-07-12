@@ -1993,20 +1993,22 @@ button.variant {padding: .9rem 1.5rem;}
   justify-content: center;
 
   &.filled_login {
-    width: 170px;
 
-    label {display: none;}
+    form {
+      width: 100%;
 
-    .input-group {
-      justify-content: center;
+      label {display: none;}
 
-      #myshopify_login {
-        display:none;
+      .input-group {
+        justify-content: center;
 
-        &+ button[type="submit"] {
-          border-radius: .3rem;
-          font-size: 4rem;
-          font-weight: bold;
+        #myshopify_login {
+          display:none;
+
+          &+ button[type="submit"] {
+            border-radius: .3rem;
+            width: 100%;
+          }
         }
       }
     }

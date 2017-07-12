@@ -29,23 +29,8 @@
 	var myAppJavaScript = function($) {
 
     if ( $('#admin_bar_iframe')[0] && window.location.href.indexOf('ediframe=true') === -1 ) {
-    	var addendum = '?referrer=' + document.referrer;
-    	var handle;
-    	if (window.location.href.indexOf('/products/') > -1) {
-    		handle = window.location.href.split('/products/')[1].split('?')[0];
-    		addendum += '&id=handle&resource=product&handle=' + handle;
-    	} else if (window.location.href.indexOf('/collections/') > -1) {
-    		handle = window.location.href.split('/collections/')[1].split('?')[0];
-    		addendum += '&id=handle&resource=collection&handle=' + handle;
-    	} else if (window.location.href.indexOf('/pages/') > -1) {
-    		handle = window.location.href.split('/pages/')[1].split('?')[0];
-    		addendum += '&id=handle&resource=page&handle=' + handle;
-    	} else if (window.location.href.match(/\/blogs\/[a-z]+\/([a-z-]+)/)) {
-    		handle = window.location.href.match(/\/blogs\/[a-z]+\/([a-z-]+)/)[1];
-    		addendum += '&id=handle&resource=blog&handle=' + handle;
-    	}
 
-      $('body').append('<%= render(partial: "home/dash_js_html/open_button").to_s.gsub(/\n/, '').html_safe %>'.replace('{{{addendum}}}', addendum));
+      $('body').append('<%= render(partial: "home/dash_js_html/open_button").to_s.gsub(/\n/, '').html_safe %>');
       var top = $('html').css('padding-top');
       $('.wittyEDContainer').css('top', top);
 

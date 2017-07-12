@@ -143,7 +143,7 @@ function ready() {
     return "";
 	}
 
-	function onlyUnique(value, index, self) { 
+	function onlyUnique(value, index, self) { // for use in ARRAY.filter()
 	  return self.indexOf(value) === index;
 	}
 
@@ -296,7 +296,7 @@ function ready() {
 				},
 				dataType: 'json'
 			}).success(function(new_html) {
-				$('#resource-section').html(new_html.form_html).find('.wittyEDPanelBody').hide().fadeIn();
+				$('#resource-section').html(new_html.form_html).find('.wittyEDPanelBody').hide().fadeIn(200);
 				$('#modals-container').html(new_html.modals);
 				$('.variant_input').prop('disabled', true);
 				previousFormState = $('form.ajax').serialize();
@@ -312,7 +312,7 @@ function ready() {
 				url: '/refresh-form',
 				dataType: 'json'
 			}).success(function(new_html) {
-				$('#resource-section').html(new_html.form_html).find('.wittyEDPanelBody').hide().fadeIn();
+				$('#resource-section').html(new_html.form_html).find('.wittyEDPanelBody').hide().fadeIn(200);
 				$('#modals-container').html(new_html.modals);
 				$('.variant_input').prop('disabled', true);
 				previousFormState = $('form.ajax').serialize();
