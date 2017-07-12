@@ -8,7 +8,7 @@
       	<%= svgs 'logo_white' %>
       </h2>
     </header><!-- .theme-editor__header -->
-    <div class="wittyEDPanelBody" data-scrollable=""<% unless @viewed_resource %> style="margin-top: 56px;"<% end %>>
+    <div class="wittyEDPanelBody" data-scrollable="">
       <% if @viewed_resource %>
         <div class="wittyEDTopButtons">
           <% if @viewed_resource.class.to_s.gsub(/shopifyapi::/i, '').underscore == 'product' %>
@@ -19,8 +19,12 @@
 
           <button class="sidebyside_small warning icon-trash delete-viewed-resource" data-id="<%= @viewed_resource.id %>" data-title="<%= @viewed_resource.title %>" data-resource="<%= @viewed_resource.class.to_s.downcase.gsub(/shopifyapi::|custom|smart/i, '') %>"></button>
         </div>
+        <h3 class="ui-subheading ui-subheading--subdued theme-editor__subheading">or choose another option</h3>
+      <% else %>
+        <header class="theme-editor__header theme-editor__header--no-shadow"> 
+          <h2 class="ui-heading theme-editor__heading">Choose an Option</h2>
+        </header>
       <% end %>
-      <h3 class="ui-subheading ui-subheading--subdued theme-editor__subheading">Choose your option</h3>
       <input type="hidden" id="target_attr" data-target="_blank">
       <article class="next-card theme-editor__card">
         <div class="card has-sections">

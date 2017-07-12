@@ -281,7 +281,10 @@ function ready() {
 		var url = messageEvent.data.replace(messageEvent.origin, '').split('?')[0];
 		var resource_handle = url.match(/^\/([a-z]+)\/?[a-z-0-9]*\/([a-z-0-9]+)$/);
 
-		$('#resource-section').append('<div id="refreshing-resource" class="is-loading">');
+		$('.wittyEDPanelBody').fadeOut(200, 'swing', function() {
+			$('.wittyEDPanel.active').addClass('is-loading');
+		});
+		// $('#resource-section').append('<div id="refreshing-resource" class="is-loading">');
 
 		if (resource_handle) {
 			$.ajax({
@@ -293,11 +296,15 @@ function ready() {
 				},
 				dataType: 'json'
 			}).success(function(new_html) {
-				$('#resource-section').html(new_html.form_html);
+				$('#resource-section').html(new_html.form_html).find('.wittyEDPanelBody').hide().fadeIn();
 				$('#modals-container').html(new_html.modals);
 				$('.variant_input').prop('disabled', true);
 				previousFormState = $('form.ajax').serialize();
 				$('.variant_input').prop('disabled', false);
+
+				setTimeout(function() {
+					$('.wittyEDPanel').removeClass('is-loading');
+				}, 200);
 			}).error(basicError);
 		} else {
 			$.ajax({
@@ -305,11 +312,15 @@ function ready() {
 				url: '/refresh-form',
 				dataType: 'json'
 			}).success(function(new_html) {
-				$('#resource-section').html(new_html.form_html);
+				$('#resource-section').html(new_html.form_html).find('.wittyEDPanelBody').hide().fadeIn();
 				$('#modals-container').html(new_html.modals);
 				$('.variant_input').prop('disabled', true);
 				previousFormState = $('form.ajax').serialize();
 				$('.variant_input').prop('disabled', false);
+
+				setTimeout(function() {
+					$('.wittyEDPanel').removeClass('is-loading');
+				}, 200);
 			}).error(basicError);
 		}
 	}
