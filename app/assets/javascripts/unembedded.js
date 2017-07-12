@@ -325,6 +325,8 @@ function ready() {
 		}
 	}
 
+	$('#shopify_api_product_body_html').froalaEditor();
+
 	/*******************************************
 	Common Events
 	*******************************************/

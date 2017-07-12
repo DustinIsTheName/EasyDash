@@ -1,6 +1,6 @@
 ShopifyApp::SessionsController.module_eval do
   def callback
-  	puts Colorize.red(return_address)
+  	# puts Colorize.red(return_address)
     if response = request.env['omniauth.auth']
       shop_name = response.uid
       sess = ShopifyAPI::Session.new(shop_name, response['credentials']['token'])
