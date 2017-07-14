@@ -38,7 +38,7 @@
       	$(this).toggleClass('open');
       });
 
-      parent.postMessage(window.location.href, '<%= Rails.env.production? ? "https://easydash.herokuapp.com" : "https://localhost:3000" %>');
+      parent.postMessage(window.location.href, '<%= Rails.env.production? ? "https://app.easydash.io" : "https://localhost:3000" %>');
 
       // $('.wittyEDContainer').mouseleave(function() {
       // 	$('.wittyEDOpenButton').removeClass('open');
