@@ -2,7 +2,6 @@ class Shop < ActiveRecord::Base
   include ShopifyApp::Shop
 
   def createScriptTag
-
 		file = ApplicationController.new.render_to_string(:template => "home/dash_js.js", :layout => false)
     asset = ShopifyAPI::Asset.new
     asset.key = "assets/witty_easy_dash.js"
@@ -21,7 +20,6 @@ class Shop < ActiveRecord::Base
         puts Colorize.green('created script tag')
       end
     end
-
   end
 
   def createTagTypeVendorQueryFiles
@@ -51,5 +49,22 @@ class Shop < ActiveRecord::Base
     else
       puts Colorize.red(search_vendors.errors)
     end
+  end
+
+  def pingTheme
+    themes = ShopifyAPI::Theme.all
+
+    easy_dash_theme = false
+    themes.each do |theme|
+      if theme.name == "Easy Dash Images"
+        easy_dash_theme = theme
+      end
+    end
+
+    unless easy_dash_theme
+      easy_dash_theme = ShopifyAPI::Theme.create(name: "Easy Dash Images")
+    end
+
+    easy_dash_theme
   end
 end

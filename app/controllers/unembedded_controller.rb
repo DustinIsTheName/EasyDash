@@ -1,7 +1,7 @@
 class UnembeddedController < ApplicationController
   include UnembeddedHelper
 	before_action :login_again_if_different_shop
-  skip_before_filter :verify_authenticity_token, :only => :update_api
+  skip_before_filter :verify_authenticity_token, :only => [:update_api, :add_image_to_theme]
   around_filter :shopify_session
   layout 'application'
 
@@ -129,6 +129,16 @@ class UnembeddedController < ApplicationController
     # puts Colorize.magenta(params)
     product = API.addImageFromURL(params)
     render json: product.images
+  end
+
+  def add_image_to_theme
+    puts Colorize.magenta(params)
+    @shop = Shop.find_by_shopify_domain(@shop_session.url)
+    theme = @shop.pingTheme
+
+    image = API.addImagesToTheme(params, theme)
+
+    render json: {link: image}
   end
 
   def change_image_order

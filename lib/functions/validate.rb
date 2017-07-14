@@ -45,7 +45,6 @@ class Validate
 		  end
 	  end
 
-	  puts v
 		if v["price"].blank?
 			return {
 				error_message: "Price can't be blank",
@@ -62,7 +61,6 @@ class Validate
 
 		if harmonized_system_code
 			unless harmonized_system_code["value"].blank?
-				puts harmonized_system_code["value"]
 				if !harmonized_system_code["value"].is_i? or harmonized_system_code["value"].length < 6
 					return {
 						error_message: "Harmonized System Code must be a number of six or more digits",

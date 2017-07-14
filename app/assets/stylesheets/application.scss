@@ -15,8 +15,14 @@
  *= require_self
  */
 
- @import "froala_editor.min.css";
- @import "froala_style.min.css";
- @import "font-awesome-sprockets";
- @import "font-awesome";
+@import "froala_editor.min.css";
+@import "froala_style.min.css";
+@import 'plugins/fullscreen.min.css';
+@import 'plugins/colors.min.css';
+@import 'plugins/table.min.css';
+@import 'plugins/image.min.css';
+@import 'plugins/video.min.css';
+@import 'plugins/code_view.min.css';
+@import "font-awesome-sprockets";
+@import "font-awesome";
  

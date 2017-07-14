@@ -70,6 +70,9 @@ button {
     width: 100%; 
   }
 }
+.gr-top-z-index.gr-top-zero {
+  display: none !important;
+}
 .button.secondary, 
 button.secondary, 
 input[type="submit"].secondary, 
@@ -972,7 +975,7 @@ label .icon-calendar { float: right; margin-top: 2px; }
       box-shadow: none;
     }
     .theme-editor__header {
-      z-index: 5;
+      z-index: 6;
       padding-top: 0;
       width: 300px;
       min-height: 0;
@@ -1237,6 +1240,10 @@ label .icon-calendar { float: right; margin-top: 2px; }
         background-position: center 4px;
       }
     }
+  }
+
+  .fr-box.fr-fullscreen {
+    width: 100vw!important;
   }
 }
 

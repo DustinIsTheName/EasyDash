@@ -439,6 +439,23 @@ class API
     product
   end
 
+  def self.addImagesToTheme(params, theme)
+
+    base64_file = Base64.encode64(params["file"].read)
+
+    new_asset = ShopifyAPI::Asset.new
+    new_asset.key = 'assets/' + params["file"].original_filename
+    new_asset.attachment = base64_file
+    new_asset.prefix_options[:theme_id] = theme.id
+    if new_asset.save
+      Colorize.green("Added Image to #{theme.name}")
+      return new_asset.public_url
+    else
+      put Colorize.red("Something went wrong")
+    end
+
+  end
+
   def self.changeImageOrder(params)
     product = ShopifyAPI::Product.find(params[:id])
     product.images.each_with_index do |image, index|

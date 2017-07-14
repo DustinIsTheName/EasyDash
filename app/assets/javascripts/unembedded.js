@@ -302,6 +302,7 @@ function ready() {
 				previousFormState = $('form.ajax').serialize();
 				$('.variant_input').prop('disabled', false);
 
+				initializeFroalaEditor();
 				setTimeout(function() {
 					$('.wittyEDPanel').removeClass('is-loading');
 				}, 200);
@@ -318,6 +319,7 @@ function ready() {
 				previousFormState = $('form.ajax').serialize();
 				$('.variant_input').prop('disabled', false);
 
+				initializeFroalaEditor();
 				setTimeout(function() {
 					$('.wittyEDPanel').removeClass('is-loading');
 				}, 200);
@@ -325,7 +327,76 @@ function ready() {
 		}
 	}
 
-	$('#shopify_api_product_body_html').froalaEditor();
+	function hideRTEButtons() {
+		$('.fr-command').addClass('fr-hidden');
+		$('.fr-command[id^="fullscreen"]').removeClass('fr-hidden');
+		$('.fr-command[id^="bold"]').removeClass('fr-hidden');
+		$('.fr-command[id^="italic"]').removeClass('fr-hidden');
+		$('.fr-command[id^="underline"]').removeClass('fr-hidden');
+		$('.fr-command[id^="insertLink"]').removeClass('fr-hidden');
+	}
+
+	function initializeFroalaEditor() {
+		$('#shopify_api_product_body_html').froalaEditor({
+			toolbarButtons: [
+				'fullscreen',
+				'paragraphFormat', 
+				'bold', 
+				'italic', 
+				'underline',
+				'formatUL',
+				'formatOL',
+				'outdent', 
+				'indent',
+				'align',
+				'color',
+				'insertLink',
+				'insertTable',
+				'insertImage',
+				'insertVideo',
+				'clearFormatting',
+				'html'
+			],
+			toolbarButtonsSM: [
+				'fullscreen',
+				'bold', 
+				'italic', 
+				'underline',
+				'insertLink'
+			],
+			toolbarSticky: false,
+			placeholderText: '',
+			useClasses: false,
+			htmlIgnoreCSSProperties: [],
+			codeMirror: true,
+		  codeMirrorOptions: {
+		    tabSize: 2,
+		    lineNumbers: true,
+		    lineWrapping: true
+		  },
+		  imageUploadURL: '/add-image-to-theme',
+		  videoInsertButtons: [
+		  	'videoBack', 
+		  	'|',
+		  	'videoEmbed'
+		  ]
+		});
+		hideRTEButtons();
+		$('#shopify_api_product_body_html').on('froalaEditor.commands.after', function (e, editor, cmd, param1, param2) {
+		  console.log(e, editor, cmd, param1, param2);
+
+		  if (cmd === "fullscreen") {
+		  	if ($('.fr-box').hasClass('fr-fullscreen')) {
+		  		$('.fr-command:not(.fr-disabled)').removeClass('fr-hidden');
+		  	} else {
+		  		hideRTEButtons();
+		  		$('.fr-top.fr-toolbar').css('z-index', 4);
+		  	}
+		  }
+		});
+	}
+
+	initializeFroalaEditor();
 
 	/*******************************************
 	Common Events

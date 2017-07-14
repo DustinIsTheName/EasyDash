@@ -28,6 +28,7 @@ Rails.application.routes.draw do
     post '/variant-image' => :update_variant_image
     post '/add-images' => :add_images
     post '/add-image-from-url' => :add_image_from_url
+    post '/add-image-to-theme' => :add_image_to_theme
     post '/change-image-order' => :change_image_order
     post '/delete-image' => :delete_image
     get '/alt-tag' => :get_alt_tag
