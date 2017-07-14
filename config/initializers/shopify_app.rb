@@ -2,7 +2,7 @@ ShopifyApp.configure do |config|
   config.api_key = ENV["API_KEY"]
   config.secret = ENV["SECRET"]
   if Rails.env.production?
-	  config.redirect_uri = "https://easydash.herokuapp.com/auth/shopify/callback"
+	  config.redirect_uri = "https://app.easydash.io/auth/shopify/callback"
 	else
 		config.redirect_uri = "https://localhost:3000/auth/shopify/callback"
 	end
