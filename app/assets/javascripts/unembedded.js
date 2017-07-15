@@ -175,6 +175,7 @@ function ready() {
 		$('.variant_input').prop('disabled', true);
 		var currentFormState = $('form.ajax').serialize();
 		$('.variant_input').prop('disabled', false);
+
 		return currentFormState !== previousFormState;
 	}
 
@@ -339,7 +340,6 @@ function ready() {
 	function initializeFroalaEditor() {
 		$('#shopify_api_product_body_html').froalaEditor({
 			toolbarButtons: [
-				'fullscreen',
 				'paragraphFormat', 
 				'bold', 
 				'italic', 
@@ -355,16 +355,11 @@ function ready() {
 				'insertImage',
 				'insertVideo',
 				'clearFormatting',
-				'html'
-			],
-			toolbarButtonsSM: [
-				'fullscreen',
-				'bold', 
-				'italic', 
-				'underline',
-				'insertLink'
+				'html',
+				'fullscreen'
 			],
 			toolbarSticky: false,
+			tooltips: true,
 			placeholderText: '',
 			useClasses: false,
 			htmlIgnoreCSSProperties: [],
@@ -382,15 +377,44 @@ function ready() {
 		  ]
 		});
 		hideRTEButtons();
+		$(window).resize(hideRTEButtons);
 		$('#shopify_api_product_body_html').on('froalaEditor.commands.after', function (e, editor, cmd, param1, param2) {
-		  console.log(e, editor, cmd, param1, param2);
 
 		  if (cmd === "fullscreen") {
 		  	if ($('.fr-box').hasClass('fr-fullscreen')) {
-		  		$('.fr-command:not(.fr-disabled)').removeClass('fr-hidden');
+		  		$('.fr-command').removeClass('fr-hidden');
+					$('.fr-command[id^="undo"]').addClass('fr-hidden');
+					$('.fr-command[id^="redo"]').addClass('fr-hidden');
+
+					var $overlay = $('<div id="frWysiwygFullscreen" class="editModalOverlay">');
+					$overlay.click(function() {
+						if ($('#shopify_api_product_body_html').froalaEditor('fullscreen.isActive')) {
+							$('#shopify_api_product_body_html').froalaEditor('fullscreen.toggle');
+				  		hideRTEButtons();
+				  		$('.fr-top.fr-toolbar').css('z-index', 4);
+				  		$('#frWysiwygFullscreen').remove();
+						}
+					});
+
+					var $overlay_inner = $('<section id="frWysiwygFullscreen" class="editModal">').click(function(e) {
+						e.stopPropagation();
+					});
+			    var overlay_inner_html = '<div class="card has-sections">';
+		      overlay_inner_html += '<div class="card-section" style="padding-bottom: 0;">';
+	        overlay_inner_html += '<h3>Description</h3>';
+	        overlay_inner_html += '</div>';
+	        overlay_inner_html += '</div>';
+	        overlay_inner_html += '</section>';
+
+	        $overlay_inner.append(overlay_inner_html);
+	        $overlay.append($overlay_inner);
+
+					$('.fr-fullscreen').after($overlay);
 		  	} else {
 		  		hideRTEButtons();
 		  		$('.fr-top.fr-toolbar').css('z-index', 4);
+
+		  		$('#frWysiwygFullscreen').remove();
 		  	}
 		  }
 		});
