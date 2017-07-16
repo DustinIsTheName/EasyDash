@@ -399,6 +399,7 @@ function ready() {
 					var $overlay_inner = $('<section id="frWysiwygFullscreen" class="editModal">').click(function(e) {
 						e.stopPropagation();
 					});
+
 			    var overlay_inner_html = '<div class="card has-sections">';
 		      overlay_inner_html += '<div class="card-section" style="padding-bottom: 0;">';
 	        overlay_inner_html += '<h3>Description</h3>';
@@ -1493,6 +1494,155 @@ function ready() {
 
 		$('#addImageUrlOverlay').addClass('open');
 	});
+
+	$('#resource-section').on('click', '#reorderVariantsLink', function(e) {
+		e.preventDefault();
+
+		$('#reorderVariantsOverlay').addClass('open');
+	});
+
+
+
+
+
+
+
+
+
+
+
+
+
+	$('.option-item').mousedown(function(e) {
+		console.log('firaga!');
+		this_elem = this;
+    e = e || window.event;
+    var start = 0, diff = 0;
+    if( e.pageY) start = e.pageY;
+    else if( e.clientY) start = e.clientY;
+
+    this_elem.style.position = 'relative';
+    document.body.onmousemove = function(e) {
+    	console.log(e.pageY);
+      e = e || window.event;
+      var end = 0;
+      if( e.pageY) end = e.pageY;
+      else if( e.clientY) end = e.clientY;
+
+      diff = end-start;
+
+			if (diff >= 54 && $(this_elem).next().length > 0) {
+				$(this_elem).next().after($(this_elem));
+				start = start + 54;
+				diff = 0;
+			} else if (diff <= -54 && $(this_elem).prev().length > 0) {
+				$(this_elem).prev().before($(this_elem));
+				start = start - 54;
+				diff = 0; 
+			}
+
+      this_elem.style.top = diff+"px";
+
+    };
+    document.body.onmouseup = function() {
+        // do something with the action here
+        // elem has been moved by diff pixels in the X axis
+        this_elem.style.position = 'static';
+        this_elem.style.top = 0;
+        document.body.onmousemove = document.body.onmouseup = null;
+    };
+	});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// $('#modals-container').on({
+	// 	dragstart: function(e) {
+	// 		console.log('start');
+	// 		$dragSrcEl = $(this); // set original element
+	// 		$dragIcon = $dragSrcEl.clone();
+	// 		$dragSrcEl.addClass('dragging');
+
+	// 		e.originalEvent.dataTransfer.effectAllowed = 'move';
+	// 		e.originalEvent.dataTransfer.setData('text/html', $dragSrcEl);
+	// 		$dragIcon.css('background', 'none');
+
+	// 		e.originalEvent.dataTransfer.setDragImage($dragIcon[0]);
+	// 	},
+	// 	dragenter: function(e) {
+	// 		e.preventDefault();
+	// 		dragCounter++; // needed to account for child elements
+	// 		$('.option-item').removeClass('over');
+	// 		$(this).addClass('over');
+	// 	},
+	// 	dragover: function(e) {
+	// 		e.preventDefault();
+	// 		e.stopPropagation();
+
+	// 		if (!$(this).hasClass('dragging')) {
+	// 			if ($(this).isAfter($dragSrcEl)) {
+	// 				$(this).after($dragSrcEl);
+	// 				return;
+	// 			}
+	// 			if ($(this).isBefore($dragSrcEl)) {
+	// 				$(this).before($dragSrcEl);
+	// 			}
+	// 		}
+	// 	},
+	// 	dragleave: function(e) {
+	// 		dragCounter--; // needed to account for child elements
+	// 		if (dragCounter === 0) {
+	// 			$(this).removeClass('over');
+	// 		}
+	// 	},
+	// 	dragend: function() {
+	// 		$(this).removeClass('dragging');
+	// 	},
+	// 	drop: function(e) {
+	// 		e.preventDefault();
+	// 		e.stopPropagation();
+
+	// 		$('.images-container .product-image').removeClass('over');
+	// 		dragCounter = 0;
+
+	// 	  // Don't do anything if dropping the same item we're dragging.
+	// 	  if ($dragSrcEl != $(this)) {
+	// 	  	var imageOrders = {};
+
+	// 	  	$('.images-container .product-image:not(.ghostImage)').each(function(index, element) {
+	// 	  		imageOrders[$(element).data('id')] = index;
+	// 	  	});
+	// 	  }
+	// 	}
+	// }, '.option-item');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	function addImagesCallback(images) {
 		$('.images-container .column.twelve').remove();

@@ -2324,6 +2324,100 @@ button.variant {padding: .9rem 1.5rem;}
         }
       }
     }
+
+    &#reorderVariants {
+      overflow: hidden;
+
+      .card.has-sections {margin-bottom:0;}
+
+      ul {
+        list-style: none;
+      }
+
+      .option-list {
+        margin: 0;
+        position: relative;
+
+        .option-item {
+          margin-bottom: 20px;
+          cursor: move; /* fallback if grab cursor is unsupported */
+          cursor: grab;
+          cursor: -moz-grab;
+          cursor: -webkit-grab;
+
+          &:active {
+            cursor: grabbing;
+            cursor: -moz-grabbing;
+            cursor: -webkit-grabbing;
+          }
+
+          .option-name {
+            display: inline-block;
+            vertical-align: middle;
+            width: 120px;
+
+            .label {
+              color: rebeccapurple;
+            }
+          }
+          
+          .value-list {
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 10px;
+
+            .value-item {
+              float: left;
+              border-radius: 3px;
+              padding: 10px;
+              color: #fff;
+              line-height: 1;
+              cursor: move; /* fallback if grab cursor is unsupported */
+              cursor: grab;
+              cursor: -moz-grab;
+              cursor: -webkit-grab;
+
+              &:active {
+                cursor: grabbing;
+                cursor: -moz-grabbing;
+                cursor: -webkit-grabbing;
+              }
+
+              &+ .value-item {
+                margin-left: 3px;
+              }
+
+              svg path {
+                fill: #fff !important;
+              }
+            }
+          }
+        }
+
+        .option-item:nth-child(1) {
+          .option-name .label {color:#29bc94;}
+          .value-list .value-item {background:#29bc94;}
+        }
+
+        .option-item:nth-child(2) {
+          .option-name .label {color:#763eaf;}
+          .value-list .value-item {background:#763eaf;}
+        }
+
+        .option-item:nth-child(3) {
+          .option-name .label {color:#ff9517;}
+          .value-list .value-item {background:#ff9517;}
+        }
+      }
+
+      .next-icon--size-9 {
+        width: 9px;
+      }
+
+      .card-section:last-child {
+        text-align: right;
+      }
+    }
   }
 }
 
