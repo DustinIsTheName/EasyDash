@@ -1501,20 +1501,7 @@ function ready() {
 		$('#reorderVariantsOverlay').addClass('open');
 	});
 
-
-
-
-
-
-
-
-
-
-
-
-
 	$('.option-item').mousedown(function(e) {
-		console.log('firaga!');
 		this_elem = this;
     e = e || window.event;
     var start = 0, diff = 0;
@@ -1523,7 +1510,6 @@ function ready() {
 
     this_elem.style.position = 'relative';
     document.body.onmousemove = function(e) {
-    	console.log(e.pageY);
       e = e || window.event;
       var end = 0;
       if( e.pageY) end = e.pageY;
@@ -1553,96 +1539,44 @@ function ready() {
     };
 	});
 
+	$('.value-item').mousedown(function(e) {
+		e.stopPropagation();
+		this_elem = this;
+    e = e || window.event;
+    var start = 0, diff = 0;
+    if( e.pageX) start = e.pageX;
+    else if( e.clientX) start = e.clientX;
 
+    this_elem.style.position = 'relative';
+    document.body.onmousemove = function(e) {
+      e = e || window.event;
+      var end = 0;
+      if( e.pageX) end = e.pageX;
+      else if( e.clientX) end = e.clientX;
 
+      diff = end-start;
 
+			if ($(this_elem).next().length > 0 && diff >= $(this_elem).next().outerWidth()) {
+				start = start + $(this_elem).next().outerWidth();
+				$(this_elem).next().after($(this_elem));
+				diff = 0;
+			} else if ($(this_elem).prev().length > 0 && diff <= -1*$(this_elem).prev().outerWidth()) {
+				start = start - $(this_elem).prev().outerWidth();
+				$(this_elem).prev().before($(this_elem));
+				diff = 0; 
+			}
 
+      this_elem.style.left = diff+"px";
 
-
-
-
-
-
-
-
-
-
-
-	// $('#modals-container').on({
-	// 	dragstart: function(e) {
-	// 		console.log('start');
-	// 		$dragSrcEl = $(this); // set original element
-	// 		$dragIcon = $dragSrcEl.clone();
-	// 		$dragSrcEl.addClass('dragging');
-
-	// 		e.originalEvent.dataTransfer.effectAllowed = 'move';
-	// 		e.originalEvent.dataTransfer.setData('text/html', $dragSrcEl);
-	// 		$dragIcon.css('background', 'none');
-
-	// 		e.originalEvent.dataTransfer.setDragImage($dragIcon[0]);
-	// 	},
-	// 	dragenter: function(e) {
-	// 		e.preventDefault();
-	// 		dragCounter++; // needed to account for child elements
-	// 		$('.option-item').removeClass('over');
-	// 		$(this).addClass('over');
-	// 	},
-	// 	dragover: function(e) {
-	// 		e.preventDefault();
-	// 		e.stopPropagation();
-
-	// 		if (!$(this).hasClass('dragging')) {
-	// 			if ($(this).isAfter($dragSrcEl)) {
-	// 				$(this).after($dragSrcEl);
-	// 				return;
-	// 			}
-	// 			if ($(this).isBefore($dragSrcEl)) {
-	// 				$(this).before($dragSrcEl);
-	// 			}
-	// 		}
-	// 	},
-	// 	dragleave: function(e) {
-	// 		dragCounter--; // needed to account for child elements
-	// 		if (dragCounter === 0) {
-	// 			$(this).removeClass('over');
-	// 		}
-	// 	},
-	// 	dragend: function() {
-	// 		$(this).removeClass('dragging');
-	// 	},
-	// 	drop: function(e) {
-	// 		e.preventDefault();
-	// 		e.stopPropagation();
-
-	// 		$('.images-container .product-image').removeClass('over');
-	// 		dragCounter = 0;
-
-	// 	  // Don't do anything if dropping the same item we're dragging.
-	// 	  if ($dragSrcEl != $(this)) {
-	// 	  	var imageOrders = {};
-
-	// 	  	$('.images-container .product-image:not(.ghostImage)').each(function(index, element) {
-	// 	  		imageOrders[$(element).data('id')] = index;
-	// 	  	});
-	// 	  }
-	// 	}
-	// }, '.option-item');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    };
+    document.body.onmouseup = function() {
+        // do something with the action here
+        // elem has been moved by diff pixels in the X axis
+        this_elem.style.position = 'static';
+        this_elem.style.left = 0;
+        document.body.onmousemove = document.body.onmouseup = null;
+    };
+	});
 
 	function addImagesCallback(images) {
 		$('.images-container .column.twelve').remove();
