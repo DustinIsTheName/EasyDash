@@ -1428,7 +1428,7 @@ function ready() {
 		    	new_html += '</li>';
 		    }
 	    }
-	    // qw12
+	    
 	    $('.product-types .select-sim-dropdown .variable').remove();
 	    $('.product-types .select-sim-dropdown').removeClass('is-loading').append(new_html);
 
@@ -1501,7 +1501,7 @@ function ready() {
 		$('#reorderVariantsOverlay').addClass('open');
 	});
 
-	$('.option-item').mousedown(function(e) {
+	$('#modals-container').on('mousedown', '.option-item', function(e) {
 		this_elem = this;
     e = e || window.event;
     var start = 0, diff = 0;
@@ -1539,7 +1539,7 @@ function ready() {
     };
 	});
 
-	$('.value-item').mousedown(function(e) {
+	$('#modals-container').on('mousedown', '.value-item', function(e) {
 		e.stopPropagation();
 		this_elem = this;
     e = e || window.event;
@@ -1576,6 +1576,58 @@ function ready() {
         this_elem.style.left = 0;
         document.body.onmousemove = document.body.onmouseup = null;
     };
+	});
+
+	$('#modals-container').on('click', '#save-reorder-variants', function() {
+		$(this).addClass('is-loading');
+		var optionsOrder = {}
+
+		$('.option-item').each(function(index, element) {
+			var values = [];
+
+			$(this).find('.value-item').each(function(index, element) {
+				values.push($(element).data('value'));
+			});
+
+			optionsOrder[$(element).data('id')] = {
+				index: index,
+				values: values
+			};
+		});
+
+		console.log(optionsOrder);
+		$.ajax({
+      type: "POST",
+      url: '/reorder-variants',
+      data: {
+      	id: $('[name="id"]').val(),
+      	options: optionsOrder
+      },
+      dataType: "JSON"
+    }).success(function(new_options) {
+    	console.log(new_options);
+			$('#allVariantsPanel').fadeOut(200, 'swing', function() {
+				$('#allVariantsPanel').parent().addClass('is-loading');
+			});
+
+    	$.ajax({
+    		type: 'GET',
+    		url: '/refresh-variant-panel',
+    		data: {id: $('[name="id"]').val()},
+    		dataType: 'html'
+    	}).success(function(variants_html) {
+    		$('#allVariantsPanel').fadeIn().html(variants_html).parent().removeClass('is-loading');
+    	}).error(basicError);
+
+    	$('#save-reorder-variants').removeClass('is-loading');
+    	closeModal($('#reorderVariantsOverlay'));
+    	flashMessage('The order of your product variants was successfully saved.');
+    	refreshIframe();
+
+    }).error(function(error) {
+    	console.log(error);
+    	flashMessage('The order of your product variants failed to save.', 'error');
+    });
 	});
 
 	function addImagesCallback(images) {

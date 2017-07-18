@@ -150,14 +150,14 @@
         <p>Reorder variants or options to change how they appear on your store.</p>
         <ul class="option-list">
           <% for option in @resource.options %>
-            <li class="option-item">
+            <li class="option-item noSelect" data-id="<%= option.id %>">
               <div class="option-name">
                 <%= svgs 'drag' %>
                 <span class="label"><%= option.name %></span>
               </div>
               <ul class="value-list">
                 <% for value in option.values %>
-                  <li class="value-item">
+                  <li class="value-item noSelect" data-value="<%= value %>">
                     <%= svgs 'drag' %>
                     <%= value %>
                   </li>

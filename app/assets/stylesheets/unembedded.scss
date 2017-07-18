@@ -269,6 +269,12 @@ label .icon-calendar { float: right; margin-top: 2px; }
   }
 }
 
+.noSelect {
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+}
+
 .tooltip:hover .tooltiptext {
   visibility: visible;
 }
@@ -1136,6 +1142,10 @@ label .icon-calendar { float: right; margin-top: 2px; }
       padding: 10px 10px 0;
       box-sizing: border-box;
       -webkit-overflow-scrolling: touch;
+
+      &#allVariantsPanel.is-loading:before {
+        top: 50px;
+      }
 
       .sidebyside_large {width: calc(85% - 9px);}
       .icon-trash {background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 27 27' enable-background='new 0 0 27 27'%3E%3Cpath fill='rgb(255,255,255)' d='M27.5,5a2.22,2.22,0,0,1-1.8,2.25H2.3A2.22,2.22,0,0,1,.5,5,2.22,2.22,0,0,1,2.3,2.75H9.5C9.5,1.63,11.07.5,12.2,0.5h3.6c1.13,0,2.7,1.35,2.7,2.25h7.2A2.22,2.22,0,0,1,27.5,5Zm-2.25,5.85V25.7c0,0.9-1.8,1.8-2.7,1.8H5.45c-0.9,0-2.7-.68-2.7-1.8V10.85A3.17,3.17,0,0,1,4.33,9.5H23.9A3.88,3.88,0,0,1,25.25,10.85ZM11.75,14.9a1,1,0,0,0-.9-0.9H10.4a1,1,0,0,0-.9.9v7.2a1,1,0,0,0,.9.9h0.45a1,1,0,0,0,.9-0.9V14.9Zm6.75,0a1,1,0,0,0-.9-0.9H17.15a1,1,0,0,0-.9.9v7.2a1,1,0,0,0,.9.9H17.6a1,1,0,0,0,.9-0.9V14.9Z' transform='translate(-0.5 -0.5)' /%3E%3C/svg%3E");}

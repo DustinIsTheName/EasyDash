@@ -26,6 +26,7 @@ Rails.application.routes.draw do
     get '/dashboard-hard-delete' => :hard_delete_api
     post '/variant-update' => :update_variant
     post '/variant-image' => :update_variant_image
+    post '/reorder-variants' => :reorder_variants
     post '/add-images' => :add_images
     post '/add-image-from-url' => :add_image_from_url
     post '/add-image-to-theme' => :add_image_to_theme
@@ -37,6 +38,7 @@ Rails.application.routes.draw do
     get '/product-seo' => :get_product_seo
     get '/ajax-resources' => :ajax_get_resources
     get '/refresh-form' => :refresh_form
+    get '/refresh-variant-panel' => :refresh_variant_panel
     get '/product-tags' => :get_product_tags
     get '/product-types' => :get_product_types
     get '/product-vendors' => :get_product_vendors

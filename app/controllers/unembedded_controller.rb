@@ -93,6 +93,12 @@ class UnembeddedController < ApplicationController
 
   end
 
+  def refresh_variant_panel
+    @resource = ShopifyAPI::Product.find(params[:id])
+
+    render html: render_to_string('unembedded/panels/_all_variants', :layout => false)
+  end
+
   def update_api
     puts Colorize.magenta(params)
 
@@ -117,6 +123,12 @@ class UnembeddedController < ApplicationController
     else
       render json: validation
     end
+  end
+
+  def reorder_variants
+    puts Colorize.magenta(params)
+    product = API.changeVariantOrder(params)
+    render json: product.options
   end
 
   def add_images

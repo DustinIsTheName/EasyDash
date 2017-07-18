@@ -387,6 +387,80 @@ class API
     end
   end
 
+  def self.changeVariantOrder(params)
+    product = ShopifyAPI::Product.find(params[:id])
+
+    original_positions = product.options.map {|o| o.position}
+    product.options.each_with_index do |option, index|
+      product.options[index].position = params["options"][option.id.to_s]["index"].to_i + 1
+      # product.options[index].values = params["options"][option.id.to_s]["values"]
+    end
+    new_positions = product.options.map {|o| o.position}
+    product.options.sort_by! { |option| option.position}
+
+    positions_change = Hash[new_positions.zip(original_positions)]
+    puts positions_change
+
+    product.variants.each do |variant|
+      original_options = {}
+
+      original_options["option1"] = variant.option1 if variant.option1
+      original_options["option2"] = variant.option2 if variant.option2
+      original_options["option3"] = variant.option3 if variant.option3
+
+      variant.option1 = original_options["option"+positions_change[1].to_s] if variant.option1
+      variant.option2 = original_options["option"+positions_change[2].to_s] if variant.option2
+      variant.option3 = original_options["option"+positions_change[3].to_s] if variant.option3
+    end
+
+    values_list = params["options"].values.map {|o| o["values"]}
+    index = 1
+
+    puts Colorize.magenta(values_list[0])
+
+    if values_list[0]
+      for value1 in values_list[0]
+        if values_list[1]
+          for value2 in values_list[1]
+            if values_list[2]
+              for value3 in values_list[2]
+                v = product.variants.select { |v| v.option1 == value1 and v.option2 == value2 and v.option3 == value3 }.first
+                if v
+                  v.position = index
+                  index += 1
+                end
+              end
+            else
+              v = product.variants.select { |v| v.option1 == value1 and v.option2 == value2 }.first
+              if v
+                v.position = index
+                index += 1
+              end
+            end
+          end
+        else
+          v = product.variants.select { |v| v.option1 == value1 }.first
+          if v
+            v.position = index
+            index += 1
+          end
+        end
+      end
+    end
+
+    product.variants.sort_by! { |variant| variant.position}
+
+    puts product.variants.map {|v| v.title}
+
+    if product.save
+      puts Colorize.green('Variant order saved')
+    else
+      puts Colorize.red(product.errors.messages)
+    end
+
+    product
+  end
+
   def self.deleteResource(params)
     case params[:resource]
     when 'product'
