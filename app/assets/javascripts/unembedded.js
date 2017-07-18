@@ -27,13 +27,6 @@ function ready() {
 		query: ''
 	}
 
-	var currentIframeUrl = $('#dashboard-iframe').attr('src');
-	$('#section-edit-variant [name^="variants"]').addClass('variant_input');
-	$('.variant_input').prop('disabled', true);
-	var previousFormState = $('form.ajax').serialize();
-	var previousVariantState;
-	$('.variant_input').prop('disabled', false);
-
 	// console.log(resource_infomation);
 
 	try {
@@ -299,11 +292,11 @@ function ready() {
 			}).success(function(new_html) {
 				$('#resource-section').html(new_html.form_html).find('.wittyEDPanelBody').hide().fadeIn(200);
 				$('#modals-container').html(new_html.modals);
+
+				initializeFroalaEditor();
 				$('.variant_input').prop('disabled', true);
 				previousFormState = $('form.ajax').serialize();
 				$('.variant_input').prop('disabled', false);
-
-				initializeFroalaEditor();
 				setTimeout(function() {
 					$('.wittyEDPanel').removeClass('is-loading');
 				}, 200);
@@ -316,11 +309,11 @@ function ready() {
 			}).success(function(new_html) {
 				$('#resource-section').html(new_html.form_html).find('.wittyEDPanelBody').hide().fadeIn(200);
 				$('#modals-container').html(new_html.modals);
+
+				initializeFroalaEditor();
 				$('.variant_input').prop('disabled', true);
 				previousFormState = $('form.ajax').serialize();
 				$('.variant_input').prop('disabled', false);
-
-				initializeFroalaEditor();
 				setTimeout(function() {
 					$('.wittyEDPanel').removeClass('is-loading');
 				}, 200);
@@ -422,6 +415,13 @@ function ready() {
 	}
 
 	initializeFroalaEditor();
+
+	var currentIframeUrl = $('#dashboard-iframe').attr('src');
+	$('#section-edit-variant [name^="variants"]').addClass('variant_input');
+	$('.variant_input').prop('disabled', true);
+	var previousFormState = $('form.ajax').serialize();
+	var previousVariantState;
+	$('.variant_input').prop('disabled', false);
 
 	/*******************************************
 	Common Events
