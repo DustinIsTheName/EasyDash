@@ -1265,57 +1265,6 @@ label .icon-calendar { float: right; margin-top: 2px; }
     .fr-wrapper {
       max-height: calc(100% - 39px);
     }
-
-    &~ .editModalOverlay {
-      display: block;
-      width: 100vw;
-      left: 0;
-
-      .editModal {
-        position: static;
-        pointer-events: none;
-        max-width: none;
-        transform: none;
-
-        .card {
-          border-radius: 3px 3px 0 0;
-          height: 100vh;
-          margin-bottom: 0;
-          border-bottom: 0;
-          background-color: transparent;
-          pointer-events: none;
-
-          .card-section {
-            padding: 2.0rem;
-            background: #fff;
-            border: 1px solid #d3dbe2;
-            width: 100vw;
-            max-width: 720px;
-            left: 50vw;
-            transform: translateX(-50%);
-            box-sizing: border-box;
-            position: fixed;
-            pointer-events: all;
-
-            &:first-child {
-              top: 42px;
-            }
-
-            &:last-child {
-              bottom: 31px;
-              text-align: right;
-            }
-
-            .info-text {
-              margin: 0;
-              vertical-align: middle;
-              display: inline-block;
-              margin-right: 2rem;
-            }
-          }
-        }
-      }
-    }
   }
 
   .fr-box.fr-top {
@@ -1365,67 +1314,6 @@ label .icon-calendar { float: right; margin-top: 2px; }
       &:hover {
         background: $witty-teal;
         color: #fff;
-      }
-    }
-  }
-}
-
-
-
-#frWysiwygFullscreenOverlay {
-  display: block;
-  width: 100vw;
-  z-index: 99999;
-
-  #frWysiwygFullscreen {
-    max-width: 720px;
-
-    .card {
-      margin-bottom: 0;
-      border-bottom: 0;
-
-      .card-section {
-        padding: 2.0rem;
-        background: #fff;
-        border: 1px solid #d3dbe2;
-        width: 100%;
-        max-width: 720px;
-        box-sizing: border-box;
-
-        &#fullscreen-wysiwyg-container {
-          height: 100%;
-          padding: 0;
-          max-height: calc(100vh - 220px);
-
-          .fr-box {
-            position: static;
-            height: 100%;
-
-            .fr-toolbar {
-              border-radius: 0;
-
-              .fr-command[id^="html"] {
-                float: right;
-              }
-            }
-
-            .fr-wrapper {
-              max-height: calc(100% - 43px);
-              box-shadow: none;
-            }
-          }
-        }
-
-        &:last-child {
-          text-align: right;
-        }
-
-        .info-text {
-          margin: 0;
-          vertical-align: middle;
-          display: inline-block;
-          margin-right: 2rem;
-        }
       }
     }
   }
@@ -2220,6 +2108,12 @@ button.variant {padding: .9rem 1.5rem;}
     display: block;
   }
 
+  &#frWysiwygFullscreenOverlay {
+    display: block;
+    width: 100vw;
+    z-index: 99999;
+  }
+
   .editModal {
     width: calc(100% - 20px);
     max-width: 620px;
@@ -2550,6 +2444,74 @@ button.variant {padding: .9rem 1.5rem;}
 
       .card-section:last-child {
         text-align: right;
+      }
+    }
+
+    &#frWysiwygFullscreen {
+      max-width: 720px;
+
+      .card {
+        margin-bottom: 0;
+        border-bottom: 0;
+
+        .card-section {
+          padding: 2.0rem;
+          background: #fff;
+          border: 1px solid #d3dbe2;
+          width: 100%;
+          max-width: 720px;
+          box-sizing: border-box;
+
+          &#fullscreen-wysiwyg-container {
+            height: calc(100vh - 220px);
+            max-height: 325px;
+
+            .fr-box {
+              position: static;
+              height: 100%;
+              border: 1px solid #ddd;
+              overflow: hidden;
+              box-sizing: content-box;
+              border-radius: .3rem;
+
+              .fr-toolbar {
+                box-shadow: none;
+                border-top: 0;
+                background: #fafbfc;
+                border-bottom: 1px solid #ddd;
+                border-radius: 0;
+
+                .fr-command[id^="html"] {
+                  float: right;
+                }
+              }
+
+              .fr-wrapper {
+                max-height: calc(100% - 43px);
+                box-shadow: none;
+              }
+            }
+          }
+
+          &:first-child {
+            border-bottom: 0;
+          }
+
+          &:last-child {
+            border-top: 0;
+            display: flex;
+            align-items: center;
+          }
+
+          .info-text {
+            margin: 0;
+            color: #aaa;
+          }
+
+          .cancel {
+            margin-left: auto;
+          }
+        }
       }
     }
   }
