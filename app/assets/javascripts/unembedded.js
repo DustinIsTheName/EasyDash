@@ -330,6 +330,13 @@ function ready() {
 		$('.fr-command[id^="insertLink"]').removeClass('fr-hidden');
 	}
 
+	function showRTEButtons() {
+		$('.fr-command').removeClass('fr-hidden');
+		$('.fr-command[id^="undo"]').addClass('fr-hidden');
+		$('.fr-command[id^="redo"]').addClass('fr-hidden');
+		$('.fr-command[id^="fullscreen"]').addClass('fr-hidden');
+	}
+
 	function initializeFroalaEditor() {
 		$('#shopify_api_product_body_html').froalaEditor({
 			toolbarButtons: [
@@ -367,48 +374,70 @@ function ready() {
 		  	'videoBack', 
 		  	'|',
 		  	'videoEmbed'
-		  ]
+		  ],
+		  paragraphFormat: {
+			  N: 'Paragraph',
+			  H1: 'Heading 1',
+			  H2: 'Heading 2',
+			  H3: 'Heading 3',
+			  H4: 'Heading 4',
+			  H5: 'Heading 5',
+			  H6: 'Heading 6',
+			  BLOCKQUOTE: 'Blockquote'
+			}
 		});
 		hideRTEButtons();
-		$(window).resize(hideRTEButtons);
+		$(window).resize(function() {
+			if ($('.fr-box').hasClass('fr-fullscreen')) {
+				showRTEButtons();			
+			} else {
+				hideRTEButtons();
+			}
+		});
 		$('#shopify_api_product_body_html').on('froalaEditor.commands.after', function (e, editor, cmd, param1, param2) {
+
+  		function exitFullscreen() {
+				if ($('#shopify_api_product_body_html').froalaEditor('fullscreen.isActive')) {
+		  		$('#description-label').after($('.fr-box'));
+					$('#shopify_api_product_body_html').froalaEditor('fullscreen.toggle');
+		  		hideRTEButtons();
+		  		$('.fr-top.fr-toolbar').css('z-index', 4);
+		  		$('#frWysiwygFullscreenOverlay').remove();
+				}
+			}
 
 		  if (cmd === "fullscreen") {
 		  	if ($('.fr-box').hasClass('fr-fullscreen')) {
-		  		$('.fr-command').removeClass('fr-hidden');
-					$('.fr-command[id^="undo"]').addClass('fr-hidden');
-					$('.fr-command[id^="redo"]').addClass('fr-hidden');
+		  		showRTEButtons();
 
-					var $overlay = $('<div id="frWysiwygFullscreen" class="editModalOverlay">');
-					$overlay.click(function() {
-						if ($('#shopify_api_product_body_html').froalaEditor('fullscreen.isActive')) {
-							$('#shopify_api_product_body_html').froalaEditor('fullscreen.toggle');
-				  		hideRTEButtons();
-				  		$('.fr-top.fr-toolbar').css('z-index', 4);
-				  		$('#frWysiwygFullscreen').remove();
-						}
-					});
+					var $overlay = $('<div id="frWysiwygFullscreenOverlay" class="editModalOverlay">');
+					$overlay.click(exitFullscreen);
 
 					var $overlay_inner = $('<section id="frWysiwygFullscreen" class="editModal">').click(function(e) {
 						e.stopPropagation();
 					});
 
 			    var overlay_inner_html = '<div class="card has-sections">';
-		      overlay_inner_html += '<div class="card-section" style="padding-bottom: 0;">';
-	        overlay_inner_html += '<h3>Description</h3>';
+		      overlay_inner_html += '<div class="card-section">';
+	        overlay_inner_html += '<h3 style="margin-bottom: 0;">Description</h3>';
+	        overlay_inner_html += '</div>';
+		      overlay_inner_html += '<div id="fullscreen-wysiwyg-container" class="card-section"></div>';
+		      overlay_inner_html += '<div class="card-section">';
+		      overlay_inner_html += '<p class="info-text">Changes will not be lost when exiting fullscreen.</p>';
+	        overlay_inner_html += '<button type="button" class="secondary cancel" href="#">Exit Fullscreen</button>';
 	        overlay_inner_html += '</div>';
 	        overlay_inner_html += '</div>';
-	        overlay_inner_html += '</section>';
 
 	        $overlay_inner.append(overlay_inner_html);
 	        $overlay.append($overlay_inner);
 
-					$('.fr-fullscreen').after($overlay);
-		  	} else {
-		  		hideRTEButtons();
-		  		$('.fr-top.fr-toolbar').css('z-index', 4);
+	        $overlay.find('button.cancel').click(exitFullscreen);
 
-		  		$('#frWysiwygFullscreen').remove();
+					$('body').append($overlay);
+	        $('#fullscreen-wysiwyg-container').append($('.fr-box'));
+
+		  	} else {
+		  		exitFullscreen();
 		  	}
 		  }
 		});
