@@ -131,6 +131,12 @@ class UnembeddedController < ApplicationController
     render json: product.options
   end
 
+  def edit_options
+    puts Colorize.magenta(params)
+    product = API.editOptions(params)
+    render json: product.options
+  end
+
   def add_images
     # puts Colorize.magenta(params)
     product = API.addImages(params)
@@ -188,6 +194,15 @@ class UnembeddedController < ApplicationController
     get_resources
     @type = 'resource_select'
     render :dashboard
+  end
+
+  def bulk_delete_api
+    puts Colorize.magenta(params)
+    resources = []
+    params["resource_ids"].each do |id|
+      resources.push(API.deleteResource({id: id.to_i, resource: params["resource"]}))
+    end
+    render json: resources
   end
 
   def get_alt_tag

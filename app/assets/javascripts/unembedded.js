@@ -270,6 +270,19 @@ function ready() {
 		$('.wittyEDPanel[data-tier="'+(tier + 1)+'"]').css({'height': 'auto', 'opacity': 1}).blindRightIn(400);
 	}
 
+	function refreshFormCallback(new_html) {
+		$('#resource-section').html(new_html.form_html).find('.wittyEDPanelBody').hide().fadeIn(200);
+		$('#modals-container').html(new_html.modals);
+
+		initializeFroalaEditor();
+		$('.variant_input').prop('disabled', true);
+		previousFormState = $('form.ajax').serialize();
+		$('.variant_input').prop('disabled', false);
+		setTimeout(function() {
+			$('.wittyEDPanel').removeClass('is-loading');
+		}, 200);
+	}
+
 	function refreshForm(messageEvent) {
 		currentIframeUrl = messageEvent.data;
 		var url = messageEvent.data.replace(messageEvent.origin, '').split('?')[0];
@@ -289,37 +302,42 @@ function ready() {
 					handle: resource_handle[2]
 				},
 				dataType: 'json'
-			}).success(function(new_html) {
-				$('#resource-section').html(new_html.form_html).find('.wittyEDPanelBody').hide().fadeIn(200);
-				$('#modals-container').html(new_html.modals);
-
-				initializeFroalaEditor();
-				$('.variant_input').prop('disabled', true);
-				previousFormState = $('form.ajax').serialize();
-				$('.variant_input').prop('disabled', false);
-				setTimeout(function() {
-					$('.wittyEDPanel').removeClass('is-loading');
-				}, 200);
-			}).error(basicError);
+			}).success(refreshFormCallback).error(basicError);
 		} else {
 			$.ajax({
 				type: 'GET',
 				url: '/refresh-form',
 				dataType: 'json'
-			}).success(function(new_html) {
-				$('#resource-section').html(new_html.form_html).find('.wittyEDPanelBody').hide().fadeIn(200);
-				$('#modals-container').html(new_html.modals);
-
-				initializeFroalaEditor();
-				$('.variant_input').prop('disabled', true);
-				previousFormState = $('form.ajax').serialize();
-				$('.variant_input').prop('disabled', false);
-				setTimeout(function() {
-					$('.wittyEDPanel').removeClass('is-loading');
-				}, 200);
-			}).error(basicError);
+			}).success(refreshFormCallback).error(basicError);
 		}
 	}
+
+	function refreshVariantPanel() {
+		$('#allVariantsPanel').fadeOut(200, 'swing', function() {
+			$('#allVariantsPanel').parent().addClass('is-loading');
+		});
+
+		$.ajax({
+			type: 'GET',
+			url: '/refresh-form',
+			data: {
+				resource: 'product',
+				handle: $('[name="handle"]').val()
+			},
+			dataType: 'json'
+		}).success(function(new_html) {
+			$('#modals-container').html(new_html.modals);
+		}).error(basicError);
+
+  	$.ajax({
+  		type: 'GET',
+  		url: '/refresh-variant-panel',
+  		data: {id: $('[name="id"]').val()},
+  		dataType: 'html'
+  	}).success(function(variants_html) {
+  		$('#allVariantsPanel').fadeIn().html(variants_html).parent().removeClass('is-loading');
+  	}).error(basicError);
+  }
 
 	function hideRTEButtons() {
 		$('.fr-command').addClass('fr-hidden');
@@ -1524,13 +1542,17 @@ function ready() {
 		$('#addImageUrlOverlay').addClass('open');
 	});
 
+	/*******************************************
+	Links at the top of the Variant Panel
+	*******************************************/
+
 	$('#resource-section').on('click', '#reorderVariantsLink', function(e) {
 		e.preventDefault();
 
 		$('#reorderVariantsOverlay').addClass('open');
 	});
 
-	$('#modals-container').on('mousedown', '.option-item', function(e) {
+	$('#modals-container').on('mousedown', '#reorderVariants .option-item', function(e) {
 		this_elem = this;
     e = e || window.event;
     var start = 0, diff = 0;
@@ -1568,7 +1590,7 @@ function ready() {
     };
 	});
 
-	$('#modals-container').on('mousedown', '.value-item', function(e) {
+	$('#modals-container').on('mousedown', '#reorderVariants .value-item', function(e) {
 		e.stopPropagation();
 		this_elem = this;
     e = e || window.event;
@@ -1611,15 +1633,17 @@ function ready() {
 		$(this).addClass('is-loading');
 		var optionsOrder = {}
 
-		$('.option-item').each(function(index, element) {
+		$('#reorderVariants .option-item').each(function(option_index, element) {
 			var values = [];
 
-			$(this).find('.value-item').each(function(index, element) {
+			$(this).find('.value-item').each(function(value_index, element) {
+				console.log(element);
+
 				values.push($(element).data('value'));
 			});
 
 			optionsOrder[$(element).data('id')] = {
-				index: index,
+				index: option_index,
 				values: values
 			};
 		});
@@ -1635,18 +1659,8 @@ function ready() {
       dataType: "JSON"
     }).success(function(new_options) {
     	console.log(new_options);
-			$('#allVariantsPanel').fadeOut(200, 'swing', function() {
-				$('#allVariantsPanel').parent().addClass('is-loading');
-			});
 
-    	$.ajax({
-    		type: 'GET',
-    		url: '/refresh-variant-panel',
-    		data: {id: $('[name="id"]').val()},
-    		dataType: 'html'
-    	}).success(function(variants_html) {
-    		$('#allVariantsPanel').fadeIn().html(variants_html).parent().removeClass('is-loading');
-    	}).error(basicError);
+    	refreshVariantPanel();
 
     	$('#save-reorder-variants').removeClass('is-loading');
     	closeModal($('#reorderVariantsOverlay'));
@@ -1657,6 +1671,87 @@ function ready() {
     	console.log(error);
     	flashMessage('The order of your product variants failed to save.', 'error');
     });
+	});
+
+	$('#resource-section').on('click', '#editOptionsLink', function(e) {
+		e.preventDefault();
+
+		$('#editOptionsOverlay').addClass('open');
+	});
+
+	$('#modals-container').on('click', '#save-edit-options', function(e) {
+		var new_option_names = {}
+		var $this = $(this);
+
+		$this.addClass('is-loading');
+		$('#editOptions .option-item').each(function() {
+			new_option_names[$(this).data('id')] = $(this).find('.option-input').val();
+		});
+
+		$.ajax({
+      type: "POST",
+      url: '/edit-options',
+      data: {
+      	id: $('[name="id"]').val(),
+      	option_names: new_option_names
+      },
+      dataType: "JSON"
+    }).success(function(new_options) {
+			console.log(new_options);
+
+			refreshVariantPanel();
+
+ 			$this.removeClass('is-loading');
+			flashMessage('Your options have been updated.');
+			closeModal($('#editOptionsOverlay'));
+
+    }).error(function(erro) {
+    	console.log(error);
+    	flashMessage('There was a problem updating your product options', 'error');
+    });
+
+	});
+
+	$('#modals-container').on('click', '#editOptions .value-item a', function(e) {
+		e.preventDefault();
+		var $this = $(this);
+		var value = $(this).parent().data('value'),
+				option = $(this).parent().data('option'),
+				optionIndex = $(this).parent().data('option-index'),
+				variantAmount = $('.variant[data-option'+optionIndex+'="'+value+'"]').length,
+				variant_ids = [];
+
+		$('.variant[data-option'+optionIndex+'="'+value+'"]').each(function() {
+			variant_ids.push($(this).data('id'));
+		});
+
+		closeModal($('#editOptionsOverlay'));
+	  confirmBox(
+	  	'Are you sure you want to delete this option value?', // Title of confirm Box
+	  	'You are about to delete <strong>all '+variantAmount+' variants</strong> with a <strong>'+option+'</strong> of <strong>'+value+'</strong>. Deleted variants cannot be recovered.', // Text of confirm Box
+	  	'Delete',
+	  	{ // Confirm Button Text
+		  	yes: function() { // function for confirm button
+		  		$('#editOptionsLink').addClass('is-loading');
+
+		  		$.ajax({
+			      type: "POST",
+			      url: '/dashboard-bulk-delete',
+			      data: {
+			      	resource_ids: variant_ids,
+			      	resource: 'variant'
+			      },
+			      dataType: "JSON"
+		  		}).success(function(deleted_resource) {
+		  			console.log(deleted_resource);
+		  			$('#editOptionsLink').removeClass('is-loading');
+
+		  			refreshVariantPanel();
+
+		  		}).error(basicError);
+		  	}
+		  }
+  	);
 	});
 
 	function addImagesCallback(images) {
@@ -2114,60 +2209,62 @@ function ready() {
 		  confirmBox(
 		  	'You have unsaved changes on this page', // Title of confirm Box
 		  	'If you leave this page, all unsaved changes will be lost. Are you sure you want to leave this page?', // Text of confirm Box
-		  	'Leave Page', { // Confirm Button Text
-		  	yes: function() { // function for confirm button
-		  		shiftPannelsRight($this);
-		  	}
-		  },
-		  {}, // function parameters; unneeded here
-	  	{
-	  		text: "Save & Leave", // extra button text
-	  		function: function() { // extra button function
-	  			$(this).addClass('is-loading');
+		  	'Leave Page', 
+		  	{ // Confirm Button Text
+			  	yes: function() { // function for confirm button
+			  		shiftPannelsRight($this);
+			  	}
+			  },
+			  {}, // function parameters; unneeded here
+		  	{
+		  		text: "Save & Leave", // extra button text
+		  		function: function() { // extra button function
+		  			$(this).addClass('is-loading');
 
-					$('form.ajax [name]:not(.variant_input)').prop('disabled', true);
-					var data = $('form.ajax').serialize();
-					$('form.ajax [name]:not(.variant_input)').prop('disabled', false);
+						$('form.ajax [name]:not(.variant_input)').prop('disabled', true);
+						var data = $('form.ajax').serialize();
+						$('form.ajax [name]:not(.variant_input)').prop('disabled', false);
 
-					// submit form with AJAX
-			    $.ajax({
-			      type: "POST",
-			      url: '/variant-update', //sumbits it to the given url of the form
-			      data: data,
-			      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
-			    }).success(function(variant) {
-			      console.log(variant);
-			      $('.single_variant_submit').removeClass('is-loading');
-			      $('form.ajax [name]:not(.variant_input)').prop('disabled', false);
-			      previousVariantState = data;
+						// submit form with AJAX
+				    $.ajax({
+				      type: "POST",
+				      url: '/variant-update', //sumbits it to the given url of the form
+				      data: data,
+				      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+				    }).success(function(variant) {
+				      console.log(variant);
+				      $('.single_variant_submit').removeClass('is-loading');
+				      $('form.ajax [name]:not(.variant_input)').prop('disabled', false);
+				      previousVariantState = data;
 
-			    	if (variant.error_message) {
+				    	if (variant.error_message) {
+						    $('#confirmBoxOverlay').remove();
+				    		flashMessage(variant.error_message, 'error');
+				    	}	else {
+					      flashMessage('Variant has been updated successfully.');
+					      refreshIframe();
+					      $('[data-object*="'+variant.id+'"]').data('object', variant);
+					      $('#variants_'+variant.id+'_option1').val(variant.option1);
+					      $('#variants_'+variant.id+'_option2').val(variant.option2);
+					      $('#variants_'+variant.id+'_option3').val(variant.option3);
+					      $('#variants_'+variant.id+'_inventory_quantity').val(variant.inventory_quantity);
+					      $('#variants_'+variant.id+'_compare_at_price').val(variant.compare_at_price);
+					      $('#variants_'+variant.id+'_price').val(variant.price);
+					      $('#variants_'+variant.id+'_sku').val(variant.sku);
+					    }
+
 					    $('#confirmBoxOverlay').remove();
-			    		flashMessage(variant.error_message, 'error');
-			    	}	else {
-				      flashMessage('Variant has been updated successfully.');
-				      refreshIframe();
-				      $('[data-object*="'+variant.id+'"]').data('object', variant);
-				      $('#variants_'+variant.id+'_option1').val(variant.option1);
-				      $('#variants_'+variant.id+'_option2').val(variant.option2);
-				      $('#variants_'+variant.id+'_option3').val(variant.option3);
-				      $('#variants_'+variant.id+'_inventory_quantity').val(variant.inventory_quantity);
-				      $('#variants_'+variant.id+'_compare_at_price').val(variant.compare_at_price);
-				      $('#variants_'+variant.id+'_price').val(variant.price);
-				      $('#variants_'+variant.id+'_sku').val(variant.sku);
-				    }
-
-				    $('#confirmBoxOverlay').remove();
-				    shiftPannelsRight($this);
-			      // time to provide feedback 
-			    }).error(function(e) {
-			    	console.log(e);
-				    $('#confirmBoxOverlay').remove();
-			    	flashMessage('Variant failed to update successfully.', 'error');
-			    	$('form.ajax [name]:not(.variant_input)').prop('disabled', false);
-			    });
-	  		}
-	  	});
+					    shiftPannelsRight($this);
+				      // time to provide feedback 
+				    }).error(function(e) {
+				    	console.log(e);
+					    $('#confirmBoxOverlay').remove();
+				    	flashMessage('Variant failed to update successfully.', 'error');
+				    	$('form.ajax [name]:not(.variant_input)').prop('disabled', false);
+				    });
+		  		}
+		  	}
+	  	);
 		} else {
 			shiftPannelsRight($this);
 		}

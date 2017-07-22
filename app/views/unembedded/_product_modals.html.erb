@@ -175,4 +175,42 @@
     </div>
   </section>
 </div>
+<div id="editOptionsOverlay" class="editModalOverlay">
+  <section id="editOptions" class="editModal">
+    <div class="card has-sections">
+      <div class="card-section" style="padding-bottom: 0;">
+        <h3>Edit options</h3>
+        <!-- <a href="#" class="close" role="button" aria-label="Close dialog">x</a> -->
+      </div>
+      <hr>
+      <div class="card-section">
+        <p>Reorder variants or options to change how they appear on your store.</p>
+        <ul class="option-list">
+          <% option_index = 0 %>
+          <% for option in @resource.options %>
+            <% option_index += 1 %>
+            <li class="option-item noSelect" data-id="<%= option.id %>">
+              <div class="option-name">
+                <input type="text" value="<%= option.name %>" class="option-input">
+              </div>
+              <ul class="value-list">
+                <% for value in option.values %>
+                  <li class="value-item noSelect" data-option="<%= option.name %>" data-option-index="<%= option_index %>" data-value="<%= value %>">
+                    <%= value %>
+                    <a href="#"></a>
+                  </li>
+                <% end %>
+              </ul>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+      <hr>
+      <div class="card-section">
+        <button type="button" class="secondary cancel" href="#">Cancel</button>
+        <button type="button" id="save-edit-options" class="primary" href="#">Save</button>
+      </div>
+    </div>
+  </section>
+</div>
 <% end %>

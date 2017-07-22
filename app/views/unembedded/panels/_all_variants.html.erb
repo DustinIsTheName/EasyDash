@@ -2,7 +2,7 @@
   <div class="card">
     <div class="row">
       <a id="reorderVariantsLink" style="display: inherit; margin-bottom: 1rem;" href="">Redorder variants</a>
-      <a style="display: inherit; margin-bottom: 1rem;" href="">Edit options</a>              
+      <a id="editOptionsLink" style="display: inherit; margin-bottom: 1rem;" href="">Edit options</a>              
       <a style="display: inherit; margin-bottom: 1rem;" href="">Add variant</a>
       <div class="divider"></div>
       <div class="variant-selector">
@@ -36,7 +36,7 @@
       </div>
       <% @resource.variants.each do |variant| %>
         <%= fields_for 'variants[]', variant do |v| %>
-          <div id="variant_id_<%= variant.id %>" class="variant" data-option1="<%= variant.option1 %>" data-option2="<%= variant.option2 %>" data-option3="<%= variant.option3 %>" >
+          <div id="variant_id_<%= variant.id %>" class="variant" data-option1="<%= variant.option1 %>" data-option2="<%= variant.option2 %>" data-option3="<%= variant.option3 %>" data-id="<%= variant.id %>">
             <div class="col_left">
               <input type="checkbox">
               <% if variant.image_id %>

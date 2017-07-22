@@ -666,6 +666,13 @@ label .icon-calendar { float: right; margin-top: 2px; }
         background: #ebeef0;
       }
       
+      #editOptionsLink {
+        &:before {
+          border-color: $witty-teal;
+          left: 20px;
+        }
+      }
+
       &.collection_conditions, &.blog_post_options {
         .extra_margin { 
           margin-bottom: 1rem;
@@ -2094,6 +2101,10 @@ button.variant {padding: .9rem 1.5rem;}
   }
 }
 
+.fr-tooltip {
+  z-index: 99999;
+}
+
 .editModalOverlay {
   position: fixed;
   width: 100%;
@@ -2382,7 +2393,7 @@ button.variant {padding: .9rem 1.5rem;}
           .option-name {
             display: inline-block;
             vertical-align: middle;
-            width: 120px;
+            width: 170px;
 
             .label {
               color: rebeccapurple;
@@ -2401,9 +2412,9 @@ button.variant {padding: .9rem 1.5rem;}
               color: #fff;
               line-height: 1;
               cursor: move; /* fallback if grab cursor is unsupported */
-              cursor: grab;
-              cursor: -moz-grab;
               cursor: -webkit-grab;
+              cursor: -moz-grab;
+              cursor: grab;
 
               &:active {
                 cursor: grabbing;
@@ -2440,6 +2451,78 @@ button.variant {padding: .9rem 1.5rem;}
 
       .next-icon--size-9 {
         width: 9px;
+      }
+
+      .card-section:last-child {
+        text-align: right;
+      }
+    }
+
+    &#editOptions {
+
+      ul {
+        list-style: none;
+      }
+
+      .option-list {
+        margin: 0;
+
+        .option-item {
+          margin-bottom: 20px;
+
+          .option-name {
+            display: inline-block;
+            vertical-align: middle;
+            width: 170px;
+          }
+
+          .value-list {
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 10px;
+
+            .value-item {
+              float: left;
+              border-radius: 3px;
+              padding: 10px 26px 10px 10px;
+              color: #fff;
+              line-height: 1;
+              position: relative;
+
+              a {
+                background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' enable-background='new 0 0 24 24'%3E%3Cpath fill='rgb(255, 255, 255)' d='M19.5 22c-.2 0-.5-.1-.7-.3L12 14.9l-6.8 6.8c-.2.2-.4.3-.7.3-.2 0-.5-.1-.7-.3l-1.6-1.6c-.1-.2-.2-.4-.2-.6 0-.2.1-.5.3-.7L9.1 12 2.3 5.2C2.1 5 2 4.8 2 4.5c0-.2.1-.5.3-.7l1.6-1.6c.2-.1.4-.2.6-.2.3 0 .5.1.7.3L12 9.1l6.8-6.8c.2-.2.4-.3.7-.3.2 0 .5.1.7.3l1.6 1.6c.1.2.2.4.2.6 0 .2-.1.5-.3.7L14.9 12l6.8 6.8c.2.2.3.4.3.7 0 .2-.1.5-.3.7l-1.6 1.6c-.2.1-.4.2-.6.2z'%3E%3C/path%3E%3C/svg%3E");
+                background-size: 9px 9px;
+                background-repeat: no-repeat;
+                background-position: center;
+                padding: 17px 16px 17px 7px;
+                display: inline-block;
+                vertical-align: middle;
+                position: absolute;
+                top: 0;
+                right: 0;
+              }
+
+              &+ .value-item {
+                margin-left: 3px;
+              }
+            }
+          }
+
+          &:nth-child(1) {
+            .option-name .label {color:#29bc94;}
+            .value-list .value-item {background:#29bc94;}
+          }
+
+          &:nth-child(2) {
+            .option-name .label {color:#763eaf;}
+            .value-list .value-item {background:#763eaf;}
+          }
+
+          &:nth-child(3) {
+            .option-name .label {color:#ff9517;}
+            .value-list .value-item {background:#ff9517;}
+          }
+        }
       }
 
       .card-section:last-child {

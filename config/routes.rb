@@ -24,9 +24,11 @@ Rails.application.routes.draw do
     put '/dashboard-update' => :update_api
     post '/dashboard-delete' => :delete_api
     get '/dashboard-hard-delete' => :hard_delete_api
+    post '/dashboard-bulk-delete' => :bulk_delete_api
     post '/variant-update' => :update_variant
     post '/variant-image' => :update_variant_image
     post '/reorder-variants' => :reorder_variants
+    post '/edit-options' => :edit_options
     post '/add-images' => :add_images
     post '/add-image-from-url' => :add_image_from_url
     post '/add-image-to-theme' => :add_image_to_theme

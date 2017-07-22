@@ -399,7 +399,6 @@ class API
     product.options.sort_by! { |option| option.position}
 
     positions_change = Hash[new_positions.zip(original_positions)]
-    puts positions_change
 
     product.variants.each do |variant|
       original_options = {}
@@ -415,8 +414,6 @@ class API
 
     values_list = params["options"].values.map {|o| o["values"]}
     index = 1
-
-    puts Colorize.magenta(values_list[0])
 
     if values_list[0]
       for value1 in values_list[0]
@@ -450,10 +447,25 @@ class API
 
     product.variants.sort_by! { |variant| variant.position}
 
-    puts product.variants.map {|v| v.title}
-
     if product.save
       puts Colorize.green('Variant order saved')
+    else
+      puts Colorize.red(product.errors.messages)
+    end
+
+    product
+  end
+
+  def self.editOptions(params)
+    product = ShopifyAPI::Product.find(params[:id])
+
+    params["option_names"].each do |new_option_name|
+      option = product.options.select{|o| o.id == new_option_name.first.to_i}.first
+      option.name = new_option_name.last if option
+    end
+
+    if product.save
+      puts Colorize.green('Options saved')
     else
       puts Colorize.red(product.errors.messages)
     end
@@ -482,6 +494,7 @@ class API
       return resource
     else
       puts Colorize.red('something went wrong')
+      puts params
       return nil
     end
   end
