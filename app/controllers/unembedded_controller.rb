@@ -113,8 +113,14 @@ class UnembeddedController < ApplicationController
 
   def update_variant
     puts Colorize.magenta(params)
-    @variant = ShopifyAPI::Variant.find(params['variants'].keys[0])
-    variant_params = params["variants"][@variant.id.to_s]
+    if params['variants'].keys[0] == 'new'
+      @variant = ShopifyAPI::Variant.new
+      @variant.prefix_options[:product_id] = params["product_id"]
+      variant_params = params["variants"]["new"]
+    else
+      @variant = ShopifyAPI::Variant.find(params['variants'].keys[0])
+      variant_params = params["variants"][@variant.id.to_s]
+    end
 
     validation = Validate.variant(variant_params, params)
     if validation.is_valid

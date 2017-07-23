@@ -299,7 +299,11 @@ class API
     if params[:id] == 'new'
       v = params["variants"]
     else
-      v = params["variants"][variant.id.to_s]
+      if variant.id
+        v = params["variants"][variant.id.to_s]
+      else
+        v = params["variants"]["new"]
+      end
     end
 
     variant.option1 = v["option1"] if v["option1"]

@@ -666,7 +666,8 @@ label .icon-calendar { float: right; margin-top: 2px; }
         background: #ebeef0;
       }
       
-      #editOptionsLink {
+      #editOptionsLink,
+      #addVariantLink {
         &:before {
           border-color: $witty-teal;
           left: 20px;

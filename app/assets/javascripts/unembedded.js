@@ -1079,28 +1079,51 @@ function ready() {
 
 	// submit single variant
 	$('.single_variant_submit').click(function(e) {
+		if ($(this).hasClass('is-loading')) {
+			return false;
+		}
+
 		$(this).addClass('is-loading');
 
 		$('form.ajax [name]:not(.variant_input)').prop('disabled', true);
 		var data = $('form.ajax').serialize();
 		$('form.ajax [name]:not(.variant_input)').prop('disabled', false);
 
+		var data_with_id = "product_id=" + $('[name="id"]').val() + '&' + data;
+
 		// submit form with AJAX
     $.ajax({
       type: "POST",
       url: '/variant-update', //sumbits it to the given url of the form
-      data: data,
+      data: data_with_id,
       dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
     }).success(function(variant) {
       console.log(variant);
       $('.single_variant_submit').removeClass('is-loading');
       $('form.ajax [name]:not(.variant_input)').prop('disabled', false);
+
+      if ($('.variant_input[name^="variants[new]"]').length > 0) {
+
+				$('#section-edit-variant [name^="variants"]').each(function() {
+					var variantName = $(this).attr('name'),
+							variantId = $(this).attr('id'),
+							nameRegexp = /variants\[([0-9]{11}|[a-z]{3})\].*\[(.+)\]/g,
+							match = nameRegexp.exec(variantName),
+							oldId = match[1],
+							oldKey = match[2],
+							hsc,
+							$this = $(this);
+
+					$(this).attr('name', variantName.replace(oldId, variant.id));
+				});
+				refreshVariantPanel();
+      }
       previousVariantState = data;
-      refreshIframe();
 
     	if (variant.error_message) {
     		flashMessage(variant.error_message, 'error');
     	}	else {
+	      refreshIframe();
 	      flashMessage('Variant has been updated successfully.');
 	      $('[data-object*="'+variant.id+'"]').data('object', variant);
 	      $('#variants_'+variant.id+'_option1').val(variant.option1);
@@ -1190,51 +1213,80 @@ function ready() {
 		$('#section-edit-variant [name^="variants"]').each(function() {
 			var variantName = $(this).attr('name'),
 					variantId = $(this).attr('id'),
-					nameRegexp = /variants\[([0-9]{11})\].*\[(.+)\]/g,
+					nameRegexp = /variants\[([0-9]{11}|[a-z]{3})\].*\[(.+)\]/g,
 					match = nameRegexp.exec(variantName),
 					oldId = match[1],
 					oldKey = match[2],
 					hsc,
 					$this = $(this);
 
-			if (variant.hasOwnProperty(oldKey)) {
-				$(this).attr('name', variantName.replace(oldId, variant.id));
-				$(this).val(variant[oldKey]);
-				if (variantId) $(this).attr('id', variantId.replace(oldId, variant.id));
+
+			if (variant.id === 'new') {
+
+				if ($this.hasClass('harmonized_system_code')) {
+					$this.val('');
+					$this.before('<input value="harmonized_system_code" class="new_hsc_name variant_input" type="hidden" name="variants['+variant.id+']new_metafields[][name]" id="variants_'+variant.id+'_new_metafields__name">');
+					$this.attr('name', 'variants['+variant.id+']new_metafields[][value]');
+					$this.attr('id', 'variants_'+variant.id+'_new_metafields__value');
+				} else {
+					$(this).attr('name', variantName.replace(oldId, variant.id));
+					$(this).val('');
+					if (variantId) $(this).attr('id', variantId.replace(oldId, variant.id));
+				}
+
 			} else {
+				if (variant.hasOwnProperty(oldKey)) {
+					$(this).attr('name', variantName.replace(oldId, variant.id));
+					$(this).val(variant[oldKey]);
+					if (variantId) $(this).attr('id', variantId.replace(oldId, variant.id));
+				} else {
 
-				$.ajax({
-		      type: "GET",
-		      url: '/variant-hsc', //sumbits it to the given url of the form
-		      data: {
-		      	variant_id: variant.id
-		      },
-		      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
-		    }).success(function(hsc) {
-		    	console.log(hsc);
-					if (hsc) {
-						$this.val(hsc.value);
-						$this.before('<input value="harmonized_system_code" class="new_hsc_name variant_input" type="hidden" name="variants['+variant.id+']metafields['+hsc.id+'][name]" id="variants_'+variant.id+'_new_metafields__name">');
-						$this.attr('name', 'variants['+variant.id+']metafields['+hsc.id+'][value]');
-						$this.attr('id', 'variants_'+variant.id+'_metafields_'+hsc.id+'_value');
-					} else {
-						$this.val('');
-						$this.before('<input value="harmonized_system_code" class="new_hsc_name variant_input" type="hidden" name="variants['+variant.id+']new_metafields[][name]" id="variants_'+variant.id+'_new_metafields__name">');
-						$this.attr('name', 'variants['+variant.id+']new_metafields[][value]');
-						$this.attr('id', 'variants_'+variant.id+'_new_metafields__value');
-					}
+					$.ajax({
+			      type: "GET",
+			      url: '/variant-hsc', //sumbits it to the given url of the form
+			      data: {
+			      	variant_id: variant.id
+			      },
+			      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+			    }).success(function(hsc) {
+			    	console.log('hsc:', hsc);
+						if (hsc) {
+							$this.val(hsc.value);
+							$this.before('<input value="harmonized_system_code" class="new_hsc_name variant_input" type="hidden" name="variants['+variant.id+']metafields['+hsc.id+'][name]" id="variants_'+variant.id+'_new_metafields__name">');
+							$this.attr('name', 'variants['+variant.id+']metafields['+hsc.id+'][value]');
+							$this.attr('id', 'variants_'+variant.id+'_metafields_'+hsc.id+'_value');
+						} else {
+							$this.val('');
+							$this.before('<input value="harmonized_system_code" class="new_hsc_name variant_input" type="hidden" name="variants['+variant.id+']new_metafields[][name]" id="variants_'+variant.id+'_new_metafields__name">');
+							$this.attr('name', 'variants['+variant.id+']new_metafields[][value]');
+							$this.attr('id', 'variants_'+variant.id+'_new_metafields__value');
+						}
 
-					$('form.ajax [name]:not(.variant_input)').prop('disabled', true);
-					previousVariantState = $('form.ajax').serialize();
-					$('form.ajax [name]:not(.variant_input)').prop('disabled', false);
+						$('form.ajax [name]:not(.variant_input)').prop('disabled', true);
+						previousVariantState = $('form.ajax').serialize();
+						$('form.ajax [name]:not(.variant_input)').prop('disabled', false);
 
-					$('#save_resource').hide();
-					$('.single_variant_submit').show();
-					$panelThis.removeClass('is-loading');
-					shiftPannelsLeft($panelThis);
-		    }).error(basicError);
+						$('#save_resource').hide();
+						$('.single_variant_submit').show();
+						$panelThis.removeClass('is-loading');
+						shiftPannelsLeft($panelThis);
+			    }).error(basicError);
+				}
+
 			}
 		});
+
+		if (variant.id === 'new') {
+			$('form.ajax [name]:not(.variant_input)').prop('disabled', true);
+			previousVariantState = $('form.ajax').serialize();
+			$('form.ajax [name]:not(.variant_input)').prop('disabled', false);
+
+			$('#save_resource').hide();
+			$('.single_variant_submit').show();
+			$panelThis.removeClass('is-loading');
+			shiftPannelsLeft($panelThis);
+		}
+
 	});
 
 	// edit variant image
@@ -2225,11 +2277,13 @@ function ready() {
 						var data = $('form.ajax').serialize();
 						$('form.ajax [name]:not(.variant_input)').prop('disabled', false);
 
+						var data_with_id = "product_id=" + $('[name="id"]').val() + '&' + data;
+
 						// submit form with AJAX
 				    $.ajax({
 				      type: "POST",
 				      url: '/variant-update', //sumbits it to the given url of the form
-				      data: data,
+				      data: data_with_id,
 				      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
 				    }).success(function(variant) {
 				      console.log(variant);
@@ -2251,6 +2305,10 @@ function ready() {
 					      $('#variants_'+variant.id+'_compare_at_price').val(variant.compare_at_price);
 					      $('#variants_'+variant.id+'_price').val(variant.price);
 					      $('#variants_'+variant.id+'_sku').val(variant.sku);
+					      
+					      if ($('.variant_input[name^="variants[new]"]').length > 0) {
+									refreshVariantPanel();
+					      }
 					    }
 
 					    $('#confirmBoxOverlay').remove();

@@ -1,0 +1,64 @@
+<%= fields_for 'variants[]', variant do |v| %>
+  <div id="variant_id_<%= variant.id %>" class="variant" data-option1="<%= variant.option1 %>" data-option2="<%= variant.option2 %>" data-option3="<%= variant.option3 %>" data-id="<%= variant.id %>">
+    <div class="col_left">
+      <input type="checkbox">
+      <% if variant.image_id %>
+        <div class="variant_image" data-variant-id="<%= variant.id %>" data-image-id="<%= variant.image_id %>">
+          <%= image_tag @resource.images.select{ |i| i.id == variant.image_id }.first.src %>
+        </div>
+      <% else %>
+        <div class="variant_image" data-variant-id="<%= variant.id %>">
+          <i class="icon-image"></i>
+        </div>
+      <% end %>
+    </div>
+    <div class="col_right">
+      <ul class="variant_options lists">
+        <li class="option-1"><%= variant.option1 %></li>
+        <li class="option-2"><%= variant.option2 %></li>
+        <li class="option-3"><%= variant.option3 %></li>
+      </ul>
+      <ul class="variant_options inputs">
+        <% for i in 1..3 %>
+          <% if variant.attributes["option#{i}"] %>
+            <li class="option-<%= i %>">
+              <span class="label"><%= @resource.options[i - 1].name %></span>
+              <%= v.text_field "option#{i}".to_sym %>
+            </li>
+          <% else %>
+            <li class="option-<%= i %> null">
+              <span class="label">Option <%= i %></span>
+              <div class="skeleton_option"></div>
+            </li>
+          <% end %>
+        <% end %>
+      </ul>
+    </div>
+    <div class="inputs_container">
+      <div class="input">
+        <label>Inventory</label>
+        <% if variant.inventory_management %>
+          <%= v.text_field :inventory_quantity %>
+        <% else %>
+          <input type="text" class="null" value="N/A" readonly>
+        <% end %>
+      </div>
+      <div class="input">
+        <label>Compare at Price</label>
+        <%= v.text_field :compare_at_price %>
+      </div>
+      <div class="input">
+        <label>Price</label>
+        <%= v.text_field :price %>
+      </div>
+      <div class="input">
+        <label>SKU</label>
+        <%= v.text_field :sku %>
+      </div>
+    </div>
+    <div class="buttons">
+      <button type="button" class="sidebyside_85 primary next-pannel edit_single_variant" data-image="<%= if variant.image_id then @resource.images.select{ |i| i.id == variant.image_id }.first.src end %>" data-object="<%= variant.to_json %>">Edit variant</button>
+      <button type="button" class="sidebyside_15 warning icon-trash tip variant-delete" data-title="<%= variant.title %>" data-resource="variant" data-id="<%= variant.id %>" data-hover="Delete Variant"></button>
+    </div>
+  </div>
+<% end %>
