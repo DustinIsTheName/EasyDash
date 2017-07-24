@@ -980,7 +980,8 @@ input[type="button"] {
   input[type="reset"]:active,
   input[type="button"]:active {
     box-shadow: 0 0.3rem 0.6rem rgba(0, 0, 0, 0.2) inset;
-    background-color: #0069a6; }
+    // background-color: #0069a6; 
+  }
   .button.secondary,
   button.secondary,
   input[type="submit"].secondary,

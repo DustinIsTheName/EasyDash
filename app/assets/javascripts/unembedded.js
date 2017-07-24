@@ -1752,6 +1752,7 @@ function ready() {
 			console.log(new_options);
 
 			refreshVariantPanel();
+			refreshIframe();
 
  			$this.removeClass('is-loading');
 			flashMessage('Your options have been updated.');
@@ -2305,7 +2306,7 @@ function ready() {
 					      $('#variants_'+variant.id+'_compare_at_price').val(variant.compare_at_price);
 					      $('#variants_'+variant.id+'_price').val(variant.price);
 					      $('#variants_'+variant.id+'_sku').val(variant.sku);
-					      
+
 					      if ($('.variant_input[name^="variants[new]"]').length > 0) {
 									refreshVariantPanel();
 					      }
