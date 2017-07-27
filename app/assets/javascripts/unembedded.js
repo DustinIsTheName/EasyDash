@@ -636,6 +636,7 @@ function ready() {
 
 	$(document).click(function() {
 		$('.responsive-dropdown-items-container').removeClass('active');
+		$('.more-menu').removeClass('open');
 	});
 
 	$('.responsive-dropdown-items-container, #responsive-dropdown').click(function(e) {
@@ -1075,6 +1076,23 @@ function ready() {
 
   	$('.variant_input').prop('disabled', false);
   	flashMessage('Product was not saved', 'error');
+	});
+
+	$('#resource-section').on('click', '.theme-editor__heading .more', function(e) {
+		e.stopPropagation();
+		$('.more-menu').toggleClass('open');
+	});
+
+	$('#resource-section').on('click', '.more-menu', function(e) {
+		e.stopPropagation();
+	});
+
+	$('#give-feedback').click(function() {
+		$('.trackduck-anonymous').click();
+	});
+
+	$('#send-message').click(function() {
+		zE.activate();
 	});
 
 	// submit single variant

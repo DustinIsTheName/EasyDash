@@ -1,7 +1,34 @@
-<header class="theme-editor__header theme-editor__header--no-shadow">
+<header id="main-header" class="theme-editor__header theme-editor__header--no-shadow">
   <nav class="theme-editor__header-nav wittyEDLogoHeading">
     <h2 class="ui-heading theme-editor__heading" data-bind="editor.sectionName(sectionId)">
       <%= svgs 'logo_white' %>
+      <%= svgs 'more' %>
+      <div class="more-menu">
+        <div class="top-icons">
+          <a href="https://<%= @shop_session.url %>/admin">
+            <i class="icon-home"></i>
+          </a>
+          <% unless @type == 'resource_select' %>
+          <a href="https://<%= @shop_session.url %>/admin/<%= @type %>s/<%= @resource.id %>">
+            <i class="icon-offsite"></i>
+          </a>
+          <% end %>
+        </div>
+        <ul>
+          <li>
+            <a id="give-feedback" href="#">Give Feedback</a>
+          </li>
+          <li>
+            <a href="https://trello.com/b/RQrMlHxV/easydash-development-roadmap" target="_blank">Submit an Idea</a>
+          </li>
+          <li>
+            <a id="send-message" href="#">Send a Message</a>
+          </li>
+          <li>
+            <a href="#" class="tip" data-hover="Coming soon!">Duplicate</a>
+          </li>
+        </ul>
+      </div>
     </h2>
   </nav><!-- .theme-editor__header-nav -->
 </header><!-- .theme-editor__header -->

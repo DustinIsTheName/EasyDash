@@ -38,7 +38,7 @@
       	$(this).toggleClass('open');
       });
 
-      parent.postMessage(window.location.href, '<%= Rails.env.production? ? "https://app.easydash.io" : "https://localhost:3000" %>');
+      parent.postMessage(window.location.href, '<%= Rails.env.production? ? APP_URL : DEV_URL %>');
 
       // $('.wittyEDContainer').mouseleave(function() {
       // 	$('.wittyEDOpenButton').removeClass('open');
