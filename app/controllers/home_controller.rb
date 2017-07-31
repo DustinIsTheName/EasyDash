@@ -12,4 +12,17 @@ class HomeController < AuthenticatedController
     }
   end
 
+  def activate_charge
+
+    puts Colorize.magenta(params)
+    recurring_application_charge = ShopifyAPI::RecurringApplicationCharge.find(params['charge_id'])
+    if recurring_application_charge.status == "accepted"
+      recurring_application_charge.activate 
+    else 
+      redirect_to root_path
+    end
+
+    redirect_to root_path
+  end
+
 end

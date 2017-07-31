@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   end
 
   root :to => 'home#index'
+  get '/activatecharge' => 'home#activate_charge'
 
   controller :unembedded do
     get '/preview-window' => :quick_select

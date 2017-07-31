@@ -5,14 +5,12 @@
       <%= svgs 'more' %>
       <div class="more-menu">
         <div class="top-icons">
-          <a href="https://<%= @shop_session.url %>/admin">
-            <i class="icon-home"></i>
+          <a class="tip bottom" data-hover="Admin Dashboard" href="https://<%= @shop_session.url %>/admin">
+            <%= svgs 'icon-shopify' %>
           </a>
-          <% unless @type == 'resource_select' %>
-          <a href="https://<%= @shop_session.url %>/admin/<%= @type %>s/<%= @resource.id %>">
-            <i class="icon-offsite"></i>
+          <a href="#" class="tip left bottom" data-hover="Duplicate (Coming soon!)">
+            <i class="icon-duplicate"></i>
           </a>
-          <% end %>
         </div>
         <ul>
           <li>
@@ -23,9 +21,6 @@
           </li>
           <li>
             <a id="send-message" href="#">Send a Message</a>
-          </li>
-          <li>
-            <a href="#" class="tip" data-hover="Coming soon!">Duplicate</a>
           </li>
         </ul>
       </div>
