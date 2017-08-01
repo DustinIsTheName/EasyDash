@@ -1527,6 +1527,7 @@ function ready() {
 	$('#resource-section').on('click', '#view-all-types', function(e) {
 		e.stopPropagation();
 
+		$('.input-group.select-sim.no-style').removeClass('active');
   	$('.product-types .select-sim-dropdown').addClass('is-loading');
   	$(this).parent().addClass('active');
 		$.ajax({
@@ -1562,6 +1563,7 @@ function ready() {
 	$('#resource-section').on('click', '#view-all-vendors', function(e) {
 		e.stopPropagation();
 
+		$('.input-group.select-sim.no-style').removeClass('active');
   	$('.product-vendors .select-sim-dropdown').addClass('is-loading');
 		$(this).parent().addClass('active');
 		$.ajax({

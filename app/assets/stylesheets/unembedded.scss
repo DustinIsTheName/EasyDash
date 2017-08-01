@@ -1063,9 +1063,14 @@ label .icon-calendar { float: right; margin-top: 2px; }
         position: absolute;
         right: 0;
         cursor: pointer;
+        padding-bottom: 10px;
 
         path {
           fill: #fff;
+        }
+
+        &:hover + .more-menu {
+          display: block;
         }
       }
 
@@ -1077,7 +1082,7 @@ label .icon-calendar { float: right; margin-top: 2px; }
         border-radius: .3rem;
         box-shadow: 1px 0 5px rgba(0, 0, 0, 0.12);
 
-        &.open {
+        &:hover {
           display: block;
         }
 
@@ -1132,6 +1137,8 @@ label .icon-calendar { float: right; margin-top: 2px; }
 
               &.icon-duplicate {
                 background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='rgb(0,150,141)' d='M15 0H5a1 1 0 0 0-1 1v3H1a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-3h3a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1zm-5 14H2V6h2v5a1 1 0 0 0 1 1h5v2zm4-4H6V2h8v8z'/%3E%3C/svg%3E");
+                position: relative;
+                top: 2px;
               }
             }
           }
@@ -1146,6 +1153,7 @@ label .icon-calendar { float: right; margin-top: 2px; }
             color: #31373d;
             font-weight: normal;
             font-size: 1.4rem;
+            text-align: left;
           }
         }
       }
