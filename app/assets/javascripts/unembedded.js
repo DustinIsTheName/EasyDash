@@ -2356,6 +2356,20 @@ function ready() {
 		  }
 		}
 	};
+
+	$('#syncStore').click(function() {
+		$(this).addClass('is-loading');
+
+		$.ajax({
+			type: 'GET',
+			url: '/sync-store',
+			dataType: 'json'
+		}).success(function(return_message) {
+			$('#syncStore').removeClass('is-loading');
+
+			flashMessage('Store had been synced.')
+		}).error(basicError);
+	});
 }
 
 $(document).on('turbolinks:load', ready);

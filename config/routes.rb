@@ -17,6 +17,7 @@ Rails.application.routes.draw do
 
   root :to => 'home#index'
   get '/activatecharge' => 'home#activate_charge'
+  get '/sync-store' => 'home#sync_store'
 
   controller :unembedded do
     get '/preview-window' => :quick_select
