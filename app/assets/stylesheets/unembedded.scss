@@ -29,6 +29,10 @@ html, body {
   background: #ebeef0 image-url("diagonal_line.svg") 0/5px 5px;
 }
 
+html.embedded-app, body.embedded-app {
+  background: #f4f6f8;
+}
+
 $gutter: 10px;
 $witty-teal: #00a79d;
 $witty-teal-dark: #00968d;
@@ -1027,7 +1031,7 @@ label .icon-calendar { float: right; margin-top: 2px; }
 
     .wittyEDPanel .theme-editor__header {
       position: fixed;
-      overflow: hidden;
+      // overflow: hidden;
       top: 54px;
       width: 300px;
       transition: width .3s;
@@ -2231,7 +2235,7 @@ iframe#launcher {
 }
 
 .fr-tooltip {
-  z-index: 99999;
+  z-index: 100000;
 }
 
 .editModalOverlay {

@@ -22,6 +22,9 @@
           <li>
             <a id="send-message" href="#">Send a Message</a>
           </li>
+          <li>
+            <a  id="theme-settings" href="https://<%= @shop_session.url %>/admin/themes/<%= @theme.id %>/editor" target="_blank">Theme Settings</a>
+          </li>
         </ul>
       </div>
     </h2>
@@ -45,7 +48,7 @@
       <div class="drop-select-resouces wittyEDPanelBody">
         <div class="wittyEDTopButtons theme-editor__header"> 
           <button type="button" class="sidebyside_85 primary next-pannel">Edit Product</button>
-          <button type="button" class="sidebyside_15 warning icon-trash tip" data-hover="Delete Product"></button>
+          <button type="button" class="sidebyside_15 warning icon-trash bottom left tip" data-hover="Delete Product"></button>
         </div>
         <%= panel 'resource_select' %>
       </div><!-- .wittyEDPanelBody -->
