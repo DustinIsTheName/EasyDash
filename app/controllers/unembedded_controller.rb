@@ -51,8 +51,9 @@ class UnembeddedController < ApplicationController
       @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
       @fulfillment_services = ShopifyAPI::FulfillmentService.find(:all, params: {scope: :all, fields: ['name', 'handle']})
       @smart_collections = ShopifyAPI::SmartCollection.find(:all, params: {product_id: params[:id], limit: 250, fields: ['title', 'handle', 'id']})
-      @theme = ShopifyAPI::Theme.find(:first, params: {role: "main"})
     end
+    
+    @theme = ShopifyAPI::Theme.find(:first, params: {role: "main"})
 
     unless @resource
       # get_resources

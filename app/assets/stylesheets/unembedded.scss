@@ -1031,7 +1031,7 @@ label .icon-calendar { float: right; margin-top: 2px; }
 
     .wittyEDPanel .theme-editor__header {
       position: fixed;
-      // overflow: hidden;
+      overflow: visible;
       top: 54px;
       width: 300px;
       transition: width .3s;
