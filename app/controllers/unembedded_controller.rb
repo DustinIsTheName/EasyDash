@@ -59,6 +59,8 @@ class UnembeddedController < ApplicationController
       @type = 'resource_select'
     end
 
+    @theme = ShopifyAPI::Theme.find(:first, params: {role: "main"})
+
   end
 
   def refresh_form
