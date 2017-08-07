@@ -51,6 +51,34 @@ class Shop < ActiveRecord::Base
     end
   end
 
+  def createWebhook 
+    webhook = ShopifyAPI::Webhook.find(:first, params: {topic: 'app/uninstalled'})
+
+    if webhook
+      webhook.destroy
+      puts Colorize.red('webhook deleted')
+    end
+
+    webhook = ShopifyAPI::Webhook.new
+    webhook.topic = 'app/uninstalled'
+    webhook_address_url = Rails.env.production? ? APP_URL : 'c2eaf31c.ngrok.io'
+    webhook.address = 'https://' + webhook_address_url + '/app-uninstall'
+    webhook.format = 'json'
+
+    if webhook.save
+      puts Colorize.green('created webhook')
+    else
+      puts Colorize.red(webhook.errors.messages)
+    end
+  
+  end
+
+  def getShopData
+    shopify_store_data = ShopifyAPI::Shop.current
+    self.email = shopify_store_data.email
+    self.save
+  end
+
   def pingTheme
     themes = ShopifyAPI::Theme.all
 

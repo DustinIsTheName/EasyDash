@@ -46,6 +46,7 @@ Rails.application.routes.draw do
     get '/product-tags' => :get_product_tags
     get '/product-types' => :get_product_types
     get '/product-vendors' => :get_product_vendors
+    post '/app-uninstall' => :app_uninstall
   end
   
   # The priority is based upon order of creation: first created -> highest priority.

@@ -25,6 +25,8 @@ class HomeController < AuthenticatedController
     @shop = Shop.find_by_shopify_domain(@shop_session.url)
     @shop.createScriptTag
     @shop.createTagTypeVendorQueryFiles
+    @shop.createWebhook
+    @shop.getShopData
 
     render json: {success: true}
   end
