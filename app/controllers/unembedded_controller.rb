@@ -7,6 +7,8 @@ class UnembeddedController < ApplicationController
   layout 'application'
 
   def quick_select
+    puts params
+
     if params["resource"] == 'product'
       @viewed_resource = ShopifyAPI::Product.find(:first, params: {handle: params["handle"]})      
     elsif params["resource"] == 'collection'
