@@ -72,6 +72,9 @@ class Shop < ActiveRecord::Base
     else
       puts Colorize.red(webhook.errors.messages)
     end
+
+    puts Colorize.cyan(webhook.topic)
+    puts Colorize.cyan(webhook.address)
   
   end
 

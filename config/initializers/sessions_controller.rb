@@ -43,7 +43,7 @@ ShopifyApp::SessionsController.module_eval do
           @tokens[:confirmation_url] = recurring_application_charge.confirmation_url
           return recurring_application_charge.confirmation_url
         else
-          puts Colorize.red(recurring_application_charge.errors)
+          puts Colorize.red(recurring_application_charge.errors.messages)
 
           return false
         end
