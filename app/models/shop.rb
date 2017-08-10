@@ -1,6 +1,8 @@
 class Shop < ActiveRecord::Base
   include ShopifyApp::Shop
 
+  has_many :images
+
   def createScriptTag
 		file = ApplicationController.new.render_to_string(:template => "home/dash_js.js", :layout => false)
     asset = ShopifyAPI::Asset.new
@@ -61,7 +63,7 @@ class Shop < ActiveRecord::Base
 
     webhook = ShopifyAPI::Webhook.new
     webhook.topic = 'app/uninstalled'
-    webhook_address_url = Rails.env.production? ? APP_URL : 'c2eaf31c.ngrok.io'
+    webhook_address_url = Rails.env.production? ? APP_URL : 'c3a581b4.ngrok.io'
     webhook.address = 'https://' + webhook_address_url + '/app-uninstall'
     webhook.format = 'json'
 

@@ -168,6 +168,12 @@ class UnembeddedController < ApplicationController
     theme = @shop.pingTheme
 
     image = API.addImagesToTheme(params, theme)
+    puts Colorize.cyan(image.split('/').last.split('?').first)
+    
+    new_image = Image.new
+    new_image.name = image.split('/').last.split('?').first
+    new_image.shop_id = @shop.id
+    new_image.save
 
     render json: {link: image}
   end
@@ -271,7 +277,7 @@ class UnembeddedController < ApplicationController
     
     if verified
       @shop = Shop.find_by_shopify_domain(request.headers["HTTP_X_SHOPIFY_SHOP_DOMAIN"])
-
+      puts Colorize.magenta(request.headers["HTTP_X_SHOPIFY_SHOP_DOMAIN"])
       ShopMailer.uninstall_email(@shop).deliver
     end
 
@@ -300,7 +306,7 @@ class UnembeddedController < ApplicationController
 
       @sc = ShopifyAPI::SmartCollection.find(:all, params: api_params)
       @sc.each do |c|
-       @collections << c
+        @collections << c
       end
     end
 

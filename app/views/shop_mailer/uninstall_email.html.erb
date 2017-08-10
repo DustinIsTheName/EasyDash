@@ -1,4 +1,11 @@
 <div class="email">
 	<h2>Thank you for using EasyDash</h2>
-	<p>Donec faucibus corporis senectus ipsum suscipit dolores sunt voluptates senectus, aliquip aliqua mi non feugiat, placeat pharetra taciti, nulla tristique, pede integer, urna litora litora.</p>
+	<% if @shop.images.size > 0 %>
+		<p>We have stored your description images in a theme titled "Easy Dash Images".</p>
+		<ul>
+			<% for image in @shop.images %>
+				<li><%= image.name %></li>
+			<% end %>
+		</ul>
+	<% end %>
 </div>
