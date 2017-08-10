@@ -64,7 +64,7 @@ class Shop < ActiveRecord::Base
     webhook = ShopifyAPI::Webhook.new
     webhook.topic = 'app/uninstalled'
     webhook_address_url = Rails.env.production? ? APP_URL : 'c3a581b4.ngrok.io'
-    webhook.address = 'https://' + webhook_address_url + '/app-uninstall'
+    webhook.address = webhook_address_url + '/app-uninstall'
     webhook.format = 'json'
 
     if webhook.save
