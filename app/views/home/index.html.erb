@@ -12,7 +12,7 @@
       <div>
         <div class="alert success" style="margin:0;">
           <dl>
-            <dt>App installed successfully! Thanks for downloading EasyDash!</dt>
+            <dt><%= if @logged_in then 'App installed successfully! ' end %>Thanks for downloading EasyDash!</dt>
             <dd>Everything’s ready for you to start saving time using EasyDash. Just visit your <a href="https://<%= @shop_session.url %>">website</a> and click on the EasyDash sidebar button (on the left side of the screen) to get started.</dd>
           </dl>
         </div>
@@ -39,7 +39,7 @@
       <div class="card" style="margin:0;">
         <p>Is EasyDash saving you tons of time and making managing your Shopify store easier? We’d love it if you’d consider submitting a positive review on the Shopify App Store so we can continue to make EasyDash even better.</p>
         <p>If EasyDash isn’t living up to your expectations, please <a href="mailto:apps@wittycreative.com">reach out</a> and let us know what we can do to improve it.</p>
-        <a href="https://apps.shopify.com/easy-dashboard-and-editor" target="_blank">Leave a Positive Review</a>
+        <a class="button" href="https://apps.shopify.com/easy-dashboard-and-editor" target="_blank">Leave a Positive Review</a>
       </div>
     </article>
   </section>

@@ -1225,7 +1225,7 @@ label .icon-calendar { float: right; margin-top: 2px; }
       margin-left: -300px;
       height: 0;
       opacity: 0;
-      overflow-y: scroll;
+      // overflow-y: scroll;
       height: calc(100%) !important;
 
       &.active {
@@ -1259,7 +1259,8 @@ label .icon-calendar { float: right; margin-top: 2px; }
       margin-top: 108px;
       min-height: 0;
       z-index: 1 !important;
-      // overflow-y: auto;
+      overflow-y: scroll;
+      height: calc(100% - 108px);
       padding: 10px 10px 0;
       box-sizing: border-box;
       -webkit-overflow-scrolling: touch;
@@ -1572,11 +1573,16 @@ label .icon-calendar { float: right; margin-top: 2px; }
     padding: 10px;
     border-bottom: 1px solid #ebeef0;
     position: relative;
+    display: flex;
+
+    .button {
+      margin-right: 10px;
+    }
 
     .icon-search {
       position: absolute;
       top: 20px;
-      left: 20px;
+      right: 131px;
       background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' enable-background='new 0 0 16 16'%3E%3Cpath fill='rgb(149,167,183)' d='M0 5.667c0 3.125 2.542 5.667 5.667 5.667 1.202 0 2.315-.38 3.233-1.02l.455.456c-.07.5.082 1.025.466 1.41l3.334 3.332c.326.325.753.488 1.18.488.425 0 .852-.163 1.177-.488.652-.65.652-1.706 0-2.357L12.18 9.822c-.384-.384-.91-.536-1.41-.466l-.454-.456c.64-.918 1.02-2.03 1.02-3.233C11.333 2.542 8.79 0 5.666 0S0 2.542 0 5.667zm2 0C2 3.645 3.645 2 5.667 2s3.667 1.645 3.667 3.667-1.646 3.666-3.667 3.666S2 7.688 2 5.667z'%3E%3C/path%3E%3C/svg%3E");
     }
 
@@ -1622,7 +1628,10 @@ label .icon-calendar { float: right; margin-top: 2px; }
     &.is-loading {
       li {visibility: hidden;}
 
-      &:before {border-color: $witty-teal;}
+      &:before {
+        border-color: $witty-teal;
+        top: 27px;
+      }
     }
 
     li + li {border-top: 1px solid #ebeef0;}

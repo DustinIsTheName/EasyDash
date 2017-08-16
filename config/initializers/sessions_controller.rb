@@ -11,7 +11,7 @@ ShopifyApp::SessionsController.module_eval do
       shopify_session do
         redirect_url = handle_recurring_application_charge
       end
-
+      session[:logged_in] = true
       unless redirect_url
         if stored_return_address.include? "preview-window"
           redirect_url = 'https://' + shop_name 
@@ -29,13 +29,12 @@ ShopifyApp::SessionsController.module_eval do
   private
 
     def handle_recurring_application_charge
-      puts Colorize.yellow(ShopifyAPI::RecurringApplicationCharge.current)
       unless ShopifyAPI::RecurringApplicationCharge.current
         recurring_application_charge = ShopifyAPI::RecurringApplicationCharge.new(
           name: "Beta Test",
           price: 0.01,
           test: true,
-          trial_days: 9999)
+          trial_days: 1000)
         recurring_application_charge.return_url = Rails.env.production? ? "#{APP_URL}\/activatecharge" : "#{DEV_URL}\/activatecharge"
 
         if recurring_application_charge.save

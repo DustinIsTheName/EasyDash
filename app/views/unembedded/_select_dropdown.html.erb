@@ -3,14 +3,11 @@
   <div class="dropdown-arrow"></div>
 	<div class="search container">
 		<div class="search-container">
+      <%= link_to "Add", dashboard_path(resource: resource_name, id: 'new'), target: target, class: 'new button' %>
 			<i class="icon-search"></i>
     	<input type="text" class="resource-search" name="<%= resource_name %>-search" placeholder="Search <%= resource_name %>s" data-resource="<%= resource_name %>">
     </div>
-    <ul class="select-sim-dropdown <%= resource_name %>" data-resource="<%= resource_name %>">
-  		<li>
-        <%= link_to "Add #{resource_name}", dashboard_path(resource: resource_name, id: 'new'), target: target, class: 'new' %>
-  		</li>
-    </ul>
+    <ul class="select-sim-dropdown <%= resource_name %>" data-resource="<%= resource_name %>"></ul>
     <div class="arrow-navigation">
     	<button type="button" class="secondary icon-prev disabled"></button>
     	<button type="button" class="secondary icon-next"></button>

@@ -506,7 +506,9 @@ function ready() {
 	});
 
 	window.addEventListener("message", function(messageEvent) {
-		if (currentIframeUrl !== messageEvent.data) {
+		console.log(currentIframeUrl, messageEvent.data);
+
+		if (currentIframeUrl !== messageEvent.data && currentIframeUrl) {
 
 			if (isUnsaved()) {
 			  confirmBox(

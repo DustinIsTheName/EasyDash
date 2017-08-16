@@ -6,6 +6,13 @@ class HomeController < AuthenticatedController
       :value => "#{@shop_session.url}",
       :expires => 2.years.from_now
     }
+    if session[:logged_in] == true
+      puts Colorize.green('logged_in')
+      session.delete :logged_in
+      @logged_in = true
+    else
+      puts Colorize.red('not_logged_in')
+    end
   end
 
   def activate_charge
