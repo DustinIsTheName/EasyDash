@@ -10,6 +10,11 @@ ShopifyApp::SessionsController.module_eval do
       redirect_url = false
       shopify_session do
         redirect_url = handle_recurring_application_charge
+        @shop = Shop.find_by_shopify_domain(session[:shopify_domain])
+        @shop.createScriptTag
+        @shop.createTagTypeVendorQueryFiles
+        @shop.createWebhook
+        @shop.getShopData
       end
       session[:logged_in] = true
       unless redirect_url
