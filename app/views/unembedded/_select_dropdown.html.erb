@@ -3,7 +3,11 @@
   <div class="dropdown-arrow"></div>
 	<div class="search container">
 		<div class="search-container">
+      <% if resource_name == 'product' %>
       <%= link_to "+", dashboard_path(resource: resource_name, id: 'new'), target: target, class: 'new button tip right', data: {hover: "Add #{resource_name}"} %>
+      <% else %>
+      <%= link_to "+", 'https://'+@shop_session.url+'/admin/'+resource_name.gsub('blog', 'article').gsub(/smart_|custom_/, '')+'s/new', target: '_blank', class: 'new button tip right', data: {hover: "Add #{resource_name}"} %>
+      <% end %>
 			<i class="icon-search"></i>
     	<input type="text" class="resource-search" name="<%= resource_name %>-search" placeholder="Search <%= resource_name %>s" data-resource="<%= resource_name %>">
     </div>
