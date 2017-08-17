@@ -752,7 +752,6 @@ label .icon-calendar { float: right; margin-top: 2px; }
           // margin-top: 2rem;
           width: 100%;
           background: #fff;
-          margin-left: 5px;
           border: 1px solid rgba(195,207,216,.3);
           
           img { width: 100%; }
@@ -1036,7 +1035,7 @@ label .icon-calendar { float: right; margin-top: 2px; }
       -ms-flex: none;
       flex: none;
       background: #ffffff;
-      position: fixed;
+      position: absolute;
       overflow: hidden;
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
       transition: width .3s;
@@ -1060,7 +1059,7 @@ label .icon-calendar { float: right; margin-top: 2px; }
     }
 
     .wittyEDPanel .theme-editor__header {
-      position: fixed;
+      position: absolute;
       overflow: visible;
       top: 54px;
       width: 300px;

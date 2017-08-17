@@ -340,7 +340,7 @@ function ready() {
   }
 
 	function hideRTEButtons() {
-		$('.fr-toolbar .fr-command').addClass('fr-hidden');
+		$('.fr-toolbar > .fr-command').addClass('fr-hidden');
 		$('.fr-command[id^="fullscreen"]').removeClass('fr-hidden');
 		$('.fr-command[id^="bold"]').removeClass('fr-hidden');
 		$('.fr-command[id^="italic"]').removeClass('fr-hidden');
