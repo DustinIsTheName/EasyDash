@@ -8,11 +8,14 @@
           <a class="tip bottom" target="_blank" data-hover="Admin Dashboard" href="https://<%= @shop_session.url %>/admin">
             <%= svgs 'icon-shopify' %>
           </a>
-          <a href="#" class="tip left bottom" data-hover="Duplicate (Coming soon!)">
+          <a href="#" id="duplicateProductLink" class="tip left bottom" data-hover="Duplicate (Coming soon!)">
             <i class="icon-duplicate"></i>
           </a>
         </div>
         <ul>
+          <li>
+            <a id="theme-settings" href="https://<%= @shop_session.url %>/admin/themes/<%= @theme.id %>/editor" target="_blank">Customize Theme</a>
+          </li>
           <li>
             <a id="give-feedback" href="#">Give Feedback</a>
           </li>
@@ -21,9 +24,6 @@
           </li>
           <li>
             <a id="send-message" href="#">Send a Message</a>
-          </li>
-          <li>
-            <a  id="theme-settings" href="https://<%= @shop_session.url %>/admin/themes/<%= @theme.id %>/editor" target="_blank">Customize Theme</a>
           </li>
         </ul>
       </div>

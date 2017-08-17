@@ -33,6 +33,36 @@ html.embedded-app, body.embedded-app {
   background: #f4f6f8;
 }
 
+.embedded-app {
+  .card-section p:last-child {
+    margin-bottom: 0;
+  }
+
+  section.faq {
+    flex-wrap: wrap;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .accordion-trigger {
+    cursor: pointer;
+
+    &:after {
+      content: '+';
+      margin-left: 15px;
+      bottom: 1px;
+      font-size: 17px;
+      position: relative;
+      display: inline-block;
+    }
+
+    &.active:after {
+      content: '_';
+      bottom: 7px;
+    }
+  }
+}
+
 $gutter: 10px;
 $witty-teal: #00a79d;
 $witty-teal-dark: #00968d;
@@ -40,7 +70,7 @@ $witty-dark: #31373d;
 $polaris-red: linear-gradient(to bottom, #ee6b50, #ec5b3e);
 $polaris-red-border: #e83c19;
 
-* { 
+* {
   transition: .2s background, border-color;
 }
 
@@ -1158,6 +1188,12 @@ label .icon-calendar { float: right; margin-top: 2px; }
             font-weight: normal;
             font-size: 1.4rem;
             text-align: left;
+
+            &:first-child {
+              padding: 0 10px 10px;
+              margin: 0 -10px 10px;
+              border-bottom: 1px solid #d3dbe2;
+            }
           }
         }
       }
@@ -1582,7 +1618,7 @@ label .icon-calendar { float: right; margin-top: 2px; }
     .icon-search {
       position: absolute;
       top: 20px;
-      right: 131px;
+      right: 151px;
       background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' enable-background='new 0 0 16 16'%3E%3Cpath fill='rgb(149,167,183)' d='M0 5.667c0 3.125 2.542 5.667 5.667 5.667 1.202 0 2.315-.38 3.233-1.02l.455.456c-.07.5.082 1.025.466 1.41l3.334 3.332c.326.325.753.488 1.18.488.425 0 .852-.163 1.177-.488.652-.65.652-1.706 0-2.357L12.18 9.822c-.384-.384-.91-.536-1.41-.466l-.454-.456c.64-.918 1.02-2.03 1.02-3.233C11.333 2.542 8.79 0 5.666 0S0 2.542 0 5.667zm2 0C2 3.645 3.645 2 5.667 2s3.667 1.645 3.667 3.667-1.646 3.666-3.667 3.666S2 7.688 2 5.667z'%3E%3C/path%3E%3C/svg%3E");
     }
 
@@ -2247,6 +2283,29 @@ iframe#launcher {
   z-index: 100000;
 }
 
+.fr-popup.fr-active {
+  z-index: 100000 !important;
+}
+
+.fr-popup .fr-checkbox-line label {
+  line-height: 1;
+  display: inline-block;
+}
+
+.fr-popup .fr-input-line input[type=text]:focus, 
+.fr-popup .fr-input-line textarea:focus {
+  border-bottom-color: $witty-teal;
+}
+
+.fr-popup .fr-checkbox input:checked+span {
+  background: none;
+  border-color: #222;
+}
+
+.fr-toolbar > .fr-popup .fr-layer {
+  width: 180px;
+}
+
 .editModalOverlay {
   position: fixed;
   width: 100%;
@@ -2737,6 +2796,16 @@ iframe#launcher {
             margin-left: auto;
           }
         }
+      }
+    }
+
+    &#duplicateProduct {
+      h3 {
+        margin-bottom: 0;
+      }
+
+      .card-section:last-child {
+        text-align: right;
       }
     }
   }

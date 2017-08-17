@@ -138,6 +138,12 @@ class UnembeddedController < ApplicationController
     end
   end
 
+  def duplicate_product
+    puts Colorize.magenta(params)
+    product = API.duplicateProduct(params)
+    redirect_to action: 'dashboard', resource: 'product', id: params[:id]
+  end
+
   def reorder_variants
     puts Colorize.magenta(params)
     product = API.changeVariantOrder(params)
@@ -212,6 +218,7 @@ class UnembeddedController < ApplicationController
     resource = API.deleteResource(params)
     get_resources
     @type = 'resource_select'
+    @theme = ShopifyAPI::Theme.find(:first, params: {role: "main"})
     render :dashboard
   end
 

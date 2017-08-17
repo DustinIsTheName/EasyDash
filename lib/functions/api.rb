@@ -391,6 +391,16 @@ class API
     end
   end
 
+  def self.duplicateProduct(params)
+    product = ShopifyAPI::Product.find(params[:id])
+    new_product = ShopifyAPI::Product.new(product.attributes)
+    new_product.id = nil
+    new_product.title = params["new_title"]
+    new_product.handle = params["new_title"].handle
+    new_product.save
+    new_product
+  end
+
   def self.changeVariantOrder(params)
     product = ShopifyAPI::Product.find(params[:id])
 

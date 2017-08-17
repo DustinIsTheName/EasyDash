@@ -3,7 +3,7 @@
   <div class="dropdown-arrow"></div>
 	<div class="search container">
 		<div class="search-container">
-      <%= link_to "Add", dashboard_path(resource: resource_name, id: 'new'), target: target, class: 'new button' %>
+      <%= link_to "+", dashboard_path(resource: resource_name, id: 'new'), target: target, class: 'new button tip right', data: {hover: "Add #{resource_name}"} %>
 			<i class="icon-search"></i>
     	<input type="text" class="resource-search" name="<%= resource_name %>-search" placeholder="Search <%= resource_name %>s" data-resource="<%= resource_name %>">
     </div>

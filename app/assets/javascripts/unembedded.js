@@ -340,7 +340,7 @@ function ready() {
   }
 
 	function hideRTEButtons() {
-		$('.fr-command').addClass('fr-hidden');
+		$('.fr-toolbar .fr-command').addClass('fr-hidden');
 		$('.fr-command[id^="fullscreen"]').removeClass('fr-hidden');
 		$('.fr-command[id^="bold"]').removeClass('fr-hidden');
 		$('.fr-command[id^="italic"]').removeClass('fr-hidden');
@@ -349,7 +349,7 @@ function ready() {
 	}
 
 	function showRTEButtons() {
-		$('.fr-command').removeClass('fr-hidden');
+		$('.fr-toolbar .fr-command').removeClass('fr-hidden');
 		$('.fr-command[id^="undo"]').addClass('fr-hidden');
 		$('.fr-command[id^="redo"]').addClass('fr-hidden');
 		$('.fr-command[id^="fullscreen"]').addClass('fr-hidden');
@@ -2054,6 +2054,23 @@ function ready() {
 		$('#SEOURL #SEOURL-url').text(tooltiptext.join('/'))
 	});
 
+	$('#resource-section').on('click', '#duplicateProductLink', function(e) {
+		e.preventDefault();
+		$('#duplicateProductOverlay').addClass('open');
+	});
+
+	// $('#modals-container').on('click', '#duplicate-product', function(e) {
+	// 	$.ajax({
+ //      type: "POST",
+ //      url: '/duplicate-product',
+ //      data: {
+ //      	id: $('[name="id"]').val(),
+ //      	new_title: $('#duplicateProductInput').val()
+ //      },
+ //      dataType: "JSON"
+ //    })
+	// });
+
 	$('#resource-section').on('click', '.images-container .icon-preview', function() {
 		var image = $(this).parent().parent().prev().attr('src');
 
@@ -2371,6 +2388,22 @@ function ready() {
 
 			flashMessage('Store had been synced.')
 		}).error(basicError);
+	});
+
+	$('.accordion-trigger').click(function() {
+		var group = $(this).data('group');
+		var accordion = $(this).data('accordion');
+		console.log(group, accordion);
+
+		$('.accordion-target[data-group="' + group + '"]').slideUp();
+
+		if (!$(this).hasClass('active')) {
+			$('.accordion-target[data-group="' + group + '"][data-accordion="' + accordion + '"]').slideDown();
+			$('.accordion-trigger[data-group="' + group + '"]').removeClass('active');
+			$(this).addClass('active');
+		} else {
+			$('.accordion-trigger[data-group="' + group + '"]').removeClass('active');
+		}
 	});
 }
 

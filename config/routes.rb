@@ -27,6 +27,7 @@ Rails.application.routes.draw do
     post '/dashboard-delete' => :delete_api
     get '/dashboard-hard-delete' => :hard_delete_api
     post '/dashboard-bulk-delete' => :bulk_delete_api
+    post '/duplicate-product' => :duplicate_product
     post '/variant-update' => :update_variant
     post '/variant-image' => :update_variant_image
     post '/reorder-variants' => :reorder_variants
