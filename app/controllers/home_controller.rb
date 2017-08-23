@@ -9,9 +9,14 @@ class HomeController < AuthenticatedController
       :expires => 2.years.from_now
     }
 
-    front_end_token = @shop.generate_token
+    unless @shop.front_end_token
+      @shop.generate_token
+    end
+
+    puts @shop.front_end_token
+
     cookies[:front_end_token] = {
-      :value => front_end_token,
+      :value => @shop.front_end_token,
       :expires => 2.years.from_now
     }
 
