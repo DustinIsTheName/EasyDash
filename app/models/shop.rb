@@ -100,4 +100,17 @@ class Shop < ActiveRecord::Base
 
     easy_dash_theme
   end
+
+  def generate_token
+    self.front_end_token = loop do
+      random_token = SecureRandom.urlsafe_base64(nil, false)
+      break random_token unless self.class.exists?(front_end_token: random_token)
+    end
+    if self.save
+      puts Colorize.green('Generated token')
+    else
+      puts Colorize.red('mistakes were made')
+    end
+    self.front_end_token
+  end
 end

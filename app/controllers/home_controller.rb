@@ -2,15 +2,24 @@ class HomeController < AuthenticatedController
 	# protect_from_forgery except: :index
 
   def index
+    @shop = Shop.find_by_shopify_domain(@shop_session.url)
+
     cookies[:permanent_domain] = {
       :value => "#{@shop_session.url}",
       :expires => 2.years.from_now
     }
-    if session[:logged_in] == true
-      # puts Colorize.green('logged_in')
-      session.delete :logged_in
-      @logged_in = true
-    end
+
+    front_end_token = @shop.generate_token
+    cookies[:front_end_token] = {
+      :value => front_end_token,
+      :expires => 2.years.from_now
+    }
+
+    # if session[:logged_in] == true
+    #   # puts Colorize.green('logged_in')
+    #   session.delete :logged_in
+    #   @logged_in = true
+    # end
   end
 
   def activate_charge

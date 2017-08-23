@@ -9,6 +9,13 @@ class UnembeddedController < ApplicationController
   def quick_select
     puts params
 
+    @shop = Shop.find_by_shopify_domain(@shop_session.url)
+    if cookies['front_end_token'] == @shop.front_end_token
+      @is_admin = true
+    else
+      @is_admin = false
+    end
+
     if params["resource"] == 'product'
       @viewed_resource = ShopifyAPI::Product.find(:first, params: {handle: params["handle"]})      
     elsif params["resource"] == 'collection'

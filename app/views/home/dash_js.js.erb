@@ -28,28 +28,33 @@
 	/* This is my app's JavaScript */
 	var myAppJavaScript = function($) {
 
+  	var resource_handle = window.location.href.replace(window.location.origin, '').match(/^\/([a-z]+)\/?[a-z-0-9]*\/([a-z-0-9]+)$/);
+    var url = $('#wittyEDselectWindow').data('src');
+		var params = resource_handle ? '?resource=' + resource_handle[1].replace(/s$/, '') + '&handle=' + resource_handle[2] : '' ;
+    $('body').append('<%= render(partial: "home/dash_js_html/open_button").to_s.gsub(/\n/, '').html_safe %>'.replace('preview-window', 'preview-window' + params));
+
+    var top = $('html').css('padding-top');
+    $('.wittyEDContainer').css('top', top);
+
+
+    $('.wittyEDOpenButton').click(function() {
+    	$(this).toggleClass('open');
+    });
+
+    parent.postMessage(window.location.href, '<%= Rails.env.production? ? APP_URL : DEV_URL %>');
+
     if ( $('#admin_bar_iframe')[0] && window.location.href.indexOf('ediframe=true') === -1 ) {
-    	var resource_handle = window.location.href.replace(window.location.origin, '').match(/^\/([a-z]+)\/?[a-z-0-9]*\/([a-z-0-9]+)$/);
-      var url = $('#wittyEDselectWindow').data('src');
-
-			var params = resource_handle ? '?resource=' + resource_handle[1].replace(/s$/, '') + '&handle=' + resource_handle[2] : '' ;
-
-      $('body').append('<%= render(partial: "home/dash_js_html/open_button").to_s.gsub(/\n/, '').html_safe %>'.replace('preview-window', 'preview-window' + params));
-
-      var top = $('html').css('padding-top');
-      $('.wittyEDContainer').css('top', top);
-
-
-      $('.wittyEDOpenButton').click(function() {
-      	$(this).toggleClass('open');
-      });
-
-      parent.postMessage(window.location.href, '<%= Rails.env.production? ? APP_URL : DEV_URL %>');
-
-      // $('.wittyEDContainer').mouseleave(function() {
-      // 	$('.wittyEDOpenButton').removeClass('open');
-      // });
+    	$('.wittyEDContainer').show();
     }
+
+		window.addEventListener("message", function(messageEvent) {
+			console.log(messageEvent.data);
+			if (messageEvent.data === 'is-admin' && window.location.href.indexOf('ediframe=true') === -1) {
+				$('.wittyEDContainer').show();
+			}
+		}, false);
+
+    // recieve
 
 	}; // myAppJavaScript() ends here; ALL CUSTOM JS IS TO BE WITHIN THIS FUNCTION!
 

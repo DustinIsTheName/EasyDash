@@ -15,6 +15,11 @@ ShopifyApp::SessionsController.module_eval do
         @shop.createTagTypeVendorQueryFiles
         @shop.createWebhook
         @shop.getShopData
+        front_end_token = @shop.generate_token
+        cookies[:front_end_token] = {
+          :value => front_end_token,
+          :expires => 2.years.from_now
+        }
       end
       session[:logged_in] = true
       unless redirect_url

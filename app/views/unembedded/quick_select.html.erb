@@ -1,4 +1,5 @@
-<div class="wittyEDSidebar quick-select">
+<% if @is_admin %>
+<div class="wittyEDSidebar quick-select" data-is-admin="<%= @is_admin %>">
   
   <!-- Panel - Main -->
   
@@ -58,3 +59,4 @@
     </div><!-- .wittyEDPanelBody -->
   </section><!-- .wittyEDEditorMain -->
 </div>
+<% end %>

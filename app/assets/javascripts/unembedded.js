@@ -720,6 +720,12 @@ function ready() {
 	Resource Select functions and events
 	*******************************************/
 
+	if ((window.location.href.indexOf('preview-window') > -1 && $('.wittyEDSidebar.quick-select').data('is-admin'))) {
+		parent.postMessage('is-admin', 'https://' + $('body').data('shopify-url'));
+	} else if (window.location.href.indexOf('login') > -1 && getCookie('permanent_domain')) {
+		parent.postMessage('is-admin', 'https://' + getCookie('permanent_domain'));
+	}
+
 	function extendResource(resource, page, total) {
 		resource_infomation[resource+'_chunks_loaded']++;
 		$.ajax({

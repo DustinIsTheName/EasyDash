@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170809210528) do
+ActiveRecord::Schema.define(version: 20170820214154) do
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
@@ -37,11 +37,12 @@ ActiveRecord::Schema.define(version: 20170809210528) do
   end
 
   create_table "shops", force: :cascade do |t|
-    t.string   "shopify_domain", null: false
-    t.string   "shopify_token",  null: false
+    t.string   "shopify_domain",  null: false
+    t.string   "shopify_token",   null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "email"
+    t.string   "front_end_token"
   end
 
   add_index "shops", ["shopify_domain"], name: "index_shops_on_shopify_domain", unique: true
