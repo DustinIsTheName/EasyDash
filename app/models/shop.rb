@@ -71,11 +71,7 @@ class Shop < ActiveRecord::Base
       puts Colorize.green('created webhook')
     else
       puts Colorize.red(webhook.errors.messages)
-    end
-
-    puts Colorize.cyan(webhook.topic)
-    puts Colorize.cyan(webhook.address)
-  
+    end  
   end
 
   def getShopData
