@@ -3,33 +3,49 @@
     <div class="row">
       <h5>Page details</h5>
       <label>Title</label>
-      <input type="text" placeholder="e.g. Contact us, Sizing chart, FAQs" />
+      <%= o.text_field :title, placeholder: "e.g. Contact us, Sizing chart, FAQs" %>
     </div>
     <div class="row no_margin">
       <label>Content</label>
-      <textarea></textarea>
+      <%= o.text_area :body_html %>
     </div>
   </div>
 </article>
 <article>
-  <a href="#" class="theme-editor-action-list__item" data-bind-event-click="action("openSectionPanel", "section-seo")" draggable="false">
+  <div class="theme-editor-action-list__item">
     <div class="card">
       <h5>Search engine listing preview</h5>
-      <!-- <button class="btn--link top-right">Edit website SEO</button> -->
       <p>Add a title and description to see how this page might appear in a search engine listing.</p>
-      <button class="secondary">Edit website SEO</button>
-      <!-- <button class="btn btn--plain icon-next dark" type="button" name="button"></button> -->
+      <button type="button" class="secondary reveal-trigger" data-reveal="seo">Edit website SEO</button>
+      <div class="edit reveal-target" data-reveal="seo">
+
+        <div class="row title_tag_container"></div>
+
+        <div class="row description_tag_container"></div>
+
+        <div class="row no_margin">
+          <label class="seo-handle" for="shopify_api_product_handle">URL and handle
+            <span class="info-icon">
+              <span>i</span>
+            </span>
+          </label>
+          <%= o.text_field :handle %>
+        </div>
+      </div>
     </div>
-  </a>
+  </div>
 </article>
 <article>
   <div class="card secondary">
     <h5>Visibility</h5>
     <div class="divider"></div>
     <div class="row no_margin">
-      <label class="extra_margin"><input type="radio" name="option1" checked="checked">Visible <span class="subdued">(as of 2017-02-24 10:46pm EST)</span></label>
-      <label class="extra_margin"><input type="radio" name="option1">Hidden</label>
-      <a href="">Set a specific publish date</a>
+      <label class="extra_margin">
+        <input type="radio" name="shopify_api_page[published_at]" value="true"<% if @resource.published_at %> checked="checked"<% end %>>Visible <span class="subdued"><%= if @resource.published_at then Time.parse(@resource.published_at).strftime('(as of %F %I:%M%P %Z)') else Time.now.strftime('(as of %F %I:%M%P %Z)') end %></span>
+      </label>
+      <label class="extra_margin">
+        <input type="radio" name="shopify_api_page[published_at]" value="false"<% unless @resource.published_at %> checked="checked"<% end %>>Hidden</label>
+      <a href="#">Set a specific publish date</a>
     </div>
   </div>
 </article>
@@ -37,10 +53,7 @@
   <div class="card secondary">
     <h5>Template</h5>
     <label class="extra_margin">Select a template for this page.</label>
-    <select class="secondary">
-      <option>page</option>
-      <option>page.contact</option>
-    </select>
+    <%= o.select :template_suffix, template_suffix_options(@assets.select{|asset| asset.key.include? "templates/page" }), {}, {class: "secondary extra_margin"} %>
   </div>
 </article>
 <div class="wittyEDBottomButtons">

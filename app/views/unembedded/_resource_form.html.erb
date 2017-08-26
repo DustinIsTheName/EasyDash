@@ -61,6 +61,9 @@
           <a class="btn_more" href=""><% svgs 'more_teal' %></a>
         </header><!-- .theme-editor__header -->
         <div class="wittyEDPanelBody">
+          <input type="hidden" name="resource" value="<%= @type %>"> 
+          <input type="hidden" name="id" value="<%= @resource.id %>"> 
+          <input type="hidden" name="handle" value="<%= @resource.handle %>"> 
           <%= render partial: 'unembedded/panels/' + @type, locals: {o: o} %>
         </div><!-- .wittyEDPanelBody -->
       </div>

@@ -51,6 +51,7 @@ class UnembeddedController < ApplicationController
       @resource = params[:id] == 'new' ? ShopifyAPI::SmartCollection.new : ShopifyAPI::SmartCollection.find(params[:id])
     when 'page'
       @resource = params[:id] == 'new' ? ShopifyAPI::Page.new : ShopifyAPI::Page.find(params[:id])
+      @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
     when 'product'
       if params[:id] == 'new'
         @resource = ShopifyAPI::Product.new(id: 'new',title: '', body_html: '', vendor: '', product_type: '', created_at: '', handle: '', updated_at: '', published_at: '', template_suffix: '', published_scope: '', tags: '', variants: [], collections: [], options: [], images: [], image: '')
@@ -86,6 +87,7 @@ class UnembeddedController < ApplicationController
       @resource = ShopifyAPI::SmartCollection.find(:first, params: {handle: params["handle"]})
     when 'page'
       @resource = ShopifyAPI::Page.find(:first, params: {handle: params["handle"]})
+      @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
     when 'product'
       @resource = ShopifyAPI::Product.find(:first, params: {handle: params["handle"]})
       @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
@@ -102,7 +104,7 @@ class UnembeddedController < ApplicationController
 
     render :json => { 
       :form_html => render_to_string('unembedded/_resource_form', :layout => false),
-      :modals => render_to_string('unembedded/_product_modals', :layout => false)
+      :modals => render_to_string('unembedded/_resource_modals', :layout => false)
     }
 
   end
@@ -263,9 +265,9 @@ class UnembeddedController < ApplicationController
     render json: hsc_metafield
   end
 
-  def get_product_seo
+  def get_resource_seo
     puts Colorize.magenta(params)
-    seo_info = ShopifyAPI::Metafield.find(:all, params: {"metafield[owner_id]" => params[:product_id], "metafield[owner_resource]" => 'product'})
+    seo_info = ShopifyAPI::Metafield.find(:all, params: {"metafield[owner_id]" => params[:resource_id], "metafield[owner_resource]" => params[:resource_type]})
     render json: seo_info
   end
 

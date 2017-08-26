@@ -40,7 +40,7 @@ Rails.application.routes.draw do
     get '/alt-tag' => :get_alt_tag
     post '/alt-tag' => :edit_alt_tag
     get '/variant-hsc' => :get_variant_hsc
-    get '/product-seo' => :get_product_seo
+    get '/resource-seo' => :get_resource_seo
     get '/ajax-resources' => :ajax_get_resources
     get '/refresh-form' => :refresh_form
     get '/refresh-variant-panel' => :refresh_variant_panel

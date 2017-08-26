@@ -658,6 +658,18 @@ label .icon-calendar { float: right; margin-top: 2px; }
         .extra_margin { 
           margin-bottom: 1.5rem;
         }
+
+        label {
+          cursor: pointer;
+
+          input[name*="published_at"] + .subdued {
+            display: none;
+          }
+
+          input[name*="published_at"]:checked + .subdued {
+            display: inline;
+          }
+        }
         
         p.extra_margin { margin-bottom: 2rem; }
 

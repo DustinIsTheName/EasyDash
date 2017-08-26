@@ -94,24 +94,6 @@
       </div>
     </section>
   </div>
-  <div id="SEOURLOverlay" class="editModalOverlay">
-    <section id="SEOURL" class="editModal">
-      <div class="card has-sections">
-        <div class="card-section" style="padding-bottom: 0;">
-          <h3>Product URL</h3>
-          <!-- <a href="#" class="close" role="button" aria-label="Close dialog">x</a> -->
-        </div>
-        <hr>
-        <div class="card-section" style="padding-bottom: 0;">
-          <h3 id="SEOURL-url">https://<%= @shop_session.url %>/products/<%= @resource.handle %></h3>
-        </div>
-        <hr>
-        <div class="card-section">
-          <button type="button" class="secondary cancel" href="#">Done</button>
-        </div>
-      </div>
-    </section>
-  </div>
   <div id="viewAllTagsOverlay" class="editModalOverlay">
     <section id="viewAllTags" class="editModal">
       <div class="card has-sections">
@@ -235,3 +217,30 @@
     </section>
   </div>
 <% end %>
+<div id="SEOURLOverlay" class="editModalOverlay">
+  <section id="SEOURL" class="editModal">
+    <div class="card has-sections">
+      <div class="card-section" style="padding-bottom: 0;">
+        <h3>Product URL</h3>
+        <!-- <a href="#" class="close" role="button" aria-label="Close dialog">x</a> -->
+      </div>
+      <hr>
+      <div class="card-section" style="padding-bottom: 0;">
+        <% if @type == 'blog' %>
+          <% base_url = 'blogs/' %>
+        <% elsif @type == 'custom_collection' || @type == 'smart_collection' %>
+          <% base_url = 'collections' %>
+        <% elsif @type == 'page' %>
+          <% base_url = 'pages' %>
+        <% elsif @type == 'product' %>
+          <% base_url = 'products' %>
+        <% end %>
+        <h3 id="SEOURL-url">https://<%= @shop_session.url %>/<%= base_url %>/<%= @resource.handle %></h3>
+      </div>
+      <hr>
+      <div class="card-section">
+        <button type="button" class="secondary cancel" href="#">Done</button>
+      </div>
+    </div>
+  </section>
+</div>

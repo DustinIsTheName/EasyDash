@@ -31,7 +31,7 @@ module OptionsHelper
 		options = []
 
 		for asset in assets
-			options.push([asset.key.gsub("templates/", "").gsub(".liquid", ""), asset.key.gsub("templates/product", "").gsub(".", "").gsub("liquid", "")])
+			options.push([asset.key.gsub("templates/", "").gsub(".liquid", ""), asset.key.gsub(/templates\/(product|page|article|collection)/, "").gsub(".", "").gsub("liquid", "")])
 		end
 
 		options.sort

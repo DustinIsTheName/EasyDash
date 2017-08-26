@@ -356,7 +356,7 @@ function ready() {
 	}
 
 	function initializeFroalaEditor() {
-		$('#shopify_api_product_body_html').froalaEditor({
+		$('#shopify_api_product_body_html, #shopify_api_page_body_html').froalaEditor({
 			toolbarButtons: [
 				'paragraphFormat', 
 				'bold', 
@@ -579,17 +579,18 @@ function ready() {
 			} else {
 				$.ajax({
 		      type: "GET",
-		      url: '/product-seo', //sumbits it to the given url of the form
+		      url: '/resource-seo', //sumbits it to the given url of the form
 		      data: {
-		      	product_id: $('[name="id"]').val()
+		      	resource_id: $('[name="id"]').val(),
+		      	resource_type: $('[name="resource"]').val()
 		      },
 		      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
-		    }).success(function(product_metafields) {
+		    }).success(function(seo_metafields) {
 		    	var new_html = '';
-		    	var description_tag = product_metafields.filter(function(metafield) {
+		    	var description_tag = seo_metafields.filter(function(metafield) {
 					  return metafield.key === 'description_tag'
 					})[0];
-					var title_tag = product_metafields.filter(function(metafield) {
+					var title_tag = seo_metafields.filter(function(metafield) {
 					  return metafield.key === 'title_tag'
 					})[0];
 
@@ -879,7 +880,7 @@ function ready() {
 
 			  new_html += '<li class="variable">';
 			  new_html += '<button type="button" class="sidebyside_small warning icon-trash" data-id="'+resource_object[i].id+'" data-resource="'+data_resource+'"></button>'
-			  if (data_resource === 'product') {
+			  if (data_resource === 'product' || data_resource === 'page') {
 					new_html += '<a href="/dashboard?resource='+data_resource+'&id='+resource_object[i].id+'" target="'+resource_infomation.target+'" data-handle="' + resource_object[i].handle + '" data-id="'+resource_object[i].id+'">';
 				} else {
 					new_html += '<a href="https://'+$('body').data('shopify-url')+'/admin/'+data_resource.replace('blog', 'article').replace(/smart_|custom_/, '')+'s/'+resource_object[i].id+'" target="_blank" data-handle="' + resource_object[i].handle + '" data-id="'+resource_object[i].id+'">';
