@@ -3,61 +3,61 @@ class API
 	def self.updateProduct(params)
     created_new_variants = false
     created_new_product = false
-    case params[:resource]
-    when 'blog'
-    when 'collection'
-    when 'page'
-    when 'product'
 
-      # get product and write product's new information
-      if params[:id] == "new"
-        @product = ShopifyAPI::Product.new
-      else
-        @product = ShopifyAPI::Product.find(params[:id])
+    # get product and write product's new information
+    if params[:id] == "new"
+      @product = ShopifyAPI::Product.new
+    else
+      @product = ShopifyAPI::Product.find(params[:id])
+    end
+
+    old_product = ShopifyAPI::Product.new(@product.attributes)
+
+    @product.title = params["shopify_api_product"]["title"]
+    @product.body_html = params["shopify_api_product"]["body_html"]
+    @product.handle = params["shopify_api_product"]["handle"]
+    @product.product_type = params["shopify_api_product"]["product_type"]
+    @product.vendor = params["shopify_api_product"]["vendor"]
+    @product.tags = params["shopify_api_product"]["tags"]
+    @product.template_suffix = params["shopify_api_product"]["template_suffix"]
+
+    if params["shopify_api_product"]["published_at"]
+      unless params["shopify_api_product"]["old_published_at"]
+        @product.published_at = Time.now
       end
+    else
+      @product.published_at = nil
+    end
 
-      old_product = ShopifyAPI::Product.new(@product.attributes)
-
-      @product.title = params["shopify_api_product"]["title"]
-      @product.body_html = params["shopify_api_product"]["body_html"]
-      @product.handle = params["shopify_api_product"]["handle"]
-      @product.product_type = params["shopify_api_product"]["product_type"]
-      @product.vendor = params["shopify_api_product"]["vendor"]
-      @product.tags = params["shopify_api_product"]["tags"]
-      @product.template_suffix = params["shopify_api_product"]["template_suffix"]
-
-      if params["shopify_api_product"]["published_at"]
-        unless params["shopify_api_product"]["old_published_at"]
-          @product.published_at = Time.now
+    # save product if anything's changed
+    if old_product.attributes == @product.attributes
+      puts Colorize.cyan(@product.title + ' skipped')
+    else
+      if @product.save
+        puts Colorize.green(@product.title + ' saved ') + Colorize.orange(ShopifyAPI.credit_left)
+        if params[:id] == 'new'
+          created_new_product = true
         end
       else
-        @product.published_at = nil
-      end  
-
-      # save product if anything's changed
-      if old_product.attributes == @product.attributes
-        puts Colorize.cyan(@product.title + ' skipped')
-      else
-        if @product.save
-          puts Colorize.green(@product.title + ' saved ') + Colorize.orange(ShopifyAPI.credit_left)
-          if params[:id] == 'new'
-            created_new_product = true
-          end
-        else
-          puts Colorize.red(@product.errors.messages)
-          return @product.errors.messages
-        end
+        puts Colorize.red(@product.errors.messages)
+        return @product.errors.messages
       end
+    end
 
-			# loop through product metafields, update and save any new information
-      unless params[:id] == "new"
-        @product.metafields.each do |metafield|
-          old_metafield = ShopifyAPI::Metafield.new(metafield.attributes)
-          if params["metafields"]
-            m = params["metafields"][metafield.id.to_s]
-          end
+		# loop through product metafields, update and save any new information
+    unless params[:id] == "new"
+      @product.metafields.each do |metafield|
+        old_metafield = ShopifyAPI::Metafield.new(metafield.attributes)
+        if params["metafields"]
+          m = params["metafields"][metafield.id.to_s]
+        end
 
-          if m
+        if m
+          if m["value"] == ""
+            puts Colorize.red(metafield.key + ' deleted')
+            metafield.destroy
+          else
+
             metafield.value = m["value"]
             
             if old_metafield.attributes == metafield.attributes
@@ -69,159 +69,130 @@ class API
                 puts Colorize.red(metafield.errors.messages)
               end
             end
+            
           end
         end
       end
+    end
 
-      # loop through any new metafields and create them
-      if params["new_metafields"]
-        params["new_metafields"].each do |new_metafield|
-          @product.add_metafield(ShopifyAPI::Metafield.new({
-            namespace: 'global',
-            key: new_metafield["name"],
-            value: new_metafield["value"],
-            value_type: 'string'
-          }))
+    # loop through any new metafields and create them
+    if params["new_metafields"]
+      params["new_metafields"].each do |new_metafield|
+        @product.add_metafield(ShopifyAPI::Metafield.new({
+          namespace: 'global',
+          key: new_metafield["name"],
+          value: new_metafield["value"],
+          value_type: 'string'
+        }))
+      end
+    end
+
+    if params["shopify_api_product"]["files"]
+      for uploaded_file in params["shopify_api_product"]["files"]
+        # base64_file = Base64.encode64(uploaded_file.read)
+        @product.images << ShopifyAPI::Image.new(attachment: uploaded_file)
+        if @product.save
+          puts Colorize.green('image created')
+        else 
+          puts Colorize.red(@product.errors.messages)
         end
       end
+    end
 
-      if params["shopify_api_product"]["files"]
-        for uploaded_file in params["shopify_api_product"]["files"]
-          # base64_file = Base64.encode64(uploaded_file.read)
-          @product.images << ShopifyAPI::Image.new(attachment: uploaded_file)
-          if @product.save
-            puts Colorize.green('image created')
-          else 
-            puts Colorize.red(@product.errors.messages)
-          end
-        end
-      end
+    # add or remove collections from the product
+    if params["collections"]
+      new_collections = params["collections"].map{|par| par.to_i}
+    else
+      new_collections = []
+    end
+    if params[:id] == 'new'
+      add_collections = new_collections
+    else
+      old_collections = @product.collections.map{|c| c.id.to_i}
+      remove_collections = old_collections - new_collections
+      add_collections = new_collections - old_collections
 
-      # add or remove collections from the product
-      if params["collections"]
-        new_collections = params["collections"].map{|par| par.to_i}
-      else
-        new_collections = []
-      end
-      if params[:id] == 'new'
-        add_collections = new_collections
-      else
-        old_collections = @product.collections.map{|c| c.id.to_i}
-        remove_collections = old_collections - new_collections
-        add_collections = new_collections - old_collections
-
-        remove_collections.each do |r|
-          if ShopifyAPI::Collect.find(:first, params: {product_id: params[:id], collection_id: r}).destroy
-            puts Colorize.red('deleted Collect')
-          else
-            puts Colorize.red('something went wrong')
-          end
-        end
-      end
-
-      add_collections.each do |a|
-        product_id = params[:id] == 'new' ? @product.id : params[:id]
-
-        if ShopifyAPI::Collect.create(product_id: product_id, collection_id: a)
-          puts Colorize.green('created Collect')
+      remove_collections.each do |r|
+        if ShopifyAPI::Collect.find(:first, params: {product_id: params[:id], collection_id: r}).destroy
+          puts Colorize.red('deleted Collect')
         else
           puts Colorize.red('something went wrong')
         end
       end
+    end
 
-			# loop through product variants and write proper information
-      if params[:id] == 'new'
-        @product.variants.first.price = params["variants"]["price"] if params["variants"]["price"]
-        @product.variants.first.compare_at_price = params["variants"]["compare_at_price"] if params["variants"]["compare_at_price"]
-        @product.variants.first.sku = params["variants"]["sku"] if params["variants"]["sku"]
-        @product.variants.first.barcode = params["variants"]["barcode"] if params["variants"]["barcode"]
-        @product.variants.first.taxable = params["variants"]["taxable"] if params["variants"]["taxable"]
-        @product.variants.first.fulfillment_service = params["variants"]["fulfillment_service"] if params["variants"]["fulfillment_service"]
-        @product.variants.first.inventory_management = params["variants"]["inventory_management"] if params["variants"]["inventory_management"]
-        @product.variants.first.requires_shipping = params["variants"]["requires_shipping"] if params["variants"]["requires_shipping"]
-        @product.variants.first.weight = params["variants"]["weight"] if params["variants"]["weight"]
-        @product.variants.first.weight_unit = params["variants"]["weight_unit"] if params["variants"]["weight_unit"]
-        if @product.save
-          puts Colorize.green('created_new_variants')
-          if params["variants"]['new_metafields']
-            params["variants"]['new_metafields'].each do |new_metafield|
-              @product.variants.first.add_metafield(ShopifyAPI::Metafield.new({
-                namespace: 'global',
-                key: new_metafield["name"],
-                value: new_metafield["value"],
-                value_type: 'string'
-              }))
-            end
+    add_collections.each do |a|
+      product_id = params[:id] == 'new' ? @product.id : params[:id]
+
+      if ShopifyAPI::Collect.create(product_id: product_id, collection_id: a)
+        puts Colorize.green('created Collect')
+      else
+        puts Colorize.red('something went wrong')
+      end
+    end
+
+		# loop through product variants and write proper information
+    if params[:id] == 'new'
+      @product.variants.first.price = params["variants"]["price"] if params["variants"]["price"]
+      @product.variants.first.compare_at_price = params["variants"]["compare_at_price"] if params["variants"]["compare_at_price"]
+      @product.variants.first.sku = params["variants"]["sku"] if params["variants"]["sku"]
+      @product.variants.first.barcode = params["variants"]["barcode"] if params["variants"]["barcode"]
+      @product.variants.first.taxable = params["variants"]["taxable"] if params["variants"]["taxable"]
+      @product.variants.first.fulfillment_service = params["variants"]["fulfillment_service"] if params["variants"]["fulfillment_service"]
+      @product.variants.first.inventory_management = params["variants"]["inventory_management"] if params["variants"]["inventory_management"]
+      @product.variants.first.requires_shipping = params["variants"]["requires_shipping"] if params["variants"]["requires_shipping"]
+      @product.variants.first.weight = params["variants"]["weight"] if params["variants"]["weight"]
+      @product.variants.first.weight_unit = params["variants"]["weight_unit"] if params["variants"]["weight_unit"]
+      if @product.save
+        puts Colorize.green('created_new_variants')
+        if params["variants"]['new_metafields']
+          params["variants"]['new_metafields'].each do |new_metafield|
+            @product.variants.first.add_metafield(ShopifyAPI::Metafield.new({
+              namespace: 'global',
+              key: new_metafield["name"],
+              value: new_metafield["value"],
+              value_type: 'string'
+            }))
           end
-        else
-          puts Colorize.red('error')
-          puts @product.errors.messages
         end
       else
-        @product.variants.each do |variant|
-          updateVariant(params, variant)
-        end
+        puts Colorize.red('error')
+        puts @product.errors.messages
       end
-
-      if params[:id] == "new"
-        original_variant = params["variants"] # get Defaut Title variant
-      else
-        original_variant = params["variants"].values.first # get Defaut Title variant
+    else
+      @product.variants.each do |variant|
+        updateVariant(params, variant)
       end
+    end
 
-      # loop through and create new variants
-      unless params["new_option_values_1"].nil? or params["new_option_values_1"]&.strip == ""
-        new_option_values_1 = params["new_option_values_1"].split(",").map{ |v| v.strip }
-        @product.options = []
-        @product.variants = []
-        @product.options << ShopifyAPI::Option.new(:name => params["new_option_1"])
+    if params[:id] == "new"
+      original_variant = params["variants"] # get Defaut Title variant
+    else
+      original_variant = params["variants"].values.first # get Defaut Title variant
+    end
 
-        unless params["new_option_values_2"].nil? or params["new_option_values_2"]&.strip == ""
-          new_option_values_2 = params["new_option_values_2"].split(",").map{ |v| v.strip }
-          @product.options << ShopifyAPI::Option.new(:name => params["new_option_2"])
+    # loop through and create new variants
+    unless params["new_option_values_1"].nil? or params["new_option_values_1"]&.strip == ""
+      new_option_values_1 = params["new_option_values_1"].split(",").map{ |v| v.strip }
+      @product.options = []
+      @product.variants = []
+      @product.options << ShopifyAPI::Option.new(:name => params["new_option_1"])
 
-          unless params["new_option_values_3"].nil? or params["new_option_values_3"]&.strip == ""
-            new_option_values_3 = params["new_option_values_3"].split(",").map{ |v| v.strip }
-            @product.options << ShopifyAPI::Option.new(:name => params["new_option_3"])
-            puts Colorize.blue('3 options')
-            new_option_values_1.each do |option1|
-              new_option_values_2.each do |option2|
-                new_option_values_3.each do |option3|
-                  v = ShopifyAPI::Variant.new({
-                    option1: option1,
-                    option2: option2,
-                    option3: option3,
-                    price: original_variant["price"],
-                    compare_at_price: original_variant["compare_at_price"],
-                    sku: original_variant["sku"],
-                    barcode: original_variant["barcode"],
-                    taxable: original_variant["taxable"],
-                    fulfillment_service: original_variant["fulfillment_service"],
-                    inventory_management: original_variant["inventory_management"],
-                    requires_shipping: original_variant["requires_shipping"],
-                    weight: original_variant["weight"],
-                    weight_unit: original_variant["weight_unit"],
-                    metafields: [{
-                      namespace: 'global',
-                      key: original_variant['new_metafields'].first["name"],
-                      value: original_variant['new_metafields'].first["value"],
-                      value_type: 'string'
-                    }]
-                  })
+      unless params["new_option_values_2"].nil? or params["new_option_values_2"]&.strip == ""
+        new_option_values_2 = params["new_option_values_2"].split(",").map{ |v| v.strip }
+        @product.options << ShopifyAPI::Option.new(:name => params["new_option_2"])
 
-                  @product.variants << v
-                end
-              end
-            end
-            @product.save
-            puts Colorize.orange(ShopifyAPI.credit_left)
-          else
-            puts Colorize.purple('2 options')
-            new_option_values_1.each do |option1|
-              new_option_values_2.each do |option2|
+        unless params["new_option_values_3"].nil? or params["new_option_values_3"]&.strip == ""
+          new_option_values_3 = params["new_option_values_3"].split(",").map{ |v| v.strip }
+          @product.options << ShopifyAPI::Option.new(:name => params["new_option_3"])
+          puts Colorize.blue('3 options')
+          new_option_values_1.each do |option1|
+            new_option_values_2.each do |option2|
+              new_option_values_3.each do |option3|
                 v = ShopifyAPI::Variant.new({
                   option1: option1,
                   option2: option2,
+                  option3: option3,
                   price: original_variant["price"],
                   compare_at_price: original_variant["compare_at_price"],
                   sku: original_variant["sku"],
@@ -243,42 +214,72 @@ class API
                 @product.variants << v
               end
             end
-            @product.save
-            puts Colorize.orange(ShopifyAPI.credit_left)
           end
+          @product.save
+          puts Colorize.orange(ShopifyAPI.credit_left)
         else
-          puts Colorize.green('1 option')
+          puts Colorize.purple('2 options')
           new_option_values_1.each do |option1|
-            v = ShopifyAPI::Variant.new({
-              option1: option1,
-              price: original_variant["price"],
-              compare_at_price: original_variant["compare_at_price"],
-              sku: original_variant["sku"],
-              barcode: original_variant["barcode"],
-              taxable: original_variant["taxable"],
-              fulfillment_service: original_variant["fulfillment_service"],
-              inventory_management: original_variant["inventory_management"],
-              requires_shipping: original_variant["requires_shipping"],
-              weight: original_variant["weight"],
-              weight_unit: original_variant["weight_unit"],
-              metafields: [{
-                namespace: 'global',
-                key: original_variant['new_metafields'].first["name"],
-                value: original_variant['new_metafields'].first["value"],
-                value_type: 'string'
-              }]
-            })
+            new_option_values_2.each do |option2|
+              v = ShopifyAPI::Variant.new({
+                option1: option1,
+                option2: option2,
+                price: original_variant["price"],
+                compare_at_price: original_variant["compare_at_price"],
+                sku: original_variant["sku"],
+                barcode: original_variant["barcode"],
+                taxable: original_variant["taxable"],
+                fulfillment_service: original_variant["fulfillment_service"],
+                inventory_management: original_variant["inventory_management"],
+                requires_shipping: original_variant["requires_shipping"],
+                weight: original_variant["weight"],
+                weight_unit: original_variant["weight_unit"],
+                metafields: [{
+                  namespace: 'global',
+                  key: original_variant['new_metafields'].first["name"],
+                  value: original_variant['new_metafields'].first["value"],
+                  value_type: 'string'
+                }]
+              })
 
-            @product.variants << v
+              @product.variants << v
+            end
           end
           @product.save
           puts Colorize.orange(ShopifyAPI.credit_left)
         end
+      else
+        puts Colorize.green('1 option')
+        new_option_values_1.each do |option1|
+          v = ShopifyAPI::Variant.new({
+            option1: option1,
+            price: original_variant["price"],
+            compare_at_price: original_variant["compare_at_price"],
+            sku: original_variant["sku"],
+            barcode: original_variant["barcode"],
+            taxable: original_variant["taxable"],
+            fulfillment_service: original_variant["fulfillment_service"],
+            inventory_management: original_variant["inventory_management"],
+            requires_shipping: original_variant["requires_shipping"],
+            weight: original_variant["weight"],
+            weight_unit: original_variant["weight_unit"],
+            metafields: [{
+              namespace: 'global',
+              key: original_variant['new_metafields'].first["name"],
+              value: original_variant['new_metafields'].first["value"],
+              value_type: 'string'
+            }]
+          })
 
-        created_new_variants = true
+          @product.variants << v
+        end
+        @product.save
+        puts Colorize.orange(ShopifyAPI.credit_left)
       end
 
+      created_new_variants = true
     end
+
     @product.created_new_product = created_new_product
     @product.created_new_variants = created_new_variants;
 
@@ -374,6 +375,79 @@ class API
     end
 
     variant
+  end
+
+  def self.updatePage(params)
+    if params[:id] == "new"
+      @page = ShopifyAPI::Page.new
+    else
+      @page = ShopifyAPI::Page.find(params[:id])
+    end
+
+    old_page = ShopifyAPI::Page.new(@page.attributes)
+
+    @page.title = params["shopify_api_page"]["title"]
+    @page.body_html = params["shopify_api_page"]["body_html"]
+    @page.handle = params["shopify_api_page"]["handle"]
+    @page.template_suffix = params["shopify_api_page"]["template_suffix"]
+
+    if params["shopify_api_page"]["published_at"] == 'true'
+      unless params["shopify_api_page"]["old_published_at"]
+        @page.published_at = Time.now
+      end
+    else
+      @page.published_at = nil
+    end
+
+
+    # loop through page metafields, update and save any new information
+    unless params[:id] == "new"
+      @page.metafields.each do |metafield|
+        old_metafield = ShopifyAPI::Metafield.new(metafield.attributes)
+        if params["metafields"]
+          m = params["metafields"][metafield.id.to_s]
+        end
+
+        if m
+          if m["value"] == ""
+            puts Colorize.red(metafield.key + ' deleted')
+            metafield.destroy
+          else
+            metafield.value = m["value"]
+            
+            if old_metafield.attributes == metafield.attributes
+              puts Colorize.cyan(metafield.key + ' skipped')
+            else
+              if metafield.save
+                puts Colorize.green(metafield.key + ' saved ') + Colorize.orange(ShopifyAPI.credit_left)
+              else
+                puts Colorize.red(metafield.errors.messages)
+              end
+            end
+          end
+        end
+      end
+    end
+
+    # loop through any new metafields and create them
+    if params["new_metafields"]
+      params["new_metafields"].each do |new_metafield|
+        @page.add_metafield(ShopifyAPI::Metafield.new({
+          namespace: 'global',
+          key: new_metafield["name"],
+          value: new_metafield["value"],
+          value_type: 'string'
+        }))
+      end
+    end
+
+    if @page.save
+      puts Colorize.green(@page.title + ' saved')
+    else 
+      puts Colorize.red(@page.errors.messages)
+    end
+
+    @page
   end
 
   def self.updateVariantImage(variant_id, image_id)

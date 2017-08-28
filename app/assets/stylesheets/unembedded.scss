@@ -2801,10 +2801,12 @@ iframe#launcher {
 
           &:first-child {
             border-bottom: 0;
+            border-radius: .3rem .3rem 0 0;
           }
 
           &:last-child {
             border-top: 0;
+            border-radius: 0 0 .3rem .3rem;
             display: flex;
             align-items: center;
           }

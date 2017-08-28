@@ -117,13 +117,25 @@ class UnembeddedController < ApplicationController
 
   def update_api
     puts Colorize.magenta(params)
-
-    validation = Validate.product(params)
-    if validation.is_valid
-      product = API.updateProduct(params)
-      render json: product
-    else
-      render json: validation
+    case params[:resource]
+    when 'blog'
+    when 'collection'
+    when 'page'
+      validation = Validate.page(params)
+      if validation.is_valid
+        page = API.updatePage(params)
+        render json: page
+      else
+        render json: validation
+      end
+    when 'product'
+      validation = Validate.product(params)
+      if validation.is_valid
+        product = API.updateProduct(params)
+        render json: product
+      else
+        render json: validation
+      end
     end
   end
 

@@ -61,6 +61,10 @@ function ready() {
 	  };
 	}
 
+	String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+	}
+
 	/*******************************************
 	jQuery Extentions
 	*******************************************/
@@ -412,12 +416,12 @@ function ready() {
 				hideRTEButtons();
 			}
 		});
-		$('#shopify_api_product_body_html').on('froalaEditor.commands.after', function (e, editor, cmd, param1, param2) {
+		$('#shopify_api_product_body_html, #shopify_api_page_body_html').on('froalaEditor.commands.after', function (e, editor, cmd, param1, param2) {
 
   		function exitFullscreen() {
-				if ($('#shopify_api_product_body_html').froalaEditor('fullscreen.isActive')) {
+				if ($('#shopify_api_product_body_html, #shopify_api_page_body_html').froalaEditor('fullscreen.isActive')) {
 		  		$('#description-label').after($('.fr-box'));
-					$('#shopify_api_product_body_html').froalaEditor('fullscreen.toggle');
+					$('#shopify_api_product_body_html, #shopify_api_page_body_html').froalaEditor('fullscreen.toggle');
 		  		hideRTEButtons();
 		  		$('.fr-top.fr-toolbar').css('z-index', 4);
 		  		$('#frWysiwygFullscreenOverlay').remove();
@@ -1035,29 +1039,31 @@ function ready() {
 		$('form.ajax').submit();
 	});
 
-	$('#resource-section').on("ajax:success", 'form.ajax', function(event, product) {
-		$('#save_resource').removeClass('is-loading');
-		$('#shopify_api_product_handle').val(product.handle);
+	$('#resource-section').on("ajax:success", 'form.ajax', function(event, resource) {
+		var resourceType = $('[name="resource"]').val();
 
-		if (product.id) {
-		  if (product.created_new_product) {
-			  window.location.href = '/dashboard?id='+product.id+'&resource=product'
+		$('#save_resource').removeClass('is-loading');
+		$('#shopify_api_'+resourceType+'_handle').val(resource.handle);
+
+		if (resource.id) {
+		  if (resource.created_new_product) {
+			  window.location.href = '/dashboard?id='+resource.id+'&resource='+resourceType
 			} else {
-				if (product.created_new_variants) {
+				if (resource.created_new_variants) {
 					location.reload();
 				}
 			}
 	  	var variant;
-	    console.log("success product", product);
+	    console.log("success " + resourceType, resource);
 
-	    if (product.variants) {
-		    for (var i = 0; i < product.variants.length; i++) {
-		    	variant = product.variants[i];
+	    if (resource.variants) {
+		    for (var i = 0; i < resource.variants.length; i++) {
+		    	variant = resource.variants[i];
 		    	$('#variant_id_'+variant.id+' .edit_single_variant').data('object', variant);
 		    }
 		  }
-	    // time to provide feedback 
-		  flashMessage('Product was successfully saved');
+	    // time to provide feedback
+		  flashMessage(resourceType.capitalize() + ' was successfully saved');
 		  refreshIframe();
 			previousFormState = $('form.ajax').serialize();
 
@@ -1066,15 +1072,15 @@ function ready() {
 		  	shiftPannelsRight($('.check-for-unsaved'));
 		  }
 		} else {
-			console.log(product);
+			console.log(resource);
 		  if ($('#confirmBoxOverlay #extra').length > 0) {
 		  	$('#confirmBoxOverlay').remove();
 		  }
 
-			if (product.error_message) {
-				flashMessage(product.error_message, 'error');
+			if (resource.error_message) {
+				flashMessage(resource.error_message, 'error');
 			} else {
-				flashMessage('Product was not saved', 'error');
+				flashMessage(resourceType + ' was not saved', 'error');
 			}
 		}
     $('.variant_input').prop('disabled', false);
