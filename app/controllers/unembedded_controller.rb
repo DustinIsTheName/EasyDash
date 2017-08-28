@@ -50,7 +50,11 @@ class UnembeddedController < ApplicationController
     when 'smart_collection'
       @resource = params[:id] == 'new' ? ShopifyAPI::SmartCollection.new : ShopifyAPI::SmartCollection.find(params[:id])
     when 'page'
-      @resource = params[:id] == 'new' ? ShopifyAPI::Page.new : ShopifyAPI::Page.find(params[:id])
+      if params[:id] == 'new' 
+        @resource  = ShopifyAPI::Page.new(id: 'new',title: '', body_html: '', created_at: '', handle: '', updated_at: '', published_at: nil, template_suffix: '')
+      else
+        @resource = ShopifyAPI::Page.find(params[:id])
+      end
       @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
     when 'product'
       if params[:id] == 'new'

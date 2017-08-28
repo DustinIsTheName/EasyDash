@@ -69,7 +69,7 @@ class API
                 puts Colorize.red(metafield.errors.messages)
               end
             end
-            
+
           end
         end
       end
@@ -426,6 +426,12 @@ class API
             end
           end
         end
+      end
+    else
+      if @page.save
+        puts Colorize.green(@page.title + ' saved')
+      else 
+        puts Colorize.red(@page.errors.messages)
       end
     end
 
