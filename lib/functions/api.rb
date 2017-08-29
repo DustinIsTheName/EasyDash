@@ -280,8 +280,9 @@ class API
       created_new_variants = true
     end
 
-    @product.created_new_product = created_new_product
-    @product.created_new_variants = created_new_variants;
+    @product.created_new_resource = created_new_product
+    @product.created_new_variants = created_new_variants
+    @product.metafields_tracking = @product.metafields
 
     @product
 	end
@@ -378,6 +379,8 @@ class API
   end
 
   def self.updatePage(params)
+    created_new_page = false
+
     if params[:id] == "new"
       @page = ShopifyAPI::Page.new
     else
@@ -452,6 +455,9 @@ class API
     else 
       puts Colorize.red(@page.errors.messages)
     end
+
+    @page.created_new_resource = created_new_page
+    @page.metafields_tracking = @page.metafields
 
     @page
   end

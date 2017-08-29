@@ -1040,13 +1040,16 @@ function ready() {
 	});
 
 	$('#resource-section').on("ajax:success", 'form.ajax', function(event, resource) {
+		var html;
 		var resourceType = $('[name="resource"]').val();
+
+		console.log(resource.metafields_tracking);
 
 		$('#save_resource').removeClass('is-loading');
 		$('#shopify_api_'+resourceType+'_handle').val(resource.handle);
 
 		if (resource.id) {
-		  if (resource.created_new_product) {
+		  if (resource.created_new_resource) {
 			  window.location.href = '/dashboard?id='+resource.id+'&resource='+resourceType
 			} else {
 				if (resource.created_new_variants) {
@@ -1071,6 +1074,32 @@ function ready() {
 		  	$('#confirmBoxOverlay').remove();
 		  	shiftPannelsRight($('.check-for-unsaved'));
 		  }
+
+		  // adjust SEO fields to match results
+		  titleTag = $.grep(resource.metafields_tracking, function(e){ return e.key == 'title_tag'; })[0];
+		  descriptionTag = $.grep(resource.metafields_tracking, function(e){ return e.key == 'description_tag'; })[0];
+
+		  if (titleTag) {
+		    html = '<label for="metafields_'+titleTag.id+'_value">Page title</label>';
+		    html += '<input type="text" value="'+titleTag.value+'" name="metafields['+titleTag.id+'][value]" id="metafields_'+titleTag.id+'_value">';
+		  } else {
+  	    html = '<input value="title_tag" class="new_field" type="hidden" name="new_metafields[][name]" id="new_metafields__name">';
+				html += '<label for="new_field_title">Page title</label>';
+				html += '<input class="new_field" id="new_field_title" type="text" name="new_metafields[][value]">';
+		  }
+		  $('.title_tag_container').html(html);
+
+		  if (descriptionTag) {
+		    html = '<label for="metafields_'+descriptionTag.id+'_value">Page title</label>';
+		    html += '<textarea type="text" name="metafields['+descriptionTag.id+'][value]" id="metafields_'+descriptionTag.id+'_value">'+descriptionTag.value+'</textarea>';
+		  } else {
+		    html = '<input value="description_tag" class="new_field" type="hidden" name="new_metafields[][name]" id="new_metafields__name">';
+		    html += '<label for="new_field_description">Meta description</label>';
+		    html += '<textarea class="new_field" id="new_field_description" name="new_metafields[][value]"></textarea>';
+		  }
+		  $('.description_tag_container').html(html);
+
+
 		} else {
 			console.log(resource);
 		  if ($('#confirmBoxOverlay #extra').length > 0) {
