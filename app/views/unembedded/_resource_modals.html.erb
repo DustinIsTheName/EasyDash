@@ -1,69 +1,242 @@
-<% if @type == 'product' %>
-  <div id="editVariantImageOverlay" class="editModalOverlay">
-    <section id="editVariantImage" class="editModal">
-      <div class="card has-sections">
-        <div class="card-section">
-          <h3>Update variant image</h3>
-          <!-- <a href="#" class="close" role="button" aria-label="Close dialog">x</a> -->
-        </div>
-        <hr>
-        <div class="card-section" style="padding-bottom: 0;">
-          <% @resource.images.each_with_index do |image, index| %>
-            <input type="radio" id="variant-select-image-<%= image.id %>" class="variant-select-image" name="variants[<%= @resource.variants.first.id %>][image_id]" value="<%= image.id %>">
-            <label for="variant-select-image-<%= image.id %>" class="variant-select-image-label" data-page="<%= index/10 %>"<% if index > 9 %> style="display: none;"<% end %>>
-              <img src="<%= image.src %>">
-            </label>
-          <% end %>
-        </div>
-        <hr>
-        <div class="card-section">
-          <div class="arrow-navigation">
-            <button class="secondary icon-prev disabled"></button>
-            <button class="secondary icon-next"></button>
-            <div style="clear:both;"></div>
+<% if @resource %>
+  <% if @type == 'product' %>
+    <div id="editVariantImageOverlay" class="editModalOverlay">
+      <section id="editVariantImage" class="editModal">
+        <div class="card has-sections">
+          <div class="card-section">
+            <h3>Update variant image</h3>
+            <!-- <a href="#" class="close" role="button" aria-label="Close dialog">x</a> -->
           </div>
-          <button type="button" id="variant-image-destroy" class="secondary red variant-image-save" href="#">Remove image</button>
+          <hr>
+          <div class="card-section" style="padding-bottom: 0;">
+            <% @resource.images.each_with_index do |image, index| %>
+              <input type="radio" id="variant-select-image-<%= image.id %>" class="variant-select-image" name="variants[<%= @resource.variants.first.id %>][image_id]" value="<%= image.id %>">
+              <label for="variant-select-image-<%= image.id %>" class="variant-select-image-label" data-page="<%= index/10 %>"<% if index > 9 %> style="display: none;"<% end %>>
+                <img src="<%= image.src %>">
+              </label>
+            <% end %>
+          </div>
+          <hr>
+          <div class="card-section">
+            <div class="arrow-navigation">
+              <button class="secondary icon-prev disabled"></button>
+              <button class="secondary icon-next"></button>
+              <div style="clear:both;"></div>
+            </div>
+            <button type="button" id="variant-image-destroy" class="secondary red variant-image-save" href="#">Remove image</button>
 
-          <button type="button" class="secondary cancel" href="#">Cancel</button>
-          <button type="button" id="variant-add-image" class="secondary" href="#">Add Image</button>
-          <button type="button" id="variant-image-save" class="primary variant-image-save" href="#">Save</button>
+            <button type="button" class="secondary cancel" href="#">Cancel</button>
+            <button type="button" id="variant-add-image" class="secondary" href="#">Add Image</button>
+            <button type="button" id="variant-image-save" class="primary variant-image-save" href="#">Save</button>
+          </div>
         </div>
-      </div>
-    </section>
-  </div>
-  <div id="editAltTagOverlay" class="editModalOverlay">
-    <section id="editAltTag" class="editModal">
+      </section>
+    </div>
+    <div id="editAltTagOverlay" class="editModalOverlay">
+      <section id="editAltTag" class="editModal">
+        <div class="card has-sections">
+          <div class="card-section">
+            <h3>Edit image alt text</h3>
+            <!-- <a href="#" class="close" role="button" aria-label="Close dialog">x</a> -->
+          </div>
+          <hr>
+          <div class="card-section" style="padding-bottom: 0;">
+            <div class="product-image">
+              <img id="image-for-alt-tag">
+            </div>
+            <div class="field-for-alt-tag">
+              <label for="image-alt-tag">Image alt text</label>
+              <input type="text" id="image-alt-tag">
+              <p class="type--subdued">Write a brief description of this image to improve search engine optimization (SEO) and accessibility for visually impaired customers.</p>
+            </div>
+          </div>
+          <hr>
+          <div class="card-section">
+            <button type="button" class="secondary cancel" href="#">Cancel</button>
+            <button type="button" id="image-alt-tag-save" class="primary" href="#">Save</button>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div id="previewOverlay" class="editModalOverlay">
+      <section id="preview" class="editModal">
+        <div class="card has-sections">
+          <div class="card-section" style="padding-bottom: 0;">
+            <div class="product-image">
+              <img id="image-preview">
+            </div>
+          </div>
+          <hr>
+          <div class="card-section">
+            <button type="button" class="secondary cancel" href="#">Done</button>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div id="addImageUrlOverlay" class="editModalOverlay">
+      <section id="addImageUrl" class="editModal">
+        <div class="card has-sections">
+          <div class="card-section">
+            <h3>Add image from URL</h3>
+            <!-- <a href="#" class="close" role="button" aria-label="Close dialog">x</a> -->
+          </div>
+          <hr>
+          <div class="card-section" style="padding-bottom: 0;">
+            <div class="product-image">
+              <label for="addImageUrlInput">Paste image URL</label>
+              <input type="text" id="addImageUrlInput" placeholder="http://">
+            </div>
+          </div>
+          <hr>
+          <div class="card-section">
+            <button type="button" class="secondary cancel" href="#">Cancel</button>
+            <button type="button" id="add-image-from-url" class="primary" href="#">Add image</button>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div id="viewAllTagsOverlay" class="editModalOverlay">
+      <section id="viewAllTags" class="editModal">
+        <div class="card has-sections">
+          <div class="card-section" style="padding-bottom: 0;">
+            <h3>Tags</h3>
+            <!-- <a href="#" class="close" role="button" aria-label="Close dialog">x</a> -->
+          </div>
+          <hr>
+          <div class="card-section" style="padding-bottom: 0;">
+            <h6>Applied Tags</h6>
+            <div class="applied-tags"></div>
+            <p>Select previously used tags from the list below to add them to this product.</p>
+          </div>
+          <hr>
+          <div class="card-section" style="padding-bottom: 0;">
+            <h6>All Tags</h6>
+            <div class="all-tags"></div>
+          </div>
+          <hr>
+          <div class="card-section">
+            <button type="button" class="secondary cancel" href="#">Cancel</button>
+            <button type="button" id="apply-tag-changes" class="primary" href="#">Apply Changes</button>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div id="reorderVariantsOverlay" class="editModalOverlay">
+      <section id="reorderVariants" class="editModal">
+        <div class="card has-sections">
+          <div class="card-section" style="padding-bottom: 0;">
+            <h3>Reorder variants and options</h3>
+            <!-- <a href="#" class="close" role="button" aria-label="Close dialog">x</a> -->
+          </div>
+          <hr>
+          <div class="card-section" style="padding-bottom: 0;">
+            <p>Reorder variants or options to change how they appear on your store.</p>
+            <ul class="option-list">
+              <% for option in @resource.options %>
+                <li class="option-item noSelect" data-id="<%= option.id %>">
+                  <div class="option-name">
+                    <%= svgs 'drag' %>
+                    <span class="label"><%= option.name %></span>
+                  </div>
+                  <ul class="value-list">
+                    <% for value in option.values %>
+                      <li class="value-item noSelect" data-value="<%= value %>">
+                        <%= svgs 'drag' %>
+                        <%= value %>
+                      </li>
+                    <% end %>
+                  </ul>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+          <hr>
+          <div class="card-section">
+            <button type="button" class="secondary cancel" href="#">Cancel</button>
+            <button type="button" id="save-reorder-variants" class="primary" href="#">Save</button>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div id="editOptionsOverlay" class="editModalOverlay">
+      <section id="editOptions" class="editModal">
+        <div class="card has-sections">
+          <div class="card-section" style="padding-bottom: 0;">
+            <h3>Edit options</h3>
+            <!-- <a href="#" class="close" role="button" aria-label="Close dialog">x</a> -->
+          </div>
+          <hr>
+          <div class="card-section">
+            <p>Reorder variants or options to change how they appear on your store.</p>
+            <ul class="option-list">
+              <% option_index = 0 %>
+              <% for option in @resource.options %>
+                <% option_index += 1 %>
+                <li class="option-item noSelect" data-id="<%= option.id %>">
+                  <div class="option-name">
+                    <input type="text" value="<%= option.name %>" class="option-input">
+                  </div>
+                  <ul class="value-list">
+                    <% for value in option.values %>
+                      <li class="value-item noSelect" data-option="<%= option.name %>" data-option-index="<%= option_index %>" data-value="<%= value %>">
+                        <%= value %>
+                        <a href="#"></a>
+                      </li>
+                    <% end %>
+                  </ul>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+          <hr>
+          <div class="card-section">
+            <button type="button" class="secondary cancel" href="#">Cancel</button>
+            <button type="button" id="save-edit-options" class="primary" href="#">Save</button>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div id="duplicateProductOverlay" class="editModalOverlay">
+      <section id="duplicateProduct" class="editModal">
+        <form action="/duplicate-product" class="card has-sections" method="post">
+          <div class="card-section">
+            <h3>Duplicate this product?</h3>
+            <!-- <a href="#" class="close" role="button" aria-label="Close dialog">x</a> -->
+          </div>
+          <hr>
+          <div class="card-section">
+            <label for="duplicateProductInput">Provide a name for your new product</label>
+            <input type="hidden" name="id">
+            <input name="new_title" type="text" id="duplicateProductInput" value="Copy of <%= @resource.title %>">
+          </div>
+          <hr>
+          <div class="card-section">
+            <button type="button" class="secondary cancel" href="#">Cancel</button>
+            <button type="button" id="duplicate-product" class="primary">Duplicate</button>
+          </div>
+        </form>
+      </section>
+    </div>
+  <% end %>
+  <div id="SEOURLOverlay" class="editModalOverlay">
+    <section id="SEOURL" class="editModal">
       <div class="card has-sections">
-        <div class="card-section">
-          <h3>Edit image alt text</h3>
+        <div class="card-section" style="padding-bottom: 0;">
+          <h3><%= @type.capitalize %> URL</h3>
           <!-- <a href="#" class="close" role="button" aria-label="Close dialog">x</a> -->
         </div>
         <hr>
         <div class="card-section" style="padding-bottom: 0;">
-          <div class="product-image">
-            <img id="image-for-alt-tag">
-          </div>
-          <div class="field-for-alt-tag">
-            <label for="image-alt-tag">Image alt text</label>
-            <input type="text" id="image-alt-tag">
-            <p class="type--subdued">Write a brief description of this image to improve search engine optimization (SEO) and accessibility for visually impaired customers.</p>
-          </div>
-        </div>
-        <hr>
-        <div class="card-section">
-          <button type="button" class="secondary cancel" href="#">Cancel</button>
-          <button type="button" id="image-alt-tag-save" class="primary" href="#">Save</button>
-        </div>
-      </div>
-    </section>
-  </div>
-  <div id="previewOverlay" class="editModalOverlay">
-    <section id="preview" class="editModal">
-      <div class="card has-sections">
-        <div class="card-section" style="padding-bottom: 0;">
-          <div class="product-image">
-            <img id="image-preview">
-          </div>
+          <% if @type == 'blog' %>
+            <% base_url = 'blogs/' %>
+          <% elsif @type == 'custom_collection' || @type == 'smart_collection' %>
+            <% base_url = 'collections' %>
+          <% elsif @type == 'page' %>
+            <% base_url = 'pages' %>
+          <% elsif @type == 'product' %>
+            <% base_url = 'products' %>
+          <% end %>
+          <h3 id="SEOURL-url">https://<%= @shop_session.url %>/<%= base_url %>/<%= @resource.handle %></h3>
         </div>
         <hr>
         <div class="card-section">
@@ -72,175 +245,4 @@
       </div>
     </section>
   </div>
-  <div id="addImageUrlOverlay" class="editModalOverlay">
-    <section id="addImageUrl" class="editModal">
-      <div class="card has-sections">
-        <div class="card-section">
-          <h3>Add image from URL</h3>
-          <!-- <a href="#" class="close" role="button" aria-label="Close dialog">x</a> -->
-        </div>
-        <hr>
-        <div class="card-section" style="padding-bottom: 0;">
-          <div class="product-image">
-            <label for="addImageUrlInput">Paste image URL</label>
-            <input type="text" id="addImageUrlInput" placeholder="http://">
-          </div>
-        </div>
-        <hr>
-        <div class="card-section">
-          <button type="button" class="secondary cancel" href="#">Cancel</button>
-          <button type="button" id="add-image-from-url" class="primary" href="#">Add image</button>
-        </div>
-      </div>
-    </section>
-  </div>
-  <div id="viewAllTagsOverlay" class="editModalOverlay">
-    <section id="viewAllTags" class="editModal">
-      <div class="card has-sections">
-        <div class="card-section" style="padding-bottom: 0;">
-          <h3>Tags</h3>
-          <!-- <a href="#" class="close" role="button" aria-label="Close dialog">x</a> -->
-        </div>
-        <hr>
-        <div class="card-section" style="padding-bottom: 0;">
-          <h6>Applied Tags</h6>
-          <div class="applied-tags"></div>
-          <p>Select previously used tags from the list below to add them to this product.</p>
-        </div>
-        <hr>
-        <div class="card-section" style="padding-bottom: 0;">
-          <h6>All Tags</h6>
-          <div class="all-tags"></div>
-        </div>
-        <hr>
-        <div class="card-section">
-          <button type="button" class="secondary cancel" href="#">Cancel</button>
-          <button type="button" id="apply-tag-changes" class="primary" href="#">Apply Changes</button>
-        </div>
-      </div>
-    </section>
-  </div>
-  <div id="reorderVariantsOverlay" class="editModalOverlay">
-    <section id="reorderVariants" class="editModal">
-      <div class="card has-sections">
-        <div class="card-section" style="padding-bottom: 0;">
-          <h3>Reorder variants and options</h3>
-          <!-- <a href="#" class="close" role="button" aria-label="Close dialog">x</a> -->
-        </div>
-        <hr>
-        <div class="card-section" style="padding-bottom: 0;">
-          <p>Reorder variants or options to change how they appear on your store.</p>
-          <ul class="option-list">
-            <% for option in @resource.options %>
-              <li class="option-item noSelect" data-id="<%= option.id %>">
-                <div class="option-name">
-                  <%= svgs 'drag' %>
-                  <span class="label"><%= option.name %></span>
-                </div>
-                <ul class="value-list">
-                  <% for value in option.values %>
-                    <li class="value-item noSelect" data-value="<%= value %>">
-                      <%= svgs 'drag' %>
-                      <%= value %>
-                    </li>
-                  <% end %>
-                </ul>
-              </li>
-            <% end %>
-          </ul>
-        </div>
-        <hr>
-        <div class="card-section">
-          <button type="button" class="secondary cancel" href="#">Cancel</button>
-          <button type="button" id="save-reorder-variants" class="primary" href="#">Save</button>
-        </div>
-      </div>
-    </section>
-  </div>
-  <div id="editOptionsOverlay" class="editModalOverlay">
-    <section id="editOptions" class="editModal">
-      <div class="card has-sections">
-        <div class="card-section" style="padding-bottom: 0;">
-          <h3>Edit options</h3>
-          <!-- <a href="#" class="close" role="button" aria-label="Close dialog">x</a> -->
-        </div>
-        <hr>
-        <div class="card-section">
-          <p>Reorder variants or options to change how they appear on your store.</p>
-          <ul class="option-list">
-            <% option_index = 0 %>
-            <% for option in @resource.options %>
-              <% option_index += 1 %>
-              <li class="option-item noSelect" data-id="<%= option.id %>">
-                <div class="option-name">
-                  <input type="text" value="<%= option.name %>" class="option-input">
-                </div>
-                <ul class="value-list">
-                  <% for value in option.values %>
-                    <li class="value-item noSelect" data-option="<%= option.name %>" data-option-index="<%= option_index %>" data-value="<%= value %>">
-                      <%= value %>
-                      <a href="#"></a>
-                    </li>
-                  <% end %>
-                </ul>
-              </li>
-            <% end %>
-          </ul>
-        </div>
-        <hr>
-        <div class="card-section">
-          <button type="button" class="secondary cancel" href="#">Cancel</button>
-          <button type="button" id="save-edit-options" class="primary" href="#">Save</button>
-        </div>
-      </div>
-    </section>
-  </div>
-  <div id="duplicateProductOverlay" class="editModalOverlay">
-    <section id="duplicateProduct" class="editModal">
-      <form action="/duplicate-product" class="card has-sections" method="post">
-        <div class="card-section">
-          <h3>Duplicate this product?</h3>
-          <!-- <a href="#" class="close" role="button" aria-label="Close dialog">x</a> -->
-        </div>
-        <hr>
-        <div class="card-section">
-          <label for="duplicateProductInput">Provide a name for your new product</label>
-          <input type="hidden" name="id">
-          <input name="new_title" type="text" id="duplicateProductInput" value="Copy of <%= @resource.title %>">
-        </div>
-        <hr>
-        <div class="card-section">
-          <button type="button" class="secondary cancel" href="#">Cancel</button>
-          <button type="button" id="duplicate-product" class="primary">Duplicate</button>
-        </div>
-      </form>
-    </section>
-  </div>
 <% end %>
-<div id="SEOURLOverlay" class="editModalOverlay">
-  <section id="SEOURL" class="editModal">
-    <div class="card has-sections">
-      <div class="card-section" style="padding-bottom: 0;">
-        <h3><%= @type.capitalize %> URL</h3>
-        <!-- <a href="#" class="close" role="button" aria-label="Close dialog">x</a> -->
-      </div>
-      <hr>
-      <div class="card-section" style="padding-bottom: 0;">
-        <% if @type == 'blog' %>
-          <% base_url = 'blogs/' %>
-        <% elsif @type == 'custom_collection' || @type == 'smart_collection' %>
-          <% base_url = 'collections' %>
-        <% elsif @type == 'page' %>
-          <% base_url = 'pages' %>
-        <% elsif @type == 'product' %>
-          <% base_url = 'products' %>
-        <% end %>
-        <h3 id="SEOURL-url">https://<%= @shop_session.url %>/<%= base_url %>/<%= @resource.handle %></h3>
-      </div>
-      <hr>
-      <div class="card-section">
-        <button type="button" class="secondary cancel" href="#">Done</button>
-      </div>
-    </div>
-  </section>
-</div>
