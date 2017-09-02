@@ -108,6 +108,8 @@
 <% unless @type == 'resource_select' %>
   <% if @type.include? 'collection' %>
     <% resource_url = 'collections/' %>
+  <% elsif @type.include? 'blog' %>
+    <% resource_url = 'blogs/' + @blogs.select{|b| b.id == @resource.blog_id}.first.handle + '/' %>
   <% else %>
     <% resource_url = @type + 's/' %>
   <% end %>

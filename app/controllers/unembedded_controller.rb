@@ -44,7 +44,13 @@ class UnembeddedController < ApplicationController
     # get_resources
     case @type
     when 'blog'
-      @resource = params[:id] == 'new' ? ShopifyAPI::Article.new : ShopifyAPI::Article.find(params[:id])
+      @resource = if params[:id] == 'new' 
+        ShopifyAPI::Article.new
+      else 
+        ShopifyAPI::Article.find(params[:id])
+      end
+      @blogs = ShopifyAPI::Blog.all
+      @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
     when 'custom_collection'
       @resource = params[:id] == 'new' ? ShopifyAPI::CustomCollection.new : ShopifyAPI::CustomCollection.find(params[:id])
     when 'smart_collection'
@@ -283,7 +289,7 @@ class UnembeddedController < ApplicationController
 
   def get_resource_seo
     puts Colorize.magenta(params)
-    seo_info = ShopifyAPI::Metafield.find(:all, params: {"metafield[owner_id]" => params[:resource_id], "metafield[owner_resource]" => params[:resource_type]})
+    seo_info = ShopifyAPI::Metafield.find(:all, params: {"metafield[owner_id]" => params[:resource_id], "metafield[owner_resource]" => params[:resource_type].gsub('blog', 'article')})
     render json: seo_info
   end
 

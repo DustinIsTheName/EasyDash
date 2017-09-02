@@ -5,8 +5,8 @@
       <%= o.text_field :title, placeholder: "Short Sleeve T-Shirt" %>
     </div>
     <div class="row no_margin">
-      <label id="description-label">Description</label>
-      <%= o.text_area :body_html %>
+      <label for="shopify_api_product_body_html">Description</label>
+      <%= o.text_area :body_html, class: "make-rich-text-editor" %>
     </div>
   </div>
 </article>
@@ -186,7 +186,7 @@
     <div class="divider"></div>
     <div class="row no_margin">
       <label class="extra_margin">Tags <a href="#" id="view-all-tags" class="label-cta">View all tags</a></label>
-      <input type="text" id="tag-field" placeholder="Vintage, cotton, summer">
+      <input type="text" id="tag-field" data-resource="product" placeholder="Vintage, cotton, summer">
       <div class="tag-error">Oops, you've already used <span class=""></span></div>
       <div class="tags-container">
         <% for tag in @resource.tags.split(',') %>

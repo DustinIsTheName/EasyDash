@@ -36,4 +36,17 @@ module OptionsHelper
 
 		options.sort
 	end
+
+	def article_blog_options(blogs)
+		options = []
+
+		for blog in blogs
+			options.push([blog.title, blog.id])
+		end
+
+		options.push(['———————————————', 'separator'])
+		options.push(['Create a new blog...', 'create_new_blog'])
+
+		options
+	end
 end

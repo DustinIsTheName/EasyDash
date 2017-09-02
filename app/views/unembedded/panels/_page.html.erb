@@ -6,8 +6,8 @@
       <%= o.text_field :title, placeholder: "e.g. Contact us, Sizing chart, FAQs" %>
     </div>
     <div class="row no_margin">
-      <label id="description-label">Content</label>
-      <%= o.text_area :body_html %>
+      <label for="shopify_api_page_body_html">Content</label>
+      <%= o.text_area :body_html, class: "make-rich-text-editor" %>
     </div>
   </div>
 </article>

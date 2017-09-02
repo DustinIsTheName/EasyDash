@@ -353,14 +353,14 @@ function ready() {
 	}
 
 	function showRTEButtons() {
-		$('.fr-toolbar .fr-command').removeClass('fr-hidden');
-		$('.fr-command[id^="undo"]').addClass('fr-hidden');
-		$('.fr-command[id^="redo"]').addClass('fr-hidden');
-		$('.fr-command[id^="fullscreen"]').addClass('fr-hidden');
+		$('.active-in-fullscreen .fr-toolbar .fr-command').removeClass('fr-hidden');
+		$('.active-in-fullscreen .fr-command[id^="undo"]').addClass('fr-hidden');
+		$('.active-in-fullscreen .fr-command[id^="redo"]').addClass('fr-hidden');
+		$('.active-in-fullscreen .fr-command[id^="fullscreen"]').addClass('fr-hidden');
 	}
 
 	function initializeFroalaEditor() {
-		$('#shopify_api_product_body_html, #shopify_api_page_body_html').froalaEditor({
+		$('.make-rich-text-editor').froalaEditor({
 			toolbarButtons: [
 				'paragraphFormat', 
 				'bold', 
@@ -416,12 +416,14 @@ function ready() {
 				hideRTEButtons();
 			}
 		});
-		$('#shopify_api_product_body_html, #shopify_api_page_body_html').on('froalaEditor.commands.after', function (e, editor, cmd, param1, param2) {
+		$('.make-rich-text-editor').on('froalaEditor.commands.after', function (e, editor, cmd, param1, param2) {
+			var $this = $(this);
 
   		function exitFullscreen() {
-				if ($('#shopify_api_product_body_html, #shopify_api_page_body_html').froalaEditor('fullscreen.isActive')) {
-		  		$('#description-label').after($('.fr-box'));
-					$('#shopify_api_product_body_html, #shopify_api_page_body_html').froalaEditor('fullscreen.toggle');
+  			console.log($this.attr('id'), $this.prevAll('.fr-box'));
+				if ($this.froalaEditor('fullscreen.isActive')) {
+		  		$('label[for="'+$this.attr('id')+'"]').after($('.fr-box.active-in-fullscreen').removeClass('active-in-fullscreen'));
+					$this.froalaEditor('fullscreen.toggle');
 		  		hideRTEButtons();
 		  		$('.fr-top.fr-toolbar').css('z-index', 4);
 		  		$('#frWysiwygFullscreenOverlay').remove();
@@ -429,9 +431,7 @@ function ready() {
 			}
 
 		  if (cmd === "fullscreen") {
-		  	if ($('.fr-box').hasClass('fr-fullscreen')) {
-		  		showRTEButtons();
-
+		  	if ($this.prevAll('.fr-box').hasClass('fr-fullscreen')) {
 					var $overlay = $('<div id="frWysiwygFullscreenOverlay" class="editModalOverlay">');
 					$overlay.click(exitFullscreen);
 
@@ -456,7 +456,9 @@ function ready() {
 	        $overlay.find('button.cancel').click(exitFullscreen);
 
 					$('body').append($overlay);
-	        $('#fullscreen-wysiwyg-container').append($('.fr-box'));
+	        $('#fullscreen-wysiwyg-container').append($this.prevAll('.fr-box').addClass('active-in-fullscreen'));
+
+		  		showRTEButtons();
 
 		  	} else {
 		  		exitFullscreen();
@@ -884,7 +886,7 @@ function ready() {
 
 			  new_html += '<li class="variable">';
 			  new_html += '<button type="button" class="sidebyside_small warning icon-trash" data-id="'+resource_object[i].id+'" data-resource="'+data_resource+'"></button>'
-			  if (data_resource === 'product' || data_resource === 'page') {
+			  if (data_resource === 'product' || data_resource === 'page' || data_resource === 'blog') {
 					new_html += '<a href="/dashboard?resource='+data_resource+'&id='+resource_object[i].id+'" target="'+resource_infomation.target+'" data-handle="' + resource_object[i].handle + '" data-id="'+resource_object[i].id+'">';
 				} else {
 					new_html += '<a href="https://'+$('body').data('shopify-url')+'/admin/'+data_resource.replace('blog', 'article').replace(/smart_|custom_/, '')+'s/'+resource_object[i].id+'" target="_blank" data-handle="' + resource_object[i].handle + '" data-id="'+resource_object[i].id+'">';
@@ -1409,10 +1411,11 @@ function ready() {
 	});
 
 	$('#resource-section').on('keyup', '#tag-field', function(e) {
+		var resource = $(this).data('resource');
 		$('.tag-error').hide();
     if (e.key === ',') {
     	var tag_text = $(this).val().replace(',', '');
-    	var tag_list = $('#shopify_api_product_tags').val().split(',').filter(function(value) {
+    	var tag_list = $('#shopify_api_'+resource+'_tags').val().split(',').filter(function(value) {
     		return value !== '';
     	}).map(function(value, index) {
 	  		return value.trim();
@@ -1425,7 +1428,7 @@ function ready() {
     		$('.tag-error').show();
     	} else {
 	    	tag_list.push(tag_text.trim())
-				$('#shopify_api_product_tags').val(tag_list.join(','));
+				$('#shopify_api_'+resource+'_tags').val(tag_list.join(','));
 	    	$(this).val('');
 	    	tag = '<span class="tag teal remove">'+tag_text+'<a href="#"></a></span>';
 	    	$('.tags-container').append(tag);
@@ -2252,6 +2255,14 @@ function ready() {
 			product_id: product_id,
 			image_id: image_id
 		});
+	});
+
+	$('#shopify_api_article_blog_id').change(function() {
+		if ($(this).val() === 'create_new_blog') {
+			$('.new_blog_container').show();
+		} else {
+			$('.new_blog_container').hide();
+		}
 	});
 
 	$('#resource-section').on('click', '.info-icon', function() {
