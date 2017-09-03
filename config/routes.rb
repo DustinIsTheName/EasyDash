@@ -34,7 +34,6 @@ Rails.application.routes.draw do
     post '/edit-options' => :edit_options
     post '/add-product-images' => :add_product_images
     post '/add-image-from-url' => :add_image_from_url
-    post '/add-article-image' => :add_article_image
     post '/add-image-to-theme' => :add_image_to_theme
     post '/change-image-order' => :change_image_order
     post '/delete-image' => :delete_image

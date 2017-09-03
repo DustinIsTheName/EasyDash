@@ -206,15 +206,6 @@ class UnembeddedController < ApplicationController
     render json: product.images
   end
 
-  def add_article_image
-    article = API.addArticleImage(params)
-    if a.attributes["image"]
-      render json: article.image
-    else
-      render json: nil
-    end
-  end
-
   def add_image_to_theme
     puts Colorize.magenta(params)
     @shop = Shop.find_by_shopify_domain(@shop_session.url)
