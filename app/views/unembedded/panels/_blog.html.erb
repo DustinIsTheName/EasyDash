@@ -59,10 +59,10 @@
     <div class="divider"></div>
     <div class="row no_margin">
       <label class="extra_margin">
-        <input type="radio" name="shopify_api_page[published_at]" value="true"<% if @resource.published_at %> checked="checked"<% end %>>Visible <span class="subdued"><%= if @resource.published_at then Time.parse(@resource.published_at).strftime('(as of %F %I:%M%P %Z)') else Time.now.strftime('(as of %F %I:%M%P %Z)') end %></span>
+        <input type="radio" name="shopify_api_article[published_at]" value="true"<% if @resource.published_at %> checked="checked"<% end %>>Visible <span class="subdued"><%= if @resource.published_at then Time.parse(@resource.published_at).strftime('(as of %F %I:%M%P %Z)') else Time.now.strftime('(as of %F %I:%M%P %Z)') end %></span>
       </label>
       <label class="extra_margin">
-        <input type="radio" name="shopify_api_page[published_at]" value="false"<% unless @resource.published_at %> checked="checked"<% end %>>Hidden</label>
+        <input type="radio" name="shopify_api_article[published_at]" value="false"<% unless @resource.published_at %> checked="checked"<% end %>>Hidden</label>
       <a href="#" class="tip" data-hover="Set publish date coming soon">Set a specific publish date</a>
     </div>
   </div>

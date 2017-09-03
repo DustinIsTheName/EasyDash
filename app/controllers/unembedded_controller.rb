@@ -44,10 +44,10 @@ class UnembeddedController < ApplicationController
     # get_resources
     case @type
     when 'blog'
-      @resource = if params[:id] == 'new' 
-        ShopifyAPI::Article.new
+      if params[:id] == 'new' 
+        @resource = ShopifyAPI::Article.new(id: 'new',title: '', body_html: '', summary_html: '', created_at: '', blog_id: '', handle: '', updated_at: '', published_at: nil, tags: '', template_suffix: '')
       else 
-        ShopifyAPI::Article.find(params[:id])
+        @resource = ShopifyAPI::Article.find(params[:id])
       end
       @blogs = ShopifyAPI::Blog.all
       @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
@@ -129,6 +129,13 @@ class UnembeddedController < ApplicationController
     puts Colorize.magenta(params)
     case params[:resource]
     when 'blog'
+      validation = Validate.blog(params)
+      if validation.is_valid
+        blog = API.updateBlog(params)
+        render json: blog
+      else
+        render json: validation
+      end
     when 'collection'
     when 'page'
       validation = Validate.page(params)

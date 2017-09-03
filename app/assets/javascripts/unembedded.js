@@ -574,12 +574,12 @@ function ready() {
 	      new_html += '<input value="title_tag" class="new_field" type="hidden" name="new_metafields[][name]" id="new_metafields__name">';
 	      new_html += '<label for="new_field_title">Page title</label>';
 	      new_html += '<input class="new_field" id="new_field_title" type="text" name="new_metafields[][value]">';
-				$('.title_tag_container').append(new_html);
+				$('.title_tag_container').html(new_html);
 				new_html = '';
         new_html += '<input value="description_tag" class="new_field" type="hidden" name="new_metafields[][name]" id="new_metafields__name">';
         new_html += '<label for="new_field_description">Meta description</label>';
         new_html += '<textarea class="new_field" id="new_field_description" name="new_metafields[][value]"></textarea>';
-        $('.description_tag_container').append(new_html);
+        $('.description_tag_container').html(new_html);
 		  	$this.hide();
 		  	$('.reveal-target[data-reveal="'+reveal+'"]').show(); 
 			} else {
@@ -603,12 +603,12 @@ function ready() {
 					if (title_tag) {
 	          new_html += '<label for="metafields_'+title_tag.id+'_value">Page title</label>';
 	          new_html += '<input type="text" value="'+title_tag.value+'" name="metafields['+title_tag.id+'][value]" id="metafields_'+title_tag.id+'_value">';
-						$('.title_tag_container').append(new_html);
+						$('.title_tag_container').html(new_html);
 					}	else {
 	          new_html += '<input value="title_tag" class="new_field" type="hidden" name="new_metafields[][name]" id="new_metafields__name">';
 	          new_html += '<label for="new_field_title">Page title</label>';
 	          new_html += '<input class="new_field" id="new_field_title" type="text" name="new_metafields[][value]">';
-						$('.title_tag_container').append(new_html);
+						$('.title_tag_container').html(new_html);
 	        }
 
 	        new_html = '';
@@ -616,12 +616,12 @@ function ready() {
 					if (description_tag) {
 	          new_html += '<label for="metafields_'+description_tag.id+'_value">Page title</label>';
 	          new_html += '<textarea type="text" name="metafields['+description_tag.id+'][value]" id="metafields_'+description_tag.id+'_value">'+description_tag.value+'</textarea>';
-						$('.description_tag_container').append(new_html);
+						$('.description_tag_container').html(new_html);
 					}	else {
 	          new_html += '<input value="description_tag" class="new_field" type="hidden" name="new_metafields[][name]" id="new_metafields__name">';
 	          new_html += '<label for="new_field_description">Meta description</label>';
 	          new_html += '<textarea class="new_field" id="new_field_description" name="new_metafields[][value]"></textarea>';
-	          $('.description_tag_container').append(new_html);
+	          $('.description_tag_container').html(new_html);
 	        }
 
 			  	$this.hide();
@@ -1048,7 +1048,7 @@ function ready() {
 		console.log(resource.metafields_tracking);
 
 		$('#save_resource').removeClass('is-loading');
-		$('#shopify_api_'+resourceType+'_handle').val(resource.handle);
+		$('#shopify_api_'+resourceType.replace('blog','article')+'_handle').val(resource.handle);
 
 		if (resource.id) {
 		  if (resource.created_new_resource) {
@@ -1069,6 +1069,15 @@ function ready() {
 		  }
 	    // time to provide feedback
 		  flashMessage(resourceType.capitalize() + ' was successfully saved');
+
+		  currentIframeUrlArray = currentIframeUrl.split('/');
+		  currentIframeUrlArray.pop();
+		  currentIframeUrlArray.push(resource.handle + '?ediframe=true')
+		  currentIframeUrl = currentIframeUrlArray.join('/')
+		  if (resourceType === 'blog') {
+		  	currentIframeUrl = currentIframeUrl.replace(/blogs\/[a-z|-]*/, 'blogs/'+resource.blog_handle);
+		  }
+
 		  refreshIframe();
 			previousFormState = $('form.ajax').serialize();
 

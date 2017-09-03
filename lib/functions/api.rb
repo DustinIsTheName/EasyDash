@@ -22,7 +22,7 @@ class API
     @product.template_suffix = params["shopify_api_product"]["template_suffix"]
 
     if params["shopify_api_product"]["published_at"]
-      unless params["shopify_api_product"]["old_published_at"]
+      unless @product.attributes["published_at"]
         @product.published_at = Time.now
       end
     else
@@ -395,7 +395,7 @@ class API
     @page.template_suffix = params["shopify_api_page"]["template_suffix"]
 
     if params["shopify_api_page"]["published_at"] == 'true'
-      unless params["shopify_api_page"]["old_published_at"]
+      unless @page.attributes["published_at"]
         @page.published_at = Time.now
       end
     else
@@ -452,6 +452,9 @@ class API
 
     if @page.save
       puts Colorize.green(@page.title + ' saved')
+      if params[:id] == 'new'
+        created_new_page = true
+      end
     else 
       puts Colorize.red(@page.errors.messages)
     end
@@ -460,6 +463,106 @@ class API
     @page.metafields_tracking = @page.metafields
 
     @page
+  end
+
+  def self.updateBlog(params)
+    created_new_blog = false
+
+    if params[:id] == "new"
+      @article = ShopifyAPI::Article.new
+    else
+      @article = ShopifyAPI::Article.find(params[:id])
+    end
+
+    old_article = ShopifyAPI::Article.new(@article.attributes)
+
+    @article.title = params["shopify_api_article"]["title"]
+    @article.body_html = params["shopify_api_article"]["body_html"]
+    @article.summary_html = params["shopify_api_article"]["summary_html"]
+    if params["shopify_api_article"]["blog_id"] == 'create_new_blog'
+      @blog = ShopifyAPI::Blog.new
+      @blog.title = params["shopify_api_article"]["new_blog_title"]
+      @blog.save
+      
+      @article.blog_id = @blog.id
+    else
+      @article.blog_id = params["shopify_api_article"]["blog_id"]
+      @blog = ShopifyAPI::Blog.find(params["shopify_api_article"]["blog_id"])
+      puts Colorize.purple(@blog.handle)
+    end
+    @article.tags = params["shopify_api_article"]["tags"]
+    @article.handle = params["shopify_api_article"]["handle"]
+    @article.template_suffix = params["shopify_api_article"]["template_suffix"]
+
+    if params["shopify_api_article"]["published_at"] == 'true'
+      unless @article.attributes["published_at"]
+        @article.published_at = Time.now
+      end
+    else
+      @article.published_at = nil
+    end
+
+    # loop through page metafields, update and save any new information
+    unless params[:id] == "new"
+      @article.metafields.each do |metafield|
+        old_metafield = ShopifyAPI::Metafield.new(metafield.attributes)
+        if params["metafields"]
+          m = params["metafields"][metafield.id.to_s]
+        end
+
+        if m
+          if m["value"] == ""
+            puts Colorize.red(metafield.key + ' deleted')
+            metafield.destroy
+          else
+            metafield.value = m["value"]
+            
+            if old_metafield.attributes == metafield.attributes
+              puts Colorize.cyan(metafield.key + ' skipped')
+            else
+              if metafield.save
+                puts Colorize.green(metafield.key + ' saved ') + Colorize.orange(ShopifyAPI.credit_left)
+              else
+                puts Colorize.red(metafield.errors.messages)
+              end
+            end
+          end
+        end
+      end
+    else
+      if @article.save
+        puts Colorize.green(@article.title + ' saved')
+      else 
+        puts Colorize.red(@article.errors.messages)
+      end
+    end
+
+    # loop through any new metafields and create them
+    if params["new_metafields"]
+      params["new_metafields"].each do |new_metafield|
+        @article.add_metafield(ShopifyAPI::Metafield.new({
+          namespace: 'global',
+          key: new_metafield["name"],
+          value: new_metafield["value"],
+          value_type: 'string'
+        }))
+      end
+    end
+
+    if @article.save
+      puts Colorize.green(@article.title + ' saved')
+      if params[:id] == 'new'
+        created_new_blog = true
+      end
+    else 
+      puts Colorize.red(@article.errors.messages)
+    end
+
+    @article.created_new_resource = created_new_blog
+    @article.metafields_tracking = @article.metafields
+    @article.blog_handle = @blog.handle
+
+    @article
   end
 
   def self.updateVariantImage(variant_id, image_id)

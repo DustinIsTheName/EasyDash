@@ -85,4 +85,24 @@ class Validate
 		{ is_valid: true }.extend(LookLikeJSON)
 
 	end
+
+	def self.blog(params)
+
+		if params["shopify_api_article"]["title"].blank?
+			return {
+				error_message: "Title can't be blank",
+				is_valid: false
+			}.extend(LookLikeJSON)
+		end
+
+		if params["shopify_api_article"]["blog_id"] == 'create_new_blog' and params["shopify_api_article"]["new_blog_title"].blank?
+			return {
+				error_message: "Blog title can't be blank",
+				is_valid: false
+			}.extend(LookLikeJSON)
+		end
+
+		{ is_valid: true }.extend(LookLikeJSON)
+
+	end
 end
