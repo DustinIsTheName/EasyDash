@@ -1075,7 +1075,14 @@ function ready() {
 		  currentIframeUrlArray.push(resource.handle + '?ediframe=true')
 		  currentIframeUrl = currentIframeUrlArray.join('/')
 		  if (resourceType === 'blog') {
-		  	currentIframeUrl = currentIframeUrl.replace(/blogs\/[a-z|-]*/, 'blogs/'+resource.blog_handle);
+		  	currentIframeUrl = currentIframeUrl.replace(/blogs\/[a-z|-]*/, 'blogs/'+resource.blog.handle);
+
+		  	if ($('#shopify_api_article_blog_id option[value="'+resource.blog.id+'"]').length === 0) {
+		  		$('#shopify_api_article_blog_id option[value="separator"]').before('<option value="'+resource.blog.id+'">'+resource.blog.title+'</option>');
+		  		$('#shopify_api_article_blog_id').val(resource.blog.id);
+		  		$('#shopify_api_article_new_blog_title').val('');
+		  		$('.new_blog_container').hide();
+		  	}
 		  }
 
 		  refreshIframe();
@@ -1933,6 +1940,20 @@ function ready() {
 		closeModal($('#addImageUrlOverlay'));
   }
 
+	function getBase64(file, total_files, data, callback) {
+  	var reader = new FileReader();
+  	reader.readAsDataURL(file);
+  	reader.onload = function () {
+    	data.push(reader.result.replace(/data:image\/[a-z]{3,4};base64,/, ''));
+    	if (data.length === total_files) {
+    		callback(data);
+    	}
+  	};
+  	reader.onerror = function (error) {
+  		console.log('Error: ', error);
+  	};
+	}
+
 	$('#resource-section').on('change', '#shopify_api_product_file', function() {
 		var data = [];
 		var files = Array.from(this.files);
@@ -1940,22 +1961,8 @@ function ready() {
 		$('#variant-add-image').addClass('is-loading');
 		$('body').addClass('is-loading-body');
 
-		function getBase64(file, total_files, callback) {
-	  	var reader = new FileReader();
-	  	reader.readAsDataURL(file);
-	  	reader.onload = function () {
-	    	data.push(reader.result.replace(/data:image\/[a-z]{3,4};base64,/, ''));
-	    	if (data.length === total_files) {
-	    		callback(data);
-	    	}
-	  	};
-	  	reader.onerror = function (error) {
-	  		console.log('Error: ', error);
-	  	};
-		}
-
 		files.forEach(function(file) {
-			getBase64(file, files.length, function(data) {
+			getBase64(file, files.length, data, function(data) {
 				if ($('[name="id"]').val() === 'new') {
 					$('.images-container .column.twelve').remove();
 			  	$('#shopify_api_product_file').val('');
@@ -1987,18 +1994,53 @@ function ready() {
 				} else {
 					$.ajax({
 			      type: "POST",
-			      url: '/add-images', // sumbits it to the given url of the form
+			      url: '/add-product-images',
 			      data: {
 			      	id: $('[name="id"]').val(),
 			      	images: data
 			      },
-			      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+			      dataType: "JSON" 
 					}).success(addImagesCallback).error(function(e) {
 			    	console.log(e);
 			    });
 			  }
 			});
 		});
+	});
+
+	$('#resource-section').on('change', '#shopify_api_article_file', function() {
+		var new_image = this.files[0];
+		var reader = new FileReader();
+		reader.readAsDataURL(new_image);
+  	reader.onload = function () {
+  		imageBase64 = reader.result.replace(/data:image\/[a-z]{3,4};base64,/, '')
+
+    	$('#shopify_api_article_file').val('');
+
+  		var image_html = '';
+      image_html += '<div class="article-image">';
+      	image_html += '<input type="hidden" name="shopify_api_article[file]" value="'+imageBase64+'">';
+        image_html += '<img src="data:image/png;base64,'+imageBase64+'">';
+      image_html += '</div>';
+      image_html += '<label class="update">Update</label>';
+      image_html += '<a href="#" class="remove">Remove</a>';
+
+      $('.featured_image_container').html(image_html);
+  	};
+	});
+
+	$('#resource-section').on('click', '.featured_image .featured_image_container .remove', function(e) {
+		e.preventDefault();
+
+		var image_html = '';
+	  image_html += '<div class="column twelve type--centered">';
+		  image_html += '<input type="hidden" name="shopify_api_article[file]" value="remove_image">';
+	    image_html += '<i class="icon-image next-icon--size-40"></i>';
+	    image_html += '<label for="shopify_api_article_file" class="primary button">Upload image</label>';
+		image_html += '</div>';
+
+		$('.featured_image_container').html(image_html);
+
 	});
 
 	$('#modals-container').on('click', '#add-image-from-url', function() {

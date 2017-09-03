@@ -194,9 +194,9 @@ class UnembeddedController < ApplicationController
     render json: product.options
   end
 
-  def add_images
+  def add_product_images
     # puts Colorize.magenta(params)
-    product = API.addImages(params)
+    product = API.addProductImages(params)
     render json: product.images
   end
 
@@ -204,6 +204,15 @@ class UnembeddedController < ApplicationController
     # puts Colorize.magenta(params)
     product = API.addImageFromURL(params)
     render json: product.images
+  end
+
+  def add_article_image
+    article = API.addArticleImage(params)
+    if a.attributes["image"]
+      render json: article.image
+    else
+      render json: nil
+    end
   end
 
   def add_image_to_theme

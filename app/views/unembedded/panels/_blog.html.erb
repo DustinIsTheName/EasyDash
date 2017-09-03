@@ -70,18 +70,21 @@
 <article>
   <div class="card secondary featured_image">
     <h5>Featured image</h5>
-    <% if @resource.attributes["image"] %>
-      <div class="product-image">
-        <img src="<%= @resource.image.src %>">
-      </div>
-      <a href="#" class="update">Update</a>
-      <a href="#" class="remove">Remove</a>
-    <% else %>
-      <div class="column twelve type--centered">
-        <i class="icon-image next-icon--size-40"></i>
-        <button class="primary">Upload image</button>
-  		</div>
-    <% end %>
+    <div class="featured_image_container">
+      <% if @resource.attributes["image"] %>
+        <div class="article-image">
+          <img src="<%= @resource.image.src %>">
+        </div>
+        <label for="shopify_api_article_file" class="update">Update</label>
+        <a href="#" class="remove">Remove</a>
+      <% else %>
+        <div class="column twelve type--centered">
+          <i class="icon-image next-icon--size-40"></i>
+          <label for="shopify_api_article_file" class="primary button">Upload image</label>
+    		</div>
+      <% end %>
+    </div>
+    <%= o.file_field "file", multiple: false, accept: "image/*", class: "image-upload" %>
   </div>
 </article>
 <article>

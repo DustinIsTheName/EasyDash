@@ -131,6 +131,10 @@ a {
   &+ input[type="file"] {display: none;}
 }
 
+#shopify_api_article_file {
+  display: none;
+}
+
 .type--right { text-align: right; }
 .type--left { text-align: left; }
 .type--centered { text-align: center; }
@@ -628,7 +632,7 @@ label .icon-calendar { float: right; margin-top: 2px; }
       
 
       .featured_image {
-        .product-image {
+        .article-image {
           width: 100%;
           background: #fafbfc;
           border: 1px solid rgba(195, 207, 216, 0.3);
@@ -781,11 +785,20 @@ label .icon-calendar { float: right; margin-top: 2px; }
             margin-top: 67px;
           }
           
-          button {
+          label.primary {
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
             margin-top: 132px;
+          }
+        }
+
+        .featured_image_container {
+
+          label.update {
+            color: $witty-teal;
+            cursor: pointer;
+            display: inline;
           }
         }
       }

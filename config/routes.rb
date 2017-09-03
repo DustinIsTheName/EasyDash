@@ -32,8 +32,9 @@ Rails.application.routes.draw do
     post '/variant-image' => :update_variant_image
     post '/reorder-variants' => :reorder_variants
     post '/edit-options' => :edit_options
-    post '/add-images' => :add_images
+    post '/add-product-images' => :add_product_images
     post '/add-image-from-url' => :add_image_from_url
+    post '/add-article-image' => :add_article_image
     post '/add-image-to-theme' => :add_image_to_theme
     post '/change-image-order' => :change_image_order
     post '/delete-image' => :delete_image

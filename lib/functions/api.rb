@@ -494,6 +494,14 @@ class API
     @article.handle = params["shopify_api_article"]["handle"]
     @article.template_suffix = params["shopify_api_article"]["template_suffix"]
 
+    if params["shopify_api_article"]["file"]
+      if params["shopify_api_article"]["file"] == 'remove_image'
+        @article.image = nil
+      else
+        @article.image = {attachment: params["shopify_api_article"]["file"]}
+      end
+    end
+
     if params["shopify_api_article"]["published_at"] == 'true'
       unless @article.attributes["published_at"]
         @article.published_at = Time.now
@@ -560,7 +568,7 @@ class API
 
     @article.created_new_resource = created_new_blog
     @article.metafields_tracking = @article.metafields
-    @article.blog_handle = @blog.handle
+    @article.blog = @blog
 
     @article
   end
@@ -702,7 +710,7 @@ class API
     end
   end
 
-  def self.addImages(params)
+  def self.addProductImages(params)
     product = ShopifyAPI::Product.find(params[:id])
     images = params[:images]
     if images
