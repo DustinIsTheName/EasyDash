@@ -131,7 +131,8 @@ a {
   &+ input[type="file"] {display: none;}
 }
 
-#shopify_api_article_file {
+#shopify_api_article_file,
+#shopify_api_custom_collection_file {
   display: none;
 }
 
@@ -704,10 +705,12 @@ label .icon-calendar { float: right; margin-top: 2px; }
         
         p.extra_margin { margin-bottom: 2rem; }
 
-        .collection {
+        .collection,
+        .product {
           padding: 10px;
 
-          &+ .collection {
+          &+ .collection,
+          &+ .product {
             border-top: 1px solid #ebeef0;
           }
 
@@ -1620,6 +1623,10 @@ label .icon-calendar { float: right; margin-top: 2px; }
 
   &.scroll {
     top: 66px;
+  }
+
+  input[data-exceptions="collection-panel"] + & {
+    top: 95px;
   }
 
   .dropdown-arrow {

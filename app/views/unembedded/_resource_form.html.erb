@@ -57,7 +57,7 @@
       <div class="wittyEDPanel active" data-tier="2">
         <header class="theme-editor__header theme-editor__header--no-shadow">
           <button class="btn btn--plain theme-editor__header-action icon-prev prev-pannel check-for-unsaved" aria-label="Back to sections" type="button" name="button"></button>
-          <h2 class="ui-heading theme-editor__heading"><%= @type %></h2>
+          <h2 class="ui-heading theme-editor__heading"><%= @type.gsub('custom_', '').gsub('smart_', '') %></h2>
           <a class="btn_more" href=""><% svgs 'more_teal' %></a>
         </header><!-- .theme-editor__header -->
         <div class="wittyEDPanelBody">

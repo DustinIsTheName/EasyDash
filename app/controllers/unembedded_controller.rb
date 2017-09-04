@@ -347,7 +347,7 @@ class UnembeddedController < ApplicationController
       @cc = ShopifyAPI::CustomCollection.find(:all, params: api_params)
       @cc.each do |c|
         @collections << c
-       end
+      end
 
       @sc = ShopifyAPI::SmartCollection.find(:all, params: api_params)
       @sc.each do |c|
