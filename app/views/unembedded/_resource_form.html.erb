@@ -47,7 +47,7 @@
     <div class="wittyEDPanel<% if @type == 'resource_select' %> active<% end %>" data-tier="1">
       <div class="drop-select-resouces wittyEDPanelBody">
         <div class="wittyEDTopButtons theme-editor__header"> 
-          <button type="button" class="sidebyside_85 primary next-pannel">Edit Product</button>
+          <button type="button" class="sidebyside_85 primary next-pannel">Edit <%= @type.gsub('custom_', '').gsub('smart_', '').capitalize %></button>
           <button type="button" class="sidebyside_15 warning icon-trash bottom left tip" data-hover="Delete Product"></button>
         </div>
         <%= panel 'resource_select' %>

@@ -105,4 +105,17 @@ class Validate
 		{ is_valid: true }.extend(LookLikeJSON)
 
 	end
+
+	def self.custom_collection(params)
+
+		if params["shopify_api_custom_collection"]["title"].blank?
+			return {
+				error_message: "Title can't be blank",
+				is_valid: false
+			}.extend(LookLikeJSON)
+		end
+
+		{ is_valid: true }.extend(LookLikeJSON)
+
+	end
 end

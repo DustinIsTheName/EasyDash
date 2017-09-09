@@ -68,11 +68,11 @@
   </div>
 </article>
 <article>
-  <div class="card secondary featured_image">
+  <div class="card secondary featured_image" data-resource="article">
     <h5>Featured image</h5>
     <div class="featured_image_container">
       <% if @resource.attributes["image"] %>
-        <div class="article-image">
+        <div class="featured-image">
           <img src="<%= @resource.image.src %>">
         </div>
         <label for="shopify_api_article_file" class="update">Update</label>
@@ -84,7 +84,7 @@
     		</div>
       <% end %>
     </div>
-    <%= o.file_field "file", multiple: false, accept: "image/*", class: "image-upload" %>
+    <%= o.file_field "file", multiple: false, accept: "image/*", class: "single-image-upload" %>
   </div>
 </article>
 <article>

@@ -21,7 +21,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <input type="search" class="resource-search" name="product-search" placeholder="Search for products" data-resource="product" data-exceptions="collection-panel">
+      <input type="search" class="resource-search" name="product-search" placeholder="Add products" data-resource="product" data-exceptions="collection-panel">
       <div class="select-sim-dropdown-container collection-pannel-product-select search" data-shop-url="<%= @shop_session.url %>">
         <div class="dropdown-arrow"></div>
         <ul class="select-sim-dropdown product" data-total="" data-resource="product" data-object="">
@@ -45,6 +45,8 @@
           </div>
         <% end %>
       <% end %>
+      <label>Sort:</label>
+      <%= o.select :sort_order, sort_order_options, {}, {class: "secondary"} %>
     </div>
   </div>
 </article>
@@ -94,11 +96,11 @@
   </div>
 </article>
 <article>
-  <div class="card secondary collection_image featured_image">
+  <div class="card secondary featured_image" data-resource="custom_collection">
     <h5>Collection image</h5>
     <div class="featured_image_container">
       <% if @resource.attributes["image"] %>
-        <div class="article-image">
+        <div class="featured-image">
           <img src="<%= @resource.image.src %>">
         </div>
         <label for="shopify_api_custom_collection_file" class="update">Update</label>
@@ -110,7 +112,16 @@
         </div>
       <% end %>
     </div>
-    <%= o.file_field "file", multiple: false, accept: "image/*", class: "image-upload" %>
+    <%= o.file_field "file", multiple: false, accept: "image/*", class: "single-image-upload" %>
+  </div>
+</article>
+<article>
+  <div class="card secondary">
+    <h5>Template</h5>
+    <p>Select a template for this blog post.</p>
+    <label>Template suffix</label>
+    <%= o.select :template_suffix, template_suffix_options(@assets.select{|asset| asset.key.include? "templates/collection" }), {}, {class: "secondary"} %>
+    <!-- <em class="no_margin">The template customers see when viewing this product in your store.</em> -->
   </div>
 </article>
 <div class="wittyEDBottomButtons">

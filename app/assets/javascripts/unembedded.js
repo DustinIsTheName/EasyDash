@@ -533,6 +533,8 @@ function ready() {
 			  {
 			  	text: "Save & Leave", // extra button text
 			  	function: function() {
+			  		var resourceType = $('[name="resource"]').val();
+
 			  		$(this).addClass('is-loading');
 			  		$('.variant_input').prop('disabled', true);
 			  		var data = $('form.ajax').serialize();
@@ -544,13 +546,13 @@ function ready() {
 				    }).success(function(event, product) {
 				    	$('#confirmBoxOverlay').remove();
 
-				    	flashMessage('Product was successfully saved');
+				    	flashMessage(resourceType.replace('custom_', '').replace('smart_', '') + ' was successfully saved');
 				    	refreshForm(messageEvent);
 				    }).error(function(event, error) {
 		    	  	console.log(event, error);
 
 					  	$('.variant_input').prop('disabled', false);
-					  	flashMessage('Product was not saved', 'error');
+					  	flashMessage(resourceType.replace('custom_', '').replace('smart_', '').capitalize() + ' was not saved', 'error');
 				    });
 			  	}
 			  });
@@ -1026,7 +1028,7 @@ function ready() {
     new_html += '<span class="icon-close"></span>';
     new_html += '</div>';
 
-		$('.resource-search[data-exceptions="collection-panel"]').before('<input value="'+id+'" id="product_'+id+'" type="hidden" name="collections[]">');
+		$('.resource-search[data-exceptions="collection-panel"]').before('<input value="'+id+'" id="product_'+id+'" type="hidden" name="products[]">');
     $('.collection-pannel-product-select').after(new_html);
 	});
 
@@ -1098,7 +1100,7 @@ function ready() {
 		    }
 		  }
 	    // time to provide feedback
-		  flashMessage(resourceType.capitalize() + ' was successfully saved');
+		  flashMessage(resourceType.replace('custom_', '').replace('smart_', '').capitalize() + ' was successfully saved');
 
 		  currentIframeUrlArray = currentIframeUrl.split('/');
 		  currentIframeUrlArray.pop();
@@ -1163,11 +1165,12 @@ function ready() {
     $('.variant_input').prop('disabled', false);
 	});
 
-	$('#resource-section').on("ajax:error", 'form.ajax', function(event, error){
+	$('#resource-section').on("ajax:error", 'form.ajax', function(event, error) {
+		var resourceType = $('[name="resource"]').val();
   	console.log(event, error);
 
   	$('.variant_input').prop('disabled', false);
-  	flashMessage('Product was not saved', 'error');
+  	flashMessage(resourceType + ' was not saved', 'error');
 	});
 
 	$('#resource-section').on('click', '.theme-editor__heading .more', function(e) {
@@ -2038,21 +2041,22 @@ function ready() {
 		});
 	});
 
-	$('#resource-section').on('change', '#shopify_api_article_file', function() {
+	$('#resource-section').on('change', '.single-image-upload', function() {
+		var resource = $(this).parent().data('resource');
 		var new_image = this.files[0];
 		var reader = new FileReader();
 		reader.readAsDataURL(new_image);
   	reader.onload = function () {
   		imageBase64 = reader.result.replace(/data:image\/[a-z]{3,4};base64,/, '')
 
-    	$('#shopify_api_article_file').val('');
+    	$('.single-image-upload').val('');
 
   		var image_html = '';
-      image_html += '<div class="article-image">';
-      	image_html += '<input type="hidden" name="shopify_api_article[file]" value="'+imageBase64+'">';
+      image_html += '<div class="featured-image">';
+      	image_html += '<input type="hidden" name="shopify_api_'+resource+'[file]" value="'+imageBase64+'">';
         image_html += '<img src="data:image/png;base64,'+imageBase64+'">';
       image_html += '</div>';
-      image_html += '<label class="update">Update</label>';
+      image_html += '<label for="shopify_api_'+resource+'_file" class="update">Update</label>';
       image_html += '<a href="#" class="remove">Remove</a>';
 
       $('.featured_image_container').html(image_html);
@@ -2061,12 +2065,13 @@ function ready() {
 
 	$('#resource-section').on('click', '.featured_image .featured_image_container .remove', function(e) {
 		e.preventDefault();
+		var resource = $(this).parent().parent().data('resource');
 
 		var image_html = '';
 	  image_html += '<div class="column twelve type--centered">';
-		  image_html += '<input type="hidden" name="shopify_api_article[file]" value="remove_image">';
+		  image_html += '<input type="hidden" name="shopify_api_'+resource+'[file]" value="remove_image">';
 	    image_html += '<i class="icon-image next-icon--size-40"></i>';
-	    image_html += '<label for="shopify_api_article_file" class="primary button">Upload image</label>';
+	    image_html += '<label for="shopify_api_'+resource+'_file" class="primary button">Upload image</label>';
 		image_html += '</div>';
 
 		$('.featured_image_container').html(image_html);

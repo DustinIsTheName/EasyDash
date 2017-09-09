@@ -52,7 +52,12 @@ class UnembeddedController < ApplicationController
       @blogs = ShopifyAPI::Blog.all
       @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
     when 'custom_collection'
-      @resource = params[:id] == 'new' ? ShopifyAPI::CustomCollection.new : ShopifyAPI::CustomCollection.find(params[:id])
+      if params[:id] == 'new'
+        @resource = ShopifyAPI::CustomCollection.new 
+      else
+        @resource = ShopifyAPI::CustomCollection.find(params[:id])
+      end
+      @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
     when 'smart_collection'
       @resource = params[:id] == 'new' ? ShopifyAPI::SmartCollection.new : ShopifyAPI::SmartCollection.find(params[:id])
     when 'page'
@@ -136,7 +141,14 @@ class UnembeddedController < ApplicationController
       else
         render json: validation
       end
-    when 'collection'
+    when 'custom_collection'
+      validation = Validate.custom_collection(params)
+      if validation.is_valid
+        custom_collection = API.updateCustomCollection(params)
+        render json: custom_collection
+      else
+        render json: validation
+      end
     when 'page'
       validation = Validate.page(params)
       if validation.is_valid

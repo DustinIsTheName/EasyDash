@@ -573,6 +573,127 @@ class API
     @article
   end
 
+  def self.updateCustomCollection(params)
+    created_new_custom_collection = false
+
+    if params[:id] == "new"
+      @custom_collection = ShopifyAPI::CustomCollection.new
+    else
+      @custom_collection = ShopifyAPI::CustomCollection.find(params[:id])
+    end
+
+    old_article = ShopifyAPI::CustomCollection.new(@custom_collection.attributes)
+
+    @custom_collection.title = params["shopify_api_custom_collection"]["title"]
+    @custom_collection.body_html = params["shopify_api_custom_collection"]["body_html"]
+    @custom_collection.sort_order = params["shopify_api_custom_collection"]["sort_order"]
+
+    @custom_collection.tags = params["shopify_api_custom_collection"]["tags"]
+    @custom_collection.handle = params["shopify_api_custom_collection"]["handle"]
+    @custom_collection.template_suffix = params["shopify_api_custom_collection"]["template_suffix"]
+
+    if params["shopify_api_custom_collection"]["file"]
+      if params["shopify_api_custom_collection"]["file"] == 'remove_image'
+        @custom_collection.image = nil
+      else
+        @custom_collection.image = {attachment: params["shopify_api_custom_collection"]["file"]}
+      end
+    end
+
+    # loop through page metafields, update and save any new information
+    unless params[:id] == "new"
+      @custom_collection.metafields.each do |metafield|
+        old_metafield = ShopifyAPI::Metafield.new(metafield.attributes)
+        if params["metafields"]
+          m = params["metafields"][metafield.id.to_s]
+        end
+
+        if m
+          if m["value"] == ""
+            puts Colorize.red(metafield.key + ' deleted')
+            metafield.destroy
+          else
+            metafield.value = m["value"]
+            
+            if old_metafield.attributes == metafield.attributes
+              puts Colorize.cyan(metafield.key + ' skipped')
+            else
+              if metafield.save
+                puts Colorize.green(metafield.key + ' saved ') + Colorize.orange(ShopifyAPI.credit_left)
+              else
+                puts Colorize.red(metafield.errors.messages)
+              end
+            end
+          end
+        end
+      end
+    else
+      if @custom_collection.save
+        puts Colorize.green(@custom_collection.title + ' saved')
+      else 
+        puts Colorize.red(@custom_collection.errors.messages)
+      end
+    end
+
+    # loop through any new metafields and create them
+    if params["new_metafields"]
+      params["new_metafields"].each do |new_metafield|
+        @custom_collection.add_metafield(ShopifyAPI::Metafield.new({
+          namespace: 'global',
+          key: new_metafield["name"],
+          value: new_metafield["value"],
+          value_type: 'string'
+        }))
+      end
+    end
+
+    # add or remove collections from the product
+    if params["products"]
+      new_products = params["products"].map{|par| par.to_i}
+    else
+      new_products = []
+    end
+    if params[:id] == 'new'
+      add_products = new_products
+    else
+      old_products = @custom_collection.products.map{|c| c.id.to_i}
+      remove_products = old_products - new_products
+      add_products = new_products - old_products
+
+      remove_products.each do |r|
+        if ShopifyAPI::Collect.find(:first, params: {product_id: r, collection_id: params[:id]}).destroy
+          puts Colorize.red('deleted Collect')
+        else
+          puts Colorize.red('something went wrong')
+        end
+      end
+    end
+
+    add_products.each do |a|
+      collection_id = params[:id] == 'new' ? @custom_collection.id : params[:id]
+
+      if ShopifyAPI::Collect.create(product_id: a, collection_id: collection_id)
+        puts Colorize.green('created Collect')
+      else
+        puts Colorize.red('something went wrong')
+      end
+    end
+
+    if @custom_collection.save
+      puts Colorize.green(@custom_collection.title + ' saved')
+      if params[:id] == 'new'
+        created_new_custom_collection = true
+      end
+    else 
+      puts Colorize.red(@custom_collection.errors.messages)
+    end
+
+    @custom_collection.created_new_resource = created_new_custom_collection
+    @custom_collection.metafields_tracking = @custom_collection.metafields
+
+    @custom_collection
+  end
+
   def self.updateVariantImage(variant_id, image_id)
     variant = ShopifyAPI::Variant.find(variant_id)
     if image_id == 'destroy'

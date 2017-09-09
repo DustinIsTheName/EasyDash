@@ -15,6 +15,21 @@ module OptionsHelper
 		]
 	end
 
+	def sort_order_options
+
+		[
+			['Manually', 'manual'],
+			['By best selling', 'best-selling'],
+			['Alphabetically: A-Z', 'alpha-asc'],
+			['Alphabetically: Z-A', 'alpha-desc'],
+			['By price: Highest to lowest', 'price-desc'],
+			['By price: Lowest to highest', 'price-asc'],
+			['By date: Newest to oldest', 'created-desc'],
+			['By date: Oldest to newest', 'created']
+		]
+
+	end
+
 	def fulfillment_service_options(fulfillment_services)
 		options = [
 			['Manual', 'manual']
