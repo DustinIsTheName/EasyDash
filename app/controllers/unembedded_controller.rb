@@ -59,7 +59,12 @@ class UnembeddedController < ApplicationController
       end
       @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
     when 'smart_collection'
-      @resource = params[:id] == 'new' ? ShopifyAPI::SmartCollection.new : ShopifyAPI::SmartCollection.find(params[:id])
+      if params[:id] == 'new'
+        @resource = ShopifyAPI::SmartCollection.new
+      else 
+        @resource = ShopifyAPI::SmartCollection.find(params[:id])
+      end
+     @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
     when 'page'
       if params[:id] == 'new' 
         @resource  = ShopifyAPI::Page.new(id: 'new',title: '', body_html: '', created_at: '', handle: '', updated_at: '', published_at: nil, template_suffix: '')
@@ -96,10 +101,14 @@ class UnembeddedController < ApplicationController
     case @type
     when 'blog'
       @resource = ShopifyAPI::Article.find(:first, params: {handle: params["handle"]})
+      @blogs = ShopifyAPI::Blog.all
+      @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
     when 'custom_collection'
       @resource = ShopifyAPI::CustomCollection.find(:first, params: {handle: params["handle"]})
+      @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
     when 'smart_collection'
       @resource = ShopifyAPI::SmartCollection.find(:first, params: {handle: params["handle"]})
+      @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
     when 'page'
       @resource = ShopifyAPI::Page.find(:first, params: {handle: params["handle"]})
       @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})

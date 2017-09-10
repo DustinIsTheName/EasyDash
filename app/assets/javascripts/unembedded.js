@@ -1039,6 +1039,35 @@ function ready() {
 		$(this).parent().remove();
 	});
 
+	$('#resource-section').on('click', '.add-condition', function(e) {
+		e.preventDefault();
+		var html = $(this).data('html');
+		$(this).before(html);
+	});
+
+	$('#resource-section').on('click', '.remove-condition', function(e) {
+		e.preventDefault();
+
+		$(this).parent().next().remove();
+		$(this).parent().remove();
+	});
+
+	$('#resource-section').on('change', '.shopify_api_smart_collection_rules__column', function() {
+		var $this = $(this);
+		var selected = $this.val();
+		var $option = $this.find('option[value="'+selected+'"]');
+		var exceptions = $option.data('exceptions').split('|');
+		
+		$this.next().find('option').prop('disabled', false);
+		exceptions.forEach(function(exception) {
+			$this.next().find('option[value="'+exception+'"]').prop('disabled', true);
+		});
+
+		if (!$this.next().val()) {
+			$this.next().val($this.next().find('option:not(:disabled)').val());
+		}
+	});
+
   // checkes variant checkboxes based on option value clicked
   $('#resource-section').on('click', '.variant-selector-link', function() {
   	var option = $(this).data('option');

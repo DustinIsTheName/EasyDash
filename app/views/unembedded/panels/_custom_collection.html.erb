@@ -118,9 +118,9 @@
 <article>
   <div class="card secondary">
     <h5>Template</h5>
-    <p>Select a template for this blog post.</p>
     <label>Template suffix</label>
-    <%= o.select :template_suffix, template_suffix_options(@assets.select{|asset| asset.key.include? "templates/collection" }), {}, {class: "secondary"} %>
+    <%= o.select :template_suffix, template_suffix_options(@assets.select{|asset| asset.key.include? "templates/collection" }), {}, {class: "secondary extra_margin"} %>
+    <em class="no_margin">The template customers see when viewing this collection in your store.</em>
     <!-- <em class="no_margin">The template customers see when viewing this product in your store.</em> -->
   </div>
 </article>
