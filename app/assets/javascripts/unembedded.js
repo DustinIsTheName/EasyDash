@@ -1043,6 +1043,8 @@ function ready() {
 		e.preventDefault();
 		var html = $(this).data('html');
 		$(this).before(html);
+
+		$('.remove-condition').show();
 	});
 
 	$('#resource-section').on('click', '.remove-condition', function(e) {
@@ -1050,6 +1052,10 @@ function ready() {
 
 		$(this).parent().next().remove();
 		$(this).parent().remove();
+
+		if ($('.remove-condition').length == 1) {
+			$('.remove-condition').hide();
+		}
 	});
 
 	$('#resource-section').on('change', '.shopify_api_smart_collection_rules__column', function() {

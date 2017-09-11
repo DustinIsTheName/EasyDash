@@ -588,7 +588,6 @@ class API
     @custom_collection.body_html = params["shopify_api_custom_collection"]["body_html"]
     @custom_collection.sort_order = params["shopify_api_custom_collection"]["sort_order"]
 
-    @custom_collection.tags = params["shopify_api_custom_collection"]["tags"]
     @custom_collection.handle = params["shopify_api_custom_collection"]["handle"]
     @custom_collection.template_suffix = params["shopify_api_custom_collection"]["template_suffix"]
 
@@ -598,6 +597,14 @@ class API
       else
         @custom_collection.image = {attachment: params["shopify_api_custom_collection"]["file"]}
       end
+    end
+
+    if params["shopify_api_custom_collection"]["published_at"] == 'true'
+      unless @custom_collection.attributes["published_at"]
+        @custom_collection.published_at = Time.now
+      end
+    else
+      @custom_collection.published = false
     end
 
     # loop through page metafields, update and save any new information
@@ -692,6 +699,113 @@ class API
     @custom_collection.metafields_tracking = @custom_collection.metafields
 
     @custom_collection
+  end
+
+  def self.updateSmartCollection(params)
+    created_new_smart_collection = false
+
+    if params[:id] == "new"
+      @smart_collection = ShopifyAPI::SmartCollection.new
+    else
+      @smart_collection = ShopifyAPI::SmartCollection.find(params[:id])
+    end
+
+    old_article = ShopifyAPI::SmartCollection.new(@smart_collection.attributes)
+
+    @smart_collection.title = params["shopify_api_smart_collection"]["title"]
+    @smart_collection.body_html = params["shopify_api_smart_collection"]["body_html"]
+    @smart_collection.sort_order = params["shopify_api_smart_collection"]["sort_order"]
+
+    @smart_collection.disjunctive = params["shopify_api_smart_collection"]["disjunctive"]
+    @smart_collection.handle = params["shopify_api_smart_collection"]["handle"]
+    @smart_collection.template_suffix = params["shopify_api_smart_collection"]["template_suffix"]
+
+    if params["shopify_api_smart_collection"]["file"]
+      if params["shopify_api_smart_collection"]["file"] == 'remove_image'
+        @smart_collection.image = nil
+      else
+        @smart_collection.image = {attachment: params["shopify_api_smart_collection"]["file"]}
+      end
+    end
+
+    if params["shopify_api_smart_collection"]["published_at"] == 'true'
+      unless @smart_collection.attributes["published_at"]
+        @smart_collection.published_at = Time.now
+      end
+    else
+      @smart_collection.published = false
+    end
+
+    @smart_collection.rules = []
+
+    for rule in params["shopify_api_smart_collection"]["rules"]
+      @smart_collection.rules << {
+        column: rule["column"],
+        relation: rule["relation"],
+        condition: rule["condition"]
+      }
+    end
+
+    # loop through page metafields, update and save any new information
+    unless params[:id] == "new"
+      @smart_collection.metafields.each do |metafield|
+        old_metafield = ShopifyAPI::Metafield.new(metafield.attributes)
+        if params["metafields"]
+          m = params["metafields"][metafield.id.to_s]
+        end
+
+        if m
+          if m["value"] == ""
+            puts Colorize.red(metafield.key + ' deleted')
+            metafield.destroy
+          else
+            metafield.value = m["value"]
+            
+            if old_metafield.attributes == metafield.attributes
+              puts Colorize.cyan(metafield.key + ' skipped')
+            else
+              if metafield.save
+                puts Colorize.green(metafield.key + ' saved ') + Colorize.orange(ShopifyAPI.credit_left)
+              else
+                puts Colorize.red(metafield.errors.messages)
+              end
+            end
+          end
+        end
+      end
+    else
+      if @smart_collection.save
+        puts Colorize.green(@smart_collection.title + ' saved')
+      else 
+        puts Colorize.red(@smart_collection.errors.messages)
+      end
+    end
+
+    # loop through any new metafields and create them
+    if params["new_metafields"]
+      params["new_metafields"].each do |new_metafield|
+        @smart_collection.add_metafield(ShopifyAPI::Metafield.new({
+          namespace: 'global',
+          key: new_metafield["name"],
+          value: new_metafield["value"],
+          value_type: 'string'
+        }))
+      end
+    end
+
+    if @smart_collection.save
+      puts Colorize.green(@smart_collection.title + ' saved')
+      if params[:id] == 'new'
+        created_new_smart_collection = true
+      end
+    else 
+      puts Colorize.red(@smart_collection.errors.messages)
+    end
+
+    @smart_collection.created_new_resource = created_new_smart_collection
+    @smart_collection.metafields_tracking = @smart_collection.metafields
+
+    @smart_collection
   end
 
   def self.updateVariantImage(variant_id, image_id)

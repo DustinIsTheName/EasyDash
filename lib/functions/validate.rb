@@ -118,4 +118,33 @@ class Validate
 		{ is_valid: true }.extend(LookLikeJSON)
 
 	end
+
+	def self.smart_collection(params)
+
+		if params["shopify_api_smart_collection"]["title"].blank?
+			return {
+				error_message: "Title can't be blank",
+				is_valid: false
+			}.extend(LookLikeJSON)
+		end
+
+		for rule in params["shopify_api_smart_collection"]["rules"]
+			if rule["condition"].blank?
+				return {
+					error_message: "Conditions are not valid",
+					is_valid: false
+				}.extend(LookLikeJSON)
+			end
+
+			if !rule["condition"].is_i? and (rule["column"] == 'variant_price' or rule["column"] == 'variant_compare_at_price' or rule["column"] == 'variant_weight' or rule["column"] == 'variant_inventory')
+				return {
+					error_message: "Conditions are not valid",
+					is_valid: false
+				}.extend(LookLikeJSON)
+			end
+		end
+
+		{ is_valid: true }.extend(LookLikeJSON)
+
+	end
 end

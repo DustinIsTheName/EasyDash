@@ -158,6 +158,14 @@ class UnembeddedController < ApplicationController
       else
         render json: validation
       end
+    when 'smart_collection'
+      validation = Validate.smart_collection(params)
+      if validation.is_valid
+        smart_collection = API.updateSmartCollection(params)
+        render json: smart_collection
+      else
+        render json: validation
+      end
     when 'page'
       validation = Validate.page(params)
       if validation.is_valid
