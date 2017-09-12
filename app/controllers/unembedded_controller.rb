@@ -45,7 +45,7 @@ class UnembeddedController < ApplicationController
     case @type
     when 'blog'
       if params[:id] == 'new' 
-        @resource = ShopifyAPI::Article.new(id: 'new', title: '', body_html: '', summary_html: '', created_at: '', blog_id: '', handle: '', updated_at: '', published_at: nil, tags: '', template_suffix: '')
+        @resource = ShopifyAPI::Article.new(id: 'new', title: '', author: '', body_html: '', summary_html: '', created_at: '', blog_id: '', handle: '', updated_at: '', published_at: nil, tags: '', template_suffix: '')
       else 
         @resource = ShopifyAPI::Article.find(params[:id])
       end
@@ -293,11 +293,13 @@ class UnembeddedController < ApplicationController
 
   def hard_delete_api
     puts Colorize.magenta(params)
-    resource = API.deleteResource(params)
-    get_resources
+    if params[:id]
+      resource = API.deleteResource(params)
+    end
+    # get_resources
     @type = 'resource_select'
     @theme = ShopifyAPI::Theme.find(:first, params: {role: "main"})
-    render :dashboard
+    redirect_to :dashboard
   end
 
   def bulk_delete_api

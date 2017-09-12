@@ -821,7 +821,6 @@ class API
       params["shopify_api_custom_collection"] = params["shopify_api_smart_collection"]
       @new_collection = updateCustomCollection(params)
     end
-
     @new_collection
   end
 

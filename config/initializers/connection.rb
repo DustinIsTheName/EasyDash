@@ -23,6 +23,8 @@ module ActiveResource
             Rails.logger.info "Shopify returned 429 (Rate Limit Exceeded). Sleeping #{SHOPIFY_SLEEP_TIME}..."
             sleep(SHOPIFY_SLEEP_TIME)
             retry
+          # elsif ex.response.code.to_s == '404'
+          #   return nil
           else
             raise ex
           end

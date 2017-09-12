@@ -1134,7 +1134,7 @@ function ready() {
 		if (resource.id) {
 		  if (resource.created_new_resource) {
 
-		  	window.onbeforeunload = function () {}
+		  	window.onbeforeunload = function () {};
 		  	if (resource.collection_type) {
 				  window.location.href = '/dashboard?id='+resource.id+'&resource='+resource.collection_type
 				} else {
@@ -1143,6 +1143,7 @@ function ready() {
 
 			} else {
 				if (resource.created_new_variants) {
+					window.onbeforeunload = function () {};
 					location.reload();
 				}
 			}
@@ -2411,17 +2412,18 @@ function ready() {
 		$('#SEOURLOverlay').addClass('open');
 	});
 
-	$('#resource-section').on('click', '.warning.btn_bottom.product', function(e) {
+	$('#resource-section').on('click', '.warning.btn_bottom', function(e) {
 		e.preventDefault();
 		var resource_title = $(this).data('resource');
 		var url = $(this).find('a').attr('href');
 
 		confirmBox(
 			'Delete '+resource_title+'?', // title for confirm box
-			'Are you sure you want to delete the '+resource_title+'? This action cannot be reversed.', // text for confirm box
+			'Are you sure you want to delete the '+resource_title.replace('custom_', '').replace('smart_', '')+'? This action cannot be reversed.', // text for confirm box
 			'Delete', // confirm button text
 			{
 			yes: function() { // confirm function
+				window.onbeforeunload = function () {};
 				window.location.href = url;
 			}
 		});

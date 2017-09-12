@@ -210,6 +210,6 @@
 <% unless @resource.id == 'new' %>
 <div class="wittyEDBottomButtons"> 
   <!-- <button class="secondary red btn_bottom">Delete product</button> -->
-  <button type="button" class="warning btn_bottom product" data-id="<%= @resource.id %>" data-resource="<%= @type %>"><%= link_to 'Delete product', dashboard_hard_delete_path(id: @resource.id, resource: @type) %></button>  
+  <button type="button" class="warning btn_bottom" data-id="<%= @resource.id %>" data-resource="<%= @type %>"><%= link_to 'Delete product', dashboard_hard_delete_path(id: @resource.id, resource: @type) %></button>  
 </div>
 <% end %>

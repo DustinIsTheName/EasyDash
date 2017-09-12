@@ -228,7 +228,12 @@
         <hr>
         <div class="card-section" style="padding-bottom: 0;">
           <% if @type == 'blog' %>
-            <% base_url = 'blogs/' + @blogs.select{|b| b.id == @resource.blog_id}.first.handle %>
+            <% blog = @blogs.select{|b| b.id == @resource.blog_id}.first %>
+            <% if blog %>
+              <% base_url = 'blogs/' + blog.handle %>
+            <% else %>
+              <% base_url = '' %>
+            <% end %>
           <% elsif @type == 'custom_collection' || @type == 'smart_collection' %>
             <% base_url = 'collections' %>
           <% elsif @type == 'page' %>

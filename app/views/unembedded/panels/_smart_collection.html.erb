@@ -107,7 +107,7 @@
     <!-- <em class="no_margin">The template customers see when viewing this product in your store.</em> -->
   </div>
 </article>
-<div class="wittyEDBottomButtons">
-  <!-- <button class="secondary red btn_bottom">Delete collection</button> -->
-  <button class="warning btn_bottom">Delete collection</button>          
+<div class="wittyEDBottomButtons"> 
+  <!-- <button class="secondary red btn_bottom">Delete product</button> -->
+  <button type="button" class="warning btn_bottom" data-id="<%= @resource.id %>" data-resource="<%= @type %>"><%= link_to 'Delete collection', dashboard_hard_delete_path(id: @resource.id, resource: @type) %></button>  
 </div>
