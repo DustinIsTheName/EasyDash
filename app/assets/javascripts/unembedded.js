@@ -1058,6 +1058,18 @@ function ready() {
 		}
 	});
 
+	$('input[name="shopify_api_smart_collection[collection_type]"]').change(function() {
+		if ($('input[name="shopify_api_smart_collection[collection_type]"]:checked').val() === 'custom') {
+			$('.condition-fields').hide();
+			$('.condition-fields').next().hide();
+			$('.add-condition').hide();
+		} else {
+			$('.condition-fields').show();
+			$('.condition-fields').next().show();
+			$('.add-condition').show();
+		}
+	});
+
 	$('#resource-section').on('change', '.shopify_api_smart_collection_rules__column', function() {
 		var $this = $(this);
 		var selected = $this.val();
@@ -1073,6 +1085,8 @@ function ready() {
 			$this.next().val($this.next().find('option:not(:disabled)').val());
 		}
 	});
+
+	$('.shopify_api_smart_collection_rules__column').change();
 
   // checkes variant checkboxes based on option value clicked
   $('#resource-section').on('click', '.variant-selector-link', function() {
@@ -1119,7 +1133,14 @@ function ready() {
 
 		if (resource.id) {
 		  if (resource.created_new_resource) {
-			  window.location.href = '/dashboard?id='+resource.id+'&resource='+resourceType
+
+		  	window.onbeforeunload = function () {}
+		  	if (resource.collection_type) {
+				  window.location.href = '/dashboard?id='+resource.id+'&resource='+resource.collection_type
+				} else {
+				  window.location.href = '/dashboard?id='+resource.id+'&resource='+resourceType					
+				}
+
 			} else {
 				if (resource.created_new_variants) {
 					location.reload();

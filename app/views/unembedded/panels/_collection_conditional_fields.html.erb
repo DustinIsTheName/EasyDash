@@ -1,5 +1,5 @@
 <%= o.fields_for 'rules[]', rule do |r| %>
-  <div class="row">
+  <div class="row condition-fields">
     <%= r.select :column, options_for_select(rules_column_options, selected: rule.column), {}, {class: "secondary extra_margin shopify_api_smart_collection_rules__column"} %>
     <%= r.select :relation, rules_relation_options, {}, {class: "secondary extra_margin"} %>
     <%= r.text_field :condition, class: "secondary extra_margin" %>

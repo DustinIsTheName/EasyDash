@@ -2,11 +2,11 @@
   <div class="card">
     <div class="row">
       <label>Title</label>
-      <input type="text" placeholder="e.g. Summer collection, Under $100, Staff picks" />
+      <%= o.text_field :title, placeholder: "e.g. Summer collection, Under $100, Staff picks" %>
     </div>
     <div class="row no_margin">
       <label>Description</label>
-      <textarea></textarea>
+      <%= o.text_area :body_html, class: "make-rich-text-editor" %>
     </div>
   </div>
 </article>
@@ -14,70 +14,99 @@
   <div class="card collection_conditions">
     <h5>Conditions</h5>
     <div class="row extra_margin_3x">
-      <label class="extra_margin"><input type="radio" name="option2">Manually select products <span class="subdued">(you will be able to select products on the next page)</span></label>
-      <label><input type="radio" name="option2" checked="checked">Automatically select products based on conditions</label>
+      <label class="extra_margin">
+        <input type="radio" name="shopify_api_smart_collection[collection_type]" value="custom">Manually select products <span class="subdued">(you will be able to select products on the next page)</span>
+      </label>
+      <label>
+        <input type="radio" name="shopify_api_smart_collection[collection_type]" value="smart" checked="checked">Automatically select products based on conditions
+      </label>
     </div>
     <div class="row">
       <label>Products must match:</label>
-      <label><input type="radio" name="option3" checked="checked">all conditions</label>
-      <label><input type="radio" name="option3">any condition</label>
+      <label>
+        <input type="radio" name="shopify_api_smart_collection[disjunctive]" value="false" checked="checked">all conditions
+      </label>
+      <label>
+        <input type="radio" name="shopify_api_smart_collection[disjunctive]" value="true">any condition
+      </label>
     </div>
     <div class="divider"></div>
-    <div class="row">
-      <select class="extra_margin" id="collection_rules_column">
-        <option selected="selected" value="title">Product title</option>
-				<option value="type">Product type</option>
-				<option value="vendor">Product vendor</option>
-				<option value="variant_price">Product price</option>
-				<option value="tag">Product tag</option>
-				<option value="variant_compare_at_price">Compare at price</option>
-				<option value="variant_weight">Weight</option>
-				<option value="variant_inventory">Inventory stock</option>
-				<option value="variant_title">Variant's title</option>
-      </select>
-      <select class="extra_margin" id="rule_relation">
-        <option value="equals" selected="selected" data-bind-disabled="isRelationDisabled(this.value)">is equal to</option>
-        <option value="not_equals" data-bind-disabled="isRelationDisabled(this.value)">is not equal to</option>
-        <option value="greater_than" data-bind-disabled="isRelationDisabled(this.value)" disabled="">is greater than</option>
-        <option value="less_than" data-bind-disabled="isRelationDisabled(this.value)" disabled="">is less than</option>
-        <option value="starts_with" data-bind-disabled="isRelationDisabled(this.value)">starts with</option>
-        <option value="ends_with" data-bind-disabled="isRelationDisabled(this.value)">ends with</option>
-        <option value="contains" data-bind-disabled="isRelationDisabled(this.value)">contains</option>
-        <option value="not_contains" data-bind-disabled="isRelationDisabled(this.value)">does not contain</option>
-      </select>
-      <input type="text" />
-    </div>
-    <div class="divider" style="margin-left: 0; margin-right: 0;"></div>
-    <button class="secondary">Add another condition</button>
+
+    <%= render partial: 'unembedded/panels/collection_conditional_fields', locals: {o: o, rule: ShopifyAPI::Rule.new(column: '', relation: '', condition: ''), hide: true} %>
+
+    <button class="add-condition secondary extra_margin" data-html='<%= (render partial: 'unembedded/panels/collection_conditional_fields', locals: {o: o, rule: ShopifyAPI::Rule.new(column: '', relation: '', condition: ''), hide: false}) %>'>Add another condition</button>
+    <label>Sort:</label>
+    <%= o.select :sort_order, sort_order_options, {}, {class: "secondary"} %>
   </div>
 </article>
 <article>
-  <a href="#" class="theme-editor-action-list__item" data-bind-event-click="action("openSectionPanel", "section-seo")" draggable="false">
+  <div class="theme-editor-action-list__item" draggable="false">
     <div class="card">
       <h5>Search engine listing preview</h5>
       <!-- <button class="btn--link top-right">Edit website SEO</button> -->
       <p>Add a title and description to see how this collection might appear in a search engine listing.</p>
-      <button class="secondary">Edit website SEO</button>
+      <button type="button" class="secondary reveal-trigger" data-reveal="seo">Edit website SEO</button>
+      <div class="edit reveal-target" data-reveal="seo">
+
+        <div class="row title_tag_container"></div>
+
+        <div class="row description_tag_container"></div>
+
+        <div class="row no_margin">
+          <label class="seo-handle" for="shopify_api_product_handle">URL and handle
+            <span class="info-icon">
+              <span>i</span>
+            </span>
+          </label>
+          <%= o.text_field :handle %>
+        </div>
+      </div>
       <!-- <button class="btn btn--plain icon-next dark" type="button" name="button"></button> -->
     </div>
-  </a>
+  </div>
 </article>
 <article>
   <div class="card secondary">
     <h5>Visibility</h5>
     <div class="divider"></div>
     <div class="row no_margin">
-      <label><input type="checkbox" name="" checked="checked">Online store<a href=""><i class="icon-calendar tip" data-hover="Set publish date"></i></a></label>
+      <label>
+        <input type="checkbox" name="shopify_api_smart_collection[published_at]" value="true" checked="checked">
+        Online store
+        <a href="">
+          <i class="icon-calendar tip left" data-hover="Set publish date"></i>
+        </a>
+      </label>
     </div>
   </div>
 </article>
 <article>
-  <div class="card secondary collection_image">
+  <div class="card secondary featured_image" data-resource="smart_collection">
     <h5>Collection image</h5>
-    <div class="column twelve type--centered">
-      <i class="icon-image next-icon--size-40"></i>
-      <button class="primary">Upload image</button>
-</div>
+    <div class="featured_image_container">
+      <% if @resource.attributes["image"] %>
+        <div class="featured-image">
+          <img src="<%= @resource.image.src %>">
+        </div>
+        <label for="shopify_api_smart_collection_file" class="update">Update</label>
+        <a href="#" class="remove">Remove</a>
+      <% else %>
+        <div class="column twelve type--centered">
+          <i class="icon-image next-icon--size-40"></i>
+          <label for="shopify_api_smart_collection_file" class="primary button">Upload image</label>
+        </div>
+      <% end %>
+    </div>
+    <%= o.file_field "file", multiple: false, accept: "image/*", class: "single-image-upload" %>
+  </div>
+</article>
+<article>
+  <div class="card secondary">
+    <h5>Template</h5>
+    <label>Template suffix</label>
+    <%= o.select :template_suffix, template_suffix_options(@assets.select{|asset| asset.key.include? "templates/collection" }), {}, {class: "secondary extra_margin"} %>
+    <em class="no_margin">The template customers see when viewing this collection in your store.</em>
+    <!-- <em class="no_margin">The template customers see when viewing this product in your store.</em> -->
   </div>
 </article>
 <div class="wittyEDBottomButtons">

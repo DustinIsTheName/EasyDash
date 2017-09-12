@@ -83,9 +83,9 @@
     <div class="row no_margin">
       <label>
         <% if @resource.published_at %>
-          <input type="checkbox" name="shopify_api_custom_collection[published_at]" checked="checked">
+          <input type="checkbox" name="shopify_api_custom_collection[published_at]" value="true" checked="checked">
         <% else %>
-          <input type="checkbox" name="shopify_api_custom_collection[published_at]">
+          <input type="checkbox" name="shopify_api_custom_collection[published_at]" value="true">
         <% end %>
         Online store
         <a href="">

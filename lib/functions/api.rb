@@ -601,6 +601,7 @@ class API
 
     if params["shopify_api_custom_collection"]["published_at"] == 'true'
       unless @custom_collection.attributes["published_at"]
+        @custom_collection.published = true
         @custom_collection.published_at = Time.now
       end
     else
@@ -695,6 +696,7 @@ class API
       puts Colorize.red(@custom_collection.errors.messages)
     end
 
+    @custom_collection.collection_type = 'custom_collection'
     @custom_collection.created_new_resource = created_new_custom_collection
     @custom_collection.metafields_tracking = @custom_collection.metafields
 
@@ -730,6 +732,7 @@ class API
 
     if params["shopify_api_smart_collection"]["published_at"] == 'true'
       unless @smart_collection.attributes["published_at"]
+        @smart_collection.published = true
         @smart_collection.published_at = Time.now
       end
     else
@@ -802,10 +805,24 @@ class API
       puts Colorize.red(@smart_collection.errors.messages)
     end
 
+    @smart_collection.collection_type = 'smart_collection'
     @smart_collection.created_new_resource = created_new_smart_collection
     @smart_collection.metafields_tracking = @smart_collection.metafields
 
     @smart_collection
+  end
+
+  def self.createCollection(params)
+    if params["shopify_api_smart_collection"]["collection_type"] === 'smart'
+      params["resource"] = 'smart_collection'
+      @new_collection = updateSmartCollection(params)
+    else
+      params["resource"] = 'custom_collection'
+      params["shopify_api_custom_collection"] = params["shopify_api_smart_collection"]
+      @new_collection = updateCustomCollection(params)
+    end
+
+    @new_collection
   end
 
   def self.updateVariantImage(variant_id, image_id)

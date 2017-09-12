@@ -128,19 +128,21 @@ class Validate
 			}.extend(LookLikeJSON)
 		end
 
-		for rule in params["shopify_api_smart_collection"]["rules"]
-			if rule["condition"].blank?
-				return {
-					error_message: "Conditions are not valid",
-					is_valid: false
-				}.extend(LookLikeJSON)
-			end
+		unless params["shopify_api_smart_collection"]["collection_type"] === 'custom'
+			for rule in params["shopify_api_smart_collection"]["rules"]
+				if rule["condition"].blank?
+					return {
+						error_message: "Conditions are not valid",
+						is_valid: false
+					}.extend(LookLikeJSON)
+				end
 
-			if !rule["condition"].is_i? and (rule["column"] == 'variant_price' or rule["column"] == 'variant_compare_at_price' or rule["column"] == 'variant_weight' or rule["column"] == 'variant_inventory')
-				return {
-					error_message: "Conditions are not valid",
-					is_valid: false
-				}.extend(LookLikeJSON)
+				if !rule["condition"].is_i? and (rule["column"] == 'variant_price' or rule["column"] == 'variant_compare_at_price' or rule["column"] == 'variant_weight' or rule["column"] == 'variant_inventory')
+					return {
+						error_message: "Conditions are not valid",
+						is_valid: false
+					}.extend(LookLikeJSON)
+				end
 			end
 		end
 
