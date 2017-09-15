@@ -49,4 +49,17 @@ module OptionsHelper
 
 		options
 	end
+
+	def article_author_options(authors)
+		options = []
+
+		for author in authors
+			options.push([author.name, author.name])
+		end
+
+		options.push(['———————————————', 'separator'])
+		options.push(['Add a new author...', 'create_new_author'])
+
+		options
+	end
 end

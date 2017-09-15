@@ -2,6 +2,7 @@ class Shop < ActiveRecord::Base
   include ShopifyApp::Shop
 
   has_many :images
+  has_many :authors
 
   def createScriptTag
 		file = ApplicationController.new.render_to_string(:template => "home/dash_js.js", :layout => false)

@@ -14,13 +14,32 @@
       </div>
     </div>
     <div class="row no_margin">
-      <label>Author</label>
+<!--       <label>Author</label>
       <select class="extra_margin" id="author_column">
         <option selected="selected" value="Travis Johnson"><%= @resource.author %></option>
-      </select>
+      </select> -->
+
+
+      <% if @shop.authors.size > 0 %>
+        <label>Author</label>
+        <%= o.select :author, options_for_select(article_author_options(@shop.authors), disabled: "separator", selected: @resource.author), {}, {class: "secondary extra_margin"} %>
+        <div class="new_author_container extra_margin" style="display:none;">
+          <lable for="shopify_api_article_new_author_name">Author name</label>
+          <input type="text" id="shopify_api_article_new_author_name" name="shopify_api_article[new_author_name]">
+        </div>
+      <% else %>
+        <%= o.select :author, options_for_select(article_author_options(@shop.authors), disabled: "separator", selected: 'create_new_author'), {}, {class: "secondary extra_margin", style: 'display:none;'} %>
+        <div class="new_author_container extra_margin">
+          <lable for="shopify_api_article_new_author_name">Author name</label>
+          <input type="text" id="shopify_api_article_new_author_name" name="shopify_api_article[new_author_name]">
+        </div>
+      <% end %>
+
+
+
       <label>Blog</label>
       <%= o.select :blog_id, options_for_select(article_blog_options(@blogs), disabled: "separator", selected: @resource.blog_id), {}, {class: "secondary extra_margin"} %>
-      <div class="new_blog_container" style="display:none;">
+      <div class="new_blog_container " style="display:none;">
         <lable for="shopify_api_article_new_blog_title">Blog title</label>
         <input type="text" id="shopify_api_article_new_blog_title" name="shopify_api_article[new_blog_title]">
       </div>
