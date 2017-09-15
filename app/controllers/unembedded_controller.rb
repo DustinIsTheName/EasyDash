@@ -49,6 +49,7 @@ class UnembeddedController < ApplicationController
       else 
         @resource = ShopifyAPI::Article.find(params[:id])
       end
+      @shop = Shop.find_by_shopify_domain(@shop_session.url)
       @blogs = ShopifyAPI::Blog.all
       @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
     when 'collection'
@@ -148,6 +149,18 @@ class UnembeddedController < ApplicationController
     when 'blog'
       validation = Validate.blog(params)
       if validation.is_valid
+        if params["shopify_api_article"]["author"] == 'create_new_author'
+          params["shopify_api_article"]["author"] = params["shopify_api_article"]["new_author_name"]
+
+          unless Author.find_by_name(params["shopify_api_article"]["new_author_name"])
+            @shop = Shop.find_by_shopify_domain(@shop_session.url)
+            new_author = Author.new
+            new_author.name = params["shopify_api_article"]["new_author_name"]
+            new_author.shop_id = @shop.id
+            new_author.save
+          end
+        end
+
         blog = API.updateBlog(params)
         render json: blog
       else

@@ -111,7 +111,7 @@
   <% elsif @type.include? 'blog' %>
     <% blog = @blogs.select{|b| b.id == @resource.blog_id}.first %>
     <% if blog %>
-      <% resource_url = 'blogs/' + blog.handle %>
+      <% resource_url = 'blogs/' + blog.handle + '/' %>
     <% else %>
       <% resource_url = '' %>
     <% end %>

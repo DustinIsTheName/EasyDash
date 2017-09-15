@@ -479,6 +479,8 @@ class API
     @article.title = params["shopify_api_article"]["title"]
     @article.body_html = params["shopify_api_article"]["body_html"]
     @article.summary_html = params["shopify_api_article"]["summary_html"]
+    @article.author = params["shopify_api_article"]["author"]
+
     if params["shopify_api_article"]["blog_id"] == 'create_new_blog'
       @blog = ShopifyAPI::Blog.new
       @blog.title = params["shopify_api_article"]["new_blog_title"]

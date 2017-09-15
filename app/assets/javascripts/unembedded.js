@@ -1172,6 +1172,13 @@ function ready() {
 		  		$('#shopify_api_article_new_blog_title').val('');
 		  		$('.new_blog_container').hide();
 		  	}
+
+		  	if ($('#shopify_api_article_author option[value="'+resource.author+'"]').length === 0) {
+		  		$('#shopify_api_article_author option[value="separator"]').before('<option value="'+resource.author+'">'+resource.author+'</option>');
+		  		$('#shopify_api_article_author').val(resource.author);
+		  		$('#shopify_api_article_new_author_name').val('');
+		  		$('.new_author_container').hide();
+		  	}
 		  }
 
 		  refreshIframe();
@@ -2405,6 +2412,14 @@ function ready() {
 			$('.new_blog_container').show();
 		} else {
 			$('.new_blog_container').hide();
+		}
+	});
+
+	$('#shopify_api_article_author').change(function() {
+		if ($(this).val() === 'create_new_author') {
+			$('.new_author_container').show();
+		} else {
+			$('.new_author_container').hide();
 		}
 	});
 
