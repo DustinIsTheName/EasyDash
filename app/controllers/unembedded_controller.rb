@@ -360,6 +360,22 @@ class UnembeddedController < ApplicationController
     render json: response
   end
 
+  def get_blog_tags
+    response = '['
+
+    blogs = ShopifyAPI::Blog.all
+    blogs.each_with_index do |b, i|
+      unless i == 0
+        response += ','
+      end
+      response += open("https://#{@shop_session.url}/blogs/"+b.handle+"?view=easy_dash_tags").read
+    end
+
+    response += ']'
+
+    render json: response
+  end
+
   def get_product_types
     response = open("https://#{@shop_session.url}/search?view=easy_dash_types").read
     render json: response

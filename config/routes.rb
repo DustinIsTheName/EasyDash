@@ -45,6 +45,7 @@ Rails.application.routes.draw do
     get '/refresh-form' => :refresh_form
     get '/refresh-variant-panel' => :refresh_variant_panel
     get '/product-tags' => :get_product_tags
+    get '/blog-tags' => :get_blog_tags
     get '/product-types' => :get_product_types
     get '/product-vendors' => :get_product_vendors
     post '/app-uninstall' => :app_uninstall

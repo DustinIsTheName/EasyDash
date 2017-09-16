@@ -95,32 +95,6 @@
         </div>
       </section>
     </div>
-    <div id="viewAllTagsOverlay" class="editModalOverlay">
-      <section id="viewAllTags" class="editModal">
-        <div class="card has-sections">
-          <div class="card-section" style="padding-bottom: 0;">
-            <h3>Tags</h3>
-            <!-- <a href="#" class="close" role="button" aria-label="Close dialog">x</a> -->
-          </div>
-          <hr>
-          <div class="card-section" style="padding-bottom: 0;">
-            <h6>Applied Tags</h6>
-            <div class="applied-tags"></div>
-            <p>Select previously used tags from the list below to add them to this product.</p>
-          </div>
-          <hr>
-          <div class="card-section" style="padding-bottom: 0;">
-            <h6>All Tags</h6>
-            <div class="all-tags"></div>
-          </div>
-          <hr>
-          <div class="card-section">
-            <button type="button" class="secondary cancel" href="#">Cancel</button>
-            <button type="button" id="apply-tag-changes" class="primary" href="#">Apply Changes</button>
-          </div>
-        </div>
-      </section>
-    </div>
     <div id="reorderVariantsOverlay" class="editModalOverlay">
       <section id="reorderVariants" class="editModal">
         <div class="card has-sections">
@@ -215,6 +189,34 @@
             <button type="button" id="duplicate-product" class="primary">Duplicate</button>
           </div>
         </form>
+      </section>
+    </div>
+  <% end %>
+  <% if @type == 'product' or @type == 'blog' %>
+    <div id="viewAllTagsOverlay" class="editModalOverlay" data-type="<%= @type %>">
+      <section id="viewAllTags" class="editModal">
+        <div class="card has-sections">
+          <div class="card-section" style="padding-bottom: 0;">
+            <h3>Tags</h3>
+            <!-- <a href="#" class="close" role="button" aria-label="Close dialog">x</a> -->
+          </div>
+          <hr>
+          <div class="card-section" style="padding-bottom: 0;">
+            <h6>Applied Tags</h6>
+            <div class="applied-tags"></div>
+            <p>Select previously used tags from the list below to add them to this product.</p>
+          </div>
+          <hr>
+          <div class="card-section" style="padding-bottom: 0;">
+            <h6>All Tags</h6>
+            <div class="all-tags"></div>
+          </div>
+          <hr>
+          <div class="card-section">
+            <button type="button" class="secondary cancel" href="#">Cancel</button>
+            <button type="button" id="apply-tag-changes" class="primary" href="#">Apply Changes</button>
+          </div>
+        </div>
       </section>
     </div>
   <% end %>

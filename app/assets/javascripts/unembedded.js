@@ -1551,12 +1551,13 @@ function ready() {
 
 	$('#resource-section').on('click', '.tags-container .tag.remove a', function(e) {
 		e.preventDefault();
+		var type = $('#viewAllTagsOverlay').data('type').replace('blog', 'article');
 		var tag = $(this).parent().remove().text().trim();
-		var tag_list = $('#shopify_api_product_tags').val().split(',').map(function(a) {return a.trim()});
+		var tag_list = $('#shopify_api_'+type+'_tags').val().split(',').map(function(a) {return a.trim()});
 		var tag_index = tag_list.indexOf(tag);
 
 		tag_list.splice(tag_index, 1);
-		$('#shopify_api_product_tags').val(tag_list.join(','));
+		$('#shopify_api_'+type+'_tags').val(tag_list.join(','));
 	});
 
 	$('#modals-container').on('click', '.variant-image-save', function(e) {
@@ -1611,11 +1612,13 @@ function ready() {
 	$('#resource-section').on('click', '#view-all-tags', function(e) {
 		e.preventDefault();
 		$(this).addClass('is-loading');
+		var type = $('#viewAllTagsOverlay').data('type');
 
 		$.ajax({
       type: "GET",
-      url: '/product-tags'
+      url: '/'+type+'-tags'
     }).success(function(tags) {
+    	console.log(tags);
     	tags = tags.filter(onlyUnique);
 
     	$('#view-all-tags').removeClass('is-loading');
@@ -1665,8 +1668,9 @@ function ready() {
 
 	$('#modals-container').on('click', '#apply-tag-changes', function() {
 		$('.applied-tags .tag').each(function() {
+			var type = $('#viewAllTagsOverlay').data('type').replace('blog', 'article');
 			var tag_text = $(this).data('tag');
-    	var tag_list = $('#shopify_api_product_tags').val().split(',').filter(function(value) {
+    	var tag_list = $('#shopify_api_'+type+'_tags').val().split(',').filter(function(value) {
     		return value !== '';
     	}).map(function(value, index) {
 	  		return value.trim();
@@ -1674,7 +1678,7 @@ function ready() {
 
       if (tag_list.indexOf(tag_text.trim()) === -1) {
 	    	tag_list.push(tag_text.trim())
-				$('#shopify_api_product_tags').val(tag_list.join(','));
+				$('#shopify_api_'+type+'_tags').val(tag_list.join(','));
 	    	$(this).val('');
 	    	tag = '<span class="tag teal remove">'+tag_text+'<a href="#"></a></span>';
 	    	$('.tags-container').append(tag);

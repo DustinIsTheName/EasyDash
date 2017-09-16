@@ -35,6 +35,15 @@ class Shop < ActiveRecord::Base
       puts Colorize.red(search_tags.errors)
     end
 
+    blog_tags = ShopifyAPI::Asset.new
+    blog_tags.key = "templates/blog.easy_dash_tags.liquid"
+    blog_tags.value = ApplicationController.new.render_to_string(:template => "home/blog_tags.liquid", :layout => false)
+    if blog_tags.save
+      puts Colorize.green('Created Blog Tags Query File')
+    else
+      puts Colorize.red(blog_tags.errors)
+    end
+
     search_types = ShopifyAPI::Asset.new
     search_types.key = "templates/search.easy_dash_types.liquid"
     search_types.value = ApplicationController.new.render_to_string(:template => "home/search_types.liquid", :layout => false)

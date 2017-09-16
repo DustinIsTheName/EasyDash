@@ -1,0 +1,15 @@
+{% layout none %}
+{% capture output %}
+    ""
+    {% if blog.all_tags.size > 0 %}
+        {% for tag in blog.all_tags %}
+         
+            {% if output contains tag %}
+            {% else %}
+                ,"{{tag}}"
+            {% endif %}
+
+        {% endfor %}  
+    {% endif %}     
+{% endcapture %}
+{{ output | strip_newlines }}

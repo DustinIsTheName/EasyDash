@@ -490,7 +490,6 @@ class API
     else
       @article.blog_id = params["shopify_api_article"]["blog_id"]
       @blog = ShopifyAPI::Blog.find(params["shopify_api_article"]["blog_id"])
-      puts Colorize.purple(@blog.handle)
     end
     @article.tags = params["shopify_api_article"]["tags"]
     @article.handle = params["shopify_api_article"]["handle"]
