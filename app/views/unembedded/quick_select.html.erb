@@ -10,11 +10,7 @@
     </header><!-- .theme-editor__header -->
     <% if @viewed_resource %>
       <div class="wittyEDTopButtons">
-        <% if @viewed_resource.class.to_s.gsub(/shopifyapi::/i, '').underscore == 'product' %>
-          <%= link_to 'Edit ' + @viewed_resource.class.to_s.gsub(/shopifyapi::|custom|smart/i, ''), dashboard_path(resource: @viewed_resource.class.to_s.gsub(/shopifyapi::/i, '').underscore, id: @viewed_resource.id), class: 'button sidebyside_large primary', target: '_blank', data: {handle: @viewed_resource.handle, id: @viewed_resource.id} %>
-        <% else %>
-          <a class="button sidebyside_large primary" target="_blank" data-handle="<%= @viewed_resource.handle %>" data-id="<%= @viewed_resource.id %>" href="https://<%= @shop_session.url %>/admin/<%= @viewed_resource.class.to_s.gsub(/shopifyapi::|custom|smart/i, '').underscore %>s/<%= @viewed_resource.id %>">Edit <%= @viewed_resource.class.to_s.gsub(/shopifyapi::|custom|smart/i, '') %></a>
-        <% end %>
+        <%= link_to 'Edit ' + @viewed_resource.class.to_s.gsub(/shopifyapi::|custom|smart/i, ''), dashboard_path(resource: @viewed_resource.class.to_s.gsub(/shopifyapi::/i, '').underscore.gsub('article', 'blog'), id: @viewed_resource.id), class: 'button sidebyside_large primary', target: '_blank', data: {handle: @viewed_resource.handle, id: @viewed_resource.id} %>
 
         <button class="sidebyside_small warning icon-trash delete-viewed-resource" data-id="<%= @viewed_resource.id %>" data-title="<%= @viewed_resource.title %>" data-resource="<%= @viewed_resource.class.to_s.downcase.gsub(/shopifyapi::|custom|smart/i, '') %>"></button>
       </div>

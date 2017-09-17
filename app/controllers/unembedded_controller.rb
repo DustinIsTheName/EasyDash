@@ -107,12 +107,14 @@ class UnembeddedController < ApplicationController
       @resource = ShopifyAPI::Article.find(:first, params: {handle: params["handle"]})
       @blogs = ShopifyAPI::Blog.all
       @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
-    when 'custom_collection'
+    when 'collection'
       @resource = ShopifyAPI::CustomCollection.find(:first, params: {handle: params["handle"]})
+      @type = 'custom_collection'
       @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
-    when 'smart_collection'
-      @resource = ShopifyAPI::SmartCollection.find(:first, params: {handle: params["handle"]})
-      @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
+      unless @resource
+        @resource = ShopifyAPI::SmartCollection.find(:first, params: {handle: params["handle"]})
+        @type = 'custom_collection'
+      end
     when 'page'
       @resource = ShopifyAPI::Page.find(:first, params: {handle: params["handle"]})
       @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
@@ -362,7 +364,6 @@ class UnembeddedController < ApplicationController
 
   def get_blog_tags
     response = '['
-
     blogs = ShopifyAPI::Blog.all
     blogs.each_with_index do |b, i|
       unless i == 0
@@ -370,7 +371,6 @@ class UnembeddedController < ApplicationController
       end
       response += open("https://#{@shop_session.url}/blogs/"+b.handle+"?view=easy_dash_tags").read
     end
-
     response += ']'
 
     render json: response
