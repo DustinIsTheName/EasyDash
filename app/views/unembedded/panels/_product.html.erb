@@ -161,9 +161,7 @@
       <% if @resource.collections %>
         <% for collection in @resource.collections %>
           <div class="collection" data-collection="<%= collection.to_json %>">
-            <a target="_blank" href="https://<%= @shop_session.url %>/admin/collections/<%= collection.id %>">
-              <%= collection.title %>
-            </a>
+            <%= link_to collection.title, dashboard_path(id: collection.id, resource: 'custom_collection') %>
             <span class="icon-close"></span>
           </div>
         <% end %>
@@ -171,9 +169,7 @@
       <% if @smart_collections %>
         <% for collection in @smart_collections %>
           <div class="collection" data-collection="<%= collection.to_json %>">
-            <a target="_blank" href="https://<%= @shop_session.url %>/admin/collections/<%= collection.id %>">
-              <%= collection.title %> 
-            </a>
+            <%= link_to collection.title, dashboard_path(id: collection.id, resource: 'smart_collection') %>
             <span class="auto">auto</span>
           </div>
         <% end %>

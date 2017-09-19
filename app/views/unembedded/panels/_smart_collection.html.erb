@@ -28,9 +28,22 @@
       <%= render partial: 'unembedded/panels/collection_conditional_fields', locals: {o: o, rule: rule, hide: @resource.rules.size == 1} %>
     <% end %>
 
-    <button class="add-condition secondary extra_margin" data-html='<%= (render partial: 'unembedded/panels/collection_conditional_fields', locals: {o: o, rule: ShopifyAPI::Rule.new(column: '', relation: '', condition: ''), hide: false}) %>'>Add another condition</button>
-    <label>Sort:</label>
-    <%= o.select :sort_order, sort_order_options, {}, {class: "secondary"} %>
+    <button class="add-condition secondary" data-html='<%= (render partial: 'unembedded/panels/collection_conditional_fields', locals: {o: o, rule: ShopifyAPI::Rule.new(column: '', relation: '', condition: ''), hide: false}) %>'>Add another condition</button>
+  </div>
+</article>
+<article>
+  <div class="card collection_conditions">
+    <div class="row">
+      <label>Sort:</label>
+      <%= o.select :sort_order, sort_order_options, {}, {class: "secondary extra_margin"} %>
+      <% if @resource.products %>
+        <% for product in @resource.products %>
+          <div class="product" data-product="<%= product.to_json %>">
+            <%= link_to product.title, dashboard_path(id: product.id, resource: 'product') %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
   </div>
 </article>
 <article>

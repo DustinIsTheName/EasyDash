@@ -392,6 +392,10 @@ function ready() {
 		    lineWrapping: true
 		  },
 		  imageUploadURL: '/add-image-to-theme',
+		  imageUploadParams: {
+		  	id: $('[name="id"]').val(),
+		  	resource: $('[name="resource"]').val()
+		  },
 		  videoInsertButtons: [
 		  	'videoBack', 
 		  	'|',
@@ -1001,7 +1005,7 @@ function ready() {
 		var collection = {id: id}
 
 		var new_html = '<div class="collection" data-collection=\''+JSON.stringify(collection)+'\'>';
-    new_html += '<a target="_blank" href="https://'+shop_url+'/admin/collections/'+id+'">'+title+'</a>';
+    new_html += '<a href="/dashboard?id='+id+'&resource=custom_collection">'+title+'</a>';
     new_html += '<span class="icon-close"></span>';
     new_html += '</div>';
 
@@ -1024,7 +1028,7 @@ function ready() {
 		var product = {id: id}
 
 		var new_html = '<div class="product" data-product=\''+JSON.stringify(product)+'\'>';
-    new_html += '<a target="_blank" href="https://'+shop_url+'/admin/products/'+id+'">'+title+'</a>';
+    new_html += '<a href="/dashboard?id='+id+'&resource=product">'+title+'</a>';
     new_html += '<span class="icon-close"></span>';
     new_html += '</div>';
 

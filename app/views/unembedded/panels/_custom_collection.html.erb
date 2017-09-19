@@ -38,9 +38,7 @@
       <% if @resource.products %>
         <% for product in @resource.products %>
           <div class="product" data-product="<%= product.to_json %>">
-            <a target="_blank" href="https://<%= @shop_session.url %>/admin/products/<%= product.id %>">
-              <%= product.title %>
-            </a>
+            <%= link_to product.title, dashboard_path(id: product.id, resource: 'product') %>
             <span class="icon-close"></span>
           </div>
         <% end %>

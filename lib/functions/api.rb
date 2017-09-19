@@ -994,7 +994,7 @@ class API
     base64_file = Base64.encode64(params["file"].read)
 
     new_asset = ShopifyAPI::Asset.new
-    new_asset.key = 'assets/' + params["file"].original_filename
+    new_asset.key = 'assets/' + params["resource"] + '_' + params["id"] + '_' + params["file"].original_filename
     new_asset.attachment = base64_file
     new_asset.prefix_options[:theme_id] = theme.id
     if new_asset.save
