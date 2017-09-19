@@ -42,9 +42,9 @@ ShopifyApp::SessionsController.module_eval do
       unless ShopifyAPI::RecurringApplicationCharge.current
         recurring_application_charge = ShopifyAPI::RecurringApplicationCharge.new(
           name: "Beta Test",
-          price: 0.01,
+          price: 7.99,
           test: true,
-          trial_days: 1000)
+          trial_days: 14)
         recurring_application_charge.return_url = Rails.env.production? ? "#{APP_URL}\/activatecharge" : "#{DEV_URL}\/activatecharge"
 
         if recurring_application_charge.save
