@@ -424,7 +424,6 @@ function ready() {
 			var $this = $(this);
 
   		function exitFullscreen() {
-  			console.log($this.attr('id'), $this.prevAll('.fr-box'));
 				if ($this.froalaEditor('fullscreen.isActive')) {
 		  		$('label[for="'+$this.attr('id')+'"]').after($('.fr-box.active-in-fullscreen').removeClass('active-in-fullscreen'));
 					$this.froalaEditor('fullscreen.toggle');
@@ -516,7 +515,7 @@ function ready() {
 	});
 
 	window.addEventListener("message", function(messageEvent) {
-		console.log(currentIframeUrl, messageEvent.data);
+		// console.log(currentIframeUrl, messageEvent.data);
 
 		if (currentIframeUrl !== messageEvent.data && currentIframeUrl) {
 
@@ -700,23 +699,6 @@ function ready() {
 			$(this).next().find('.resource-search').keyup();
 		}
 
-		// if (!checkVisible(this.nextElementSibling)) {
-		// 	$(this).toggleClass('reverse');
-		// 	while (!checkVisible(this.nextElementSibling)) {
-		// 		$(this.nextElementSibling).addClass('no-arrow');
-
-		// 		if ($(this).hasClass('reverse')) {
-		// 			console.log(bottom);
-		// 			var bottom = parseInt($(this.nextElementSibling).css('bottom'));
-		// 			$(this.nextElementSibling).css({'bottom': bottom - 10, 'top': 'auto'});
-		// 		} else {
-		// 			console.log(top);
-		// 			var top = parseInt($(this.nextElementSibling).css('top'));
-		// 			$(this.nextElementSibling).css({'top': top + 10, 'bottom': 'auto'});
-		// 		}
-		// 	}
-		// }
-
 		event.stopPropagation();
 	});
 
@@ -751,7 +733,7 @@ function ready() {
 				if (extension.length < 250) {
 					resource_infomation[resource+'_chunks_loaded'] = 'all';
 				}
-				console.log(extension);
+				// console.log(extension);
 			},
 			error: basicError
 		});
@@ -792,7 +774,7 @@ function ready() {
 				resource: resource,
 				$this: $this,
 				callback: function(deleted_resource) {
-					console.log(deleted_resource);
+					// console.log(deleted_resource);
 					if (deleted_resource) {
 						index_of_id = resource_infomation[resource+'s'].map(function(a) {return a.id}).indexOf(deleted_resource.id);
 						resource_infomation[resource+'s'].splice(index_of_id, 1);
@@ -831,7 +813,7 @@ function ready() {
 				resource: resource,
 				$this: $this,
 				callback: function(deleted_resource) {
-					console.log(deleted_resource);
+					// console.log(deleted_resource);
 					$this.removeClass('is-loading');
 					flashMessage(resource_title + ' deleted.');
 					if (url.searchParams.get("referrer")) {
@@ -953,7 +935,7 @@ function ready() {
 			$.ajax({
 				url: '/search/'+resource+'?q='+resource_infomation.query+'&page=1',
 				success: function(filtered_resource) {
-					console.log(filtered_resource);
+					// console.log(filtered_resource);
 					$('.select-sim-dropdown').removeClass('is-loading');
 
 					if (resource === 'collection') {
@@ -1130,8 +1112,6 @@ function ready() {
 		var html;
 		var resourceType = $('[name="resource"]').val();
 
-		console.log(resource.metafields_tracking);
-
 		$('#save_resource').removeClass('is-loading');
 		$('#shopify_api_'+resourceType.replace('blog','article')+'_handle').val(resource.handle);
 
@@ -1152,7 +1132,7 @@ function ready() {
 				}
 			}
 	  	var variant;
-	    console.log("success " + resourceType, resource);
+	    // console.log("success " + resourceType, resource);
 
 	    if (resource.variants) {
 		    for (var i = 0; i < resource.variants.length; i++) {
@@ -1219,7 +1199,7 @@ function ready() {
 
 
 		} else {
-			console.log(resource);
+			// console.log(resource);
 		  if ($('#confirmBoxOverlay #extra').length > 0) {
 		  	$('#confirmBoxOverlay').remove();
 		  }
@@ -1279,7 +1259,7 @@ function ready() {
       data: data_with_id,
       dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
     }).success(function(variant) {
-      console.log(variant);
+      // console.log(variant);
       $('.single_variant_submit').removeClass('is-loading');
       $('form.ajax [name]:not(.variant_input)').prop('disabled', false);
 
@@ -1326,7 +1306,6 @@ function ready() {
 		      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
 		    }).success(function(hsc) {
 		    	var $this = $('.harmonized_system_code');
-		    	console.log(hsc);
 
 					if (hsc) {
 						$this.val(hsc.value);
@@ -1430,7 +1409,6 @@ function ready() {
 			      },
 			      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
 			    }).success(function(hsc) {
-			    	console.log('hsc:', hsc);
 						if (hsc) {
 							$this.val(hsc.value);
 							$this.before('<input value="harmonized_system_code" class="new_hsc_name variant_input" type="hidden" name="variants['+variant.id+']metafields['+hsc.id+'][name]" id="variants_'+variant.id+'_new_metafields__name">');
@@ -1585,7 +1563,7 @@ function ready() {
       dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
     }).success(function(image) {
     	closeModal($('#editVariantImageOverlay'));
-    	console.log(image);
+    	// console.log(image);
 
     	$('.image_box .variant_image').data('image-id', image.id);
     	$('#variant_id_'+variant_id+' .variant_image').data('image-id', image.id).attr('data-image-id', image.id);
@@ -1622,7 +1600,7 @@ function ready() {
       type: "GET",
       url: '/'+type+'-tags'
     }).success(function(tags) {
-    	console.log(tags);
+    	// console.log(tags);
     	tags = tags.filter(onlyUnique);
 
     	$('#view-all-tags').removeClass('is-loading');
@@ -1702,7 +1680,7 @@ function ready() {
       type: "GET",
       url: '/product-types'
     }).success(function(types) {
-    	console.log(types);
+    	// console.log(types);
     	var new_html = '';
 
     	for (var i = 0; i < types.length; i++) {
@@ -1738,7 +1716,7 @@ function ready() {
       type: "GET",
       url: '/product-vendors'
     }).success(function(vendors) {
-    	console.log(vendors);
+    	// console.log(vendors);
     	var new_html = '';
 
     	for (var i = 0; i < vendors.length; i++) {
@@ -1877,8 +1855,6 @@ function ready() {
 			var values = [];
 
 			$(this).find('.value-item').each(function(value_index, element) {
-				console.log(element);
-
 				values.push($(element).data('value'));
 			});
 
@@ -1888,7 +1864,7 @@ function ready() {
 			};
 		});
 
-		console.log(optionsOrder);
+		// console.log(optionsOrder);
 		$.ajax({
       type: "POST",
       url: '/reorder-variants',
@@ -1898,7 +1874,7 @@ function ready() {
       },
       dataType: "JSON"
     }).success(function(new_options) {
-    	console.log(new_options);
+    	// console.log(new_options);
 
     	refreshVariantPanel();
 
@@ -1937,7 +1913,7 @@ function ready() {
       },
       dataType: "JSON"
     }).success(function(new_options) {
-			console.log(new_options);
+			// console.log(new_options);
 
 			refreshVariantPanel();
 			refreshIframe();
@@ -1984,7 +1960,7 @@ function ready() {
 			      },
 			      dataType: "JSON"
 		  		}).success(function(deleted_resource) {
-		  			console.log(deleted_resource);
+		  			// console.log(deleted_resource);
 		  			$('#editOptionsLink').removeClass('is-loading');
 
 		  			refreshVariantPanel();
@@ -1998,7 +1974,7 @@ function ready() {
 	function addImagesCallback(images) {
 		$('.images-container .column.twelve').remove();
   	$('#shopify_api_product_file').val('');
-  	console.log(images);
+  	// console.log(images);
   	var dataPageTotal = Math.floor(($('.variant-select-image-label').length-1)/10);
   	if ($('.variant-select-image').attr('name')) {
 	  	var variantIdRegex = $('.variant-select-image').attr('name').match(/[0-9]{11}/);
@@ -2062,7 +2038,7 @@ function ready() {
 	$('#resource-section').on('change', '#shopify_api_product_file', function() {
 		var data = [];
 		var files = Array.from(this.files);
-		console.log(files);
+		// console.log(files);
 		$('#variant-add-image').addClass('is-loading');
 		$('body').addClass('is-loading-body');
 
@@ -2071,7 +2047,7 @@ function ready() {
 				if ($('[name="id"]').val() === 'new') {
 					$('.images-container .column.twelve').remove();
 			  	$('#shopify_api_product_file').val('');
-			  	console.log(data);
+			  	// console.log(data);
 			  	var dataPageTotal = Math.floor(($('.variant-select-image-label').length-1)/10);
 
 			  	data.forEach(function(imageBase64, index) {
@@ -2239,7 +2215,7 @@ function ready() {
 			      },
 			      dataType: "JSON"
 			    }).success(function(images) {
-			    	console.log(images);
+			    	// console.log(images);
 			    	flashMessage('Image order has been saved.');
 			    	refreshIframe();
 			    }).error(function(error) {
@@ -2303,7 +2279,7 @@ function ready() {
       },
       dataType: "JSON"
     }).success(function(alt_tag_metafield) {
-    	console.log(alt_tag_metafield);
+    	// console.log(alt_tag_metafield);
     	$productImage.removeClass('is-loading');
 
     	if (alt_tag_metafield) {
@@ -2333,7 +2309,7 @@ function ready() {
       },
       dataType: "JSON"
     }).success(function(alt_tag_metafield) {
-    	console.log(alt_tag_metafield);
+    	// console.log(alt_tag_metafield);
     	$('#image-alt-tag-save').removeClass('is-loading');
     	flashMessage('The image has been updated.');
     	refreshIframe();
@@ -2378,7 +2354,7 @@ function ready() {
 			      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
 			    }).success(function(image) {
 			    	var no_image_html = '';
-			    	console.log(image);
+			    	// console.log(image);
 			    	flashMessage('The image has been deleted.');
 			    	refreshIframe();
 			    	$('.variant .variant_image[data-image-id="'+image.id+'"]').prepend('<i class="icon-image"></i>').find('img').remove();
@@ -2471,7 +2447,7 @@ function ready() {
 			resource: resource,
 			$this: $this,
 			callback: function(deleted_variant) {
-				console.log(deleted_variant);
+				// console.log(deleted_variant);
 				$('.wittyEDPanel[data-tier="4"]').blindRightOut(400, 'swing', function() {
 					$(this).css({'height': 0, 'opacity': 0});
 				});
@@ -2546,7 +2522,7 @@ function ready() {
 				      data: data_with_id,
 				      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
 				    }).success(function(variant) {
-				      console.log(variant);
+				      // console.log(variant);
 				      $('.single_variant_submit').removeClass('is-loading');
 				      $('form.ajax [name]:not(.variant_input)').prop('disabled', false);
 				      previousVariantState = data;
@@ -2613,7 +2589,7 @@ function ready() {
 	$('.accordion-trigger').click(function() {
 		var group = $(this).data('group');
 		var accordion = $(this).data('accordion');
-		console.log(group, accordion);
+		// console.log(group, accordion);
 
 		$('.accordion-target[data-group="' + group + '"]').slideUp();
 
