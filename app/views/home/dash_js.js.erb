@@ -28,7 +28,7 @@
 	/* This is my app's JavaScript */
 	var myAppJavaScript = function($) {
 
-		if (window.location.href.indexOf('ediframe=true') === -1) {
+		if (window.location.href.indexOf('ediframe=true') === -1 && window.location.href.indexOf('design_theme_id') === -1) {
 	  	var resource_handle = window.location.href.replace(window.location.origin, '').match(/^\/([a-z]+)\/?[a-z-0-9]*\/([a-z-0-9]+)$/);
 	    var url = $('#wittyEDselectWindow').data('src');
 			var params = resource_handle ? '?resource=' + resource_handle[1].replace(/s$/, '') + '&handle=' + resource_handle[2] : '' ;

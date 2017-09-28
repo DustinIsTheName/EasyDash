@@ -1048,7 +1048,7 @@ function ready() {
 		var html = $(this).data('html');
 		$(this).before(html);
 
-		$('.remove-condition').show();
+		$('.condition-fields').removeClass('hide-remove');
 	});
 
 	$('#resource-section').on('click', '.remove-condition', function(e) {
@@ -1058,7 +1058,7 @@ function ready() {
 		$(this).parent().remove();
 
 		if ($('.remove-condition').length == 1) {
-			$('.remove-condition').hide();
+			$('.condition-fields').addClass('hide-remove');
 		}
 	});
 
@@ -1180,13 +1180,18 @@ function ready() {
 		  	if ($('#shopify_api_article_author option[value="'+resource.author+'"]').length === 0) {
 		  		$('#shopify_api_article_author option[value="separator"]').before('<option value="'+resource.author+'">'+resource.author+'</option>');
 		  		$('#shopify_api_article_author').val(resource.author);
+		  		$('#shopify_api_article_author').show();
 		  		$('#shopify_api_article_new_author_name').val('');
 		  		$('.new_author_container').hide();
 		  	}
 		  }
 
-		  refreshIframe();
-			previousFormState = $('form.ajax').serialize();
+		  $('#dashboard-iframe').after('<div class="overlay is-loading"></div>');
+		  setTimeout(function() {
+		  	$('#dashboard-iframe + .overlay.is-loading').remove();
+		  	$('#save_resource').addClass('just-saved');
+			  refreshIframe();
+		  }, 1000);
 
 		  if ($('#confirmBoxOverlay #extra').length > 0) {
 		  	$('#confirmBoxOverlay').remove();
@@ -1217,6 +1222,7 @@ function ready() {
 		  }
 		  $('.description_tag_container').html(html);
 
+			previousFormState = $('form.ajax').serialize();
 
 		} else {
 			console.log(resource);
@@ -1232,6 +1238,29 @@ function ready() {
 		}
     $('.variant_input').prop('disabled', false);
 	});
+
+	$('#refresh-iframe').click(function(e) {
+		e.preventDefault();
+		$(this).addClass('rotate');
+		setTimeout(function() {
+			$('#refresh-iframe').removeClass('rotate');
+		}, 1000);
+		refreshIframe();
+	});
+
+	$('input').keydown(function() {
+		$('#save_resource').removeClass('just-saved');
+	});
+
+	$('select').change(function() {
+		$('#save_resource').removeClass('just-saved');
+	});
+
+	$('.make-rich-text-editor').on('froalaEditor.keydown', function (e, editor, keydownEvent) {
+	  $('#save_resource').removeClass('just-saved');
+	});
+
+
 
 	$('#resource-section').on("ajax:error", 'form.ajax', function(event, error) {
 		var resourceType = $('[name="resource"]').val();

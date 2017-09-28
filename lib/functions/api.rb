@@ -689,11 +689,13 @@ class API
     end
 
     if @custom_collection.save
+      # puts Colorize.green(@custom_collection.image.attributes)
       puts Colorize.green(@custom_collection.title + ' saved')
       if params[:id] == 'new'
         created_new_custom_collection = true
       end
     else 
+      # puts Colorize.red(@custom_collection.image.attributes)
       puts Colorize.red(@custom_collection.errors.messages)
     end
 
