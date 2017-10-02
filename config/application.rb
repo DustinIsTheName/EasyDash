@@ -4,6 +4,8 @@ require 'rails/all'
 require 'openssl'
 require 'base64'
 require 'open-uri'
+require 'json'
+require 'rest_client'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.

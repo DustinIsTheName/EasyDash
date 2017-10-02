@@ -42,16 +42,23 @@
 	    	$(this).toggleClass('open');
 	    });
 
-	    parent.postMessage(window.location.href, '<%= Rails.env.production? ? APP_URL : DEV_URL %>');
+	    try {
+		    parent.postMessage(window.location.href, '<%= Rails.env.production? ? APP_URL : DEV_URL %>');
+	   	} catch(e) {
+					
+			}
 
 	    if ( $('#admin_bar_iframe')[0] && window.location.href.indexOf('ediframe=true') === -1 ) {
 	    	$('.wittyEDContainer').show();
 	    }
 
 			window.addEventListener("message", function(messageEvent) {
-				console.log(messageEvent.data);
-				if (messageEvent.data === 'is-admin' && window.location.href.indexOf('ediframe=true') === -1) {
-					$('.wittyEDContainer').show();
+				try {
+					if (messageEvent.data === 'is-admin' && window.location.href.indexOf('ediframe=true') === -1) {
+						$('.wittyEDContainer').show();
+					}
+				} catch(e) {
+
 				}
 			}, false);
 		}
