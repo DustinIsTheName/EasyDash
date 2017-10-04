@@ -32,7 +32,22 @@ class HomeController < AuthenticatedController
     if recurring_application_charge.status == "accepted"
       recurring_application_charge.activate 
     else 
-      redirect_to root_path
+
+      @shop = Shop.find_by_shopify_domain(@shop_session.url)
+
+      access_token = @shop.shopify_token
+
+      revoke_url = 'https://'+@shop_session.url+'/admin/api_permissions/current.json'
+      headers = {
+        'X-Shopify-Access-Token' => access_token,
+        content_type: 'application/json',
+        accept: 'application/json'
+      }
+
+      response = RestClient.delete(revoke_url, headers)
+      puts response.code # 200 for success
+      
+      redirect_to 'http://'+@shop_session.url+'/admin/apps' and return
     end
 
     redirect_to root_path

@@ -1,9 +1,9 @@
 <%= o.fields_for 'rules[]', rule do |r| %>
-  <div class="row condition-fields">
+  <div class="row condition-fields<% if hide %> hide-remove<% end %>">
     <%= r.select :column, options_for_select(rules_column_options, selected: rule.column), {}, {class: "secondary extra_margin shopify_api_smart_collection_rules__column"} %>
     <%= r.select :relation, rules_relation_options, {}, {class: "secondary extra_margin"} %>
-    <%= r.text_field :condition, class: "secondary extra_margin" %>
-    <button type="button" class="remove-condition warning icon-trash"<% if hide %> style="display:none;"<% end %>></button>
+    <%= r.text_field :condition, class: "secondary" %>
+    <button type="button" class="remove-condition warning icon-trash"></button>
   </div>
   <div class="divider" style="margin-left: 0; margin-right: 0;"></div>
 <% end %>

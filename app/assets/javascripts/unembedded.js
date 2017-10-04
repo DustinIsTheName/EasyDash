@@ -424,6 +424,10 @@ function ready() {
 			var $this = $(this);
 
   		function exitFullscreen() {
+<<<<<<< HEAD
+=======
+  			// console.log($this.attr('id'), $this.prevAll('.fr-box'));
+>>>>>>> development
 				if ($this.froalaEditor('fullscreen.isActive')) {
 		  		$('label[for="'+$this.attr('id')+'"]').after($('.fr-box.active-in-fullscreen').removeClass('active-in-fullscreen'));
 					$this.froalaEditor('fullscreen.toggle');
@@ -517,51 +521,57 @@ function ready() {
 	window.addEventListener("message", function(messageEvent) {
 		// console.log(currentIframeUrl, messageEvent.data);
 
-		if (currentIframeUrl !== messageEvent.data && currentIframeUrl) {
+		try {
 
-			if (isUnsaved()) {
-			  confirmBox(
-			  	'You have unsaved changes on this page', // Title of confirm Box
-			  	'If you leave this page, all unsaved changes will be lost. Are you sure you want to leave this page?', // Text of confirm Box
-			  	'Leave Page', // Confirm Button Text
-			  	{
-			  	yes: function() { // function for confirm button
-			  		refreshForm(messageEvent);
-			  	},
-			  	no: function() {
-			  		refreshIframe();
-			  	}
-			  },
-			  {}, // function parameters; unneeded here
-			  {
-			  	text: "Save & Leave", // extra button text
-			  	function: function() {
-			  		var resourceType = $('[name="resource"]').val();
+			if (currentIframeUrl !== messageEvent.data && currentIframeUrl) {
 
-			  		$(this).addClass('is-loading');
-			  		$('.variant_input').prop('disabled', true);
-			  		var data = $('form.ajax').serialize();
-			  		$.ajax({
-				      type: "POST",
-				      url: '/dashboard-update', //sumbits it to the given url of the form
-				      data: data,
-				      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
-				    }).success(function(event, product) {
-				    	$('#confirmBoxOverlay').remove();
+				if (isUnsaved()) {
+				  confirmBox(
+				  	'You have unsaved changes on this page', // Title of confirm Box
+				  	'If you leave this page, all unsaved changes will be lost. Are you sure you want to leave this page?', // Text of confirm Box
+				  	'Leave Page', // Confirm Button Text
+				  	{
+				  	yes: function() { // function for confirm button
+				  		refreshForm(messageEvent);
+				  	},
+				  	no: function() {
+				  		refreshIframe();
+				  	}
+				  },
+				  {}, // function parameters; unneeded here
+				  {
+				  	text: "Save & Leave", // extra button text
+				  	function: function() {
+				  		var resourceType = $('[name="resource"]').val();
 
-				    	flashMessage(resourceType.replace('custom_', '').replace('smart_', '') + ' was successfully saved');
-				    	refreshForm(messageEvent);
-				    }).error(function(event, error) {
-		    	  	console.log(event, error);
+				  		$(this).addClass('is-loading');
+				  		$('.variant_input').prop('disabled', true);
+				  		var data = $('form.ajax').serialize();
+				  		$.ajax({
+					      type: "POST",
+					      url: '/dashboard-update', //sumbits it to the given url of the form
+					      data: data,
+					      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+					    }).success(function(event, product) {
+					    	$('#confirmBoxOverlay').remove();
 
-					  	$('.variant_input').prop('disabled', false);
-					  	flashMessage(resourceType.replace('custom_', '').replace('smart_', '').capitalize() + ' was not saved', 'error');
-				    });
-			  	}
-			  });
-			} else {
-				refreshForm(messageEvent);
+					    	flashMessage(resourceType.replace('custom_', '').replace('smart_', '') + ' was successfully saved');
+					    	refreshForm(messageEvent);
+					    }).error(function(event, error) {
+			    	  	console.log(event, error);
+
+						  	$('.variant_input').prop('disabled', false);
+						  	flashMessage(resourceType.replace('custom_', '').replace('smart_', '').capitalize() + ' was not saved', 'error');
+					    });
+				  	}
+				  });
+				} else {
+					refreshForm(messageEvent);
+				}
 			}
+
+		} catch(e) {
+					
 		}
 
 	}, false);
@@ -716,10 +726,14 @@ function ready() {
 	Resource Select functions and events
 	*******************************************/
 
-	if ((window.location.href.indexOf('preview-window') > -1 && $('.wittyEDSidebar.quick-select').data('is-admin'))) {
-		parent.postMessage('is-admin', 'https://' + $('body').data('shopify-url'));
-	} else if (window.location.href.indexOf('login') > -1 && getCookie('permanent_domain')) {
-		parent.postMessage('is-admin', 'https://' + getCookie('permanent_domain'));
+	try {
+		if ((window.location.href.indexOf('preview-window') > -1 && $('.wittyEDSidebar.quick-select').data('is-admin'))) {
+			parent.postMessage('is-admin', 'https://' + $('body').data('shopify-url'));
+		} else if (window.location.href.indexOf('login') > -1 && getCookie('permanent_domain')) {
+			parent.postMessage('is-admin', 'https://' + getCookie('permanent_domain'));
+		}
+	} catch(e) {
+
 	}
 
 	function extendResource(resource, page, total) {
@@ -1030,7 +1044,7 @@ function ready() {
 		var html = $(this).data('html');
 		$(this).before(html);
 
-		$('.remove-condition').show();
+		$('.condition-fields').removeClass('hide-remove');
 	});
 
 	$('#resource-section').on('click', '.remove-condition', function(e) {
@@ -1040,7 +1054,7 @@ function ready() {
 		$(this).parent().remove();
 
 		if ($('.remove-condition').length == 1) {
-			$('.remove-condition').hide();
+			$('.condition-fields').addClass('hide-remove');
 		}
 	});
 
@@ -1112,6 +1126,8 @@ function ready() {
 		var html;
 		var resourceType = $('[name="resource"]').val();
 
+		// console.log(resource.metafields_tracking);
+
 		$('#save_resource').removeClass('is-loading');
 		$('#shopify_api_'+resourceType.replace('blog','article')+'_handle').val(resource.handle);
 
@@ -1160,13 +1176,18 @@ function ready() {
 		  	if ($('#shopify_api_article_author option[value="'+resource.author+'"]').length === 0) {
 		  		$('#shopify_api_article_author option[value="separator"]').before('<option value="'+resource.author+'">'+resource.author+'</option>');
 		  		$('#shopify_api_article_author').val(resource.author);
+		  		$('#shopify_api_article_author').show();
 		  		$('#shopify_api_article_new_author_name').val('');
 		  		$('.new_author_container').hide();
 		  	}
 		  }
 
-		  refreshIframe();
-			previousFormState = $('form.ajax').serialize();
+		  $('#dashboard-iframe').after('<div class="overlay is-loading"></div>');
+		  setTimeout(function() {
+		  	$('#dashboard-iframe + .overlay.is-loading').remove();
+		  	$('#save_resource').addClass('just-saved');
+			  refreshIframe();
+		  }, 1000);
 
 		  if ($('#confirmBoxOverlay #extra').length > 0) {
 		  	$('#confirmBoxOverlay').remove();
@@ -1197,6 +1218,7 @@ function ready() {
 		  }
 		  $('.description_tag_container').html(html);
 
+			previousFormState = $('form.ajax').serialize();
 
 		} else {
 			// console.log(resource);
@@ -1212,6 +1234,29 @@ function ready() {
 		}
     $('.variant_input').prop('disabled', false);
 	});
+
+	$('#refresh-iframe').click(function(e) {
+		e.preventDefault();
+		$(this).addClass('rotate');
+		setTimeout(function() {
+			$('#refresh-iframe').removeClass('rotate');
+		}, 1000);
+		refreshIframe();
+	});
+
+	$('input').keydown(function() {
+		$('#save_resource').removeClass('just-saved');
+	});
+
+	$('select').change(function() {
+		$('#save_resource').removeClass('just-saved');
+	});
+
+	$('.make-rich-text-editor').on('froalaEditor.keydown', function (e, editor, keydownEvent) {
+	  $('#save_resource').removeClass('just-saved');
+	});
+
+
 
 	$('#resource-section').on("ajax:error", 'form.ajax', function(event, error) {
 		var resourceType = $('[name="resource"]').val();
@@ -1409,6 +1454,9 @@ function ready() {
 			      },
 			      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
 			    }).success(function(hsc) {
+
+			    	// console.log('hsc:', hsc);
+
 						if (hsc) {
 							$this.val(hsc.value);
 							$this.before('<input value="harmonized_system_code" class="new_hsc_name variant_input" type="hidden" name="variants['+variant.id+']metafields['+hsc.id+'][name]" id="variants_'+variant.id+'_new_metafields__name">');
@@ -1855,6 +1903,8 @@ function ready() {
 			var values = [];
 
 			$(this).find('.value-item').each(function(value_index, element) {
+
+				// console.log(element);
 				values.push($(element).data('value'));
 			});
 

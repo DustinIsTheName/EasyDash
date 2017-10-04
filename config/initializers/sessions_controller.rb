@@ -41,7 +41,7 @@ ShopifyApp::SessionsController.module_eval do
     def handle_recurring_application_charge
       unless ShopifyAPI::RecurringApplicationCharge.current
         recurring_application_charge = ShopifyAPI::RecurringApplicationCharge.new(
-          name: "Beta Test",
+          name: "Standard",
           price: 7.99,
           test: true,
           trial_days: 14)
