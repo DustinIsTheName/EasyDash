@@ -424,10 +424,9 @@ function ready() {
 			var $this = $(this);
 
   		function exitFullscreen() {
-<<<<<<< HEAD
-=======
+
   			// console.log($this.attr('id'), $this.prevAll('.fr-box'));
->>>>>>> development
+
 				if ($this.froalaEditor('fullscreen.isActive')) {
 		  		$('label[for="'+$this.attr('id')+'"]').after($('.fr-box.active-in-fullscreen').removeClass('active-in-fullscreen'));
 					$this.froalaEditor('fullscreen.toggle');
