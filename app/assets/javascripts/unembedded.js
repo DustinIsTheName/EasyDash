@@ -1162,7 +1162,7 @@ function ready() {
 				}
 			}
 	  	var variant;
-	    console.log("success " + resourceType, resource);
+	    // console.log("success " + resourceType, resource);
 
 	    if (resource.variants) {
 		    for (var i = 0; i < resource.variants.length; i++) {

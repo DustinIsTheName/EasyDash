@@ -768,6 +768,26 @@ label .icon-calendar { float: right; margin-top: 2px; }
         }
       }
 
+      &.collection_conditions {
+        .secondary:not(#shopify_api_custom_collection_sort_order) {
+          width: 85%;
+
+          &.add-condition {
+            width: 100%;
+          }
+        }
+
+        .hide-remove {
+          .secondary:not(#shopify_api_custom_collection_sort_order) {
+            width: 100%;
+          }
+
+          .remove-condition {
+            display: none;
+          }
+        }
+      }
+
       &.collection_conditions, 
       &.blog_post_options {
         .secondary {
@@ -812,7 +832,8 @@ label .icon-calendar { float: right; margin-top: 2px; }
         }
       }
       
-      &.collection_image, &.featured_image {
+      &.collection_image, 
+      &.featured_image {
         .column.twelve {
           position: relative;
           width: 100%;
