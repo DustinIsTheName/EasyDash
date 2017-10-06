@@ -650,6 +650,12 @@ function ready() {
   	}
   });
 
+  $('.expand-height').click(function(e) {
+  	e.preventDefault();
+
+  	$(this).hide().parent().css('height', 'auto');
+  });
+
 	// responsive iframe adjustments
 	$('#responsive-dropdown').click(function() {
 		$('.responsive-dropdown-items-container').toggleClass('active');

@@ -37,11 +37,14 @@
       <label>Sort:</label>
       <%= o.select :sort_order, sort_order_options, {}, {class: "secondary extra_margin"} %>
       <% if @resource.products %>
-        <% for product in @resource.products %>
-          <div class="product" data-product="<%= product.to_json %>">
-            <%= link_to product.title, dashboard_path(id: product.id, resource: 'product') %>
-          </div>
-        <% end %>
+        <div class="products-container">
+          <% for product in @resource.products %>
+            <div class="product" data-product="<%= product.to_json %>">
+              <%= link_to product.title, dashboard_path(id: product.id, resource: 'product') %>
+            </div>
+          <% end %>
+          <a class="expand-height" href="#">Show more products</a>
+        </div>
       <% end %>
     </div>
   </div>
