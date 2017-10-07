@@ -1299,7 +1299,7 @@ function ready() {
 		$('.trackduck-anonymous').click();
 	});
 
-	$('#send-message').click(function() {
+	$('#send-message, .reach-out').click(function() {
 		zE.activate();
 	});
 
