@@ -2404,12 +2404,15 @@ button.variant {padding: .9rem 1.5rem;}
 #refresh-iframe {
   margin-left: -4px;
   border-radius: 0 5px 5px 0;
-  border-left: 2px solid #fff;
+  border-left: 1px solid rgba(255,255,255,.3);
   border-top: 0;
   border-bottom: 0;
   display: none;
+  width: 36px;
+  height: 36px;
+  padding: .9rem 0;
 
-  svg {width: 16px;}
+  svg {width: 15px;}
 
   &.rotate svg {
     // qw12

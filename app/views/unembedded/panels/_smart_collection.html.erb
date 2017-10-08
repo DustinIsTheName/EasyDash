@@ -34,9 +34,11 @@
 <article>
   <div class="card">
     <div class="row">
+      <h5>Products</h5>
       <label>Sort:</label>
       <%= o.select :sort_order, sort_order_options, {}, {class: "secondary extra_margin"} %>
       <% if @resource.products %>
+        <div class="divider"></div>
         <div class="products-container">
           <% for product in @resource.products %>
             <div class="product" data-product="<%= product.to_json %>">
