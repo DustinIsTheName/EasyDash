@@ -652,6 +652,12 @@ function ready() {
   	}
   });
 
+  $('.expand-height').click(function(e) {
+  	e.preventDefault();
+
+  	$(this).hide().parent().css('height', 'auto');
+  });
+
 	// responsive iframe adjustments
 	$('#responsive-dropdown').click(function() {
 		$('.responsive-dropdown-items-container').toggleClass('active');
@@ -1278,7 +1284,8 @@ function ready() {
 		$('.trackduck-anonymous').click();
 	});
 
-	$('#send-message').click(function() {
+	$('#send-message, .reach-out').click(function(e) {
+		e.preventDefault();
 		zE.activate();
 	});
 
