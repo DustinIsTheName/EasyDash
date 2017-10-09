@@ -184,10 +184,27 @@ function ready() {
 	}
 
 	function refreshIframe() {
-		setTimeout(function() {
-			$('#dashboard-iframe').attr('src', currentIframeUrl);
-		}, 500);
+		// setTimeout(function() {
+		// 	$('#dashboard-iframe').attr('src', currentIframeUrl);
+		// }, 500); qw12
+
+		$.ajax({
+			type: 'GET',
+			url: '/iframe-content',
+			data: {
+				resource: $('[name="resource"]').val(),
+				handle: $('[name="handle"]').val()
+			},
+			dataType: 'html'
+		}).success(function(iframe_html) {
+			var doc = document.getElementById('dashboard-iframe').contentWindow.document;
+			doc.open();
+			doc.write(iframe_html);
+			doc.close();
+		}).error(basicError);
 	}
+
+	refreshIframe()
 
 	function confirmBox(confirmHeader, confirmText, confirmAction, callbackFunctions, callbackParams, extra_button) {
 		var confirm_function,

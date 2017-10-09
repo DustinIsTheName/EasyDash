@@ -49,6 +49,7 @@ Rails.application.routes.draw do
     get '/product-types' => :get_product_types
     get '/product-vendors' => :get_product_vendors
     post '/app-uninstall' => :app_uninstall
+    get '/iframe-content' => :get_iframe_content
   end
   
   # The priority is based upon order of creation: first created -> highest priority.

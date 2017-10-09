@@ -2042,6 +2042,7 @@ button.variant {padding: .9rem 1.5rem;}
   border-top: none;
   position: relative;
   clear: both;
+  cursor: pointer;
   
   &:nth-child(2) { 
     border-top-right-radius: .3rem;

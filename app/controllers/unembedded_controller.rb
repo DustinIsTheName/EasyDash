@@ -400,6 +400,34 @@ class UnembeddedController < ApplicationController
     head :ok, content_type: "text/html"
   end
 
+  def get_iframe_content
+    @type = params["resource"]
+
+    unless @type == 'resource_select'
+      if @type.include? 'collection'
+        resource_url = 'collections/'
+      elsif @type.include? 'blog'
+        @blogs = ShopifyAPI::Blog.all
+        blog = @blogs.select{|b| b.id == @resource.blog_id}.first
+        if blog
+          resource_url = 'blogs/' + blog.handle + '/'
+        else
+          resource_url = ''
+        end
+      else
+        resource_url = @type + 's/'
+      end
+      
+      resource_url = resource_url + params["handle"]
+    else
+      resource_url = ''
+    end
+
+    puts resource_url
+    
+    render html: open("https://#{@shop_session.url}/#{resource_url}?ediframe=true").read
+  end
+
   private
 
     def get_resources
