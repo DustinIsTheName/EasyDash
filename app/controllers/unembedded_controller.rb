@@ -425,7 +425,7 @@ class UnembeddedController < ApplicationController
 
     puts resource_url
     
-    render html: open("https://#{@shop_session.url}/#{resource_url}?ediframe=true").read
+    render html: open("https://#{@shop_session.url}/#{resource_url}?ediframe=true").read.html_safe
   end
 
   private
