@@ -290,7 +290,7 @@ function ready() {
 	function refreshForm(messageEvent) {
 		currentIframeUrl = messageEvent.data;
 		var url = messageEvent.data.replace(messageEvent.origin, '').split('?')[0];
-		var resource_handle = url.match(/^\/([a-z]+)\/?[a-z-0-9]*\/([a-z-0-9]+)$/);
+		var resource_handle = url.replace(/^\/collections\/?[a-z-0-9]+(?=\/)/, '').match(/^\/([a-z]+)\/?[a-z-0-9]*\/([a-z-0-9]+)$/);
 
 		$('.wittyEDPanelBody').fadeOut(200, 'swing', function() {
 			$('.wittyEDPanel.active').addClass('is-loading');
