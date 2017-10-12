@@ -105,6 +105,7 @@ class UnembeddedController < ApplicationController
     case @type
     when 'blog'
       @resource = ShopifyAPI::Article.find(:first, params: {handle: params["handle"]})
+      @shop = Shop.find_by_shopify_domain(@shop_session.url)
       @blogs = ShopifyAPI::Blog.all
       @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
     when 'collection'
