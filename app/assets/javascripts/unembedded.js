@@ -288,31 +288,33 @@ function ready() {
 	}
 
 	function refreshForm(messageEvent) {
-		currentIframeUrl = messageEvent.data;
-		var url = messageEvent.data.replace(messageEvent.origin, '').split('?')[0];
-		var resource_handle = url.replace(/^\/collections\/?[a-z-0-9]+(?=\/)/, '').match(/^\/([a-z]+)\/?[a-z-0-9]*\/([a-z-0-9]+)$/);
+		if (messageEvent.data.url_for_easydash) {
+			currentIframeUrl = messageEvent.data.url_for_easydash;
+			var url = messageEvent.data.url_for_easydash.replace(messageEvent.origin, '').split('?')[0];
+			var resource_handle = url.replace(/^\/collections\/?[a-z-0-9]+(?=\/)/, '').match(/^\/([a-z]+)\/?[a-z-0-9]*\/([a-z-0-9]+)$/);
 
-		$('.wittyEDPanelBody').fadeOut(200, 'swing', function() {
-			$('.wittyEDPanel.active').addClass('is-loading');
-		});
-		// $('#resource-section').append('<div id="refreshing-resource" class="is-loading">');
+			$('.wittyEDPanelBody').fadeOut(200, 'swing', function() {
+				$('.wittyEDPanel.active').addClass('is-loading');
+			});
+			// $('#resource-section').append('<div id="refreshing-resource" class="is-loading">');
 
-		if (resource_handle) {
-			$.ajax({
-				type: 'GET',
-				url: '/refresh-form',
-				data: {
-					resource: resource_handle[1].replace(/s$/, ''),
-					handle: resource_handle[2]
-				},
-				dataType: 'json'
-			}).success(refreshFormCallback).error(basicError);
-		} else {
-			$.ajax({
-				type: 'GET',
-				url: '/refresh-form',
-				dataType: 'json'
-			}).success(refreshFormCallback).error(basicError);
+			if (resource_handle) {
+				$.ajax({
+					type: 'GET',
+					url: '/refresh-form',
+					data: {
+						resource: resource_handle[1].replace(/s$/, ''),
+						handle: resource_handle[2]
+					},
+					dataType: 'json'
+				}).success(refreshFormCallback).error(basicError);
+			} else {
+				$.ajax({
+					type: 'GET',
+					url: '/refresh-form',
+					dataType: 'json'
+				}).success(refreshFormCallback).error(basicError);
+			}
 		}
 	}
 
@@ -522,7 +524,7 @@ function ready() {
 
 		try {
 
-			if (currentIframeUrl !== messageEvent.data && currentIframeUrl) {
+			if (currentIframeUrl !== messageEvent.data.url_for_easydash && currentIframeUrl) {
 
 				if (isUnsaved()) {
 				  confirmBox(

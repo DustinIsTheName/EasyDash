@@ -45,7 +45,7 @@
 	    });
 
 	    try {
-		    parent.postMessage(window.location.href, '<%= Rails.env.production? ? APP_URL : DEV_URL %>');
+		    parent.postMessage({ url_for_easydash: window.location.href }, '<%= Rails.env.production? ? APP_URL : DEV_URL %>');
 	   	} catch(e) {
 					
 			}
