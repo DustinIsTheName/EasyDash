@@ -307,7 +307,7 @@ function ready() {
 	function refreshForm(messageEvent) {
 		currentIframeUrl = messageEvent.data;
 		var url = messageEvent.data.replace(messageEvent.origin, '').split('?')[0];
-		var resource_handle = url.match(/^\/([a-z]+)\/?[a-z-0-9]*\/([a-z-0-9]+)$/);
+		var resource_handle = url.replace(/^\/collections\/?[a-z-0-9]+(?=\/)/, '').match(/^\/([a-z]+)\/?[a-z-0-9]*\/([a-z-0-9]+)$/);
 
 		$('.wittyEDPanelBody').fadeOut(200, 'swing', function() {
 			$('.wittyEDPanel.active').addClass('is-loading');
@@ -441,7 +441,9 @@ function ready() {
 			var $this = $(this);
 
   		function exitFullscreen() {
+
   			// console.log($this.attr('id'), $this.prevAll('.fr-box'));
+
 				if ($this.froalaEditor('fullscreen.isActive')) {
 		  		$('label[for="'+$this.attr('id')+'"]').after($('.fr-box.active-in-fullscreen').removeClass('active-in-fullscreen'));
 					$this.froalaEditor('fullscreen.toggle');
@@ -728,23 +730,6 @@ function ready() {
 			$(this).next().find('.select-sim-dropdown').addClass('is-loading');
 			$(this).next().find('.resource-search').keyup();
 		}
-
-		// if (!checkVisible(this.nextElementSibling)) {
-		// 	$(this).toggleClass('reverse');
-		// 	while (!checkVisible(this.nextElementSibling)) {
-		// 		$(this.nextElementSibling).addClass('no-arrow');
-
-		// 		if ($(this).hasClass('reverse')) {
-		// 			console.log(bottom);
-		// 			var bottom = parseInt($(this.nextElementSibling).css('bottom'));
-		// 			$(this.nextElementSibling).css({'bottom': bottom - 10, 'top': 'auto'});
-		// 		} else {
-		// 			console.log(top);
-		// 			var top = parseInt($(this.nextElementSibling).css('top'));
-		// 			$(this.nextElementSibling).css({'top': top + 10, 'bottom': 'auto'});
-		// 		}
-		// 	}
-		// }
 
 		event.stopPropagation();
 	});
@@ -1258,7 +1243,7 @@ function ready() {
 			previousFormState = $('form.ajax').serialize();
 
 		} else {
-			console.log(resource);
+			// console.log(resource);
 		  if ($('#confirmBoxOverlay #extra').length > 0) {
 		  	$('#confirmBoxOverlay').remove();
 		  }
@@ -1316,7 +1301,8 @@ function ready() {
 		$('.trackduck-anonymous').click();
 	});
 
-	$('#send-message, .reach-out').click(function() {
+	$('#send-message, .reach-out').click(function(e) {
+		e.preventDefault();
 		zE.activate();
 	});
 
@@ -1341,7 +1327,7 @@ function ready() {
       data: data_with_id,
       dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
     }).success(function(variant) {
-      console.log(variant);
+      // console.log(variant);
       $('.single_variant_submit').removeClass('is-loading');
       $('form.ajax [name]:not(.variant_input)').prop('disabled', false);
 
@@ -1388,7 +1374,6 @@ function ready() {
 		      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
 		    }).success(function(hsc) {
 		    	var $this = $('.harmonized_system_code');
-		    	console.log(hsc);
 
 					if (hsc) {
 						$this.val(hsc.value);
@@ -1492,7 +1477,9 @@ function ready() {
 			      },
 			      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
 			    }).success(function(hsc) {
+
 			    	// console.log('hsc:', hsc);
+
 						if (hsc) {
 							$this.val(hsc.value);
 							$this.before('<input value="harmonized_system_code" class="new_hsc_name variant_input" type="hidden" name="variants['+variant.id+']metafields['+hsc.id+'][name]" id="variants_'+variant.id+'_new_metafields__name">');
@@ -1939,8 +1926,8 @@ function ready() {
 			var values = [];
 
 			$(this).find('.value-item').each(function(value_index, element) {
-				// console.log(element);
 
+				// console.log(element);
 				values.push($(element).data('value'));
 			});
 
