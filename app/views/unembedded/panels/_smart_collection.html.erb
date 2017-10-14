@@ -45,7 +45,9 @@
               <%= link_to product.title, dashboard_path(id: product.id, resource: 'product') %>
             </div>
           <% end %>
-          <a class="expand-height" href="#">Show more products</a>
+          <% if @resource.products.size > 10 %>
+            <a class="expand-height" href="#">Show more products</a>
+          <% end %>
         </div>
       <% end %>
     </div>
