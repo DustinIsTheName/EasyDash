@@ -14,6 +14,8 @@
   <div class="card collection_conditions">
     <div class="row">
       <h5>Products</h5>
+      <label>Sort:</label>
+      <%= o.select :sort_order, sort_order_options, {}, {class: "secondary extra_margin"} %>
       <% if @resource.products %>
         <% for product in @resource.products %>
           <%= fields_for 'products', '' do |c| %>
@@ -36,15 +38,19 @@
         </div>
       </div>
       <% if @resource.products %>
-        <% for product in @resource.products %>
-          <div class="product" data-product="<%= product.to_json %>">
-            <%= link_to product.title, dashboard_path(id: product.id, resource: 'product') %>
-            <span class="icon-close"></span>
-          </div>
-        <% end %>
+        <div class="divider"></div>
+        <div class="products-container">
+          <% for product in @resource.products %>
+            <div class="product" data-product="<%= product.to_json %>">
+              <%= link_to product.title, dashboard_path(id: product.id, resource: 'product') %>
+              <span class="icon-close"></span>
+            </div>
+          <% end %>
+          <% if @resource.products.size > 10 %>
+            <a class="expand-height" href="#">Show more products</a>
+          <% end %>
+        </div>
       <% end %>
-      <label>Sort:</label>
-      <%= o.select :sort_order, sort_order_options, {}, {class: "secondary"} %>
     </div>
   </div>
 </article>

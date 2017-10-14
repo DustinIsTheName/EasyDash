@@ -158,24 +158,32 @@
           <div style="clear:both;"></div>
         </div>
       </div>
-      <% if @resource.collections %>
-        <% for collection in @resource.collections %>
-          <div class="collection" data-collection="<%= collection.to_json %>">
-            <%= link_to collection.title, dashboard_path(id: collection.id, resource: 'custom_collection') %>
-            <span class="icon-close"></span>
-          </div>
-        <% end %>
-      <% end %>
-      <% if @smart_collections %>
-        <% for collection in @smart_collections %>
-          <div class="collection" data-collection="<%= collection.to_json %>">
-            <%= link_to collection.title, dashboard_path(id: collection.id, resource: 'smart_collection') %>
-            <span class="auto">auto</span>
-          </div>
-        <% end %>
-        <% if @smart_collections.size == 0 and @resource.collections.size == 0 %>
-          <em>Add this product to a collection so it’s easy to find in your store.</em>
-        <% end %>
+      <% if @resource.collections or @smart_collections %>
+        <div class="divider"></div>
+        <div class="products-container">
+          <% if @resource.collections %>
+            <% for collection in @resource.collections %>
+              <div class="collection" data-collection="<%= collection.to_json %>">
+                <%= link_to collection.title, dashboard_path(id: collection.id, resource: 'custom_collection') %>
+                <span class="icon-close"></span>
+              </div>
+            <% end %>
+          <% end %>
+          <% if @smart_collections %>
+            <% for collection in @smart_collections %>
+              <div class="collection" data-collection="<%= collection.to_json %>">
+                <%= link_to collection.title, dashboard_path(id: collection.id, resource: 'smart_collection') %>
+                <span class="auto">auto</span>
+              </div>
+            <% end %>
+            <% if @smart_collections.size == 0 and @resource.collections.size == 0 %>
+              <em>Add this product to a collection so it’s easy to find in your store.</em>
+            <% end %>
+          <% end %>
+          <% if @resource.collections.size + @smart_collections.size > 10 %>
+            <a class="expand-height product" href="#">Show more products</a>
+          <% end %>
+        </div>
       <% end %>
     </div>
     <div class="divider"></div>

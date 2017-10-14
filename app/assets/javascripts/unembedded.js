@@ -657,7 +657,7 @@ function ready() {
   $('.expand-height').click(function(e) {
   	e.preventDefault();
 
-  	$(this).hide().parent().css('height', 'auto');
+  	$(this).hide().parent().css('max-height', 'none');
   });
 
 	// responsive iframe adjustments
@@ -1013,7 +1013,8 @@ function ready() {
     new_html += '</div>';
 
 		$('.resource-search[data-exceptions="product-panel"]').before('<input value="'+id+'" id="collection_'+id+'" type="hidden" name="collections[]">');
-    $('.product-pannel-collection-select').after(new_html);
+    // $('.product-pannel-collection-select').after(new_html);
+    $('.products-container').prepend(new_html);
 	});
 
 	$('#resource-section').on('click', '.product-collections-select .icon-close', function() {
@@ -1036,7 +1037,8 @@ function ready() {
     new_html += '</div>';
 
 		$('.resource-search[data-exceptions="collection-panel"]').before('<input value="'+id+'" id="product_'+id+'" type="hidden" name="products[]">');
-    $('.collection-pannel-product-select').after(new_html);
+    // $('.collection-pannel-product-select').after(new_html);
+    $('.products-container').prepend(new_html);
 	});
 
 	$('#resource-section').on('click', '.collection_conditions .icon-close', function() {
