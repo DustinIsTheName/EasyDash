@@ -404,7 +404,7 @@ class UnembeddedController < ApplicationController
   def get_iframe_content
     @type = params["resource"]
 
-    unless @type == 'resource_select'
+    unless @type == 'resource_select' or @type == nil
       if @type.include? 'collection'
         resource_url = 'collections/'
       elsif @type.include? 'blog'
@@ -423,10 +423,88 @@ class UnembeddedController < ApplicationController
     else
       resource_url = ''
     end
-
-    puts resource_url
     
-    render html: open("https://#{@shop_session.url}/#{resource_url}?ediframe=true").read.html_safe
+    # render html: open("https://#{@shop_session.url}/#{resource_url}?ediframe=true").read.html_safe
+    uri = URI.parse("https://#{@shop_session.url}/#{resource_url}?ediframe=true")
+    if session[:iframe_cookies]
+      headers = {
+        'Cookie' => session[:iframe_cookies]
+      }
+    else
+      headers = {}
+    end
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+
+    response = http.get(uri, headers)
+
+    while response.code == "301" or response.code == "302"
+      response = http.get(URI.parse(response['location']), headers)
+    end
+
+    all_cookies = response.get_fields('set-cookie')
+    cookies_array = Array.new
+    all_cookies&.each { | cookie |
+        cookies_array.push(cookie.split('; ')[0])
+    }
+    cookies = cookies_array.join('; ')
+    session[:iframe_cookies] = cookies
+
+    render html: response.body.html_safe
+  end
+
+  def get_from_site
+    puts Colorize.magenta("https://#{@shop_session.url}#{params['url']}")
+    uri = URI.parse("https://#{@shop_session.url}#{params['url']}")
+    if session[:iframe_cookies]
+      headers = {
+        'Cookie' => session[:iframe_cookies]
+      }
+    else
+      headers = {}
+    end
+
+    response = Net::HTTP.get_response(uri, headers)
+    while response.code == "301" or response.code == "302"
+      response = Net::HTTP.get_response(URI.parse(response['location']), headers)
+    end
+
+    all_cookies = response.get_fields('set-cookie')
+    cookies_array = Array.new
+    all_cookies.each { | cookie |
+        cookies_array.push(cookie.split('; ')[0])
+    }
+    cookies = cookies_array.join('; ')
+    session[:iframe_cookies] = cookies
+
+    render html: response.body.html_safe
+  end
+
+  def post_to_site
+    puts Colorize.magenta("https://#{@shop_session.url}#{params['url']}")
+    uri = URI.parse("https://#{@shop_session.url}#{params['url']}")
+    if session[:iframe_cookies]
+      headers = {
+        'Cookie' => session[:iframe_cookies]
+      }
+    else
+      headers = {}
+    end
+
+    response = Net::HTTP.post_form(uri, CGI::parse(params["params"]), headers)
+    while response.code == "301" or response.code == "302"
+      response = Net::HTTP.get_response(URI.parse(response['location']), headers)
+    end
+
+    all_cookies = response.get_fields('set-cookie')
+    cookies_array = Array.new
+    all_cookies.each { | cookie |
+        cookies_array.push(cookie.split('; ')[0])
+    }
+    cookies = cookies_array.join('; ')
+    session[:iframe_cookies] = cookies
+
+    render html: response.body.html_safe
   end
 
   private

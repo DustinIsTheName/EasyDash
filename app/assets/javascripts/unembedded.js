@@ -541,51 +541,86 @@ function ready() {
 
 		try {
 
-			if (currentIframeUrl !== messageEvent.data.url_for_easydash && currentIframeUrl) {
+			if (messageEvent.data.url_for_easydash) {
 
-				if (isUnsaved()) {
-				  confirmBox(
-				  	'You have unsaved changes on this page', // Title of confirm Box
-				  	'If you leave this page, all unsaved changes will be lost. Are you sure you want to leave this page?', // Text of confirm Box
-				  	'Leave Page', // Confirm Button Text
-				  	{
-				  	yes: function() { // function for confirm button
-				  		refreshForm(messageEvent);
-				  	},
-				  	no: function() {
-				  		refreshIframe();
-				  	}
-				  },
-				  {}, // function parameters; unneeded here
-				  {
-				  	text: "Save & Leave", // extra button text
-				  	function: function() {
-				  		var resourceType = $('[name="resource"]').val();
+				if (currentIframeUrl !== messageEvent.data.url_for_easydash && currentIframeUrl) {
 
-				  		$(this).addClass('is-loading');
-				  		$('.variant_input').prop('disabled', true);
-				  		var data = $('form.ajax').serialize();
-				  		$.ajax({
-					      type: "POST",
-					      url: '/dashboard-update', //sumbits it to the given url of the form
-					      data: data,
-					      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
-					    }).success(function(event, product) {
-					    	$('#confirmBoxOverlay').remove();
+					if (isUnsaved()) {
+					  confirmBox(
+					  	'You have unsaved changes on this page', // Title of confirm Box
+					  	'If you leave this page, all unsaved changes will be lost. Are you sure you want to leave this page?', // Text of confirm Box
+					  	'Leave Page', // Confirm Button Text
+					  	{
+					  	yes: function() { // function for confirm button
+					  		refreshForm(messageEvent);
+					  	},
+					  	no: function() {
+					  		refreshIframe();
+					  	}
+					  },
+					  {}, // function parameters; unneeded here
+					  {
+					  	text: "Save & Leave", // extra button text
+					  	function: function() {
+					  		var resourceType = $('[name="resource"]').val();
 
-					    	flashMessage(resourceType.replace('custom_', '').replace('smart_', '') + ' was successfully saved');
-					    	refreshForm(messageEvent);
-					    }).error(function(event, error) {
-			    	  	console.log(event, error);
+					  		$(this).addClass('is-loading');
+					  		$('.variant_input').prop('disabled', true);
+					  		var data = $('form.ajax').serialize();
+					  		$.ajax({
+						      type: "POST",
+						      url: '/dashboard-update', //sumbits it to the given url of the form
+						      data: data,
+						      dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+						    }).success(function(event, product) {
+						    	$('#confirmBoxOverlay').remove();
 
-						  	$('.variant_input').prop('disabled', false);
-						  	flashMessage(resourceType.replace('custom_', '').replace('smart_', '').capitalize() + ' was not saved', 'error');
-					    });
-				  	}
-				  });
-				} else {
-					refreshForm(messageEvent);
+						    	flashMessage(resourceType.replace('custom_', '').replace('smart_', '') + ' was successfully saved');
+						    	refreshForm(messageEvent);
+						    }).error(function(event, error) {
+				    	  	console.log(event, error);
+
+							  	$('.variant_input').prop('disabled', false);
+							  	flashMessage(resourceType.replace('custom_', '').replace('smart_', '').capitalize() + ' was not saved', 'error');
+						    });
+					  	}
+					  });
+					} else {
+						refreshForm(messageEvent);
+					}
 				}
+
+			} else if (messageEvent.data.anchor_url) {
+				$.ajax({
+					type: 'GET',
+					url: '/from-site',
+					data: {
+						url: messageEvent.data.anchor_url
+					},
+					dataType: 'html'
+				}).success(function(iframe_html) {
+					var doc = document.getElementById('dashboard-iframe').contentWindow.document;
+					doc.open();
+					doc.write(iframe_html);
+					doc.close();
+				}).error(basicError);
+			} else if (messageEvent.data.form_url) {
+				$.ajax({
+					type: 'GET',
+					url: '/post-to-site',
+					data: {
+						url: messageEvent.data.form_url,
+						params: messageEvent.data.params
+					},
+					dataType: 'html'
+				}).success(function(iframe_html) {
+					// console.log(iframe_html);
+
+					var doc = document.getElementById('dashboard-iframe').contentWindow.document;
+					doc.open();
+					doc.write(iframe_html);
+					doc.close();
+				}).error(basicError);
 			}
 
 		} catch(e) {

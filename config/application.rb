@@ -6,6 +6,9 @@ require 'base64'
 require 'open-uri'
 require 'json'
 require 'rest_client'
+require "net/http"
+require "uri"
+require 'cgi'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.

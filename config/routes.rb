@@ -50,6 +50,8 @@ Rails.application.routes.draw do
     get '/product-vendors' => :get_product_vendors
     post '/app-uninstall' => :app_uninstall
     get '/iframe-content' => :get_iframe_content
+    get '/from-site' => :get_from_site
+    get '/post-to-site' => :post_to_site
   end
   
   # The priority is based upon order of creation: first created -> highest priority.

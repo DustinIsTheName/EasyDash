@@ -28,6 +28,8 @@
 	/* This is my app's JavaScript */
 	var myAppJavaScript = function($) {
 
+		console.log(window.location.href);
+
 		if (window.location.href.indexOf('ediframe=true') === -1 && window.location.href.indexOf('design_theme_id') === -1) {
 
 			if (window.top === window.self) {
@@ -46,8 +48,25 @@
 
 	    try {
 		    parent.postMessage({ url_for_easydash: window.location.href }, '<%= Rails.env.production? ? APP_URL : DEV_URL %>');
+
+		    $('a').click(function(e) {
+		    	e.preventDefault();
+		    	e.stopPropagation();
+		    	e.stopImmediatePropagation();
+		    	if ($(this).attr('href').indexOf('#') === -1) {
+			    	parent.postMessage({ anchor_url: $(this).attr('href') }, '<%= Rails.env.production? ? APP_URL : DEV_URL %>');
+			    }
+		    });
+
+		    $('form').submit(function(e) {
+		    	e.preventDefault();
+		    	e.stopPropagation();
+		    	e.stopImmediatePropagation();
+		    	parent.postMessage({ form_url: $(this).attr('action'), params: $(this).serialize() }, '<%= Rails.env.production? ? APP_URL : DEV_URL %>');
+		    });
+
 	   	} catch(e) {
-					
+				
 			}
 
 	    if ( $('#admin_bar_iframe')[0] && window.location.href.indexOf('ediframe=true') === -1 ) {
