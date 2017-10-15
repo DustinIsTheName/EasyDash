@@ -183,17 +183,21 @@ function ready() {
 		return currentVariantState !== previousVariantState;
 	}
 
+	var currentIframeUrl = '/' + $('[name="resource"]').val() + '/' + $('[name="handle"]').val();
+
 	function refreshIframe() {
 		// setTimeout(function() {
 		// 	$('#dashboard-iframe').attr('src', currentIframeUrl);
 		// }, 500); qw12
 
+		var resource_handle = currentIframeUrl.replace(/^\/collections\/?[a-z-0-9]+(?=\/)/, '').match(/^\/([a-z]+)\/?[a-z-0-9]*\/([a-z-0-9]+)$/);
+
 		$.ajax({
 			type: 'GET',
 			url: '/iframe-content',
 			data: {
-				resource: $('[name="resource"]').val(),
-				handle: $('[name="handle"]').val()
+				resource: resource_handle[1].replace(/s$/, ''),
+				handle: resource_handle[2]
 			},
 			dataType: 'html'
 		}).success(function(iframe_html) {
@@ -495,7 +499,6 @@ function ready() {
 
 	initializeFroalaEditor();
 
-	var currentIframeUrl = $('[name="resource"]').val() + '/' + $('[name="handle"]').val();
 	$('#section-edit-variant [name^="variants"]').addClass('variant_input');
 	$('.variant_input').prop('disabled', true);
 	var previousFormState = $('form.ajax').serialize();

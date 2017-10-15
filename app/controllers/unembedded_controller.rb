@@ -123,7 +123,7 @@ class UnembeddedController < ApplicationController
       @resource = ShopifyAPI::Product.find(:first, params: {handle: params["handle"]})
       @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
       @fulfillment_services = ShopifyAPI::FulfillmentService.find(:all, params: {scope: :all, fields: ['name', 'handle']})
-      @smart_collections = ShopifyAPI::SmartCollection.find(:all, params: {product_id: params[:id], limit: 250, fields: ['title', 'handle', 'id']})
+      @smart_collections = ShopifyAPI::SmartCollection.find(:all, params: {product_id: @resource.id, limit: 250, fields: ['title', 'handle', 'id']})
     end
 
     unless @resource
