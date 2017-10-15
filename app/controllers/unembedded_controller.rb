@@ -402,6 +402,8 @@ class UnembeddedController < ApplicationController
   end
 
   def get_iframe_content
+    puts params
+
     @type = params["resource"]
 
     unless @type == 'resource_select' or @type == nil
@@ -426,83 +428,54 @@ class UnembeddedController < ApplicationController
     
     # render html: open("https://#{@shop_session.url}/#{resource_url}?ediframe=true").read.html_safe
     uri = URI.parse("https://#{@shop_session.url}/#{resource_url}?ediframe=true")
-    if session[:iframe_cookies]
-      headers = {
-        'Cookie' => session[:iframe_cookies]
-      }
-    else
-      headers = {}
-    end
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
 
+    headers = session[:iframe_cookies] ? { 'Cookie' => session[:iframe_cookies] } : {}
     response = http.get(uri, headers)
+    store_cookies(response.get_fields('set-cookie'))
 
     while response.code == "301" or response.code == "302"
+      headers = session[:iframe_cookies] ? { 'Cookie' => session[:iframe_cookies] } : {}
       response = http.get(URI.parse(response['location']), headers)
+      store_cookies(response.get_fields('set-cookie'))
     end
-
-    all_cookies = response.get_fields('set-cookie')
-    cookies_array = Array.new
-    all_cookies&.each { | cookie |
-        cookies_array.push(cookie.split('; ')[0])
-    }
-    cookies = cookies_array.join('; ')
-    session[:iframe_cookies] = cookies
 
     render html: response.body.html_safe
   end
 
   def get_from_site
-    puts Colorize.magenta("https://#{@shop_session.url}#{params['url']}")
-    uri = URI.parse("https://#{@shop_session.url}#{params['url']}")
-    if session[:iframe_cookies]
-      headers = {
-        'Cookie' => session[:iframe_cookies]
-      }
-    else
-      headers = {}
-    end
+    uri = URI.parse("https://#{@shop_session.url}#{params['url']}?ediframe=true")
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
 
-    response = Net::HTTP.get_response(uri, headers)
+    headers = session[:iframe_cookies] ? { 'Cookie' => session[:iframe_cookies] } : {}
+    response = http.get(uri, headers)
+    store_cookies(response.get_fields('set-cookie'))
+
     while response.code == "301" or response.code == "302"
-      response = Net::HTTP.get_response(URI.parse(response['location']), headers)
+      headers = session[:iframe_cookies] ? { 'Cookie' => session[:iframe_cookies] } : {}
+      response = http.get(URI.parse(response['location']), headers)
+      store_cookies(response.get_fields('set-cookie'))
     end
-
-    all_cookies = response.get_fields('set-cookie')
-    cookies_array = Array.new
-    all_cookies.each { | cookie |
-        cookies_array.push(cookie.split('; ')[0])
-    }
-    cookies = cookies_array.join('; ')
-    session[:iframe_cookies] = cookies
 
     render html: response.body.html_safe
   end
 
   def post_to_site
-    puts Colorize.magenta("https://#{@shop_session.url}#{params['url']}")
-    uri = URI.parse("https://#{@shop_session.url}#{params['url']}")
-    if session[:iframe_cookies]
-      headers = {
-        'Cookie' => session[:iframe_cookies]
-      }
-    else
-      headers = {}
-    end
+    uri = URI.parse("https://#{@shop_session.url}#{params['url']}?ediframe=true")
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
 
-    response = Net::HTTP.post_form(uri, CGI::parse(params["params"]), headers)
+    headers = session[:iframe_cookies] ? { 'Cookie' => session[:iframe_cookies] } : {}
+    response = http.post(uri, params["params"], headers)
+    store_cookies(response.get_fields('set-cookie'))
+
     while response.code == "301" or response.code == "302"
-      response = Net::HTTP.get_response(URI.parse(response['location']), headers)
+      headers = session[:iframe_cookies] ? { 'Cookie' => session[:iframe_cookies] } : {}
+      response = http.get(URI.parse(response['location']), headers)
+      store_cookies(response.get_fields('set-cookie'))
     end
-
-    all_cookies = response.get_fields('set-cookie')
-    cookies_array = Array.new
-    all_cookies.each { | cookie |
-        cookies_array.push(cookie.split('; ')[0])
-    }
-    cookies = cookies_array.join('; ')
-    session[:iframe_cookies] = cookies
 
     render html: response.body.html_safe
   end
@@ -542,6 +515,39 @@ class UnembeddedController < ApplicationController
         puts Colorize.red("Invalid verification!")
       end
       calculated_hmac == hmac_header
+    end
+
+    def store_cookies(all_cookies)
+      cookie_hash = {}
+      session[:iframe_cookies].split('; ').each do |c|
+        split_cookie = c.split('=')
+        cookie_hash[split_cookie[0]] = split_cookie[1]
+      end
+
+      old_cookies_array = Array.new
+      all_cookies&.each { | cookie |
+        cleaned_cookie = cookie.split('; ')[0]
+        old_cookies_array.push(cleaned_cookie)
+        split_cookie = cleaned_cookie.split('=')
+        cookie_hash[split_cookie[0]] = split_cookie[1]
+      }
+
+      cookies_array = Array.new
+      cookie_hash.each do |c, v|
+        if c
+          if v
+            cookies_array.push(c + '=' + v)
+          else
+            cookies_array.push(c + '=')
+          end
+        end
+      end
+
+      cookies = cookies_array.join('; ')
+      puts Colorize.blue(cookies)
+      puts Colorize.purple(old_cookies_array.join('; '))
+      session[:iframe_cookies] = cookies
+      
     end
 
 end

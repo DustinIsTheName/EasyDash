@@ -47,23 +47,27 @@
 	    });
 
 	    try {
-		    parent.postMessage({ url_for_easydash: window.location.href }, '<%= Rails.env.production? ? APP_URL : DEV_URL %>');
 
-		    $('a').click(function(e) {
-		    	e.preventDefault();
-		    	e.stopPropagation();
-		    	e.stopImmediatePropagation();
-		    	if ($(this).attr('href').indexOf('#') === -1) {
-			    	parent.postMessage({ anchor_url: $(this).attr('href') }, '<%= Rails.env.production? ? APP_URL : DEV_URL %>');
-			    }
-		    });
+	    	console.log(window.location.href);
+	    	if (window.location.href.indexOf('<%= Rails.env.production? ? APP_URL : DEV_URL %>') > -1) {
+			    parent.postMessage({ url_for_easydash: window.location.href }, '<%= Rails.env.production? ? APP_URL : DEV_URL %>');
 
-		    $('form').submit(function(e) {
-		    	e.preventDefault();
-		    	e.stopPropagation();
-		    	e.stopImmediatePropagation();
-		    	parent.postMessage({ form_url: $(this).attr('action'), params: $(this).serialize() }, '<%= Rails.env.production? ? APP_URL : DEV_URL %>');
-		    });
+			    $('a').click(function(e) {
+			    	e.preventDefault();
+			    	e.stopPropagation();
+			    	e.stopImmediatePropagation();
+			    	if ($(this).attr('href').indexOf('#') === -1) {
+				    	parent.postMessage({ anchor_url: $(this).attr('href') }, '<%= Rails.env.production? ? APP_URL : DEV_URL %>');
+				    }
+			    });
+
+			    $('form').submit(function(e) {
+			    	e.preventDefault();
+			    	e.stopPropagation();
+			    	e.stopImmediatePropagation();
+			    	parent.postMessage({ form_url: $(this).attr('action'), params: $(this).serialize() }, '<%= Rails.env.production? ? APP_URL : DEV_URL %>');
+			    });
+			  }
 
 	   	} catch(e) {
 				
