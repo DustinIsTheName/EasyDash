@@ -520,7 +520,7 @@ class UnembeddedController < ApplicationController
 
     def store_cookies(all_cookies)
       cookie_hash = {}
-      session[:iframe_cookies].split('; ').each do |c|
+      session[:iframe_cookies]&.split('; ')&.each do |c|
         split_cookie = c.split('=')
         cookie_hash[split_cookie[0]] = split_cookie[1]
       end
