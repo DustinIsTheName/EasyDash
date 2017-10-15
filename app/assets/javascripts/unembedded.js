@@ -183,7 +183,7 @@ function ready() {
 		return currentVariantState !== previousVariantState;
 	}
 
-	var currentIframeUrl = '/' + $('[name="resource"]').val() + '/' + $('[name="handle"]').val();
+	var currentIframeUrl = '/' + $('[name="resource"]').val().replace('custom_', '').replace('smart_', '') + '/' + $('[name="handle"]').val();
 
 	function refreshIframe() {
 		// setTimeout(function() {
@@ -210,7 +210,7 @@ function ready() {
 		}).error(basicError);
 	}
 
-	refreshIframe()
+	refreshIframe();
 
 	function confirmBox(confirmHeader, confirmText, confirmAction, callbackFunctions, callbackParams, extra_button) {
 		var confirm_function,
@@ -1228,10 +1228,6 @@ function ready() {
 	    // time to provide feedback
 		  flashMessage(resourceType.replace('custom_', '').replace('smart_', '').capitalize() + ' was successfully saved');
 
-		  currentIframeUrlArray = currentIframeUrl.split('/');
-		  currentIframeUrlArray.pop();
-		  currentIframeUrlArray.push(resource.handle + '?ediframe=true')
-		  currentIframeUrl = currentIframeUrlArray.join('/')
 		  if (resourceType === 'blog') {
 		  	currentIframeUrl = currentIframeUrl.replace(/blogs\/[a-z|-]*/, 'blogs/'+resource.blog.handle);
 
