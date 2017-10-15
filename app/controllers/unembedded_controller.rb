@@ -410,6 +410,7 @@ class UnembeddedController < ApplicationController
       if @type.include? 'collection'
         resource_url = 'collections/'
       elsif @type.include? 'blog'
+        @resource = ShopifyAPI::Article.find(:first, params: {handle:params["handle"]})
         @blogs = ShopifyAPI::Blog.all
         blog = @blogs.select{|b| b.id == @resource.blog_id}.first
         if blog
@@ -544,10 +545,7 @@ class UnembeddedController < ApplicationController
       end
 
       cookies = cookies_array.join('; ')
-      puts Colorize.blue(cookies)
-      puts Colorize.purple(old_cookies_array.join('; '))
       session[:iframe_cookies] = cookies
-      
     end
 
 end

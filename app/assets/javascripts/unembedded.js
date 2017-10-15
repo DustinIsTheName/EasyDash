@@ -305,6 +305,7 @@ function ready() {
 	}
 
 	function refreshForm(messageEvent) {
+		console.log('DATA HERE:', messageEvent.data);
 		if (messageEvent.data.url_for_easydash) {
 			currentIframeUrl = messageEvent.data.url_for_easydash;
 			var url = messageEvent.data.url_for_easydash.replace(messageEvent.origin, '').split('?')[0];
@@ -494,7 +495,7 @@ function ready() {
 
 	initializeFroalaEditor();
 
-	var currentIframeUrl = $('#dashboard-iframe').attr('src');
+	var currentIframeUrl = $('[name="resource"]').val() + '/' + $('[name="handle"]').val();
 	$('#section-edit-variant [name^="variants"]').addClass('variant_input');
 	$('.variant_input').prop('disabled', true);
 	var previousFormState = $('form.ajax').serialize();
@@ -540,6 +541,8 @@ function ready() {
 		// console.log(currentIframeUrl, messageEvent.data);
 
 		try {
+
+			console.log('ALL EVENT DATA, and currentIframeUrl', messageEvent.data, currentIframeUrl);
 
 			if (messageEvent.data.url_for_easydash) {
 
