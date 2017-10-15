@@ -183,7 +183,11 @@ function ready() {
 		return currentVariantState !== previousVariantState;
 	}
 
-	var currentIframeUrl = '/' + $('[name="resource"]').val().replace('custom_', '').replace('smart_', '') + '/' + $('[name="handle"]').val();
+	if ($('[name="resource"]').val() && $('[name="handle"]').val()) {
+		var currentIframeUrl = '/' + $('[name="resource"]').val().replace('custom_', '').replace('smart_', '') + '/' + $('[name="handle"]').val();
+	} else {
+		currentIframeUrl = '/'
+	}
 
 	function refreshIframe() {
 		// setTimeout(function() {
