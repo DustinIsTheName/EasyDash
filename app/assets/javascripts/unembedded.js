@@ -192,6 +192,8 @@ function ready() {
 
 		var resource_handle = currentIframeUrl.replace(/^\/collections\/?[a-z-0-9]+(?=\/)/, '').match(/^\/([a-z]+)\/?[a-z-0-9]*\/([a-z-0-9]+)$/);
 
+		resource_handle = resource_handle || ['', 'resource_select', '']
+
 		$.ajax({
 			type: 'GET',
 			url: '/iframe-content',
