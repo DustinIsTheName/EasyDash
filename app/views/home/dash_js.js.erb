@@ -54,7 +54,7 @@
 	    	if (window.location.href.indexOf('<%= Rails.env.production? ? APP_URL : DEV_URL %>') > -1) {
 			    // parent.postMessage({ url_for_easydash: window.location.href }, '<%= Rails.env.production? ? APP_URL : DEV_URL %>');
 
-			    $('a').click(function(e) {
+			    $(document).on('click', 'a', function(e) {
 			    	e.preventDefault();
 			    	e.stopPropagation();
 			    	e.stopImmediatePropagation();
@@ -64,7 +64,7 @@
 				    }
 			    });
 
-			    $('form').submit(function(e) {
+			    $(document).on('submit', 'form', function(e) {
 			    	e.preventDefault();
 			    	e.stopPropagation();
 			    	e.stopImmediatePropagation();
