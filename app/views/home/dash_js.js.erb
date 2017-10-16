@@ -46,6 +46,10 @@
 
 	    try {
 
+	    	function isShopifyURL(url) {
+	    		return url === '/' || url.startsWith('/account') || url.startsWith('/blogs') || url.startsWith('/cart') || url.startsWith('/collections') || url.startsWith('/pages') || url.startsWith('/products') || url.startsWith('/search')
+	    	}
+
 	    	// console.log(window.location.href);
 	    	if (window.location.href.indexOf('<%= Rails.env.production? ? APP_URL : DEV_URL %>') > -1) {
 			    // parent.postMessage({ url_for_easydash: window.location.href }, '<%= Rails.env.production? ? APP_URL : DEV_URL %>');
@@ -54,7 +58,7 @@
 			    	e.preventDefault();
 			    	e.stopPropagation();
 			    	e.stopImmediatePropagation();
-			    	if ($(this).attr('href').indexOf('#') === -1) {
+			    	if (isShopifyURL($(this).attr('href'))) {
 				    	parent.postMessage({ anchor_url: $(this).attr('href') }, '<%= Rails.env.production? ? APP_URL : DEV_URL %>');
 				    	parent.postMessage({ url_for_easydash: $(this).attr('href')  }, '<%= Rails.env.production? ? APP_URL : DEV_URL %>');
 				    }

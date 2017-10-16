@@ -442,7 +442,11 @@ class UnembeddedController < ApplicationController
       store_cookies(response.get_fields('set-cookie'))
     end
 
-    render html: response.body.html_safe
+    if response.code == "404"
+      render html: nil
+    else
+      render html: response.body.html_safe
+    end
   end
 
   def get_from_site
@@ -461,7 +465,11 @@ class UnembeddedController < ApplicationController
       store_cookies(response.get_fields('set-cookie'))
     end
 
-    render html: response.body.html_safe
+    if response.code == "404"
+      render html: nil
+    else
+      render html: response.body.html_safe
+    end
   end
 
   def post_to_site
@@ -475,13 +483,19 @@ class UnembeddedController < ApplicationController
     response = http.post(uri, params["params"], headers)
     store_cookies(response.get_fields('set-cookie'))
 
+    puts response.code
     while response.code == "301" or response.code == "302"
+      puts response.code
       headers = session[:iframe_cookies] ? { 'Cookie' => session[:iframe_cookies] } : {}
       response = http.get(URI.parse(response['location']), headers)
       store_cookies(response.get_fields('set-cookie'))
     end
 
-    render html: response.body.html_safe
+    if response.code == "404"
+      render html: nil
+    else
+      render html: response.body.html_safe
+    end
   end
 
   private

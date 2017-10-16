@@ -207,10 +207,12 @@ function ready() {
 			},
 			dataType: 'html'
 		}).success(function(iframe_html) {
-			var doc = document.getElementById('dashboard-iframe').contentWindow.document;
-			doc.open();
-			doc.write(iframe_html);
-			doc.close();
+			if (iframe_html) {
+				var doc = document.getElementById('dashboard-iframe').contentWindow.document;
+				doc.open();
+				doc.write(iframe_html);
+				doc.close();
+			}
 		}).error(basicError);
 	}
 
@@ -611,10 +613,12 @@ function ready() {
 					},
 					dataType: 'html'
 				}).success(function(iframe_html) {
-					var doc = document.getElementById('dashboard-iframe').contentWindow.document;
-					doc.open();
-					doc.write(iframe_html);
-					doc.close();
+					if (iframe_html) {
+						var doc = document.getElementById('dashboard-iframe').contentWindow.document;
+						doc.open();
+						doc.write(iframe_html);
+						doc.close();
+					}
 				}).error(basicError);
 			} else if (messageEvent.data.form_url) {
 				$.ajax({
@@ -627,11 +631,12 @@ function ready() {
 					dataType: 'html'
 				}).success(function(iframe_html) {
 					// console.log(iframe_html);
-
-					var doc = document.getElementById('dashboard-iframe').contentWindow.document;
-					doc.open();
-					doc.write(iframe_html);
-					doc.close();
+					if (iframe_html) {
+						var doc = document.getElementById('dashboard-iframe').contentWindow.document;
+						doc.open();
+						doc.write(iframe_html);
+						doc.close();
+					}
 				}).error(basicError);
 			}
 
