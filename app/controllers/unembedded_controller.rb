@@ -402,7 +402,7 @@ class UnembeddedController < ApplicationController
   end
 
   def get_iframe_content
-    puts params
+    puts Colorize.magenta(params)
 
     @type = params["resource"]
 
@@ -446,6 +446,7 @@ class UnembeddedController < ApplicationController
   end
 
   def get_from_site
+    puts Colorize.blue(params)
     uri = URI.parse("https://#{@shop_session.url}#{params['url']}?ediframe=true")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
@@ -464,6 +465,8 @@ class UnembeddedController < ApplicationController
   end
 
   def post_to_site
+    puts Colorize.yellow(params)
+
     uri = URI.parse("https://#{@shop_session.url}#{params['url']}?ediframe=true")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true

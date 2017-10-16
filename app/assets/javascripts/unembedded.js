@@ -724,6 +724,10 @@ function ready() {
   	$(this).hide().parent().css('max-height', 'none');
   });
 
+  $('.publish-date').click(function(e) {
+  	e.preventDefault();
+  });
+
 	// responsive iframe adjustments
 	$('#responsive-dropdown').click(function() {
 		$('.responsive-dropdown-items-container').toggleClass('active');
