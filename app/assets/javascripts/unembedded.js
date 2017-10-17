@@ -193,7 +193,7 @@ function ready() {
 		// setTimeout(function() {
 		// 	$('#dashboard-iframe').attr('src', currentIframeUrl);
 		// }, 500); qw12
-
+		
 		var resource_handle = currentIframeUrl.replace(/^\/collections\/?[a-z-0-9]+(?=\/)/, '').match(/^\/([a-z]+)\/?[a-z-0-9]*\/([a-z-0-9]+)$/);
 
 		resource_handle = resource_handle || ['', 'resource_select', '']
@@ -2730,6 +2730,37 @@ function ready() {
 			$('.accordion-trigger[data-group="' + group + '"]').removeClass('active');
 		}
 	});
+
+	document.getElementById('dashboard-iframe').onload = function() {
+		console.log('iFRAME IS LOADING!');
+	  var ttle = $('#dashboard-iframe').contents().find('title').text();
+
+	  // setTimeout(function(){
+	    if (ttle.indexOf('Action Controller: Exception caught') == -1) {
+	      return false;
+	    } else {
+	    	currentIframeUrl = document.getElementById("dashboard-iframe").contentWindow.location.href.split('?')[0].replace(window.origin, '')
+				var doc = document.getElementById('dashboard-iframe').contentWindow.document;
+				doc.open();
+				doc.write('');
+				doc.close();
+
+				$.ajax({
+					type: 'GET',
+					url: '/from-site',
+					data: {
+						url: currentIframeUrl
+					},
+					dataType: 'html'
+				}).success(function(iframe_html) {
+					var doc = document.getElementById('dashboard-iframe').contentWindow.document;
+					doc.open();
+					doc.write(iframe_html);
+					doc.close();
+				}).error(basicError);
+	    }
+	  // }, 2000);
+	};
 }
 
 $(document).on('turbolinks:load', ready);
