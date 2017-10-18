@@ -435,7 +435,8 @@ class UnembeddedController < ApplicationController
     response = http.get(uri, headers)
     store_cookies(response.get_fields('set-cookie'))
 
-    while response.code == "301" or response.code == "302"
+    redirect_count = 0
+    while (response.code == "301" or response.code == "302") and redirect_count < 10
       headers = session[:iframe_cookies] ? { 'Cookie' => session[:iframe_cookies] } : {}
       puts Colorize.purple(response['location'])
       if response['location'].include? 'https://' 
@@ -460,8 +461,9 @@ class UnembeddedController < ApplicationController
     headers = session[:iframe_cookies] ? { 'Cookie' => session[:iframe_cookies] } : {}
     response = http.get(uri, headers)
     store_cookies(response.get_fields('set-cookie'))
-
-    while response.code == "301" or response.code == "302"
+    
+    redirect_count = 0
+    while (response.code == "301" or response.code == "302") and redirect_count < 10
       headers = session[:iframe_cookies] ? { 'Cookie' => session[:iframe_cookies] } : {}
       response = http.get(URI.parse(response['location']), headers)
       store_cookies(response.get_fields('set-cookie'))
@@ -481,7 +483,8 @@ class UnembeddedController < ApplicationController
     response = http.post(uri, params["params"], headers)
     store_cookies(response.get_fields('set-cookie'))
 
-    while response.code == "301" or response.code == "302"
+    redirect_count = 0
+    while (response.code == "301" or response.code == "302") and redirect_count < 10
       headers = session[:iframe_cookies] ? { 'Cookie' => session[:iframe_cookies] } : {}
       response = http.get(URI.parse(response['location']), headers)
       store_cookies(response.get_fields('set-cookie'))
