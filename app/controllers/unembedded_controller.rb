@@ -427,7 +427,6 @@ class UnembeddedController < ApplicationController
       resource_url = ''
     end
     
-    # render html: open("https://#{@shop_session.url}/#{resource_url}?ediframe=true").read.html_safe
     uri = URI.parse("https://#{@shop_session.url}/#{resource_url}?ediframe=true")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
@@ -438,16 +437,12 @@ class UnembeddedController < ApplicationController
 
     while response.code == "301" or response.code == "302"
       headers = session[:iframe_cookies] ? { 'Cookie' => session[:iframe_cookies] } : {}
-      puts Colorize.red(response['location'])
-      response = http.get(URI.parse(response['location']), headers)
+      redirect_location = response['location'].include? 'https://' ? response['location'] : "https://#{@shop_session.url}#{resource_url}"
+      response = http.get(URI.parse(redirect_location), headers)
       store_cookies(response.get_fields('set-cookie'))
     end
 
-    if response.code == "404"
-      render html: nil
-    else
-      render html: response.body.html_safe
-    end
+    render html: response.body.html_safe
   end
 
   def get_from_site
@@ -466,11 +461,7 @@ class UnembeddedController < ApplicationController
       store_cookies(response.get_fields('set-cookie'))
     end
 
-    if response.code == "404"
-      render html: nil
-    else
-      render html: response.body.html_safe
-    end
+    render html: response.body.html_safe
   end
 
   def post_to_site
@@ -484,19 +475,13 @@ class UnembeddedController < ApplicationController
     response = http.post(uri, params["params"], headers)
     store_cookies(response.get_fields('set-cookie'))
 
-    puts response.code
     while response.code == "301" or response.code == "302"
-      puts response.code
       headers = session[:iframe_cookies] ? { 'Cookie' => session[:iframe_cookies] } : {}
       response = http.get(URI.parse(response['location']), headers)
       store_cookies(response.get_fields('set-cookie'))
     end
 
-    if response.code == "404"
-      render html: nil
-    else
-      render html: response.body.html_safe
-    end
+    render html: response.body.html_safe
   end
 
   private
