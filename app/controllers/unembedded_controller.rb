@@ -438,6 +438,7 @@ class UnembeddedController < ApplicationController
 
     while response.code == "301" or response.code == "302"
       headers = session[:iframe_cookies] ? { 'Cookie' => session[:iframe_cookies] } : {}
+      puts Colorize.red(response['location'])
       response = http.get(URI.parse(response['location']), headers)
       store_cookies(response.get_fields('set-cookie'))
     end
