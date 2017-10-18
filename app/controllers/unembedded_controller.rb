@@ -438,7 +438,11 @@ class UnembeddedController < ApplicationController
     while response.code == "301" or response.code == "302"
       headers = session[:iframe_cookies] ? { 'Cookie' => session[:iframe_cookies] } : {}
       puts Colorize.purple(response['location'])
-      redirect_location = response['location'].include? 'https://' ? response['location'] : "https://#{@shop_session.url}#{resource_url}"
+      if response['location'].include? 'https://' 
+        redirect_location = response['location'] 
+      else
+        redirect_location = "https://#{@shop_session.url}#{resource_url}"
+      end
       puts Colorize.red(redirect_location)
       response = http.get(URI.parse(redirect_location), headers)
       store_cookies(response.get_fields('set-cookie'))
