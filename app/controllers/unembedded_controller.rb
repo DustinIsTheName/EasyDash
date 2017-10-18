@@ -442,7 +442,7 @@ class UnembeddedController < ApplicationController
       if response['location'].include? 'https://' 
         redirect_location = response['location'] 
       else
-        redirect_location = "https://#{@shop_session.url}/#{resource_url}"
+        redirect_location = "https://#{@shop_session.url}/#{response['location']}"
       end
       puts Colorize.red(redirect_location)
       response = http.get(URI.parse(redirect_location), headers)
