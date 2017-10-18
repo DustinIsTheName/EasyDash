@@ -438,15 +438,14 @@ class UnembeddedController < ApplicationController
     redirect_count = 0
     while (response.code == "301" or response.code == "302") and redirect_count < 10
       headers = session[:iframe_cookies] ? { 'Cookie' => session[:iframe_cookies] } : {}
-      puts Colorize.purple(response['location'])
       if response['location'].include? 'https://' 
         redirect_location = response['location'] 
       else
-        redirect_location = "https://#{@shop_session.url}/#{response['location']}"
+        redirect_location = "https://#{@shop_session.url}#{response['location']}"
       end
-      puts Colorize.red(redirect_location)
       response = http.get(URI.parse(redirect_location), headers)
       store_cookies(response.get_fields('set-cookie'))
+      redirect_count += 1
     end
 
     render html: response.body.html_safe
@@ -461,12 +460,18 @@ class UnembeddedController < ApplicationController
     headers = session[:iframe_cookies] ? { 'Cookie' => session[:iframe_cookies] } : {}
     response = http.get(uri, headers)
     store_cookies(response.get_fields('set-cookie'))
-    
+
     redirect_count = 0
     while (response.code == "301" or response.code == "302") and redirect_count < 10
       headers = session[:iframe_cookies] ? { 'Cookie' => session[:iframe_cookies] } : {}
-      response = http.get(URI.parse(response['location']), headers)
+      if response['location'].include? 'https://' 
+        redirect_location = response['location'] 
+      else
+        redirect_location = "https://#{@shop_session.url}#{response['location']}"
+      end
+      response = http.get(URI.parse(redirect_location), headers)
       store_cookies(response.get_fields('set-cookie'))
+      redirect_count += 1
     end
 
     render html: response.body.html_safe
@@ -486,8 +491,14 @@ class UnembeddedController < ApplicationController
     redirect_count = 0
     while (response.code == "301" or response.code == "302") and redirect_count < 10
       headers = session[:iframe_cookies] ? { 'Cookie' => session[:iframe_cookies] } : {}
-      response = http.get(URI.parse(response['location']), headers)
+      if response['location'].include? 'https://' 
+        redirect_location = response['location'] 
+      else
+        redirect_location = "https://#{@shop_session.url}#{response['location']}"
+      end
+      response = http.get(URI.parse(redirect_location), headers)
       store_cookies(response.get_fields('set-cookie'))
+      redirect_count += 1
     end
 
     render html: response.body.html_safe
