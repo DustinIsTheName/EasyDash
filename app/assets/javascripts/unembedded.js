@@ -2731,7 +2731,7 @@ function ready() {
 		}
 	});
 
-	document.getElementById('dashboard-iframe').onload = function() {
+	$('#dashboard-iframe').load(function() {
 		console.log('iFRAME IS LOADING!');
 	  var ttle = $('#dashboard-iframe').contents().find('title').text();
 
@@ -2760,7 +2760,7 @@ function ready() {
 				}).error(basicError);
 	    }
 	  // }, 2000);
-	};
+	});
 }
 
 $(document).on('turbolinks:load', ready);
