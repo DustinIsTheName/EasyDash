@@ -43,7 +43,7 @@ ShopifyApp::SessionsController.module_eval do
         recurring_application_charge = ShopifyAPI::RecurringApplicationCharge.new(
           name: "Standard",
           price: 7.99,
-          test: false,
+          test: true,
           trial_days: 14)
         recurring_application_charge.return_url = Rails.env.production? ? "#{APP_URL}\/activatecharge" : "#{DEV_URL}\/activatecharge"
 

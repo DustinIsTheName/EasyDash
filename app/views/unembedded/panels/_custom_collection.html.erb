@@ -49,6 +49,9 @@
           <% if @resource.products.size > 10 %>
             <a class="expand-height" href="#">Show more products</a>
           <% end %>
+          <% if @resource.products.size == 0 %>
+            <p class="no_margin">There are no products in this collection</p>
+          <% end %>
         </div>
       <% end %>
     </div>
