@@ -729,7 +729,7 @@ label .icon-calendar { float: right; margin-top: 2px; }
         }
 
         .collection,
-        .product {
+        div.product {
           padding: 10px;
 
           &+ .collection,
@@ -791,7 +791,7 @@ label .icon-calendar { float: right; margin-top: 2px; }
       }
 
       &.collection_conditions {
-        .secondary:not(#shopify_api_custom_collection_sort_order) {
+        .smart_collection_conditions {
           width: 85%;
 
           &.add-condition {
@@ -799,8 +799,12 @@ label .icon-calendar { float: right; margin-top: 2px; }
           }
         }
 
+        .add-condition {
+          width: 100%;
+        }
+
         .hide-remove {
-          .secondary:not(#shopify_api_custom_collection_sort_order) {
+          .smart_collection_conditions {
             width: 100%;
           }
 
@@ -812,13 +816,6 @@ label .icon-calendar { float: right; margin-top: 2px; }
 
       &.collection_conditions, 
       &.blog_post_options {
-        .secondary {
-          width: 85%;
-
-          &.add-condition {
-            width: 100%;
-          }
-        }
 
         .extra_margin { 
           margin-bottom: 1rem;
@@ -827,7 +824,7 @@ label .icon-calendar { float: right; margin-top: 2px; }
           margin-bottom: 3rem;
         }
 
-        .icon-trash {
+        .icon-trash.remove-condition {
           background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 27 27' enable-background='new 0 0 27 27'%3E%3Cpath fill='rgb(221,221,221)' d='M27.5,5a2.22,2.22,0,0,1-1.8,2.25H2.3A2.22,2.22,0,0,1,.5,5,2.22,2.22,0,0,1,2.3,2.75H9.5C9.5,1.63,11.07.5,12.2,0.5h3.6c1.13,0,2.7,1.35,2.7,2.25h7.2A2.22,2.22,0,0,1,27.5,5Zm-2.25,5.85V25.7c0,0.9-1.8,1.8-2.7,1.8H5.45c-0.9,0-2.7-.68-2.7-1.8V10.85A3.17,3.17,0,0,1,4.33,9.5H23.9A3.88,3.88,0,0,1,25.25,10.85ZM11.75,14.9a1,1,0,0,0-.9-0.9H10.4a1,1,0,0,0-.9.9v7.2a1,1,0,0,0,.9.9h0.45a1,1,0,0,0,.9-0.9V14.9Zm6.75,0a1,1,0,0,0-.9-0.9H17.15a1,1,0,0,0-.9.9v7.2a1,1,0,0,0,.9.9H17.6a1,1,0,0,0,.9-0.9V14.9Z' transform='translate(-0.5 -0.5)' /%3E%3C/svg%3E");
           background-color: #fff;
           border: 0;
@@ -1266,7 +1263,7 @@ label .icon-calendar { float: right; margin-top: 2px; }
         position: absolute;
         right: 5px;
         border-radius: .3rem;
-        box-shadow: 1px 0 5px rgba(0, 0, 0, 0.12);
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.22);
 
         &:hover {
           display: block;
@@ -1711,7 +1708,7 @@ label .icon-calendar { float: right; margin-top: 2px; }
   }
 
   input[data-exceptions="collection-panel"] + & {
-    top: 95px;
+    top: 160px;
   }
 
   .dropdown-arrow {

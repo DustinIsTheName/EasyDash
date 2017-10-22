@@ -317,7 +317,6 @@ function ready() {
 	}
 
 	function refreshForm(messageEvent) {
-		console.log('DATA HERE:', messageEvent.data);
 		if (messageEvent.data.url_for_easydash) {
 			currentIframeUrl = messageEvent.data.url_for_easydash;
 			var url = messageEvent.data.url_for_easydash.replace(messageEvent.origin, '').split('?')[0];
@@ -2732,7 +2731,6 @@ function ready() {
 	});
 
 	$('#dashboard-iframe').load(function() {
-		console.log('iFRAME IS LOADING!');
 	  var ttle = $('#dashboard-iframe').contents().find('title').text();
 
 	  // setTimeout(function(){
