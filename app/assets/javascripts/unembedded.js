@@ -1084,6 +1084,7 @@ function ready() {
     new_html += '<span class="icon-close"></span>';
     new_html += '</div>';
 
+    $('.products-container em').remove();
 		$('.resource-search[data-exceptions="product-panel"]').before('<input value="'+id+'" id="collection_'+id+'" type="hidden" name="collections[]">');
     // $('.product-pannel-collection-select').after(new_html);
     $('.products-container').prepend(new_html);
@@ -1094,6 +1095,10 @@ function ready() {
 
 		$('input#collection_'+id).remove();
 		$(this).parent().remove();
+
+		if ($('.products-container .collection').length === 0) {
+			$('.products-container').append('<em>Add this product to a collection so it’s easy to find in your store.</em>');
+		}
 	});
 
 	$('#resource-section').on('click', '.collection-pannel-product-select .variable a', function(event) {
@@ -1108,6 +1113,7 @@ function ready() {
     new_html += '<span class="icon-close"></span>';
     new_html += '</div>';
 
+    $('.products-container p').remove();
 		$('.resource-search[data-exceptions="collection-panel"]').before('<input value="'+id+'" id="product_'+id+'" type="hidden" name="products[]">');
     // $('.collection-pannel-product-select').after(new_html);
     $('.products-container').prepend(new_html);
@@ -1118,6 +1124,10 @@ function ready() {
 
 		$('input#product_'+id).remove();
 		$(this).parent().remove();
+
+		if ($('.products-container .product').length === 0) {
+			$('.products-container').append('<p class="no_margin">There are no products in this collection</p>');
+		}
 	});
 
 	$('#resource-section').on('click', '.add-condition', function(e) {
