@@ -1790,7 +1790,8 @@ label .icon-calendar { float: right; margin-top: 2px; }
       .icon-trash {
         position: absolute;
         right: 7px;
-        top: 7px;
+        top: 50%;
+        margin-top: -13px;
         min-height: 2.6rem;
         width: 22px;
         padding: 0 14px;
@@ -1857,6 +1858,11 @@ label .icon-calendar { float: right; margin-top: 2px; }
       &.icon-prev {border-radius: .3rem 0 0 .3rem;border-right: 0;}
       &.icon-next {border-radius: 0 .3rem .3rem 0;}
     }
+  }
+
+  .product-collections-select &,
+  .collection_conditions & {
+    width: 100%;
   }
 }
 
