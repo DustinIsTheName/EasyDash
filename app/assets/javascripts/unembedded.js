@@ -190,9 +190,6 @@ function ready() {
 	}
 
 	function refreshIframe() {
-		// setTimeout(function() {
-		// 	$('#dashboard-iframe').attr('src', currentIframeUrl);
-		// }, 500); qw12
 		
 		var resource_handle = currentIframeUrl.replace(/^\/collections\/?[a-z-0-9]+(?=\/)/, '').match(/^\/([a-z]+)\/?[a-z-0-9]*\/([a-z-0-9]+)$/);
 
@@ -756,7 +753,7 @@ function ready() {
 		$('.views_button span').removeClass('active rotated');
 		$('.views_button span.'+icon).addClass('active');
 
-		$('#dashboard-iframe').width(width).height(height);
+		$('#dashboard-iframe-container').width(width).height(height);
 	});
 
 	$('.responsive-dropdown-items .rotate').click(function(e) {
@@ -764,11 +761,11 @@ function ready() {
 		e.stopPropagation();
 		if (!$('.responsive-dropdown-items a.active').hasClass('desktop')) {
 			$('.responsive-dropdown-items a.active').toggleClass('rotated');
-			var width = $('#dashboard-iframe').attr('style').match(/height: ([0-9]{0,4}).{1,}/)[1];
-			var height = $('#dashboard-iframe').attr('style').match(/width: ([0-9]{0,4}).{1,}/)[1];
+			var width = $('#dashboard-iframe-container').attr('style').match(/height: ([0-9]{0,4}).{1,}/)[1];
+			var height = $('#dashboard-iframe-container').attr('style').match(/width: ([0-9]{0,4}).{1,}/)[1];
 			$('.views_button .active').toggleClass('rotated');
 
-			$('#dashboard-iframe').width(width).height(height);
+			$('#dashboard-iframe-container').width(width).height(height);
 		}
 	});
 
@@ -2745,6 +2742,14 @@ function ready() {
 
 	  // setTimeout(function(){
 	    if (ttle.indexOf('Action Controller: Exception caught') == -1 && ttle.indexOf('The page you were looking for doesn\'t exist (404)') == -1) {
+	    	var iframe = document.getElementById('dashboard-iframe');
+				var iframeWin = document.getElementById('dashboard-iframe').contentWindow.window;
+				iframeWin.onresize = function() {
+					iframe.height = "";
+	        $('#dashboard-iframe').css('height', iframe.contentWindow.document.body.scrollHeight + "px");
+				};
+	    	iframe.height = "";
+        $('#dashboard-iframe').css('height', iframe.contentWindow.document.body.scrollHeight + "px");
 	      return false;
 	    } else {
 	    	currentIframeUrl = document.getElementById("dashboard-iframe").contentWindow.location.href.split('?')[0].replace(window.origin, '')

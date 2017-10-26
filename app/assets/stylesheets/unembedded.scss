@@ -364,7 +364,7 @@ label .icon-calendar { float: right; margin-top: 2px; }
   &.closed {
     width: 0;
 
-    &~ #dashboard-iframe {
+    &~ #dashboard-iframe-container {
       max-width: 100%;
       left: 50%;
     }
@@ -1345,6 +1345,21 @@ label .icon-calendar { float: right; margin-top: 2px; }
             }
           }
         }
+
+        #send-message {
+          background: #00a79d;
+          color: #fff;
+          padding: 6px 6px 6px;
+          line-height: 1;
+          display: inline-block;
+          margin-bottom: 1px;
+          border-radius: .3rem;
+
+          &:hover {
+            background-color: #00968d;
+            text-decoration: none;
+          }
+        }
       }
     }
     .btn--link {
@@ -1790,7 +1805,8 @@ label .icon-calendar { float: right; margin-top: 2px; }
       .icon-trash {
         position: absolute;
         right: 7px;
-        top: 7px;
+        top: 50%;
+        margin-top: -13px;
         min-height: 2.6rem;
         width: 22px;
         padding: 0 14px;
@@ -1857,6 +1873,11 @@ label .icon-calendar { float: right; margin-top: 2px; }
       &.icon-prev {border-radius: .3rem 0 0 .3rem;border-right: 0;}
       &.icon-next {border-radius: 0 .3rem .3rem 0;}
     }
+  }
+
+  .product-collections-select &,
+  .collection_conditions & {
+    width: 100%;
   }
 }
 
@@ -2369,36 +2390,44 @@ button.variant {padding: .9rem 1.5rem;}
   }
 }
 
-#dashboard-iframe {
+#dashboard-iframe-container {
   width: 100%;
   height: 100%;
+  min-width: 320px;
   max-width: calc(100% - 299px);
   max-height: 100%;
-  position: relative;
+  position: fixed;
   left: 300px;
   display: block;
-  border: none;
   top: 50%;
   left: calc(50% + 150px);
   display: block;
-  border: none;
   -webkit-transform: translate(-50%,-50%);
   -moz-transform: translate(-50%,-50%);
   transform: translate(-50%,-50%);
   transition: height .3s, width .3s, max-width .3s, left .3s;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  overflow: auto;
+  -webkit-overflow-scrolling:touch;
 
-  &.overlay:before {
-    content: '';
-  }
-
-  &+ .overlay.is-loading {
-    position: fixed !important;
+  #dashboard-iframe {
+    border: none;
+    width: 100%;
     height: 100%;
-    width: calc(100% - 299px);
-    top: 0;
-    right: 0;
-    background: rgba(0,0,0,0.45);
+    float: left;
+
+    &.overlay:before {
+      content: '';
+    }
+
+    &+ .overlay.is-loading {
+      position: fixed !important;
+      height: 100%;
+      width: calc(100% - 299px);
+      top: 0;
+      right: 0;
+      background: rgba(0,0,0,0.45);
+    }
   }
 }
 
