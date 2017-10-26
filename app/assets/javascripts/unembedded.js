@@ -2742,6 +2742,14 @@ function ready() {
 
 	  // setTimeout(function(){
 	    if (ttle.indexOf('Action Controller: Exception caught') == -1 && ttle.indexOf('The page you were looking for doesn\'t exist (404)') == -1) {
+	    	var iframe = document.getElementById('dashboard-iframe');
+				var iframeWin = document.getElementById('dashboard-iframe').contentWindow.window;
+				iframeWin.onresize = function() {
+					iframe.height = "";
+	        $('#dashboard-iframe').css('height', iframe.contentWindow.document.body.scrollHeight + "px");
+				};
+	    	iframe.height = "";
+        $('#dashboard-iframe').css('height', iframe.contentWindow.document.body.scrollHeight + "px");
 	      return false;
 	    } else {
 	    	currentIframeUrl = document.getElementById("dashboard-iframe").contentWindow.location.href.split('?')[0].replace(window.origin, '')
