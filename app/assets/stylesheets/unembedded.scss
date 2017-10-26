@@ -1345,6 +1345,21 @@ label .icon-calendar { float: right; margin-top: 2px; }
             }
           }
         }
+
+        #send-message {
+          background: #00a79d;
+          color: #fff;
+          padding: 6px 6px 6px;
+          line-height: 1;
+          display: inline-block;
+          margin-bottom: 1px;
+          border-radius: .3rem;
+
+          &:hover {
+            background-color: #00968d;
+            text-decoration: none;
+          }
+        }
       }
     }
     .btn--link {
