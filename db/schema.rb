@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170913120701) do
+ActiveRecord::Schema.define(version: 20171028145923) do
 
   create_table "authors", force: :cascade do |t|
     t.string   "name"
@@ -50,6 +50,8 @@ ActiveRecord::Schema.define(version: 20170913120701) do
     t.datetime "updated_at"
     t.string   "email"
     t.string   "front_end_token"
+    t.string   "shop_owner"
+    t.string   "domain"
   end
 
   add_index "shops", ["shopify_domain"], name: "index_shops_on_shopify_domain", unique: true

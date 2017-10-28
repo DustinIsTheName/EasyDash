@@ -87,6 +87,8 @@ class Shop < ActiveRecord::Base
   def getShopData
     shopify_store_data = ShopifyAPI::Shop.current
     self.email = shopify_store_data.email
+    self.shop_owner = shopify_store_data.shop_owner
+    self.domain = shopify_store_data.domain
     self.save
   end
 
