@@ -31,4 +31,18 @@ module RecurringApplicationCharge
 
     end
 	end
+
+	def check_for_charge
+		unless ShopifyAPI::RecurringApplicationCharge.current
+			pending = ShopifyAPI::RecurringApplicationCharge.pending.first
+			if pending
+				puts pending.confirmation_url
+				redirect_to pending.confirmation_url
+			else
+				redirect_url = RecurringApplicationCharge.create
+				puts redirect_url
+				redirect_to redirect_url
+			end
+		end
+	end
 end

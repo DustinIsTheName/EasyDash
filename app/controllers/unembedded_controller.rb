@@ -1,9 +1,11 @@
 class UnembeddedController < ApplicationController
   include UnembeddedHelper
+  include RecurringApplicationCharge
 	before_action :login_again_if_different_shop, :except =>[:app_uninstall]
 
   skip_before_filter :verify_authenticity_token, :only => [:update_api, :add_image_to_theme, :app_uninstall]
   around_filter :shopify_session, :except =>[:app_uninstall]
+  around_filter :check_for_charge, :except =>[:app_uninstall, :quick_select]
   layout 'application'
 
   def quick_select
