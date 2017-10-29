@@ -1,5 +1,12 @@
 ShopifyApp::SessionsController.module_eval do
+
+  def new
+    session[:charge_type] = params[:charge_type] if params[:charge_type].present?
+    authenticate if params[:shop].present?
+  end
+
   def callback
+    puts params
     stored_return_address = return_address
     if response = request.env['omniauth.auth']
       shop_name = response.uid
@@ -9,7 +16,12 @@ ShopifyApp::SessionsController.module_eval do
       flash[:notice] = "Logged in"
       redirect_url = false
       shopify_session do
-        redirect_url = handle_recurring_application_charge
+        if session[:charge_type]
+          redirect_url = RecurringApplicationCharge.create(session[:charge_type])
+          session.delete(:charge_type)
+        else
+          redirect_url = RecurringApplicationCharge.create
+        end
         @shop = Shop.find_by_shopify_domain(session[:shopify_domain])
         @shop.createScriptTag
         @shop.createTagTypeVendorQueryFiles
@@ -35,27 +47,4 @@ ShopifyApp::SessionsController.module_eval do
       redirect_to action: 'new'
     end
   end
-
-  private
-
-    def handle_recurring_application_charge
-      unless ShopifyAPI::RecurringApplicationCharge.current
-        recurring_application_charge = ShopifyAPI::RecurringApplicationCharge.new(
-          name: "Standard",
-          price: 7.99,
-          test: nil,
-          trial_days: 14)
-        recurring_application_charge.return_url = Rails.env.production? ? "#{APP_URL}\/activatecharge" : "#{DEV_URL}\/activatecharge"
-
-        if recurring_application_charge.save
-          puts recurring_application_charge.confirmation_url
-          @tokens[:confirmation_url] = recurring_application_charge.confirmation_url
-          return recurring_application_charge.confirmation_url
-        else
-          puts Colorize.red(recurring_application_charge.errors.messages)
-
-          return false
-        end
-      end
-    end
 end

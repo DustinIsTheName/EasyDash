@@ -17,12 +17,6 @@ class HomeController < AuthenticatedController
       :value => @shop.front_end_token,
       :expires => 2.years.from_now
     }
-
-    # if session[:logged_in] == true
-    #   # puts Colorize.green('logged_in')
-    #   session.delete :logged_in
-    #   @logged_in = true
-    # end
   end
 
   def activate_charge
