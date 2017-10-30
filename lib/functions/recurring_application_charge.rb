@@ -44,6 +44,5 @@ module RecurringApplicationCharge
 				redirect_to redirect_url
 			end
 		end
-		return
 	end
 end
