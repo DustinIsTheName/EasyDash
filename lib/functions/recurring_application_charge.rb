@@ -1,7 +1,7 @@
 module RecurringApplicationCharge
 	def self.create(charge_type = 'default')
 
-    unless ShopifyAPI::RecurringApplicationCharge.current
+    unless ShopifyAPI::RecurringApplicationCharge.current or ShopifyAPI::Shop.current.plan_name == 'affiliate'
 
 			case charge_type
 			when 'extended_trial'
