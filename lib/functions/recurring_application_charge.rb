@@ -33,7 +33,7 @@ module RecurringApplicationCharge
 	end
 
 	def check_for_charge
-		unless ShopifyAPI::RecurringApplicationCharge.current
+		unless ShopifyAPI::RecurringApplicationCharge.current or ShopifyAPI::Shop.current.plan_name == 'affiliate'
 			pending = ShopifyAPI::RecurringApplicationCharge.pending.first
 			if pending
 				puts pending.confirmation_url
@@ -44,5 +44,6 @@ module RecurringApplicationCharge
 				redirect_to redirect_url
 			end
 		end
+		return
 	end
 end
