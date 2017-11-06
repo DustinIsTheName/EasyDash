@@ -7,13 +7,13 @@ module RecurringApplicationCharge
 			when 'extended_trial'
 	      recurring_application_charge = ShopifyAPI::RecurringApplicationCharge.new(
 	        name: "Extended Trial",
-	        price: 7.99,
+	        price: 4.99,
 	        test: Rails.env.development? ? true : nil,
 	        trial_days: 30)
 			else
 	      recurring_application_charge = ShopifyAPI::RecurringApplicationCharge.new(
 	        name: "Standard",
-	        price: 7.99,
+	        price: 4.99,
 	        test: Rails.env.development? ? true : nil,
 	        trial_days: 14)
 	    end
