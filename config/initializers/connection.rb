@@ -25,7 +25,7 @@ module ActiveResource
             retry
           elsif ex.response.code.to_s == '401'
             puts 'BBBBB'
-            return nil
+            return
           else
             raise ex
           end
