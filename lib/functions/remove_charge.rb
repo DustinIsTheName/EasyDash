@@ -6,12 +6,12 @@ class RemoveCharge < ActionController::Base
 
 		begin
 			if ShopifyAPI::RecurringApplicationCharge.current&.destroy
-				puts Colorize.red(shop.domain + ' charge removed')
+				puts Colorize.red(shop.shopify_domain + ' charge removed')
 			else
-				puts Colorize.cyan(shop.domain + ' charge didn\'t exit')
+				puts Colorize.cyan(shop.shopify_domain + ' charge didn\'t exit')
 			end
 		rescue
-			puts Colorize.magenta(shop.domain + ' has uninstalled')
+			puts Colorize.magenta(shop.shopify_domain + ' has uninstalled')
 		end
 
 		ShopifyAPI::Base.clear_session
