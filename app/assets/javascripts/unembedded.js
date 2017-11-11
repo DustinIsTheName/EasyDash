@@ -411,7 +411,7 @@ function ready() {
 			toolbarSticky: false,
 			tooltips: true,
 			placeholderText: '',
-			useClasses: false,
+			useClasses: true,
 			htmlIgnoreCSSProperties: [],
 			codeMirror: true,
 		  codeMirrorOptions: {
@@ -1641,7 +1641,8 @@ function ready() {
 	$('#resource-section').on('keyup', '#tag-field', function(e) {
 		var resource = $(this).data('resource');
 		$('.tag-error').hide();
-    if (e.key === ',') {
+		console.log(e.key);
+    if (e.key === ',' || e.key === 'Enter') {
     	var tag_text = $(this).val().replace(',', '');
     	var tag_list = $('#shopify_api_'+resource+'_tags').val().split(',').filter(function(value) {
     		return value !== '';
