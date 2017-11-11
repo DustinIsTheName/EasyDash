@@ -2419,7 +2419,8 @@ button.variant {padding: .9rem 1.5rem;}
     &.overlay:before {
       content: '';
     }
-
+  }
+  
     &+ .overlay.is-loading {
       position: fixed !important;
       height: 100%;
@@ -2428,7 +2429,6 @@ button.variant {padding: .9rem 1.5rem;}
       right: 0;
       background: rgba(0,0,0,0.45);
     }
-  }
 }
 
 // #save_resource {}

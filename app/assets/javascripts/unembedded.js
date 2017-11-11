@@ -1266,9 +1266,9 @@ function ready() {
 		  	}
 		  }
 
-		  $('#dashboard-iframe').after('<div class="overlay is-loading"></div>');
+		  $('#dashboard-iframe-container').after('<div class="overlay is-loading"></div>');
 		  setTimeout(function() {
-		  	$('#dashboard-iframe + .overlay.is-loading').remove();
+		  	$('#dashboard-iframe-container + .overlay.is-loading').remove();
 		  	$('#save_resource').addClass('just-saved');
 			  refreshIframe();
 		  }, 1000);
