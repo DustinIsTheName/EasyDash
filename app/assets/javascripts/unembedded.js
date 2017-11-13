@@ -191,7 +191,7 @@ function ready() {
 
 	function refreshIframe() {
 		
-		var resource_handle = currentIframeUrl.replace(/^\/collections\/?[a-z-0-9]+(?=\/)/, '').match(/^\/([a-z]+)\/?[a-z-0-9]*\/([a-z-0-9]+)$/);
+		var resource_handle = currentIframeUrl.replace(/^\/collections\/?[a-z-0-9]+(?=\/)/, '').match(/^\/([a-z]+)\/?[a-z-0-9]*\/([a-z-0-9]+)/);
 
 		resource_handle = resource_handle || ['', 'resource_select', '']
 
@@ -323,7 +323,7 @@ function ready() {
 		if (messageEvent.data.url_for_easydash) {
 			currentIframeUrl = messageEvent.data.url_for_easydash;
 			var url = messageEvent.data.url_for_easydash.replace(messageEvent.origin, '').split('?')[0];
-			var resource_handle = url.replace(/^\/collections\/?[a-z-0-9]+(?=\/)/, '').match(/^\/([a-z]+)\/?[a-z-0-9]*\/([a-z-0-9]+)$/);
+			var resource_handle = url.replace(/^\/collections\/?[a-z-0-9]+(?=\/)/, '').match(/^\/([a-z]+)\/?[a-z-0-9]*\/([a-z-0-9]+)/);
 
 			$('.wittyEDPanelBody').fadeOut(200, 'swing', function() {
 				$('.wittyEDPanel.active').addClass('is-loading');
