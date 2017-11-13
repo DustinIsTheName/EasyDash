@@ -305,6 +305,12 @@ function ready() {
 		$('#modals-container').html(new_html.modals);
 
 		initializeFroalaEditor();
+
+		if ($('[name="id"]').val()) {
+			window.history.pushState({}, 'EasyDash', '/dashboard?resource='+$('[name="resource"]').val()+'&id='+$('[name="id"]').val());
+		} else {
+			window.history.pushState({}, 'EasyDash', '/dashboard');
+		}
 		$('.variant_input').prop('disabled', true);
 		previousFormState = $('form.ajax').serialize();
 		$('.variant_input').prop('disabled', false);
@@ -2753,7 +2759,7 @@ function ready() {
         $('#dashboard-iframe').css('height', iframe.contentWindow.document.body.scrollHeight + "px");
 	      return false;
 	    } else {
-	    	currentIframeUrl = document.getElementById("dashboard-iframe").contentWindow.location.href.split('?')[0].replace(window.origin, '')
+	    	currentIframeUrl = document.getElementById("dashboard-iframe").contentWindow.location.href.replace(window.origin, '')
 				var doc = document.getElementById('dashboard-iframe').contentWindow.document;
 				doc.open();
 				doc.write('');
