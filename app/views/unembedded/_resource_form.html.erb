@@ -14,7 +14,25 @@
         </div>
         <ul>
           <li>
-            <a id="theme-settings" href="https://<%= @shop_session.url %>/admin/themes/<%= @theme.id %>/editor" target="_blank">Customize Theme</a>
+            <% unless @type == 'resource_select' %>
+              <% if @type.include? 'collection' %>
+                <% resource_url = 'collections/' %>
+              <% elsif @type.include? 'blog' %>
+                <% blog = @blogs.select{|b| b.id == @resource.blog_id}.first %>
+                <% if blog %>
+                  <% resource_url = 'blogs/' + blog.handle + '/' %>
+                <% else %>
+                  <% resource_url = '' %>
+                <% end %>
+              <% else %>
+                <% resource_url = @type + 's/' %>
+              <% end %>
+              
+              <% resource_url = resource_url + @resource.handle %>
+            <% else %>
+              <% resource_url = '' %>
+            <% end %>
+            <a id="theme-settings" href="https://<%= @shop_session.url %>/admin/themes/<%= @theme.id %>/editor#/<%= resource_url %>" target="_blank">Customize Theme</a>
           </li>
           <li>
             <a id="send-message" href="#">Send a Message</a>
