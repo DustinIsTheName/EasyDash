@@ -25,7 +25,7 @@ class HomeController < AuthenticatedController
     recurring_application_charge = ShopifyAPI::RecurringApplicationCharge.find(params['charge_id'])
     if recurring_application_charge.status == "accepted"
       recurring_application_charge.activate 
-    else 
+    else
 
       @shop = Shop.find_by_shopify_domain(@shop_session.url)
 
