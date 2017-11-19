@@ -2,6 +2,7 @@ class UnembeddedController < ApplicationController
   include UnembeddedHelper
   include RecurringApplicationCharge
 	before_action :login_again_if_different_shop, :except =>[:app_uninstall]
+  before_action :get_shop
 
   skip_before_filter :verify_authenticity_token, :only => [:update_api, :add_image_to_theme, :app_uninstall]
   around_filter :shopify_session, :except =>[:app_uninstall]
@@ -11,7 +12,6 @@ class UnembeddedController < ApplicationController
   def quick_select
     puts params
 
-    @shop = Shop.find_by_shopify_domain(@shop_session.url)
     if cookies['front_end_token'] == @shop.front_end_token
       @is_admin = true
     else
@@ -51,7 +51,6 @@ class UnembeddedController < ApplicationController
       else 
         @resource = ShopifyAPI::Article.find(params[:id])
       end
-      @shop = Shop.find_by_shopify_domain(@shop_session.url)
       @blogs = ShopifyAPI::Blog.all
       @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
     when 'collection'
@@ -107,7 +106,6 @@ class UnembeddedController < ApplicationController
     case @type
     when 'blog'
       @resource = ShopifyAPI::Article.find(:first, params: {handle: params["handle"]})
-      @shop = Shop.find_by_shopify_domain(@shop_session.url)
       @blogs = ShopifyAPI::Blog.all
       @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
     when 'collection'
@@ -158,7 +156,6 @@ class UnembeddedController < ApplicationController
           params["shopify_api_article"]["author"] = params["shopify_api_article"]["new_author_name"]
 
           unless Author.find_by_name(params["shopify_api_article"]["new_author_name"])
-            @shop = Shop.find_by_shopify_domain(@shop_session.url)
             new_author = Author.new
             new_author.name = params["shopify_api_article"]["new_author_name"]
             new_author.shop_id = @shop.id
@@ -266,7 +263,6 @@ class UnembeddedController < ApplicationController
 
   def add_image_to_theme
     puts Colorize.magenta(params)
-    @shop = Shop.find_by_shopify_domain(@shop_session.url)
     theme = @shop.pingTheme
 
     image = API.addImagesToTheme(params, theme)
@@ -507,6 +503,10 @@ class UnembeddedController < ApplicationController
   end
 
   private
+
+    def get_shop
+      @shop = Shop.find_by_shopify_domain(@shop_session.url)
+    end
 
     def get_resources
       @product_count = ShopifyAPI::Product.count

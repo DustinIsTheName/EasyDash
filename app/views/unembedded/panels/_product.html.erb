@@ -98,6 +98,15 @@
           <i class="icon-calendar tip left" data-hover="Set publish date coming soon"></i>
         </a>
       </label>
+      <div class="divider"></div>
+      <label>
+        <% if @resource.published_scope == "global" %>
+          <input type="checkbox" name="shopify_api_product[published_scope]" checked="checked">
+        <% else %>
+          <input type="checkbox" name="shopify_api_product[published_scope]">
+        <% end %>
+        Point of Sale
+      </label>
     </div>
   </div>
 </article>

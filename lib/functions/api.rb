@@ -29,6 +29,14 @@ class API
       @product.published_at = nil
     end
 
+    if params["shopify_api_product"]["published_scope"]
+      puts 'global'
+      @product.published_scope = 'global'
+    else
+      puts 'web'
+      @product.published_scope = 'web'
+    end
+
     # save product if anything's changed
     if old_product.attributes == @product.attributes
       puts Colorize.cyan(@product.title + ' skipped')
