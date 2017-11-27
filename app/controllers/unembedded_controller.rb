@@ -426,6 +426,7 @@ class UnembeddedController < ApplicationController
     end
     
     uri = URI.parse("https://#{@shop_session.url}/#{resource_url}?ediframe=true")
+    # uri = URI.parse("https://s-medio.myshopify.com/products/tee-shirt-enfant-jumeaux-monster-teitw34/?ediframe=true")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
 
@@ -504,10 +505,6 @@ class UnembeddedController < ApplicationController
 
   private
 
-    def get_shop
-      @shop = Shop.find_by_shopify_domain(@shop_session.url)
-    end
-
     def get_resources
       @product_count = ShopifyAPI::Product.count
       @article_count = ShopifyAPI::Article.count
@@ -541,36 +538,6 @@ class UnembeddedController < ApplicationController
         puts Colorize.red("Invalid verification!")
       end
       calculated_hmac == hmac_header
-    end
-
-    def store_cookies(all_cookies)
-      cookie_hash = {}
-      session[:iframe_cookies]&.split('; ')&.each do |c|
-        split_cookie = c.split('=')
-        cookie_hash[split_cookie[0]] = split_cookie[1]
-      end
-
-      old_cookies_array = Array.new
-      all_cookies&.each { | cookie |
-        cleaned_cookie = cookie.split('; ')[0]
-        old_cookies_array.push(cleaned_cookie)
-        split_cookie = cleaned_cookie.split('=')
-        cookie_hash[split_cookie[0]] = split_cookie[1]
-      }
-
-      cookies_array = Array.new
-      cookie_hash.each do |c, v|
-        if c
-          if v
-            cookies_array.push(c + '=' + v)
-          else
-            cookies_array.push(c + '=')
-          end
-        end
-      end
-
-      cookies = cookies_array.join('; ')
-      session[:iframe_cookies] = cookies
     end
 
 end

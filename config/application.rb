@@ -40,6 +40,9 @@ module EasyDash
     # use delayed_job gem to asynchronously queue API calls
     config.active_job.queue_adapter = :delayed_job
 
+    # enable rescue_from ActionController::RoutingError
+    config.exceptions_app = self.routes # a Rack Application
+
     config.before_configuration do
       env_file = File.join(Rails.root, 'config', 'local_env.yml')
       YAML.load(File.open(env_file)).each do |key, value|

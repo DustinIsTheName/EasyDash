@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
   
+  # send 404 errors to custom controller
+  match "/404", :to => "errors#not_found", :via => :all
+
   controller :sessions do
     get 'login' => :new, :as => :login
     post 'login' => :create, :as => :authenticate
