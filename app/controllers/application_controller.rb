@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 	private
 
     def get_shop
-      @shop = Shop.find_by_shopify_domain(@shop_session.url)
+      @shop = Shop.find_by_shopify_domain(@shop_session.url) if @shop_session
     end
 
     def store_cookies(all_cookies)
