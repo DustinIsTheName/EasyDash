@@ -4,6 +4,7 @@ class ErrorsController < ApplicationController
   before_action :get_shop
 
   def not_found
+  	Colorize.cyan('request.xhr?')
   	Colorize.cyan(request.xhr?)
 
   	if request.xhr?
