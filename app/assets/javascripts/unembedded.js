@@ -555,7 +555,7 @@ function ready() {
 
 		try {
 
-			console.log('ALL EVENT DATA, and currentIframeUrl', messageEvent.data, currentIframeUrl);
+			// console.log('ALL EVENT DATA, and currentIframeUrl', messageEvent.data, currentIframeUrl);
 
 			if (messageEvent.data.url_for_easydash) {
 
