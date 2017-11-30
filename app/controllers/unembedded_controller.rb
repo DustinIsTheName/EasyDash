@@ -46,47 +46,71 @@ class UnembeddedController < ApplicationController
     # get_resources
     case @type
     when 'blog'
-      if params[:id] == 'new' 
-        @resource = ShopifyAPI::Article.new(id: 'new', title: '', author: '', body_html: '', summary_html: '', created_at: '', blog_id: '', handle: '', updated_at: '', published_at: nil, tags: '', template_suffix: '')
-      else 
-        @resource = ShopifyAPI::Article.find(params[:id])
+      begin
+        if params[:id] == 'new' 
+          @resource = ShopifyAPI::Article.new(id: 'new', title: '', author: '', body_html: '', summary_html: '', created_at: '', blog_id: '', handle: '', updated_at: '', published_at: nil, tags: '', template_suffix: '')
+        else
+          @resource = ShopifyAPI::Article.find(params[:id])
+        end
+        @blogs = ShopifyAPI::Blog.all
+        @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
+      rescue
+        render 'errors/not_found'
       end
-      @blogs = ShopifyAPI::Blog.all
-      @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
     when 'collection'
-      @resource = ShopifyAPI::SmartCollection.new(id: 'new', title: '', body_html: '', disjunctive: '', created_at: '', sort_order: '', handle: '', updated_at: '', rules: [], published_at: nil, template_suffix: '')
-      @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
+      begin
+        @resource = ShopifyAPI::SmartCollection.new(id: 'new', title: '', body_html: '', disjunctive: '', created_at: '', sort_order: '', handle: '', updated_at: '', rules: [], published_at: nil, template_suffix: '')
+        @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
+      rescue
+        render 'errors/not_found'
+      end
     when 'custom_collection'
-      if params[:id] == 'new'
-        @resource = ShopifyAPI::CustomCollection.new 
-      else
-        @resource = ShopifyAPI::CustomCollection.find(params[:id])
+      begin
+        if params[:id] == 'new'
+          @resource = ShopifyAPI::CustomCollection.new 
+        else
+          @resource = ShopifyAPI::CustomCollection.find(params[:id])
+        end
+        @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
+      rescue
+        render 'errors/not_found'
       end
-      @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
     when 'smart_collection'
-      if params[:id] == 'new'
-        @resource = ShopifyAPI::SmartCollection.new
-      else 
-        @resource = ShopifyAPI::SmartCollection.find(params[:id])
+      begin
+        if params[:id] == 'new'
+          @resource = ShopifyAPI::SmartCollection.new
+        else 
+          @resource = ShopifyAPI::SmartCollection.find(params[:id])
+        end
+        @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
+      rescue
+        render 'errors/not_found'
       end
-     @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
     when 'page'
-      if params[:id] == 'new' 
-        @resource  = ShopifyAPI::Page.new(id: 'new',title: '', body_html: '', created_at: '', handle: '', updated_at: '', published_at: nil, template_suffix: '')
-      else
-        @resource = ShopifyAPI::Page.find(params[:id])
+      begin
+        if params[:id] == 'new' 
+          @resource  = ShopifyAPI::Page.new(id: 'new',title: '', body_html: '', created_at: '', handle: '', updated_at: '', published_at: nil, template_suffix: '')
+        else
+          @resource = ShopifyAPI::Page.find(params[:id])
+        end
+        @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
+      rescue
+        render 'errors/not_found'
       end
-      @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
     when 'product'
-      if params[:id] == 'new'
-        @resource = ShopifyAPI::Product.new(id: 'new',title: '', body_html: '', vendor: '', product_type: '', created_at: '', handle: '', updated_at: '', published_at: '', template_suffix: '', published_scope: '', tags: '', variants: [], collections: [], options: [], images: [], image: '')
-        @resource.variants << ShopifyAPI::Variant.new(title: 'Default Title', price: '', sku: '', position: '', grams: '', inventory_policy: '', compare_at_price: '', fulfillment_service: '', inventory_management: '', option1: 'Default Title', option2: nil, option3: nil, taxable: '', barcode: '', image_id: '', inventory_quantity: '', weight: '', weight_unit: '', old_inventory_quantity: '', requires_shipping: '')
-      else
-        @resource = ShopifyAPI::Product.find(params[:id])
+      begin
+        if params[:id] == 'new'
+          @resource = ShopifyAPI::Product.new(id: 'new',title: '', body_html: '', vendor: '', product_type: '', created_at: '', handle: '', updated_at: '', published_at: '', template_suffix: '', published_scope: '', tags: '', variants: [], collections: [], options: [], images: [], image: '')
+          @resource.variants << ShopifyAPI::Variant.new(title: 'Default Title', price: '', sku: '', position: '', grams: '', inventory_policy: '', compare_at_price: '', fulfillment_service: '', inventory_management: '', option1: 'Default Title', option2: nil, option3: nil, taxable: '', barcode: '', image_id: '', inventory_quantity: '', weight: '', weight_unit: '', old_inventory_quantity: '', requires_shipping: '')
+        else
+          @resource = ShopifyAPI::Product.find(params[:id])
+        end
+        @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
+        @fulfillment_services = ShopifyAPI::FulfillmentService.find(:all, params: {scope: :all, fields: ['name', 'handle']})
+        @smart_collections = ShopifyAPI::SmartCollection.find(:all, params: {product_id: params[:id], limit: 250, fields: ['title', 'handle', 'id']})
+      rescue
+        render 'errors/not_found'
       end
-      @assets = ShopifyAPI::Asset.find(:all, params: {fields: ['key']})
-      @fulfillment_services = ShopifyAPI::FulfillmentService.find(:all, params: {scope: :all, fields: ['name', 'handle']})
-      @smart_collections = ShopifyAPI::SmartCollection.find(:all, params: {product_id: params[:id], limit: 250, fields: ['title', 'handle', 'id']})
     end
     
     unless @resource
