@@ -2745,10 +2745,10 @@ function ready() {
 	});
 
 	$('#dashboard-iframe').load(function() {
-	  var ttle = $('#dashboard-iframe').contents().find('title').text();
+	  var title = $('#dashboard-iframe').contents().find('title').text();
 
 	  // setTimeout(function(){
-	    if (ttle.indexOf('Action Controller: Exception caught') == -1 && ttle.indexOf('The page you were looking for doesn\'t exist (404)') == -1) {
+	    if (title.indexOf('Action Controller: Exception caught') == -1 && title.indexOf('The page you were looking for doesn\'t exist (404)') == -1) {
 	    	var iframe = document.getElementById('dashboard-iframe');
 				var iframeWin = document.getElementById('dashboard-iframe').contentWindow.window;
 				iframeWin.onresize = function() {
