@@ -1369,11 +1369,6 @@ function ready() {
 		$('.trackduck-anonymous').click();
 	});
 
-	$('#send-message, .reach-out').click(function(e) {
-		e.preventDefault();
-		zE.activate();
-	});
-
 	// submit single variant
 	$('.single_variant_submit').click(function(e) {
 		if ($(this).hasClass('is-loading')) {
