@@ -26,7 +26,7 @@
     <article style="margin:0;">
       <div class="card" style="margin:0;">
         <p>If you’re experiencing any issue using EasyDash, it can likely be resolved by syncing the app with your store again.<p>
-        <p>Click on the “Sync Store” button below and <a class="reach-out" href="#">reach out</a> to us if you still experience any issues.</p>
+        <p>Click on the “Sync Store” button below and <a class="reach-out" target="_blank" href="https://www.messenger.com/t/wittycreative">reach out</a> to us if you still experience any issues.</p>
         <button id="syncStore" type="button">Sync Store</button>
       </div>
     </article>
@@ -38,7 +38,7 @@
     <article style="margin:0;">
       <div class="card" style="margin:0;">
         <p>Is EasyDash saving you tons of time and making managing your Shopify store easier? We’d love it if you’d consider submitting a review on the Shopify App Store so we can continue to make EasyDash even better.</p>
-        <p>If EasyDash isn’t living up to your expectations, please <a class="reach-out" href="#">reach out</a> and let us know what we can do to improve it.</p>
+        <p>If EasyDash isn’t living up to your expectations, please <a class="reach-out" target="_blank" href="https://www.messenger.com/t/wittycreative">reach out</a> and let us know what we can do to improve it.</p>
         <a class="button" href="https://apps.shopify.com/easy-dashboard-and-editor?reveal_new_review=true" target="_blank">Leave a Review</a>
       </div>
     </article>
@@ -55,13 +55,17 @@
   <section class="faq" style="margin-top: 2rem;">
     <h6 class="accordion-trigger" data-group="faqs" data-accordion="0">Are description images handled differently on EasyDash?</h6>
     <div class="card accordion-target" data-group="faqs" data-accordion="0" style="display:none;">
-      <p class="no_margin">Short answer, yes. <a target="_blank" href="https://witty.zendesk.com/hc/en-us/articles/115001242231-Are-description-images-handled-differently-on-EasyDash-">Click here for more details.</a></p>
+      <p>Short answer, yes. Long answer is Shopify usually stores description images in the Files section (within the Settings area) but they do not allow developers to store images in the Files section via their API. Since this is the case, we have to store the description images within the Assets section of a theme. We chose to create a new theme called “EasyDash Images” to store the description images , instead of simply storing them within the Assets of the live theme, because of potential issues in the future if you chose to change themes, upgrade your theme, etc. Having a separate theme for description images allows our app to store the new description images within one single theme so you don’t have to worry about where all of your images are stored since downloading EasyDash.</p>
+
+      <p>We’ll continue to keep a close eye on Shopify’s improvements to their API and will change the description images to work the same way they do on the Shopify backend when/if they give developers the ability to do so.</p>
+
+      <p class="no_margin">If you chose to uninstall EasyDash, we provide you via email with a list of all of the images that have been added since downloading our app for your reference.</p>
     </div>
   </section>
   <section class="faq" style="margin-top: 2rem;">
     <h6 class="accordion-trigger" data-group="faqs" data-accordion="1">Am I still able to set future publish dates for products, collections, blog posts and pages on EasyDash?</h6>
     <div class="card accordion-target" data-group="faqs" data-accordion="1" style="display:none;">
-      <p class="no_margin">You can set future publish dates in EasyDash but the publish dates are stored on our server, instead of Shopify’s, and then published at the date you chose when it arrives. <a target="_blank" href="https://witty.zendesk.com/hc/en-us/articles/115001242191">Click here for more details.</a></p>
+      <p class="no_margin">Future publish dates are not able to be set on EasyDash. You will have to continue to set those in Shopify's admin dashboard.</p>
     </div>
   </section>
 </div>
