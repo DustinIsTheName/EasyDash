@@ -394,58 +394,77 @@ function ready() {
 	}
 
 	function initializeFroalaEditor() {
-		$('.make-rich-text-editor').froalaEditor({
-			toolbarButtons: [
-				'paragraphFormat', 
-				'bold', 
-				'italic', 
-				'underline',
-				'formatUL',
-				'formatOL',
-				'outdent', 
-				'indent',
-				'align',
-				'color',
-				'insertLink',
-				'insertTable',
-				'insertImage',
-				'insertVideo',
-				'clearFormatting',
-				'html',
-				'fullscreen'
-			],
-			toolbarSticky: false,
-			tooltips: true,
-			placeholderText: '',
-			useClasses: true,
-			htmlIgnoreCSSProperties: [],
-			codeMirror: true,
-		  codeMirrorOptions: {
-		    tabSize: 2,
-		    lineNumbers: true,
-		    lineWrapping: true
+
+		var quill = new Quill('.make-rich-text-editor', {
+			modules: {
+		    toolbar: [
+		      [{ header: [1, 2, false] }],
+		      ['bold', 'italic', 'underline'],
+		      ['image', 'code-block']
+		    ]
 		  },
-		  imageUploadURL: '/add-image-to-theme',
-		  imageUploadParams: {
-		  	id: $('[name="id"]').val(),
-		  	resource: $('[name="resource"]').val()
-		  },
-		  videoInsertButtons: [
-		  	'videoBack', 
-		  	'|',
-		  	'videoEmbed'
-		  ],
-		  paragraphFormat: {
-			  N: 'Paragraph',
-			  H1: 'Heading 1',
-			  H2: 'Heading 2',
-			  H3: 'Heading 3',
-			  H4: 'Heading 4',
-			  H5: 'Heading 5',
-			  H6: 'Heading 6',
-			  BLOCKQUOTE: 'Blockquote'
-			}
+	    theme: 'snow'
+	  });
+
+		quill.on('text-change', function(delta, oldDelta, source) {
+			var textarea = $(quill.container).siblings('textarea')
+			console.log(textarea.val());
+			textarea.val(quill.container.firstChild.innerHTML);
+			console.log(quill.container.firstChild.innerHTML);
 		});
+
+		// $('.make-rich-text-editor').froalaEditor({
+		// 	toolbarButtons: [
+		// 		'paragraphFormat', 
+		// 		'bold', 
+		// 		'italic', 
+		// 		'underline',
+		// 		'formatUL',
+		// 		'formatOL',
+		// 		'outdent', 
+		// 		'indent',
+		// 		'align',
+		// 		'color',
+		// 		'insertLink',
+		// 		'insertTable',
+		// 		'insertImage',
+		// 		'insertVideo',
+		// 		'clearFormatting',
+		// 		'html',
+		// 		'fullscreen'
+		// 	],
+		// 	toolbarSticky: false,
+		// 	tooltips: true,
+		// 	placeholderText: '',
+		// 	useClasses: true,
+		// 	htmlIgnoreCSSProperties: [],
+		// 	codeMirror: true,
+		//   codeMirrorOptions: {
+		//     tabSize: 2,
+		//     lineNumbers: true,
+		//     lineWrapping: true
+		//   },
+		//   imageUploadURL: '/add-image-to-theme',
+		//   imageUploadParams: {
+		//   	id: $('[name="id"]').val(),
+		//   	resource: $('[name="resource"]').val()
+		//   },
+		//   videoInsertButtons: [
+		//   	'videoBack', 
+		//   	'|',
+		//   	'videoEmbed'
+		//   ],
+		//   paragraphFormat: {
+		// 	  N: 'Paragraph',
+		// 	  H1: 'Heading 1',
+		// 	  H2: 'Heading 2',
+		// 	  H3: 'Heading 3',
+		// 	  H4: 'Heading 4',
+		// 	  H5: 'Heading 5',
+		// 	  H6: 'Heading 6',
+		// 	  BLOCKQUOTE: 'Blockquote'
+		// 	}
+		// });
 		hideRTEButtons();
 		$(window).resize(function() {
 			if ($('.fr-box').hasClass('fr-fullscreen')) {

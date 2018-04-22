@@ -6,7 +6,10 @@
     </div>
     <div class="row no_margin">
       <label for="shopify_api_product_body_html">Description</label>
-      <%= o.text_area :body_html, class: "make-rich-text-editor" %>
+      <%= o.text_area :body_html, class: "rich-text-editor-data" %>
+      <div class="make-rich-text-editor">
+        <%= @resource.body_html.html_safe %>
+      </div>
     </div>
   </div>
 </article>

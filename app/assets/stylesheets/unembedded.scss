@@ -767,6 +767,10 @@ label .icon-calendar { float: right; margin-top: 2px; }
             float: right;
           }
         }
+
+        .rich-text-editor-data {
+          display: none;
+        }
       }
 
       .image_box img {max-width: 100%;}
