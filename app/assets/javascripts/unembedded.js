@@ -526,7 +526,9 @@ function ready() {
 		});
 	}
 
-	initializeFroalaEditor();
+	if ($('.make-rich-text-editor').length) {
+		initializeFroalaEditor();
+	}
 
 	$('#section-edit-variant [name^="variants"]').addClass('variant_input');
 	$('.variant_input').prop('disabled', true);
