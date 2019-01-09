@@ -4,6 +4,7 @@ class SyncStore
 		session = ShopifyAPI::Session.new(shop.shopify_domain, shop.shopify_token)
 		ShopifyAPI::Base.activate_session(session)
 		shop.getShopData
+    shop.createScriptTag
 		ShopifyAPI::Base.clear_session
 	end
 
