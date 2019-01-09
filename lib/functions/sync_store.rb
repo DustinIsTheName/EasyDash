@@ -3,8 +3,12 @@ class SyncStore
 	def self.single_store(shop)
 		session = ShopifyAPI::Session.new(shop.shopify_domain, shop.shopify_token)
 		ShopifyAPI::Base.activate_session(session)
-		shop.getShopData
-    shop.createScriptTag
+    begin
+  		shop.getShopData
+      shop.createScriptTag
+    rescue => e
+      puts e
+    end 
 		ShopifyAPI::Base.clear_session
 	end
 
