@@ -43,6 +43,5 @@
 <body data-shopify-url="<% if @shop_session %><%= @shop_session.url %><% end %>" data-app-url="<%= Rails.env.production? ? APP_URL : DEV_URL %>">
 	<%= yield %>
 	<div class="flash-message"></div>
-	<script src="//cdn.trackduck.com/toolbar/prod/td.js" async data-trackduck-id="595a9550a3e486b648a32b4f"></script>
 </body>
 </html>
