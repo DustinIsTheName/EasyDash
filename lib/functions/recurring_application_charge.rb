@@ -1,7 +1,7 @@
 module RecurringApplicationCharge
 	def self.create(charge_type = 'default')
 
-    unless ShopifyAPI::RecurringApplicationCharge.current or ShopifyAPI::Shop.current.plan_name == 'affiliate'
+    unless ShopifyAPI::RecurringApplicationCharge.current or ShopifyAPI::Shop.current.plan_name == 'affiliate' or Rails.env == 'development' or Rails.env == 'test'
 
 			case charge_type
 			when 'extended_trial'
@@ -33,7 +33,7 @@ module RecurringApplicationCharge
 	end
 
 	def check_for_charge
-		unless ShopifyAPI::RecurringApplicationCharge.current or ShopifyAPI::Shop.current.plan_name == 'affiliate'
+		unless ShopifyAPI::RecurringApplicationCharge.current or ShopifyAPI::Shop.current.plan_name == 'affiliate' or Rails.env == 'development' or Rails.env == 'test'
 			pending = ShopifyAPI::RecurringApplicationCharge.pending.first
 			if pending
 				puts pending.confirmation_url

@@ -56,6 +56,12 @@ Rails.application.routes.draw do
     get '/from-site' => :get_from_site
     get '/post-to-site' => :post_to_site
   end
+
+  controller :gdpr_webhooks do
+    post '/customers/redact' => :customers_redact
+    post '/shop/redact' => :shop_redact
+    post '/customers/data_request' => :customers_data_request
+  end
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
