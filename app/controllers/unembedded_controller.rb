@@ -424,6 +424,7 @@ class UnembeddedController < ApplicationController
   end
 
   def get_iframe_content
+    puts Colorize.magenta("get_iframe_content")
     puts Colorize.magenta(params)
 
     @type = params["resource"]
@@ -453,10 +454,13 @@ class UnembeddedController < ApplicationController
     # uri = URI.parse("https://s-medio.myshopify.com/products/tee-shirt-enfant-jumeaux-monster-teitw34/?ediframe=true")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
-
     headers = session[:iframe_cookies] ? { 'Cookie' => session[:iframe_cookies] } : {}
     response = http.get(uri, headers)
     store_cookies(response.get_fields('set-cookie'))
+
+    puts Colorize.green(uri)
+    print Colorize.purple("#{response.code} ")
+    puts Colorize.purple(response)
 
     redirect_count = 0
     while (response.code == "301" or response.code == "302") and redirect_count < 10
@@ -468,6 +472,12 @@ class UnembeddedController < ApplicationController
       end
       response = http.get(URI.parse(redirect_location), headers)
       store_cookies(response.get_fields('set-cookie'))
+
+      print Colorize.green("#{redirect_count} ")
+      puts Colorize.green(uri)
+      print Colorize.purple("#{response.code} ")
+      puts Colorize.purple(response)
+
       redirect_count += 1
     end
 
