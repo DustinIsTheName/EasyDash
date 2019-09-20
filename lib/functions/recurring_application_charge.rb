@@ -1,7 +1,7 @@
 module RecurringApplicationCharge
 	def self.create(charge_type = 'default')
 
-    unless ShopifyAPI::RecurringApplicationCharge.current or ShopifyAPI::Shop.current.plan_name == 'affiliate' or Rails.env == 'development' or Rails.env == 'test'
+    unless ShopifyAPI::RecurringApplicationCharge.current or ShopifyAPI::Shop.current.myshopify_domain == "witty-creative.myshopify.com" or ShopifyAPI::Shop.current.plan_name == 'affiliate' or Rails.env == 'development' or Rails.env == 'test'
 
 			case charge_type
 			when 'extended_trial'
